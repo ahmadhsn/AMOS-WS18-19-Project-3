@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">BikerApp</string>
+    <string name="insert_data_message">Please insert your login data.</string>
+    <string name="username_label">Username:</string>
+    <string name="password_label">Password:</string>
+    <string name="button_login">Login</string>
+    <string name="starting_info">Discover great Tracks near you and make new friends along.</string>
+    <string name="try_label">Try Without Registration</string>
+    <string name="signup_label">Sign Up</string>
+    <string name="login_label">Login</string>
 </resources>
