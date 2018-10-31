@@ -54,7 +54,7 @@
         app:layout_constraintTop_toBottomOf="@id/linearLayout">
 
         <Button
-            android:id="@+id/button8"
+            android:id="@+id/login_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
@@ -69,7 +69,7 @@
             android:id="@+id/button7"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/button8"
+            android:layout_below="@+id/login_button"
             android:layout_marginLeft="50dp"
             android:layout_marginRight="50dp"
             android:layout_marginTop="5dp"

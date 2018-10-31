@@ -1,9 +1,13 @@
 package com.gr03.amos.bikerapp;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
+
+import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -13,19 +17,4 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
     }
 
-    /**
-     * Collects user name and password.
-     * TODO: make req and it information
-     * TODO: pw needs to be hashed
-     * Caused by button click.
-     * TODO: switches to the new activity
-     *
-     * @param view
-     * @r
-     */
-    public void loginClick(android.view.View view) {
-        EditText username = findViewById(R.id.username_input);
-        EditText password = findViewById(R.id.password_input);
-        Log.i("LoginData", "name: " + username.getText() + ", pw: " + password.getText());
-    }
 }
