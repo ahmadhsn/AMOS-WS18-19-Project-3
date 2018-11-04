@@ -1,0 +1,4 @@
+127.0.0.1 - - [21/Jul/2018:12:06:33 +0200] "GET / HTTP/1.1" 200 11452
+127.0.0.1 - - [21/Jul/2018:12:06:33 +0200] "GET /RESTfulWebserver/WEB-INF/classes/com/jwt/service/Services.java HTTP/1.1" 404 1047
+127.0.0.1 - - [21/Jul/2018:12:06:34 +0200] "GET /favicon.ico HTTP/1.1" 200 21630
+127.0.0.1 - - [21/Jul/2018:12:11:01 +0200] "GET / HTTP/1.1" 200 11452
