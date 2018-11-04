@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp"
+    tools:context=".Eventcreator"
+    tools:ignore="MissingDefaultResource">
+
+    <TextView
+        android:id="@+id/letsride"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:text="Let's RIDE!!"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toTopOf="@+id/eventname"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <EditText
+        android:id="@+id/eventname"
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:hint="Event name"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/eventdescr"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/letsride" />
+
+    <EditText
+        android:id="@+id/eventdescr"
+        android:layout_width="match_parent"
+        android:layout_height="67dp"
+        android:hint="Event description"
+        android:inputType="textMultiLine"
+        android:singleLine="false"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/eventdate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventname" />
+
+    <EditText
+        android:id="@+id/eventdate"
+        android:layout_width="0dp"
+        android:layout_height="67dp"
+        android:hint="Event Date"
+        android:inputType="date"
+        android:singleLine="false"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/eventlocation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventdescr" />
+
+    <EditText
+        android:id="@+id/eventlocation"
+        android:layout_width="match_parent"
+        android:layout_height="67dp"
+        android:hint="Event location"
+        android:inputType="textPostalAddress"
+        android:singleLine="false"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/eventsubmit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventdate" />
+
+    <Button
+        android:id="@+id/eventsubmit"
+        android:layout_width="155dp"
+        android:layout_height="54dp"
+        android:background="#ea7052"
+        android:text="@string/create"
+        android:textAllCaps="true"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventlocation" />
+
+
+</android.support.constraint.ConstraintLayout>
