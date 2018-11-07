@@ -1,31 +1,44 @@
 package com.gr03.amos.bikerapp;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-    }
 
-    /**
-     * Collects user name and password.
-     * TODO: make req and it information
-     * TODO: pw needs to be hashed
-     * Caused by button click.
-     * TODO: switches to the new activity
-     *
-     * @param view
-     * @r
-     */
-    public void loginClick(android.view.View view) {
-        EditText username = findViewById(R.id.username_input);
-        EditText password = findViewById(R.id.password_input);
-        Log.i("LoginData", "name: " + username.getText() + ", pw: " + password.getText());
+//        try {
+//            PostgreSQLExample postgreSQLExample = new PostgreSQLExample();
+//            Connection conn = postgreSQLExample.getPostgreSQLConnection();
+////            PreparedStatement st = conn.prepareStatement("INSERT INTO STUDENT (NAME) VALUES (?)");
+////            st.setString(1, "ahsan");
+////            st.executeUpdate();
+//
+//            Statement stmt = conn.createStatement();
+//            ResultSet rs = stmt.executeQuery("SELECT * FROM STUDENT;");
+//
+//            while ( rs.next() ) {
+//                String  name = rs.getString("name");
+//                System.out.println( "NAME = " + name );
+//            }
+//            stmt.close();
+////            conn.close();
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+        setContentView(R.layout.activity_login);
     }
 }
