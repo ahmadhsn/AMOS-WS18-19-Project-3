@@ -36,6 +36,17 @@ public class createEventActivity extends AppCompatActivity {
         EditText eventTime = findViewById(R.id.eventtime);
         EditText eventLocation = findViewById(R.id.eventlocation);
 
+
+/*        //get the spinner from the xml.
+        Spinner dropdown = findViewById(R.id.event_type);
+        //create a list of items for the spinner.
+        String[] items = new String[]{"1", "2", "three"};
+        //create an adapter to describe how the items are displayed, adapters are used in several places in android.
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
+        //set the spinners adapter to the previously created one.
+        dropdown.setAdapter(adapter);
+        */
+
         JSONObject json = new JSONObject();
         json.put("name", eventName.getText().toString());
         json.put("name", eventDescr.getText().toString());

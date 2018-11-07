@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="10dp"
-    tools:context=".Eventcreator"
     tools:ignore="MissingDefaultResource">
 
     <TextView
@@ -82,7 +81,7 @@
         android:layout_width="155dp"
         android:layout_height="54dp"
         android:background="#ea7052"
-        android:text="@string/create"
+        android:text="create"
         android:textAllCaps="true"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
