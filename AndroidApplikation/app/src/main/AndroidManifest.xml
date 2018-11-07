@@ -18,19 +18,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<<<<<<< HEAD
         <activity android:name=".LoginActivity" />
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".createEventActivity"></activity>
-=======
-        <activity android:name=".Eventcreator">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
->>>>>>> 0d43c27a7d1c7b1ea6de289274a65b0ebdaf51bf
+        <activity android:name=".SignUpActivity"/>
+		<activity android:name=".createEventActivity"></activity>
     </application>
 
 </manifest>

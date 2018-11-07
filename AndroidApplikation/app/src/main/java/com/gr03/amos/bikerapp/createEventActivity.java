@@ -28,7 +28,7 @@ public class createEventActivity extends AppCompatActivity {
     }
 
     public void newEvent(View view) throws JSONException{
-        //TODO check all values are validahmadhsn
+        //TODO check all values are valid
 
         EditText eventName = findViewById(R.id.eventname);
         EditText eventDescr = findViewById(R.id.eventdescr);
