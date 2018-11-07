@@ -91,8 +91,6 @@ public class Services {
 	public Response userRegistration(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
 		JSONObject JSONreq = new JSONObject(urlReq);
-		
-		System.out.println("userRegistrationRequest");
 
 		if (JSONreq.has("username") && JSONreq.has("password") && JSONreq.has("email")) {
 			try {
@@ -105,7 +103,7 @@ public class Services {
 				// TODO: more data... city, birth?
 
 
-				// TODO: addUserToDBandCreateResponse
+				// TODO: addUserToDB
 				
 				// TODO: response for client
 				JSONObject response = new JSONObject();

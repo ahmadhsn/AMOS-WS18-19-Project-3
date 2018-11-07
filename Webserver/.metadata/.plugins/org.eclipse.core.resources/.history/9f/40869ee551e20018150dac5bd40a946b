@@ -24,7 +24,7 @@ public class Services {
 
 	/**
 	 * Gives greetings to an Request. Testable with
-	 * http://localhost:8080/RESTfulWebserver/services/Tester.
+	 * http://localhost:8443/RESTfulWebserver/services/Tester.
 	 * 
 	 * @param name
 	 *            path ending of tester
@@ -88,29 +88,26 @@ public class Services {
 	@POST
 	@Path("/userRegistration")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response userRegistration(String urlReq)
+	public Response addProcess(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
 		JSONObject JSONreq = new JSONObject(urlReq);
-		
-		System.out.println("userRegistrationRequest");
 
 		if (JSONreq.has("username") && JSONreq.has("password") && JSONreq.has("email")) {
 			try {
 				// TODO: check if email already exists
 				
 				// get data
-				String username = JSONreq.getString("name");
+				String username = JSONreq.getString("username");
 				String password = JSONreq.getString("password");
 				String email = JSONreq.getString("email");
 				// TODO: more data... city, birth?
 
 
-				// TODO: addUserToDBandCreateResponse
+				// TODO: addUserToDB
 				
 				// TODO: response for client
 				JSONObject response = new JSONObject();
-				response.put("registerUser", "succesTEST");
-				
+
 				return Response.status(200).entity(response.toString()).build();
 
 			} catch (Exception e) {

@@ -105,7 +105,7 @@ public class Services {
 				// TODO: more data... city, birth?
 
 
-				// TODO: addUserToDBandCreateResponse
+				// TODO: addUserToDB
 				
 				// TODO: response for client
 				JSONObject response = new JSONObject();
