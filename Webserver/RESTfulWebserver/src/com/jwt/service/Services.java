@@ -3,17 +3,21 @@ package com.jwt.service;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 
+import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.jwt.service.mail.Mailer;
 
 
 /**
@@ -21,10 +25,13 @@ import org.json.JSONObject;
  */
 @Path("/services")
 public class Services {
-
+	
+	@Context	
+	private ServletContext context;
+	
 	/**
 	 * Gives greetings to an Request. Testable with
-	 * http://localhost:8080/RESTfulWebserver/services/Tester.
+	 * http://localhost:8443/RESTfulWebserver/services/Tester.
 	 * 
 	 * @param name
 	 *            path ending of tester
@@ -66,7 +73,7 @@ public class Services {
 			
 			// TODO: response for client
 			JSONObject response = new JSONObject();
-			
+
 			return Response.status(200).entity(response.toString()).build();
 		} else {
 			return Response.status(400).entity("InvalidRequestBody").build();
@@ -88,29 +95,30 @@ public class Services {
 	@POST
 	@Path("/userRegistration")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response userRegistration(String urlReq)
+	public Response addProcess(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
 		JSONObject JSONreq = new JSONObject(urlReq);
-		
-		System.out.println("userRegistrationRequest");
 
 		if (JSONreq.has("username") && JSONreq.has("password") && JSONreq.has("email")) {
 			try {
 				// TODO: check if email already exists
 				
 				// get data
-				String username = JSONreq.getString("name");
+				String username = JSONreq.getString("username");
 				String password = JSONreq.getString("password");
 				String email = JSONreq.getString("email");
 				// TODO: more data... city, birth?
 
 
-				// TODO: addUserToDBandCreateResponse
+				// TODO: addUserToDB
 				
+				//send registration mail 
+				Mailer mailer = new Mailer(context);
+				boolean messageSent = mailer.sendRegistrationMail(email, username);
+		
 				// TODO: response for client
 				JSONObject response = new JSONObject();
-				response.put("registerUser", "succesTEST");
-				
+
 				return Response.status(200).entity(response.toString()).build();
 
 			} catch (Exception e) {
@@ -120,7 +128,7 @@ public class Services {
 		System.out.println("InvalidRequestbody");
 		return Response.status(400).entity("InvalidRequestBody").build();
 	}
-
+	
 	/**
 	 * Sets options for headers.
 	 */
@@ -129,4 +137,21 @@ public class Services {
 		return Response.ok().header("Allow-Control-Allow-Methods", "POST,GET,OPTIONS")
 				.header("Access-Control-Allow-Origin", "*").build();
 	}
+
+
+	@GET
+	@Path("/testMail")
+	public Response sendTestMail() throws JSONException {
+		JSONObject output = new JSONObject("{Test: send Mail}");
+		System.out.println("...sendTestMail Request " );
+		
+		Mailer mailer = new Mailer(context);
+		//send test registration mail 
+		mailer.sendRegistrationMail("anika.apel@gmx.de", "test");
+		
+		return Response.status(200).entity(output.toString()).build();
+	}
+
 }
+
+
