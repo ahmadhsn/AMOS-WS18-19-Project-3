@@ -17,7 +17,7 @@ import javax.ws.rs.core.Response;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.jwt.service.mail.Mailer;
+//import com.jwt.service.mail.Mailer;
 
 
 /**
@@ -115,8 +115,8 @@ public class Services {
 				// TODO: addUserToDB
 				
 				//send registration mail 
-				Mailer mailer = new Mailer(context);
-				boolean messageSent = mailer.sendRegistrationMail(email, username);
+				//Mailer mailer = new Mailer(context);
+				//boolean messageSent = mailer.sendRegistrationMail(email, username);
 		
 				// TODO: response for client
 				JSONObject response = new JSONObject();
@@ -183,9 +183,8 @@ public class Services {
 		JSONObject output = new JSONObject("{Test: send Mail}");
 		System.out.println("...sendTestMail Request " );
 		
-		Mailer mailer = new Mailer(context);
+		//Mailer mailer = new Mailer(context);
 		//send test registration mail 
-		
 		//mailer.sendRegistrationMail("anika.apel@gmx.de", "test");
 		
 		return Response.status(200).entity(output.toString()).build();

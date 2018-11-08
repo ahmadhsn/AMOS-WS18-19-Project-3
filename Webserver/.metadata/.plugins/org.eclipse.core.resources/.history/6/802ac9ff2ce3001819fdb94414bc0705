@@ -185,8 +185,7 @@ public class Services {
 		
 		Mailer mailer = new Mailer(context);
 		//send test registration mail 
-		
-		//mailer.sendRegistrationMail("anika.apel@gmx.de", "test");
+		mailer.sendRegistrationMail("anika.apel@gmx.de", "test");
 		
 		return Response.status(200).entity(output.toString()).build();
 	}
