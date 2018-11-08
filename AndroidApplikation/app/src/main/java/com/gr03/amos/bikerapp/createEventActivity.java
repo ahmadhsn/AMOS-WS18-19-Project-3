@@ -49,10 +49,10 @@ public class createEventActivity extends AppCompatActivity {
 
         JSONObject json = new JSONObject();
         json.put("name", eventName.getText().toString());
-        json.put("name", eventDescr.getText().toString());
-        json.put("name", eventDate.getText().toString());
-        json.put("name", eventTime.getText().toString());
-        json.put("name", eventLocation.getText().toString());
+        json.put("description", eventDescr.getText().toString());
+        json.put("date", eventDate.getText().toString());
+        json.put("time", eventTime.getText().toString());
+        json.put("location", eventLocation.getText().toString());
 
         try {
             JSONObject response;

@@ -150,14 +150,14 @@ public class Services {
 		JSONObject JSONreq = new JSONObject(urlReq);
 		System.out.println("...createEventRequest");
 		
-		if (JSONreq.has("name")) {
+		if (JSONreq.has("name") && JSONreq.has("password") && JSONreq.has("email")) {
 			try {
 		
-				JSONObject response = new JSONObject();
-				
-				response.put("eventCreation", "successfullCreation");
+		JSONObject response = new JSONObject();
 		
-				return Response.status(200).entity(response.toString()).build();
+		response.put("eventCreation", "successfullCreation");
+
+		return Response.status(200).entity(response.toString()).build();
 
 			} catch (Exception e) {
 				System.out.println("Wrong JSONFormat:" + e.toString());
