@@ -17,7 +17,7 @@ import javax.ws.rs.core.Response;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-//import com.jwt.service.mail.Mailer;
+import com.jwt.service.mail.Mailer;
 
 
 /**
@@ -31,7 +31,7 @@ public class Services {
 	
 	/**
 	 * Gives greetings to an Request. Testable with
-	 * http://localhost:8080/RESTfulWebserver/services/Tester
+	 * http://localhost:8443/RESTfulWebserver/services/Tester.
 	 * 
 	 * @param name
 	 *            path ending of tester
@@ -99,17 +99,15 @@ public class Services {
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
 		JSONObject JSONreq = new JSONObject(urlReq);
 
-		if (JSONreq.has("name") && JSONreq.has("password") && JSONreq.has("email")) {
+		if (JSONreq.has("username") && JSONreq.has("password") && JSONreq.has("email")) {
 			try {
 				// TODO: check if email already exists
-
+				
 				// get data
-				String username = JSONreq.getString("name");
+				String username = JSONreq.getString("username");
 				String password = JSONreq.getString("password");
 				String email = JSONreq.getString("email");
 				// TODO: more data... city, birth?
-
-				System.out.println("...userRegistrationRequest from " + username);
 
 
 				// TODO: addUserToDB
@@ -120,8 +118,6 @@ public class Services {
 		
 				// TODO: response for client
 				JSONObject response = new JSONObject();
-				
-				response.put("userRegistration", "successfullRegistration");
 
 				return Response.status(200).entity(response.toString()).build();
 
@@ -149,9 +145,9 @@ public class Services {
 		JSONObject output = new JSONObject("{Test: send Mail}");
 		System.out.println("...sendTestMail Request " );
 		
-		//Mailer mailer = new Mailer(context);
+		Mailer mailer = new Mailer(context);
 		//send test registration mail 
-		//mailer.sendRegistrationMail("anika.apel@gmx.de", "test");
+		mailer.sendRegistrationMail("anika.apel@gmx.de", "test");
 		
 		return Response.status(200).entity(output.toString()).build();
 	}

@@ -14,7 +14,7 @@ public class Requests {
 
     public static JSONObject getResponse(String urlTail, JSONObject json) {
         try {
-            URL url = new URL("http://10.0.2.2:8080/RESTfulWebserver/" + urlTail);
+            URL url = new URL("http://10.0.2.2:8080/RESTfulWebserver/services/" + urlTail);
 
             HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
             urlConn.setRequestProperty("Content-Type", "application/json");

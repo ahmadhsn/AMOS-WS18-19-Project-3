@@ -102,14 +102,12 @@ public class Services {
 		if (JSONreq.has("name") && JSONreq.has("password") && JSONreq.has("email")) {
 			try {
 				// TODO: check if email already exists
-
+				
 				// get data
 				String username = JSONreq.getString("name");
 				String password = JSONreq.getString("password");
 				String email = JSONreq.getString("email");
 				// TODO: more data... city, birth?
-
-				System.out.println("...userRegistrationRequest from " + username);
 
 
 				// TODO: addUserToDB
@@ -120,8 +118,6 @@ public class Services {
 		
 				// TODO: response for client
 				JSONObject response = new JSONObject();
-				
-				response.put("userRegistration", "successfullRegistration");
 
 				return Response.status(200).entity(response.toString()).build();
 

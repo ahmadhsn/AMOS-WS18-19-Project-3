@@ -121,7 +121,7 @@ public class Services {
 				// TODO: response for client
 				JSONObject response = new JSONObject();
 				
-				response.put("userRegistration", "successfullRegistration");
+				response.put("userRegistration", "successfullRegistration);
 
 				return Response.status(200).entity(response.toString()).build();
 
