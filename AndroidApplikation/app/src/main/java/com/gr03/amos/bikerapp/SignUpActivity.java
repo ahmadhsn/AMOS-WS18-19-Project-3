@@ -73,7 +73,6 @@ public class SignUpActivity extends AppCompatActivity {
         json.put("isBusinessUser", businessUser.booleanValue());
         if (businessUser) json.put("business_name", businessName.getText().toString());
 
-
         try {
             JSONObject response;
 

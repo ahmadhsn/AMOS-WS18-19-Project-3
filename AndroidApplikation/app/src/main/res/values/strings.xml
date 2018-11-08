@@ -16,4 +16,16 @@
     <string name="signup_business_user">Business User</string>
     <string name="company_name">Enter Company Name</string>
     <string name="user_type">Select User Type</string>
+
+    <string name="eventType">Enter Event Name</string>
+
+
+    <!--
+        <string name="eventName">Enter Event Name</string>
+        <string name="event_location">Enter Event Location</string>
+        <string name="event_descr">Enter Event Description</string>
+        <string name="event_date">Select Date</string>
+        <string name="event_time">Select Time</string>
+        <string name="event_create">Create Event</string>-->
+
 </resources>
