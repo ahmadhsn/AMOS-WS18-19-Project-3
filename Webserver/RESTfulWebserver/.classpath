@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre1.8.0_144">
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
 		<attributes>
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
@@ -13,15 +13,23 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="lib" path="D:/libary/jersey-client-1.17.1.jar"/>
-	<classpathentry kind="lib" path="D:/libary/jersey-core-1.17.1.jar"/>
-	<classpathentry kind="lib" path="D:/libary/jsr311-api-1.1.1.jar"/>
-	<classpathentry kind="lib" path="D:/libary/asm-3.1.jar"/>
-	<classpathentry kind="lib" path="D:/libary/jersey-server-1.17.1.jar"/>
-	<classpathentry kind="lib" path="D:/libary/jersey-servlet-1.17.1.jar"/>
-	<classpathentry kind="lib" path="D:/libary/org.json.jar"/>
-	<classpathentry kind="lib" path="D:/libary/sqljdbc42.jar"/>
-	<classpathentry kind="lib" path="D:/libary/common-lang3.jar"/>
-	<classpathentry kind="lib" path="D:/libary/bcprov-ext-jdk14-1.48.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/activation-1.1.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/asm-3.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/bcprov-ext-jdk14-1.48.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/common-lang3.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/javax.mail.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jersey-client-1.17.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jersey-core-1.17.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jersey-server-1.17.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jersey-servlet-1.17.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/json-20140107.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jsr311-api-1.1.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/mail-1.4.7.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/mail.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/org.json.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/postgresql-42.2.5.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/sqljdbc42-6.0.8112.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/sqljdbc42.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/tomcat-juli-8.5.31.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
