@@ -2,7 +2,7 @@ package com.jwt.service;
 
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
-
+import java.sql.Connection;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -13,12 +13,14 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
+import java.sql.ResultSet;
+import java.sql.PreparedStatement;
 import org.json.JSONException;
 import org.json.JSONObject;
-
+import java.time.format.DateTimeFormatter;
 import com.jwt.service.mail.Mailer;
-
+import java.util.*;
+import java.text.*;
 
 /**
  * This class provides all web services.
@@ -155,9 +157,27 @@ public class Services {
 		
 				
 				String eventname = JSONreq.getString("name");
+				String eventdescription = JSONreq.getString("description");
+				String eventdate = JSONreq.getString("date");
+				String eventtime = JSONreq.getString("time");
+				
+				
 				System.out.println("...newEventCreated:" + eventname);
 				
-// TODO: addEventToDB
+		        try {
+		            PostgreSQLExample postgreSQLExample = new PostgreSQLExample();
+		            Connection conn = postgreSQLExample.getPostgreSQLConnection();
+
+	            PreparedStatement st = conn.prepareStatement("INSERT INTO EVENT (name,description) VALUES (?,?)");
+	            st.setString(1, eventname);
+	            st.setString(2, eventdescription);
+	            st.executeUpdate();
+	            st.closeOnCompletion();
+
+		        } catch (Exception ex) {
+		            ex.printStackTrace();
+		        }
+				
 				
 				
 				JSONObject response = new JSONObject();
