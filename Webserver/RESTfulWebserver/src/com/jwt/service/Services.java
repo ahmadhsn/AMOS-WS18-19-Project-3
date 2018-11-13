@@ -153,6 +153,13 @@ public class Services {
 		if (JSONreq.has("name")) {
 			try {
 		
+				
+				String eventname = JSONreq.getString("name");
+				System.out.println("...newEventCreated:" + eventname);
+				
+// TODO: addEventToDB
+				
+				
 				JSONObject response = new JSONObject();
 				
 				response.put("eventCreation", "successfullCreation");
