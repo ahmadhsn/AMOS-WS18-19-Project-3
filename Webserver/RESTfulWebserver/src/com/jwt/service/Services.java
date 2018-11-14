@@ -210,7 +210,7 @@ public class Services {
 		JSONObject JSONreq = new JSONObject(urlReq);
 		System.out.println("...createEventRequest");
 		
-		if (JSONreq.has("name")) {
+		if (JSONreq.has("name") && JSONreq.has("description") && JSONreq.has("date") && JSONreq.has("time")) {
 			try {
 		
 				
@@ -226,9 +226,11 @@ public class Services {
 		            PostgreSQLExample postgreSQLExample = new PostgreSQLExample();
 		            Connection conn = postgreSQLExample.getPostgreSQLConnection();
 
-	            PreparedStatement st = conn.prepareStatement("INSERT INTO EVENT (name,description) VALUES (?,?)");
+	            PreparedStatement st = conn.prepareStatement ("INSERT INTO EVENT (name,description,date,time) VALUES (?,?,?::date,?::time)");
 	            st.setString(1, eventname);
 	            st.setString(2, eventdescription);
+	            st.setString(3, eventdate);
+	            st.setString(4, eventtime);
 	            st.executeUpdate();
 	            st.closeOnCompletion();
 

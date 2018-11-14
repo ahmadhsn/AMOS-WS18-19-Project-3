@@ -23,6 +23,7 @@ public class PostgreSQLExample {
             String dbName = dbmd.getDatabaseProductName();
             String dbVersion = dbmd.getDatabaseProductVersion();
             String dbUrl = dbmd.getURL();
+            
             String userName = dbmd.getUserName();
             String driverName = dbmd.getDriverName();
 
