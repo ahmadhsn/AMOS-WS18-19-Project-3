@@ -11,6 +11,7 @@ public class HomeActivity extends AppCompatActivity {
     Button loginButton;
     Button signUpButton;
     Button createEventButton;
+    Button EventTypeButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +22,7 @@ public class HomeActivity extends AppCompatActivity {
         signUpButton = findViewById(R.id.signup_button);
         loginButton = findViewById(R.id.login_button);
         createEventButton = findViewById(R.id.createEvent_Button);
+        EventTypeButton = findViewById(R.id.EventType_Button);
 
         signUpButton.setOnClickListener(v -> {
             Intent intent = new Intent(this, SignUpActivity.class);
@@ -34,6 +36,11 @@ public class HomeActivity extends AppCompatActivity {
 
         createEventButton.setOnClickListener(v -> {
             Intent intent = new Intent(this, createEventActivity.class);
+            startActivity(intent);
+        });
+
+        EventTypeButton.setOnClickListener(v -> {
+            Intent intent = new Intent(this, EventTypeActivity.class);
             startActivity(intent);
         });
     }
