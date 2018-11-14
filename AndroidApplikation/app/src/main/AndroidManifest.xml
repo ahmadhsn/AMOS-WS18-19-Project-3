@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.gr03.amos.bikerapp">
 
-
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -20,9 +19,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginActivity" />
-        <activity android:name=".SignUpActivity"></activity>
-        <activity android:name=".createEventActivity"/>
+        <activity android:name=".SignUpActivity" />
+        <activity android:name=".CreateEventActivity" />
+        <activity android:name=".EventTypeActivity" />
     </application>
 
 </manifest>
-

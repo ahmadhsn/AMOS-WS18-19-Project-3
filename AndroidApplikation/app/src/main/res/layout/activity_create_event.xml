@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:background="@color/colorPrimary"
-tools:context=".createEventActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    tools:context=".CreateEventActivity">
 
     <RelativeLayout
         android:id="@+id/relativeLayout2"
@@ -20,26 +20,12 @@ tools:context=".createEventActivity">
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginLeft="40dp"
-            android:layout_marginTop="10dp"
             android:layout_marginRight="40dp"
+            android:layout_marginTop="10dp"
             android:hint="Event Name"
             android:inputType="text"
             android:textColor="@color/white"
             android:textColorHint="@color/white" />
-
-<!--        <Spinner
-            android:id="@+id/event_type"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginLeft="40dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="40dp"
-            android:layout_below="@id/eventname"
-            android:autofillHints="@string/eventType"
-            android:spinnerMode="dropdown"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white"
-            />-->
 
         <EditText
             android:id="@+id/eventdescr"
@@ -47,12 +33,13 @@ tools:context=".createEventActivity">
             android:layout_height="40dp"
             android:layout_below="@id/eventname"
             android:layout_marginLeft="40dp"
-            android:layout_marginTop="10dp"
             android:layout_marginRight="40dp"
+            android:layout_marginTop="10dp"
             android:hint="Event Description"
             android:inputType="textMultiLine"
             android:textColor="@color/white"
             android:textColorHint="@color/white" />
+
 
         <EditText
             android:id="@+id/eventdate"
@@ -60,11 +47,12 @@ tools:context=".createEventActivity">
             android:layout_height="40dp"
             android:layout_below="@id/eventdescr"
             android:layout_marginLeft="40dp"
-            android:layout_marginTop="10dp"
             android:layout_marginRight="40dp"
+            android:layout_marginTop="10dp"
             android:hint="Select Date"
             android:inputType="date"
             android:textColor="@color/white"
+            android:focusableInTouchMode="false"
             android:textColorHint="@color/white" />
 
         <EditText
@@ -73,10 +61,11 @@ tools:context=".createEventActivity">
             android:layout_height="40dp"
             android:layout_below="@id/eventdate"
             android:layout_marginLeft="40dp"
-            android:layout_marginTop="10dp"
             android:layout_marginRight="40dp"
+            android:layout_marginTop="10dp"
             android:hint="Select Time"
             android:inputType="time"
+            android:focusableInTouchMode="false"
             android:textColor="@color/white"
             android:textColorHint="@color/white" />
 
@@ -86,8 +75,8 @@ tools:context=".createEventActivity">
             android:layout_height="40dp"
             android:layout_below="@id/eventtime"
             android:layout_marginLeft="40dp"
-            android:layout_marginTop="10dp"
             android:layout_marginRight="40dp"
+            android:layout_marginTop="10dp"
             android:autofillHints=""
             android:hint="Event Location"
             android:inputType="text"
@@ -100,8 +89,8 @@ tools:context=".createEventActivity">
             android:layout_height="wrap_content"
             android:layout_below="@id/eventlocation"
             android:layout_marginLeft="50dp"
-            android:layout_marginTop="10dp"
             android:layout_marginRight="50dp"
+            android:layout_marginTop="10dp"
             android:background="@drawable/shape"
             android:onClick="newEvent"
             android:text=" Create Event"
@@ -109,7 +98,6 @@ tools:context=".createEventActivity">
             android:textStyle="bold" />
 
     </RelativeLayout>
-
 
 
 </android.support.constraint.ConstraintLayout>
