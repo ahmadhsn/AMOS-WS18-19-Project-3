@@ -13,9 +13,9 @@ public class PostgreSQLExample {
         try {
 
             Class.forName("org.postgresql.Driver");
-            String mysqlConnUrl = "jdbc:postgresql://localhost:5432/AdrenalineDatabase";
+            String mysqlConnUrl = "jdbc:postgresql://localhost:5432/AMOS1";
             String mysqlUserName = "postgres";
-            String mysqlPassword = "12345";
+            String mysqlPassword = "toor";
 
             ret = DriverManager.getConnection(mysqlConnUrl, mysqlUserName, mysqlPassword);
 
@@ -23,6 +23,7 @@ public class PostgreSQLExample {
             String dbName = dbmd.getDatabaseProductName();
             String dbVersion = dbmd.getDatabaseProductVersion();
             String dbUrl = dbmd.getURL();
+            
             String userName = dbmd.getUserName();
             String driverName = dbmd.getDriverName();
 
