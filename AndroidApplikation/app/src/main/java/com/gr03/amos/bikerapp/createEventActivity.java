@@ -59,7 +59,7 @@ public class createEventActivity extends AppCompatActivity {
 
             FutureTask<String> task = new FutureTask(new Callable<String>() {
                 public String call() {
-                    JSONObject threadResponse = Requests.getResponseEvent("createEvent", json);
+                    JSONObject threadResponse = Requests.getResponse("createEvent", json);
                     return threadResponse.toString();
                 }
             });
