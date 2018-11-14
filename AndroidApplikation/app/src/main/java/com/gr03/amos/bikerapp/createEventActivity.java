@@ -1,51 +1,79 @@
 package com.gr03.amos.bikerapp;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.Toast;
+import android.widget.TimePicker;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.gr03.amos.bikerapp.Requests;
-
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 
 
-public class createEventActivity extends AppCompatActivity {
+public class createEventActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+    EditText eventName;
+    EditText eventDescr;
+    EditText eventDate;
+    EditText eventTime;
+    EditText eventLocation;
+    SimpleDateFormat simpleDateFormat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
+
+        eventName = findViewById(R.id.eventname);
+        eventDescr = findViewById(R.id.eventdescr);
+        eventDate = findViewById(R.id.eventdate);
+        eventTime = findViewById(R.id.eventtime);
+        eventLocation = findViewById(R.id.eventlocation);
+        simpleDateFormat = new SimpleDateFormat("dd MM yyyy", Locale.US);
+        eventDate.setOnClickListener(v -> {
+            showDatePicker(1980, 0, 1);
+        });
+
+        eventTime.setOnClickListener(v -> {
+            showTimePicker(10, 44);
+        });
+
     }
 
-    public void newEvent(View view) throws JSONException{
+
+    @Override
+    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+        Calendar calendar = new GregorianCalendar(year, month, day);
+        eventDate.setText(simpleDateFormat.format(calendar.getTime()));
+    }
+
+    @Override
+    public void onTimeSet(TimePicker timePicker, int hour, int minutes) {
+        eventTime.setText(hour + ":" + minutes);
+    }
+
+
+    public void showDatePicker(int year, int month, int day) {
+        new DatePickerDialog(this, R.style.DateTimePicker, this, year, month, day)
+                .show();
+    }
+
+    private void showTimePicker(int hour, int minute) {
+        new TimePickerDialog(this, R.style.DateTimePicker, this, hour, minute, true).show();
+    }
+
+    public void newEvent(View view) throws JSONException {
         //TODO check all values are valid
-
-        EditText eventName = findViewById(R.id.eventname);
-        EditText eventDescr = findViewById(R.id.eventdescr);
-        EditText eventDate = findViewById(R.id.eventdate);
-        EditText eventTime = findViewById(R.id.eventtime);
-        EditText eventLocation = findViewById(R.id.eventlocation);
-
-
-/*        //get the spinner from the xml.
-        Spinner dropdown = findViewById(R.id.event_type);
-        //create a list of items for the spinner.
-        String[] items = new String[]{"1", "2", "three"};
-        //create an adapter to describe how the items are displayed, adapters are used in several places in android.
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
-        //set the spinners adapter to the previously created one.
-        dropdown.setAdapter(adapter);
-        */
 
         JSONObject json = new JSONObject();
         json.put("name", eventName.getText().toString());
