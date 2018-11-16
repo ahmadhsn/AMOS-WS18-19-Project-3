@@ -2,6 +2,7 @@ package com.gr03.amos.bikerapp;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -53,7 +54,7 @@ public class createEventActivity extends AppCompatActivity implements DatePicker
 
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-        eventDate.setText(year+"/"+(month +1)+"/"+day);
+        eventDate.setText(year + "/" + (month + 1) + "/" + day);
     }
 
     @Override
@@ -84,19 +85,19 @@ public class createEventActivity extends AppCompatActivity implements DatePicker
         try {
             JSONObject response;
 
-            FutureTask<String> task = new FutureTask(new Callable<String>() {
-                public String call() {
-                    JSONObject threadResponse = Requests.getResponse("createEvent", json);
-                    return threadResponse.toString();
-                }
+            FutureTask<String> task = new FutureTask((Callable<String>) () -> {
+                JSONObject threadResponse = Requests.getResponse("createEvent", json);
+                return threadResponse.toString();
             });
 
             new Thread(task).start();
             Log.i("Response", task.get());
-            response = new JSONObject(task.get());
+            Intent intent = new Intent(this, ShowEventActivity.class);
+            startActivity(intent);
         } catch (Exception e) {
             Log.i("Exception --- not requested", e.toString());
         }
+
     }
 
 

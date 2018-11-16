@@ -293,7 +293,7 @@ public class Services {
  
 		        
  		        Statement ss= conn.createStatement();
- 		        ResultSet result= ss.executeQuery("SELECT name,description,date,time FROM EVENT");
+ 		        ResultSet result= ss.executeQuery("SELECT id_event,name,description,date,time FROM EVENT");
  		        System.out.println("thiss" + result.getClass().getName());
 	             
  		            
@@ -301,13 +301,15 @@ public class Services {
 	             JSONArray jArray = new JSONArray();
 	             while (result.next())
 	             {
-	                 String name_json=result.getString("name");
+	            	 String id_json=result.getString("id_event");
+	            	 String name_json=result.getString("name");
 	                 String  desc_json=result.getString("description");
 	                 String  date_json=result.getString("date");
 	                 String  time_json=result.getString("time");
 	         		System.out.println(result);
 
 	                 JSONObject jobj = new JSONObject();
+	                 jobj.put("id_event", id_json);
 	                 jobj.put("name", name_json);
 	                 jobj.put("description", desc_json);
 	                 jobj.put("date", date_json);
