@@ -11,7 +11,7 @@ public class Event extends RealmObject {
     private long id_event;
     private String name;
     private String description;
-    private Date date;
+    private String date;
     private String time;
 
     public String getName() {
@@ -30,13 +30,6 @@ public class Event extends RealmObject {
         this.description = description;
     }
 
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
 
 
     public long getId_event() {
@@ -49,5 +42,13 @@ public class Event extends RealmObject {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

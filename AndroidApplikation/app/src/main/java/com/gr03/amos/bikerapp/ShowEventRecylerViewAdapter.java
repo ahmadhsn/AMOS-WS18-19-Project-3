@@ -2,6 +2,7 @@ package com.gr03.amos.bikerapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,16 +11,21 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gr03.amos.bikerapp.Model.Event;
+
 import java.util.List;
+
+import io.realm.RealmResults;
 
 
 public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventRecylerViewAdapter.ViewHolder> {
 
-    private List<List<String>> mData;
+    private RealmResults<Event> mData;
     private LayoutInflater mInflater;
     private Context context;
+
     // data is passed into the constructor
-    ShowEventRecylerViewAdapter(Context context, List<List<String>> data) {
+    ShowEventRecylerViewAdapter(Context context, RealmResults<Event> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
         this.context = context;
@@ -33,12 +39,11 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        Log.i("recyler", mData.get(position).get(0));
-        holder.eventName.setText(mData.get(position).get(0));
-        holder.eventDescription.setText(mData.get(position).get(1));
-        holder.eventDate.setText(mData.get(position).get(2));
-        holder.eventTime.setText(mData.get(position).get(3));
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        holder.eventName.setText(mData.get(position).getName());
+        holder.eventDescription.setText(mData.get(position).getDescription());
+        holder.eventDate.setText(mData.get(position).getDate());
+        holder.eventTime.setText(mData.get(position).getTime());
 
     }
 
@@ -66,12 +71,10 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
 
         @Override
         public void onClick(View view) {
-            String id = mData.get(getAdapterPosition()).get(4);
-            //ToDo add the intent for the new activity here
-            Intent intent = new Intent( context, EditEventActivity.class);
-            intent.putExtra("id",id);
+            Long id = mData.get(getAdapterPosition()).getId_event();
+            Intent intent = new Intent(context, EditEventActivity.class);
+            intent.putExtra("id", id);
             context.startActivity(intent);
-            Log.i("ID", id);
         }
     }
 }

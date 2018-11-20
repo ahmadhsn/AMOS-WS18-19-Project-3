@@ -12,25 +12,20 @@ import io.realm.RealmResults;
 
 public class EditEventActivity extends AppCompatActivity {
     Intent intent;
-    String eventId;
+    Long eventId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_event);
         intent = getIntent();
-        eventId = intent.getStringExtra("id");
+        eventId = intent.getLongExtra("id", 0);
 
-        Requests.getEventById("getEventById/" + eventId, this);
         Realm.init(this);
         Realm realm = Realm.getDefaultInstance();
 
-        final RealmResults<Event> event = realm.where(Event.class).findAll();
-        Log.i("name", String.valueOf(event.size()));
-
-
-        final Event eventRealm = realm.where(Event.class).equalTo("id_event", Long.parseLong(eventId)).findFirst();
-        Log.i("name", eventRealm.getName());
+        final Event event = realm.where(Event.class).equalTo("id_event", eventId).findFirst();
+        Log.i("EditEventActivity", event.getName() + event.getDate());
 
     }
 }

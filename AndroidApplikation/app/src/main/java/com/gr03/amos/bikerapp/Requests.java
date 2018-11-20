@@ -50,46 +50,25 @@ public class Requests {
         }
     }
 
-    public static List<List<String>> getJsonResponse(String urlTail) {
-        List<List<String>> renderedlist = new ArrayList<>();
+    public static void getJsonResponse(String urlTail, Context context) {
         try {
             JsonObject jsonObject = new GetJson().AsJSONObject("http://10.0.2.2:8080/RESTfulWebserver/services/" + urlTail);
             JSONObject obj = new JSONObject(String.valueOf(jsonObject));
             String eventString = obj.getJSONObject("eventCreation").getString("event");
 
             JSONArray object = new JSONArray(eventString); // parse the array
-            for (int i = 0; i < object.length(); i++) { // iterate over the array
-                List<String> list = new ArrayList<>();
-                JSONObject objectJSON = object.getJSONObject(i);
-                list.add(objectJSON.getString("name"));
-                list.add(objectJSON.getString("description"));
-                list.add(objectJSON.getString("time"));
-                list.add(objectJSON.getString("date"));
-                list.add(objectJSON.getString("id_event"));
-                renderedlist.add(list);
-            }
-
-        } catch (ExecutionException | InterruptedException | JSONException e) {
-            e.printStackTrace();
-        }
-        return renderedlist;
-    }
-
-    public static List<String> getEventById(String urlTail, Context context) {
-        try {
-            JsonObject jsonObject = new GetJson().AsJSONObject("http://10.0.2.2:8080/RESTfulWebserver/services/" + urlTail);
-            JSONObject obj = new JSONObject(String.valueOf(jsonObject));
 
             Realm.init(context);
             Realm realm = Realm.getDefaultInstance();
             realm.beginTransaction();
-            realm.createOrUpdateAllFromJson(Event.class, obj.getJSONArray("eventCreation"));
+            realm.createOrUpdateAllFromJson(Event.class, object);
             realm.commitTransaction();
             realm.close();
 
         } catch (ExecutionException | InterruptedException | JSONException e) {
             e.printStackTrace();
         }
-        return null;
+
     }
+
 }

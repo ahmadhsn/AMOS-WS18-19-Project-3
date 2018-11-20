@@ -12,10 +12,11 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
-import java.net.MalformedURLException;
+import com.gr03.amos.bikerapp.Model.Event;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class ShowEventActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -29,12 +30,17 @@ public class ShowEventActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        Realm.init(this);
+        Realm realm = Realm.getDefaultInstance();
+
+        Requests.getJsonResponse("getEvents", this);
+        RealmResults<Event> events = realm.where(Event.class).findAll();
+
         showEventsRecyclerView = findViewById(R.id.showEvents);
-
-
         showEventsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        showEventRecylerViewAdapter = new ShowEventRecylerViewAdapter(this, Requests.getJsonResponse("getEvents"));
+        showEventRecylerViewAdapter = new ShowEventRecylerViewAdapter(this, events);
         showEventsRecyclerView.setAdapter(showEventRecylerViewAdapter);
+
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -42,7 +48,7 @@ public class ShowEventActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
