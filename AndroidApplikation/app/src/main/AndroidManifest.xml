@@ -25,7 +25,8 @@
         <activity
             android:name=".ShowEventActivity"
             android:label="@string/title_activity_show_event"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".EditEventActivity"></activity>
     </application>
 
 </manifest>

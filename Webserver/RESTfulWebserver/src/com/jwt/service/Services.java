@@ -317,11 +317,59 @@ public class Services {
 	                 jArray.put(jobj);
 	                 
 	             }
-
 	             
 	             jobj1.put("event", jArray);
 	 			
 
+	             
+	} 
+		catch (Exception ex) {
+        ex.printStackTrace();
+    }
+		
+	
+	JSONObject response = new JSONObject();
+	
+	response.put("eventCreation", jobj1);
+
+	return Response.status(200).entity(response.toString()).build();
+
+} 
+
+
+	@GET
+	@Path("/getEventById/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response getEventById(@PathParam("id") int id) throws JSONException {
+	       JSONObject jobj = new JSONObject();
+	    		
+		System.out.println("...Get Event By ID ");
+		try {
+		        PostgreSQLExample postgreSQLExample = new PostgreSQLExample();
+		        Connection conn = postgreSQLExample.getPostgreSQLConnection(); 
+		        
+ 		        Statement statement= conn.createStatement();
+ 		        ResultSet result= statement.executeQuery("SELECT * FROM EVENT WHERE id_event="+id);
+ 				System.out.println("...Get Event By ID ssssss");
+
+ 		        System.out.println("thiss" + result.getClass().getName());
+ 		              
+	        if(result.next()) 
+ 		        {
+	        	String id_json, name_json, desc_json, date_json, time_json;
+ 		           	   id_json=result.getString("id_event");
+ 		           	   name_json=result.getString("name");
+	                   desc_json=result.getString("description");
+	                   date_json=result.getString("date");
+	                   time_json=result.getString("time");
+	         		System.out.println(result);
+	         		
+	                 jobj.put("id_event", id_json);
+	                 jobj.put("name", name_json);
+	                 jobj.put("description", desc_json);
+	                 jobj.put("date", date_json);
+	                 jobj.put("time", time_json); 		        	
+ 		        }    
 	             
 	} 
 		catch (Exception ex) {
@@ -332,12 +380,13 @@ public class Services {
 	
 	JSONObject response = new JSONObject();
 	
-	response.put("eventCreation", jobj1);
+	response.put("eventCreation", jobj);
 
 	return Response.status(200).entity(response.toString()).build();
 
 } 
 
+	
 	
 	
 }

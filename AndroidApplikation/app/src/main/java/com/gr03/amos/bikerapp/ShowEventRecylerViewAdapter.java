@@ -1,6 +1,7 @@
 package com.gr03.amos.bikerapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,15 +12,18 @@ import android.widget.Toast;
 
 import java.util.List;
 
+
 public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventRecylerViewAdapter.ViewHolder> {
 
     private List<List<String>> mData;
     private LayoutInflater mInflater;
-
+    private Context context;
     // data is passed into the constructor
     ShowEventRecylerViewAdapter(Context context, List<List<String>> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
+        this.context = context;
+
     }
 
     @Override
@@ -64,6 +68,9 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
         public void onClick(View view) {
             String id = mData.get(getAdapterPosition()).get(4);
             //ToDo add the intent for the new activity here
+            Intent intent = new Intent( context, EditEventActivity.class);
+            intent.putExtra("id",id);
+            context.startActivity(intent);
             Log.i("ID", id);
         }
     }

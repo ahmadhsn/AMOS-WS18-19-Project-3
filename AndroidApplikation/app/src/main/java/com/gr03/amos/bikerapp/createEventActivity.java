@@ -51,7 +51,6 @@ public class createEventActivity extends AppCompatActivity implements DatePicker
 
     }
 
-
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
         eventDate.setText(year + "/" + (month + 1) + "/" + day);

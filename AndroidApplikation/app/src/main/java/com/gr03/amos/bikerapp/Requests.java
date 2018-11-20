@@ -1,9 +1,11 @@
 package com.gr03.amos.bikerapp;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.dezlum.codelabs.getjson.GetJson;
 import com.google.gson.JsonObject;
+import com.gr03.amos.bikerapp.Model.Event;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,7 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import io.realm.Realm;
+
 public class Requests {
+
 
     public static JSONObject getResponse(String urlTail, JSONObject json) {
         try {
@@ -70,4 +75,21 @@ public class Requests {
         return renderedlist;
     }
 
+    public static List<String> getEventById(String urlTail, Context context) {
+        try {
+            JsonObject jsonObject = new GetJson().AsJSONObject("http://10.0.2.2:8080/RESTfulWebserver/services/" + urlTail);
+            JSONObject obj = new JSONObject(String.valueOf(jsonObject));
+
+            Realm.init(context);
+            Realm realm = Realm.getDefaultInstance();
+            realm.beginTransaction();
+            realm.createOrUpdateAllFromJson(Event.class, obj.getJSONArray("eventCreation"));
+            realm.commitTransaction();
+            realm.close();
+
+        } catch (ExecutionException | InterruptedException | JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
