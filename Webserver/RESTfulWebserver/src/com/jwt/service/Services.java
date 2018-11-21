@@ -122,6 +122,7 @@ public class Services {
 				PostgreSQLExample postgreSQLExample = new PostgreSQLExample();
 		        Connection conn = postgreSQLExample.getPostgreSQLConnection();
 		        
+		        
  		        Statement ss= conn.createStatement();
  		        ResultSet result= ss.executeQuery("SELECT email FROM user_reg");				
 				while(result.next()) {
@@ -142,10 +143,15 @@ public class Services {
                } catch (Exception ex) {
                    ex.printStackTrace();
                }
-	        
+	        	
 				//send registration mail 
-				//Mailer mailer = new Mailer(context);
-				//boolean messageSent = mailer.sendRegistrationMail(email, username);
+				Mailer mailer = new Mailer(context);
+				boolean messageSent = mailer.sendRegistrationMail(email, username);
+				
+				if(!messageSent) {
+					response.put("userRegistraion", "invalidMail");
+					return Response.status(400).entity(response.toString()).build();
+				}
 				
 				response.put("userRegistration", "successfullRegistration");
 				return Response.status(200).entity(response.toString()).build();
