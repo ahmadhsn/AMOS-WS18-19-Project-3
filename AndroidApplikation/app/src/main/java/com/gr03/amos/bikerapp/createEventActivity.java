@@ -22,7 +22,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 
 
-public class CreateEventActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public class createEventActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
     EditText eventName;
     EditText eventDescr;
     EditText eventDate;
