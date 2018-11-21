@@ -1,7 +1,5 @@
-package com.gr03.amos.bikerapp.Model;
+package com.gr03.amos.bikerapp.Models;
 
-
-import java.util.Date;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -29,7 +27,6 @@ public class Event extends RealmObject {
     public void setDescription(String description) {
         this.description = description;
     }
-
 
 
     public long getId_event() {

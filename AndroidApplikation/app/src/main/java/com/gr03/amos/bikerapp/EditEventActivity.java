@@ -19,10 +19,9 @@ import java.util.Locale;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 
-import com.gr03.amos.bikerapp.Model.Event;
+import com.gr03.amos.bikerapp.Models.Event;
 
 import io.realm.Realm;
-import io.realm.RealmResults;
 
 public class EditEventActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
     Intent intent;
