@@ -121,9 +121,9 @@ public class Services {
 				//check if user already exists
 				PostgreSQLExample postgreSQLExample = new PostgreSQLExample();
 		        Connection conn = postgreSQLExample.getPostgreSQLConnection();
-
+		        
  		        Statement ss= conn.createStatement();
- 		        ResultSet result= ss.executeQuery("SELECT email FROM USER");				
+ 		        ResultSet result= ss.executeQuery("SELECT email FROM user_reg");				
 				while(result.next()) {
 					if(result.getString("email").equals(email)) {
 						response.put("userRegistration", "emailExistsAlready");
@@ -131,8 +131,18 @@ public class Services {
 					}
 				}
 
-				// TODO: addUserToDB
-				
+		        //insert into DB
+		        try {
+	               PreparedStatement ur = conn.prepareStatement ("INSERT INTO user_reg (name,password,email) VALUES (?,?,?)");
+	               ur.setString(1, username);
+	               ur.setString(2, password);
+	               ur.setString(3, email);
+	               ur.executeUpdate();
+	               ur.closeOnCompletion();
+               } catch (Exception ex) {
+                   ex.printStackTrace();
+               }
+	        
 				//send registration mail 
 				//Mailer mailer = new Mailer(context);
 				//boolean messageSent = mailer.sendRegistrationMail(email, username);

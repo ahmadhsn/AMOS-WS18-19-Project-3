@@ -14,10 +14,7 @@ public class PostgreSQLExample {
 
             Class.forName("org.postgresql.Driver");
 //            String mysqlConnUrl = "jdbc:postgresql://localhost:5432/AMOS1";
-//            String mysqlUserName = "postgres";
-//            String mysqlPassword = "toor";
-            
-            String mysqlConnUrl = "jdbc:postgresql://localhost:5433/Adrenaline_DB";
+            String mysqlConnUrl = "jdbc:postgresql://localhost:5433/AMOS1";
             String mysqlUserName = "postgres";
             String mysqlPassword = "toor";
                  
