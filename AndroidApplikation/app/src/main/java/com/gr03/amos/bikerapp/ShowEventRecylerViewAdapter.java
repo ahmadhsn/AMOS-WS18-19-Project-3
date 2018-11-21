@@ -29,7 +29,6 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
         this.context = context;
-
     }
 
     @Override
@@ -44,7 +43,6 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
         holder.eventDescription.setText(mData.get(position).getDescription());
         holder.eventDate.setText(mData.get(position).getDate());
         holder.eventTime.setText(mData.get(position).getTime());
-
     }
 
     @Override
