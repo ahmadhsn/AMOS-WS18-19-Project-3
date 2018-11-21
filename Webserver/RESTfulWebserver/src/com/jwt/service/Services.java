@@ -108,7 +108,7 @@ public class Services {
 
 		if (JSONreq.has("name") && JSONreq.has("password") && JSONreq.has("email")) {
 			try {
-				// TODO: check if email already exists
+				JSONObject response = new JSONObject();
 
 				// get data
 				String username = JSONreq.getString("name");
@@ -117,19 +117,27 @@ public class Services {
 				// TODO: more data... city, birth?
 
 				System.out.println("...userRegistrationRequest from " + username);
+				
+				//check if user already exists
+				PostgreSQLExample postgreSQLExample = new PostgreSQLExample();
+		        Connection conn = postgreSQLExample.getPostgreSQLConnection();
 
+ 		        Statement ss= conn.createStatement();
+ 		        ResultSet result= ss.executeQuery("SELECT email FROM USER");				
+				while(result.next()) {
+					if(result.getString("email").equals(email)) {
+						response.put("userRegistration", "emailExistsAlready");
+						return Response.status(200).entity(response.toString()).build();
+					}
+				}
 
 				// TODO: addUserToDB
 				
 				//send registration mail 
-				Mailer mailer = new Mailer(context);
-				boolean messageSent = mailer.sendRegistrationMail(email, username);
-		
-				// TODO: response for client
-				JSONObject response = new JSONObject();
+				//Mailer mailer = new Mailer(context);
+				//boolean messageSent = mailer.sendRegistrationMail(email, username);
 				
 				response.put("userRegistration", "successfullRegistration");
-
 				return Response.status(200).entity(response.toString()).build();
 
 			} catch (Exception e) {

@@ -2,23 +2,20 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="Pa" key="selection"/>
+		<item value="//            String mysqlConnUrl = &quot;jdbc:postgresql://localhost:5432/AMOS1&quot;;" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="//            String mysqlConnUrl = &quot;jdbc:postgresql://localhost:5432/AMOS1&quot;;"/>
+			<item value="            String mysqlConnUrl = &quot;jdbc:postgresql://localhost:5432/AMOS1&quot;;"/>
+			<item value="            Class.forName(&quot;org.postgresql.Driver&quot;);"/>
 			<item value="Pa"/>
 			<item value="pa"/>
 			<item value="REQUserLogin"/>
 			<item value="//&#x09;public static void main(String[] args)"/>
 			<item value="//&#x09;&#x09;String req = &quot;params=%7B%22username%22%3A%22abauer%22%2C%22password%22%3A%221E38I2%22%7D&quot;.substring(7);"/>
-			<item value="//&#x09;&#x09;ResultSet rs = preparedStmt.getGeneratedKeys();"/>
-			<item value="//&#x09;&#x09;String req = java.net.URLDecoder.decode(urlReq.substring(7), &quot;UTF-8&quot;);"/>
-			<item value="//&#x09;&#x09;java.sql.Date date = new java.sql.Date(System.currentTimeMillis());"/>
-			<item value="writeIntoDBgetID(1, &quot;Maik Mietz&quot;, date, &quot;Maik Mietz&quot;, &quot;190.274.2893&quot;, &quot;PA12.323&quot;, &quot;Dirk Kadler&quot;, &quot;TU Berlin&quot;,"/>
-			<item value="//&#x09;public static void main(String[] args) throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {"/>
-			<item value="//&#x09;public static void main(String[] args) throws UnsupportedEncodingException, ClassNotFoundException, SQLException {"/>
 		</list>
 		<list key="replacehistory">
 			<item value="companies"/>
