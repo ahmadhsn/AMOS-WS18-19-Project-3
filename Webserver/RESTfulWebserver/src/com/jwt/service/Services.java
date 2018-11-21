@@ -3,6 +3,7 @@ package com.jwt.service;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Array;
 import java.sql.Connection;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
@@ -20,8 +21,12 @@ import java.sql.PreparedStatement;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
+import java.time.format.DateTimeFormatter;
 import com.jwt.service.mail.Mailer;
+import com.sun.org.apache.bcel.internal.generic.Select;
+
+import java.util.*;
+import java.text.*;
 
 /**
  * This class provides all web services.
@@ -140,9 +145,9 @@ public class Services {
 		return Response.status(400).entity("InvalidRequestBody").build();
 	}
 	
-	
+
 	// Create New Event Type
-	 
+
 	@POST
 	@Path("/createEventType")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -150,15 +155,15 @@ public class Services {
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
 		JSONObject JSONreq = new JSONObject(urlReq);
 		System.out.println(".. Create New Event Type");
-		
+
 		if (JSONreq.has("name")) {
 			try {
-		
+
 				String eventname = JSONreq.getString("name");
 				String eventdescription = JSONreq.getString("description");
-				
+
 				System.out.println("...New Event Type Created:" + eventname);
-				
+
 		        try {
 		            PostgreSQLExample postgreSQLExample = new PostgreSQLExample();
 		            Connection conn = postgreSQLExample.getPostgreSQLConnection();
@@ -172,11 +177,11 @@ public class Services {
 		        } catch (Exception ex) {
 		            ex.printStackTrace();
 		        }
-				
+
 				JSONObject response = new JSONObject();
-				
+
 				response.put("eventTypeCreation", "successfullCreation");
-		
+
 				return Response.status(200).entity(response.toString()).build();
 
 			} catch (Exception e) {
@@ -186,8 +191,8 @@ public class Services {
 		System.out.println("InvalidRequestbody");
 		return Response.status(400).entity("InvalidRequestBody").build();
 	}
-	
-	
+
+
 	/**
 	 * TODO
 	 * @param urlReq
@@ -208,15 +213,15 @@ public class Services {
 		if (JSONreq.has("name") && JSONreq.has("description") && JSONreq.has("date") && JSONreq.has("time")) {
 			try {
 		
-				
+
 				String eventname = JSONreq.getString("name");
 				String eventdescription = JSONreq.getString("description");
 				String eventdate = JSONreq.getString("date");
 				String eventtime = JSONreq.getString("time");
-				
-				
+
+
 				System.out.println("...newEventCreated:" + eventname);
-				
+
 		        try {
 		            PostgreSQLExample postgreSQLExample = new PostgreSQLExample();
 		            Connection conn = postgreSQLExample.getPostgreSQLConnection();
@@ -232,9 +237,9 @@ public class Services {
 		        } catch (Exception ex) {
 		            ex.printStackTrace();
 		        }
-				
-				
-				
+
+
+
 				JSONObject response = new JSONObject();
 				
 				response.put("eventCreation", "successfullCreation");
@@ -278,60 +283,162 @@ public class Services {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getAllEvents() throws JSONException {
 	       JSONObject jobj1 = new JSONObject();
-	    		
+
 		System.out.println("...getAllEvetns");
 		try {
 		        PostgreSQLExample postgreSQLExample = new PostgreSQLExample();
 		        Connection conn = postgreSQLExample.getPostgreSQLConnection();
 
 	            //PreparedStatement st = conn.prepareStatement("SELECT name,description,date,time FROM EVENT");
- 
-		        
+
+
  		        Statement ss= conn.createStatement();
- 		        ResultSet result= ss.executeQuery("SELECT name,description,date,time FROM EVENT");
+ 		        ResultSet result= ss.executeQuery("SELECT id_event,name,description,date,time FROM EVENT");
  		        System.out.println("thiss" + result.getClass().getName());
-	             
- 		            
-	             
+
+
+
 	             JSONArray jArray = new JSONArray();
 	             while (result.next())
 	             {
-	                 String name_json=result.getString("name");
+	            	 String id_json=result.getString("id_event");
+	            	 String name_json=result.getString("name");
 	                 String  desc_json=result.getString("description");
 	                 String  date_json=result.getString("date");
 	                 String  time_json=result.getString("time");
 	         		System.out.println(result);
 
 	                 JSONObject jobj = new JSONObject();
+	                 jobj.put("id_event", id_json);
 	                 jobj.put("name", name_json);
 	                 jobj.put("description", desc_json);
 	                 jobj.put("date", date_json);
 	                 jobj.put("time", time_json);
 	                 jArray.put(jobj);
-	                 
+
 	             }
 
-	             
 	             jobj1.put("event", jArray);
-	 			
 
-	             
-	} 
+
+
+	}
 		catch (Exception ex) {
         ex.printStackTrace();
     }
-	
-	
-	
+
+
 	JSONObject response = new JSONObject();
-	
+
 	response.put("eventCreation", jobj1);
 
 	return Response.status(200).entity(response.toString()).build();
 
-} 
-
-	
-	
 }
-	
+
+
+	@GET
+	@Path("/getEventById/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response getEventById(@PathParam("id") int id) throws JSONException {
+	       JSONObject jobj = new JSONObject();
+
+		System.out.println("...Get Event By ID ");
+		try {
+		        PostgreSQLExample postgreSQLExample = new PostgreSQLExample();
+		        Connection conn = postgreSQLExample.getPostgreSQLConnection();
+
+ 		        Statement statement= conn.createStatement();
+ 		        ResultSet result= statement.executeQuery("SELECT * FROM EVENT WHERE id_event="+id);
+ 				System.out.println("...Get Event By ID ssssss");
+
+ 		        System.out.println("thiss" + result.getClass().getName());
+
+	        if(result.next())
+ 		        {
+	        	String id_json, name_json, desc_json, date_json, time_json;
+ 		           	   id_json=result.getString("id_event");
+ 		           	   name_json=result.getString("name");
+	                   desc_json=result.getString("description");
+	                   date_json=result.getString("date");
+	                   time_json=result.getString("time");
+	         		System.out.println(result);
+
+	                 jobj.put("id_event", id_json);
+	                 jobj.put("name", name_json);
+	                 jobj.put("description", desc_json);
+	                 jobj.put("date", date_json);
+	                 jobj.put("time", time_json);
+ 		        }
+
+	}
+		catch (Exception ex) {
+        ex.printStackTrace();
+    }
+
+
+
+	JSONObject response = new JSONObject();
+
+	response.put("eventCreation", jobj);
+
+	return Response.status(200).entity(response.toString()).build();
+
+}
+
+	@POST
+	@Path("/updateEvent")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response updateEvent(String urlReq)
+			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		JSONObject JSONreq = new JSONObject(urlReq);
+		System.out.println("...updateEventRequest");
+
+		if (JSONreq.has("id_event") && JSONreq.has("name") && JSONreq.has("description") && JSONreq.has("date") && JSONreq.has("time")) {
+			try {
+
+				int eventid=(int) JSONreq.get("id_event");
+				String eventname = JSONreq.getString("name");
+				String eventdescription = JSONreq.getString("description");
+				String eventdate = JSONreq.getString("date");
+				String eventtime = JSONreq.getString("time");
+
+
+				System.out.println("...updateEvent:" + eventname + "...updateEvent Id:" + eventid +  "...updateEvent Date:" + eventdate + "...updateEvent tinme:" + eventtime);
+
+		        try {
+
+		        PostgreSQLExample postgreSQLExample = new PostgreSQLExample();
+		        Connection conn = postgreSQLExample.getPostgreSQLConnection();
+
+	            PreparedStatement statement = conn.prepareStatement ("UPDATE EVENT SET name =?, description =?, date=?::date, time=?::time WHERE id_event=" + eventid);
+
+	            statement.setString(1, eventname);
+	            statement.setString(2, eventdescription);
+	            statement.setString(3, eventdate);
+	            statement.setString(4, eventtime);
+	            statement.executeUpdate();
+	            statement.closeOnCompletion();
+
+		        } catch (Exception ex) {
+		            ex.printStackTrace();
+		        }
+
+
+
+				JSONObject response = new JSONObject();
+
+				response.put("eventUpdate", "successfullUpdation");
+
+				return Response.status(200).entity(response.toString()).build();
+
+			} catch (Exception e) {
+				System.out.println("Wrong JSONFormat:" + e.toString());
+			}
+		}
+		System.out.println("InvalidRequestbody");
+		return Response.status(400).entity("InvalidRequestBody").build();
+	}
+
+
+}

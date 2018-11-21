@@ -43,5 +43,10 @@ public class HomeActivity extends AppCompatActivity {
             Intent intent = new Intent(this, EventTypeActivity.class);
             startActivity(intent);
         });
+
+        EventTypeButton.setOnClickListener(v -> {
+            Intent intent = new Intent(this, EventTypeActivity.class);
+            startActivity(intent);
+        });
     }
 }
