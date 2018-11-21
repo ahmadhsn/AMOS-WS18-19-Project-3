@@ -386,7 +386,59 @@ public class Services {
 
 } 
 
-	
+	@POST
+	@Path("/updateEvent")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response updateEvent(String urlReq)
+			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		JSONObject JSONreq = new JSONObject(urlReq);
+		System.out.println("...updateEventRequest");
+
+		if (JSONreq.has("id_event") && JSONreq.has("name") && JSONreq.has("description") && JSONreq.has("date") && JSONreq.has("time")) {
+			try {
+		
+				int eventid=(int) JSONreq.get("id_event");
+				String eventname = JSONreq.getString("name");
+				String eventdescription = JSONreq.getString("description");
+				String eventdate = JSONreq.getString("date");
+				String eventtime = JSONreq.getString("time");
+				
+				
+				System.out.println("...updateEvent:" + eventname + "...updateEvent Id:" + eventid +  "...updateEvent Date:" + eventdate + "...updateEvent tinme:" + eventtime);
+				
+		        try {
+		        	
+		        PostgreSQLExample postgreSQLExample = new PostgreSQLExample();
+		        Connection conn = postgreSQLExample.getPostgreSQLConnection();
+
+	            PreparedStatement statement = conn.prepareStatement ("UPDATE EVENT SET name =?, description =?, date=?::date, time=?::time WHERE id_event=" + eventid);
+
+	            statement.setString(1, eventname);
+	            statement.setString(2, eventdescription);
+	            statement.setString(3, eventdate);
+	            statement.setString(4, eventtime);
+	            statement.executeUpdate();
+	            statement.closeOnCompletion();
+
+		        } catch (Exception ex) {
+		            ex.printStackTrace();
+		        }
+				
+				
+				
+				JSONObject response = new JSONObject();
+				
+				response.put("eventUpdate", "successfullUpdation");
+		
+				return Response.status(200).entity(response.toString()).build();
+
+			} catch (Exception e) {
+				System.out.println("Wrong JSONFormat:" + e.toString());
+			}
+		}
+		System.out.println("InvalidRequestbody");
+		return Response.status(400).entity("InvalidRequestBody").build();
+	}
 	
 	
 }

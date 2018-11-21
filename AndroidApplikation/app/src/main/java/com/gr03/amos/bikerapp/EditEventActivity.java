@@ -84,5 +84,35 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
         new TimePickerDialog(this, R.style.DateTimePicker, this, hour, minute, true).show();
     }
 
+    public void updateEvent(View view) throws JSONException {
+
+        JSONObject json = new JSONObject();
+        json.put("id_event", eventId);
+        json.put("name", event_name.getText().toString());
+        json.put("description", event_description.getText().toString());
+        json.put("date", event_date.getText().toString());
+        json.put("time", event_time.getText().toString());
+
+        Log.i("EditEventActivity", event_name + " " + eventId);
+
+        try {
+            JSONObject response;
+
+            FutureTask<String> task = new FutureTask((Callable<String>) () -> {
+                JSONObject threadResponse = Requests.getResponse("updateEvent", json);
+                return threadResponse.toString();
+            });
+
+            new Thread(task).start();
+            Log.i("Response", task.get());
+            Intent intent = new Intent(this, ShowEventActivity.class);
+            startActivity(intent);
+        } catch (Exception e) {
+            Log.i("Exception --- not requested", e.toString());
+        }
+
+    }
+
+
 
 }
