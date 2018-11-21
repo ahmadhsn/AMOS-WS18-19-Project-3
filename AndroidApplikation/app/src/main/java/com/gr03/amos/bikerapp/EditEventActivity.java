@@ -5,10 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.gr03.amos.bikerapp.Model.Event;
+import com.gr03.amos.bikerapp.Models.Event;
 
 import io.realm.Realm;
-import io.realm.RealmResults;
 
 public class EditEventActivity extends AppCompatActivity {
     Intent intent;

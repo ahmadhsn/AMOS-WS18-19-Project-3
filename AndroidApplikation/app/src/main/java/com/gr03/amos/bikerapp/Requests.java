@@ -5,7 +5,7 @@ import android.util.Log;
 
 import com.dezlum.codelabs.getjson.GetJson;
 import com.google.gson.JsonObject;
-import com.gr03.amos.bikerapp.Model.Event;
+import com.gr03.amos.bikerapp.Models.Event;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,8 +15,6 @@ import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import io.realm.Realm;
