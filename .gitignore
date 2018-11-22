@@ -177,3 +177,5 @@ Webserver/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/RESTful
 Webserver/.metadata/version.ini
 Webserver/RESTfulWebserver/build/classes/com/jwt/service/PostgreSQLExample.class
 Webserver/RESTfulWebserver/build/classes/com/jwt/service/Services.class
+Webserver/RESTfulWebserver/build/classes/com/jwt/service/*
+Webserver/RESTfulWebserver/WebContent/WEB-INF/adrenaline.properties

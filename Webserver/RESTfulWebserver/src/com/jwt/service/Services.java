@@ -124,30 +124,16 @@ public class Services {
 				System.out.println("...userRegistrationRequest from " + username);
 				
 				//check if user already exists
-				PostgreSQLExample postgreSQLExample = new PostgreSQLExample();
-		        Connection conn = postgreSQLExample.getPostgreSQLConnection();
+				DatabaseProvider db = new DatabaseProvider(context);
 		        
-		        
- 		        Statement ss= conn.createStatement();
- 		        ResultSet result= ss.executeQuery("SELECT email FROM user_reg");				
+ 		        ResultSet result= db.querySelectDB("SELECT * FROM user_reg WHERE email = '" + email + "'"); 
 				while(result.next()) {
-					if(result.getString("email").equals(email)) {
-						response.put("userRegistration", "emailExistsAlready");
-						return Response.status(200).entity(response.toString()).build();
-					}
+					response.put("userRegistration", "emailExistsAlready");
+					return Response.status(200).entity(response.toString()).build();
 				}
 
 		        //insert into DB
-		        try {
-	               PreparedStatement ur = conn.prepareStatement ("INSERT INTO user_reg (name,password,email) VALUES (?,?,?)");
-	               ur.setString(1, username);
-	               ur.setString(2, password);
-	               ur.setString(3, email);
-	               ur.executeUpdate();
-	               ur.closeOnCompletion();
-               } catch (Exception ex) {
-                   ex.printStackTrace();
-               }
+	        	db.queryInsertDB("INSERT INTO user_reg (name,password,email) VALUES (?,?,?)", username, password, email);
 	        	
 				//send registration mail 
 				Mailer mailer = new Mailer(context);
@@ -189,7 +175,7 @@ public class Services {
 				System.out.println("...New Event Type Created:" + eventname);
 
 		        try {
-		            PostgreSQLExample postgreSQLExample = new PostgreSQLExample();
+		            DatabaseProvider postgreSQLExample = new DatabaseProvider(context);
 		            Connection conn = postgreSQLExample.getPostgreSQLConnection();
 
 	            PreparedStatement st = conn.prepareStatement("INSERT INTO EVENT_TYPE (name,description) VALUES (?,?)");
@@ -247,7 +233,7 @@ public class Services {
 				System.out.println("...newEventCreated:" + eventname);
 
 		        try {
-		            PostgreSQLExample postgreSQLExample = new PostgreSQLExample();
+		            DatabaseProvider postgreSQLExample = new DatabaseProvider(context);
 		            Connection conn = postgreSQLExample.getPostgreSQLConnection();
 
 	            PreparedStatement st = conn.prepareStatement ("INSERT INTO EVENT (name,description,date,time) VALUES (?,?,?::date,?::time)");
@@ -310,7 +296,7 @@ public class Services {
 
 		System.out.println("...getAllEvetns");
 		try {
-		        PostgreSQLExample postgreSQLExample = new PostgreSQLExample();
+		        DatabaseProvider postgreSQLExample = new DatabaseProvider(context);
 		        Connection conn = postgreSQLExample.getPostgreSQLConnection();
 
 	            //PreparedStatement st = conn.prepareStatement("SELECT name,description,date,time FROM EVENT");
@@ -369,7 +355,7 @@ public class Services {
 
 		System.out.println("...Get Event By ID ");
 		try {
-		        PostgreSQLExample postgreSQLExample = new PostgreSQLExample();
+		        DatabaseProvider postgreSQLExample = new DatabaseProvider(context);
 		        Connection conn = postgreSQLExample.getPostgreSQLConnection();
 
  		        Statement statement= conn.createStatement();
@@ -432,7 +418,7 @@ public class Services {
 
 		        try {
 
-		        PostgreSQLExample postgreSQLExample = new PostgreSQLExample();
+		        DatabaseProvider postgreSQLExample = new DatabaseProvider(context);
 		        Connection conn = postgreSQLExample.getPostgreSQLConnection();
 
 	            PreparedStatement statement = conn.prepareStatement ("UPDATE EVENT SET name =?, description =?, date=?::date, time=?::time WHERE id_event=" + eventid);
