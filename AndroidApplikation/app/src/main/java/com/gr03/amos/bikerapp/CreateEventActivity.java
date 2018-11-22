@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,11 +43,11 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
         eventLocation = findViewById(R.id.eventlocation);
         simpleDateFormat = new SimpleDateFormat("dd MM yyyy", Locale.US);
         eventDate.setOnClickListener(v -> {
-            showDatePicker(1980, 0, 1);
+            showDatePicker();
         });
 
         eventTime.setOnClickListener(v -> {
-            showTimePicker(10, 44);
+            showTimePicker();
         });
 
     }
@@ -63,17 +64,53 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
     }
 
 
-    public void showDatePicker(int year, int month, int day) {
-        new DatePickerDialog(this, R.style.DateTimePicker, this, year, month, day)
-                .show();
+    public void showDatePicker() {
+        Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        DatePickerDialog newDatePickerDialog = new DatePickerDialog(this, R.style.DateTimePicker, this, year, month, day);
+        newDatePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+        newDatePickerDialog.show();
+
     }
 
-    private void showTimePicker(int hour, int minute) {
-        new TimePickerDialog(this, R.style.DateTimePicker, this, hour, minute, true).show();
+    private void showTimePicker() {
+        Calendar c = Calendar.getInstance();
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+        int minute = c.get(Calendar.MINUTE);
+        TimePickerDialog newTimePickerDialog = new TimePickerDialog(this, R.style.DateTimePicker, this, hour, minute, true);
+        newTimePickerDialog.show();
     }
 
     public void newEvent(View view) throws JSONException {
-        //TODO check all values are valid
+
+        if (eventName.getText().toString().isEmpty()){
+            Log.i("VALIDATIONEVENT","event name is empty");
+            Toast.makeText(getApplicationContext(),"Please enter a event name",Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (eventDescr.getText().toString().isEmpty()){
+            Log.i("VALIDATIONEVENT", "event description is empty");
+            Toast.makeText(getApplicationContext(),"Please enter a event discription",Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (eventDate.getText().toString().isEmpty()){
+            Log.i("VALIDATIONEVENT","event date is empty");
+            Toast.makeText(getApplicationContext(),"Please enter a event date",Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (eventTime.getText().toString().isEmpty()){
+            Log.i("VALIDATIONEVENT","event time is empty");
+            Toast.makeText(getApplicationContext(),"Please enter a event time",Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (eventLocation.getText().toString().isEmpty()) {
+            Log.i("VALIDATIONEVENT","event location is empty");
+            Toast.makeText(getApplicationContext(),"Please enter a event location",Toast.LENGTH_LONG).show();
+            return;
+        }
+
         JSONObject json = new JSONObject();
         json.put("name", eventName.getText().toString());
         json.put("description", eventDescr.getText().toString());
@@ -96,6 +133,14 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
             Intent intent = new Intent(this, ShowEventActivity.class);
             startActivity(intent);
             response = new JSONObject(task.get());
+
+            if (response.has("createEvent")) {
+                String statusEv = (String) response.get("createEvent");
+                if (statusEv.equals("successful")) {
+                    Toast.makeText(getApplicationContext(), "Successful created Event.", Toast.LENGTH_LONG).show();
+                }
+            }
+
         } catch (Exception e) {
             //TODO: Error-Handling
             Log.i("Exception --- not requested", e.toString());
