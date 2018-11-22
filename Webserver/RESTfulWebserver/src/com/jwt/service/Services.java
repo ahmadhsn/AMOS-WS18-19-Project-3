@@ -113,7 +113,7 @@ public class Services {
 
 		if (JSONreq.has("name") && JSONreq.has("password") && JSONreq.has("email")) {
 			try {
-				// TODO: check if email already exists
+				JSONObject response = new JSONObject();
 
 				// get data
 				String username = JSONreq.getString("name");
@@ -122,19 +122,43 @@ public class Services {
 				// TODO: more data... city, birth?
 
 				System.out.println("...userRegistrationRequest from " + username);
-
-
-				// TODO: addUserToDB
 				
+				//check if user already exists
+				PostgreSQLExample postgreSQLExample = new PostgreSQLExample();
+		        Connection conn = postgreSQLExample.getPostgreSQLConnection();
+		        
+		        
+ 		        Statement ss= conn.createStatement();
+ 		        ResultSet result= ss.executeQuery("SELECT email FROM user_reg");				
+				while(result.next()) {
+					if(result.getString("email").equals(email)) {
+						response.put("userRegistration", "emailExistsAlready");
+						return Response.status(200).entity(response.toString()).build();
+					}
+				}
+
+		        //insert into DB
+		        try {
+	               PreparedStatement ur = conn.prepareStatement ("INSERT INTO user_reg (name,password,email) VALUES (?,?,?)");
+	               ur.setString(1, username);
+	               ur.setString(2, password);
+	               ur.setString(3, email);
+	               ur.executeUpdate();
+	               ur.closeOnCompletion();
+               } catch (Exception ex) {
+                   ex.printStackTrace();
+               }
+	        	
 				//send registration mail 
 				Mailer mailer = new Mailer(context);
 				boolean messageSent = mailer.sendRegistrationMail(email, username);
-		
-				// TODO: response for client
-				JSONObject response = new JSONObject();
+				
+				if(!messageSent) {
+					response.put("userRegistraion", "invalidMail");
+					return Response.status(400).entity(response.toString()).build();
+				}
 				
 				response.put("userRegistration", "successfullRegistration");
-
 				return Response.status(200).entity(response.toString()).build();
 
 			} catch (Exception e) {
