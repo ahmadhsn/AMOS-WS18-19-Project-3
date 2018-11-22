@@ -69,19 +69,18 @@ public class DatabaseProvider {
 	public ResultSet querySelectDB(String query) {
 		ResultSet rs = null;
 		Connection conn = null;
-		
-		try {
-	        conn = this.getPostgreSQLConnection();
-	        
-	        
-	        Statement ss= conn.createStatement();
-		    rs = ss.executeQuery(query);		
-		    ss.closeOnCompletion();
 
-		}catch(Exception ex) {
+		try {
+			conn = this.getPostgreSQLConnection();
+
+			Statement ss = conn.createStatement();
+			rs = ss.executeQuery(query);
+			ss.closeOnCompletion();
+
+		} catch (Exception ex) {
 			ex.printStackTrace();
-		}finally {
-			if(conn != null) {
+		} finally {
+			if (conn != null) {
 				try {
 					conn.close();
 				} catch (SQLException e) {
@@ -92,24 +91,24 @@ public class DatabaseProvider {
 		return rs;
 
 	}
-	
+
 	public void queryInsertDB(String query, String... arguments) {
 		Connection conn = this.getPostgreSQLConnection();
-		
-        try {
-            PreparedStatement ur = conn.prepareStatement (query);
-            
-            for(int i=0; i<arguments.length; i++) {
-            	ur.setString(i+1, arguments[i]);
-            }
-            if(ur.executeUpdate() < 0) {
-            	System.err.println("Executing query failed: " + query);
-            }
-            ur.closeOnCompletion();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }finally {
-			if(conn != null) {
+
+		try {
+			PreparedStatement ur = conn.prepareStatement(query);
+
+			for (int i = 0; i < arguments.length; i++) {
+				ur.setString(i + 1, arguments[i]);
+			}
+			if (ur.executeUpdate() < 0) {
+				System.err.println("Executing query failed: " + query);
+			}
+			ur.closeOnCompletion();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			if (conn != null) {
 				try {
 					conn.close();
 				} catch (SQLException e) {
