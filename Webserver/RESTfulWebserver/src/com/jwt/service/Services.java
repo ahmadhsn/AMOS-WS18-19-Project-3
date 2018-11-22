@@ -75,15 +75,23 @@ public class Services {
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
 		JSONObject JSONreq = new JSONObject(urlReq);
 
-		if (JSONreq.has("username") && JSONreq.has("password")) {
-			String username = JSONreq.getString("username"); // or email
+		if (JSONreq.has("email") && JSONreq.has("password")) {
+			String email = JSONreq.getString("email"); 
 			String password = JSONreq.getString("password");
 
+			System.out.println("...userLoginRequest from " + email);
+
 			// check users info in DB
+			DatabaseProvider db = new DatabaseProvider(context);
+			ResultSet rs = db.querySelectDB("SELECT * FROM user_reg WHERE email = ? AND password = ?", email, password);
 
-			// TODO: response for client
 			JSONObject response = new JSONObject();
-
+			if(!rs.next()) {
+				response.put("login", "wrongCredentials");
+				return Response.status(200).entity(response.toString()).build();
+			}
+			
+			response.put("login", "successfulLogin");
 			return Response.status(200).entity(response.toString()).build();
 		} else {
 			return Response.status(400).entity("InvalidRequestBody").build();
