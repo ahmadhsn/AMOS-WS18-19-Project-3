@@ -141,6 +141,7 @@ public class Services {
 				db.queryInsertDB("INSERT INTO user_reg (password,email) VALUES (?,?)", password,
 						email);
 
+
 				// send registration mail
 				Mailer mailer = new Mailer(context);
 				boolean messageSent = mailer.sendRegistrationMail(email, username);
