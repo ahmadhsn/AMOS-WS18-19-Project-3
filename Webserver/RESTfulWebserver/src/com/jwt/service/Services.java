@@ -138,9 +138,7 @@ public class Services {
 				}
 
 				// insert into DB
-				db.queryInsertDB("INSERT INTO user_reg (password,email) VALUES (?,?)", password,
-						email);
-
+				db.queryInsertDB("INSERT INTO user_reg (password,email) VALUES (?,?)", password, email);
 
 				// send registration mail
 				Mailer mailer = new Mailer(context);
