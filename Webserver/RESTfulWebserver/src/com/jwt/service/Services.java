@@ -58,7 +58,7 @@ public class Services {
 	}
 
 	/**
-	 * TODO Checks users authentication.
+	 * Checks users authentication.
 	 * 
 	 * @param urlReq with user name and password
 	 * @return Response with status 200 and massage for valid user or status 400
@@ -76,7 +76,7 @@ public class Services {
 		JSONObject JSONreq = new JSONObject(urlReq);
 
 		if (JSONreq.has("email") && JSONreq.has("password")) {
-			String email = JSONreq.getString("email"); 
+			String email = JSONreq.getString("email");
 			String password = JSONreq.getString("password");
 
 			System.out.println("...userLoginRequest from " + email);
@@ -86,11 +86,11 @@ public class Services {
 			ResultSet rs = db.querySelectDB("SELECT * FROM user_reg WHERE email = ? AND password = ?", email, password);
 
 			JSONObject response = new JSONObject();
-			if(!rs.next()) {
+			if (!rs.next()) {
 				response.put("login", "wrongCredentials");
 				return Response.status(200).entity(response.toString()).build();
 			}
-			
+
 			response.put("login", "successfulLogin");
 			return Response.status(200).entity(response.toString()).build();
 		} else {
