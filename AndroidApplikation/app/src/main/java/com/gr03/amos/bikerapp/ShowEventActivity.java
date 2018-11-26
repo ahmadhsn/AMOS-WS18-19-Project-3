@@ -90,14 +90,7 @@ public class ShowEventActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.create_event_fragment, new ShowEventsFragment())
                     .commit();
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.settings) {
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
