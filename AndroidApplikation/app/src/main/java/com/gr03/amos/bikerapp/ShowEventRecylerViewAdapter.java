@@ -21,7 +21,7 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
     private Context context;
 
     // data is passed into the constructor
-    ShowEventRecylerViewAdapter(Context context, RealmResults<Event> data) {
+    public ShowEventRecylerViewAdapter(Context context, RealmResults<Event> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
         this.context = context;

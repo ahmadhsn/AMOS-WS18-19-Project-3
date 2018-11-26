@@ -6,4 +6,9 @@
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_add_event"
+        android:icon="@drawable/ic_menu_plus"
+        android:title="Add event"
+        app:showAsAction="always" />
 </menu>
