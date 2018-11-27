@@ -179,3 +179,5 @@ Webserver/RESTfulWebserver/build/classes/com/jwt/service/PostgreSQLExample.class
 Webserver/RESTfulWebserver/build/classes/com/jwt/service/Services.class
 Webserver/RESTfulWebserver/build/classes/com/jwt/service/*
 Webserver/RESTfulWebserver/WebContent/WEB-INF/adrenaline.properties
+Webserver/.project
+Webserver/RESTfulWebserver/.settings/*
