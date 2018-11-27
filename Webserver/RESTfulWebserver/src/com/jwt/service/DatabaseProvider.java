@@ -69,6 +69,7 @@ public class DatabaseProvider {
 	public ResultSet querySelectDB(String query) {
 		ResultSet rs = null;
 		Connection conn = null;
+		System.out.println("...... Execute Select Query: " + query);
 
 		try {
 			conn = this.getPostgreSQLConnection();
@@ -88,6 +89,8 @@ public class DatabaseProvider {
 				}
 			}
 		}
+		System.out.println("...... Select Statement Successful");
+
 		return rs;
 
 	}
@@ -95,6 +98,7 @@ public class DatabaseProvider {
 	public void queryInsertDB(String query, String... arguments) {
 		Connection conn = this.getPostgreSQLConnection();
 
+		System.out.println("...... Execute Insert Query: " + query);
 		try {
 			PreparedStatement ur = conn.prepareStatement(query);
 
@@ -116,6 +120,38 @@ public class DatabaseProvider {
 				}
 			}
 		}
+		
+		System.out.println("...... Insert into database done");
 
 	}
+
+	public ResultSet querySelectDB(String query, String... arguments) {
+		Connection conn = this.getPostgreSQLConnection();
+		ResultSet rs = null;
+		System.out.println("...... Execute Select Query: " + query);
+
+		try {
+			PreparedStatement ur = conn.prepareStatement(query);
+
+			for (int i = 0; i < arguments.length; i++) {
+				ur.setString(i + 1, arguments[i]);
+			}
+			rs = ur.executeQuery();
+			ur.closeOnCompletion();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		System.out.println("...... Select Statement Successful");
+		return rs;
+	}
+
 }
