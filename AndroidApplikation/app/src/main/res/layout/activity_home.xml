@@ -27,13 +27,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Event" />
-
-        <Button
-            android:id="@+id/EventType_Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/create_event_button"
-            android:text="EventType" />
     </RelativeLayout>
 
     <LinearLayout

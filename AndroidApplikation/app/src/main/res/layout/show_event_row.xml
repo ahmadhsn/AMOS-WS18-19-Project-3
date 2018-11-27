@@ -16,7 +16,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_marginStart="5dp"
-            android:text="name"
             android:textAllCaps="true"
             android:textColor="@color/colorPrimary"
             android:textSize="20sp"
@@ -48,7 +47,6 @@
             android:layout_below="@id/event_name"
             android:layout_margin="5dp"
             android:layout_toEndOf="@+id/image_calendar"
-            android:text="date"
             android:textColor="@color/colorPrimary"
             android:textSize="15sp" />
 
@@ -60,7 +58,6 @@
             android:layout_below="@+id/event_name"
             android:layout_margin="5dp"
             android:layout_toEndOf="@+id/image_time"
-            android:text="time"
             android:textColor="@color/colorPrimary"
             android:textSize="15sp" />
 
@@ -71,7 +68,6 @@
             android:layout_below="@+id/event_date"
             android:layout_margin="5dp"
             android:maxLength="100"
-            android:text="description"
             android:textColor="@color/colorPrimary"
             android:textSize="15sp" />
     </RelativeLayout>

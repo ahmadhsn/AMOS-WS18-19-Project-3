@@ -6,6 +6,7 @@
     <color name="white">#ffffff</color>
 
     <color name="secondaryColor">#f7a20e</color>
+    <color name="secondaryDarkColor">#ff7d00</color>
 
 
 </resources>

@@ -21,7 +21,7 @@
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
             android:layout_marginTop="10dp"
-            android:hint="Event Name"
+            android:hint="@string/create_event_name"
             android:inputType="text"
             android:textColor="@color/white"
             android:textColorHint="@color/white" />
@@ -34,7 +34,7 @@
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
             android:layout_marginTop="10dp"
-            android:hint="Event Description"
+            android:hint="@string/create_event_description"
             android:inputType="textCapSentences|textMultiLine"
             android:maxLength="2000"
             android:maxLines="4"
@@ -51,7 +51,7 @@
             android:layout_marginRight="40dp"
             android:layout_marginTop="10dp"
             android:focusableInTouchMode="false"
-            android:hint="Select Date"
+            android:hint="@string/create_event_select_date"
             android:inputType="date"
             android:textColor="@color/white"
             android:textColorHint="@color/white" />
@@ -65,7 +65,7 @@
             android:layout_marginRight="40dp"
             android:layout_marginTop="10dp"
             android:focusableInTouchMode="false"
-            android:hint="Select Time"
+            android:hint="@string/create_event_select_time"
             android:inputType="time"
             android:textColor="@color/white"
             android:textColorHint="@color/white" />
@@ -78,8 +78,7 @@
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
             android:layout_marginTop="10dp"
-            android:autofillHints=""
-            android:hint="Event Location"
+            android:hint="@string/create_event_location"
             android:inputType="text"
             android:textColor="@color/white"
             android:textColorHint="@color/white" />
@@ -102,7 +101,7 @@
             android:layout_marginRight="50dp"
             android:layout_marginTop="30dp"
             android:background="@drawable/shape"
-            android:text=" Create Event"
+            android:text="@string/create_event_button"
             android:textColor="@color/white"
             android:textStyle="bold" />
 

@@ -22,7 +22,6 @@ public class HomeActivity extends AppCompatActivity {
         signUpButton = findViewById(R.id.signup_button);
         loginButton = findViewById(R.id.login_button);
         createEventButton = findViewById(R.id.create_event_button);
-        EventTypeButton = findViewById(R.id.EventType_Button);
 
         signUpButton.setOnClickListener(v -> {
             Intent intent = new Intent(this, SignUpActivity.class);
@@ -39,14 +38,5 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        EventTypeButton.setOnClickListener(v -> {
-            Intent intent = new Intent(this, EventTypeActivity.class);
-            startActivity(intent);
-        });
-
-        EventTypeButton.setOnClickListener(v -> {
-            Intent intent = new Intent(this, EventTypeActivity.class);
-            startActivity(intent);
-        });
     }
 }

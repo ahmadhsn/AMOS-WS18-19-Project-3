@@ -28,6 +28,15 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="create_event_name">Event Name</string>
+    <string name="create_event_description">Event Description</string>
+    <string name="create_event_select_date">Select Date</string>
+    <string name="create_event_select_time">Select Time</string>
+    <string name="create_event_location">Event Location</string>
+    <string name="create_event_button">Create Event</string>
+    <string name="event_drawer_show_events_title">Show Events</string>
+    <string name="settings">Settings</string>
+    <string name="event_drawer_user_options">User Options</string>
 
 
     <!--
