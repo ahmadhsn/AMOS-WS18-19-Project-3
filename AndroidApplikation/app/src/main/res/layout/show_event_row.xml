@@ -16,6 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_marginStart="5dp"
+            android:text="name"
             android:textAllCaps="true"
             android:textColor="@color/colorPrimary"
             android:textSize="20sp"
@@ -27,9 +28,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/event_name"
+            android:layout_marginStart="10dp"
             android:layout_toEndOf="@+id/event_date"
             android:contentDescription="calendar"
-            android:layout_marginStart="10dp"
             android:src="@drawable/ic_time" />
 
         <ImageView
@@ -40,6 +41,25 @@
             android:contentDescription="time"
             android:src="@drawable/ic_calendar" />
 
+        <ImageView
+            android:id="@+id/edit_event"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="5dp"
+            android:contentDescription="time"
+            android:src="@drawable/ic_calendar" />
+
+        <ImageView
+            android:id="@+id/delete_event"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_toStartOf="@id/edit_event"
+            android:contentDescription="time"
+            android:src="@drawable/ic_calendar" />
+
+
         <TextView
             android:id="@+id/event_date"
             android:layout_width="wrap_content"
@@ -47,6 +67,7 @@
             android:layout_below="@id/event_name"
             android:layout_margin="5dp"
             android:layout_toEndOf="@+id/image_calendar"
+            android:text="date"
             android:textColor="@color/colorPrimary"
             android:textSize="15sp" />
 
@@ -58,6 +79,7 @@
             android:layout_below="@+id/event_name"
             android:layout_margin="5dp"
             android:layout_toEndOf="@+id/image_time"
+            android:text="time"
             android:textColor="@color/colorPrimary"
             android:textSize="15sp" />
 
@@ -68,6 +90,7 @@
             android:layout_below="@+id/event_date"
             android:layout_margin="5dp"
             android:maxLength="100"
+            android:text="description"
             android:textColor="@color/colorPrimary"
             android:textSize="15sp" />
     </RelativeLayout>

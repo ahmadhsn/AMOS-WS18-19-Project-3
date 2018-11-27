@@ -44,7 +44,7 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
     SimpleDateFormat simpleDateFormat;
 
     private Spinner spinner;
-    private static final String[] paths = {"Expo", "Rally", "Party"};
+    private static final String[] paths = {"Choose Event Type","Expo", "Rally", "Party"};
 
     public CreateEventFragment() {
     }
