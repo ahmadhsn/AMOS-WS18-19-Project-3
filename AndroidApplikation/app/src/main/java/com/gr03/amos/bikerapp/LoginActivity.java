@@ -1,5 +1,6 @@
 package com.gr03.amos.bikerapp;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -53,6 +54,9 @@ public class LoginActivity extends AppCompatActivity {
 
                 if(loginResponse.equals("successfulLogin")){
                     Toast.makeText(getApplicationContext(), "You are logged in now!", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(this, ShowEventActivity.class);
+                    startActivity(intent);
+
                     //TODO create session and redirect to home screen
                 }
             }
