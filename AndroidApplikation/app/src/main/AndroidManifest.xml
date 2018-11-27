@@ -27,6 +27,7 @@
             android:label="@string/title_activity_show_event"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".EditEventActivity" />
+        <activity android:name=".ChangePasswordActivity"></activity>
     </application>
 
 </manifest>

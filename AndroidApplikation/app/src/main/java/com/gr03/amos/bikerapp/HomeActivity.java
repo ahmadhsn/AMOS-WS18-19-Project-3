@@ -12,6 +12,7 @@ public class HomeActivity extends AppCompatActivity {
     Button signUpButton;
     Button createEventButton;
     Button EventTypeButton;
+    Button ChangePasswordButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +24,7 @@ public class HomeActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.login_button);
         createEventButton = findViewById(R.id.create_event_button);
         EventTypeButton = findViewById(R.id.EventType_Button);
+        ChangePasswordButton = findViewById(R.id.change_password_button);
 
         signUpButton.setOnClickListener(v -> {
             Intent intent = new Intent(this, SignUpActivity.class);
@@ -46,6 +48,10 @@ public class HomeActivity extends AppCompatActivity {
 
         EventTypeButton.setOnClickListener(v -> {
             Intent intent = new Intent(this, EventTypeActivity.class);
+            startActivity(intent);
+        });
+        ChangePasswordButton.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ChangePasswordActivity.class);
             startActivity(intent);
         });
     }
