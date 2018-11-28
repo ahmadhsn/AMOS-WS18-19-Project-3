@@ -92,11 +92,14 @@ public class Services {
 			}
 
 			response.put("login", "successfulLogin");
+			
 			return Response.status(200).entity(response.toString()).build();
 		} else {
 			return Response.status(400).entity("InvalidRequestBody").build();
 		}
 	}
+	
+	
 
 	/**
 	 * TODO Adds new user to database.
@@ -429,6 +432,57 @@ public class Services {
 				JSONObject response = new JSONObject();
 
 				response.put("eventUpdate", "successfullUpdation");
+
+				return Response.status(200).entity(response.toString()).build();
+
+			} catch (Exception e) {
+				System.out.println("Wrong JSONFormat:" + e.toString());
+			}
+		}
+		System.out.println("InvalidRequestbody");
+		return Response.status(400).entity("InvalidRequestBody").build();
+	}
+	
+	@POST
+	@Path("/changePassword")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response changePassword(String urlReq)
+			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		JSONObject JSONreq = new JSONObject(urlReq);
+		
+		if (JSONreq.has("email") && JSONreq.has("oldPassword") && JSONreq.has("newPassword") && JSONreq.has("repeatNewPassword")
+//				&& (JSONreq.getString("newPassword").equals(JSONreq.getString("repeatNewPassword")))
+				) {
+			try {
+				
+				String email = JSONreq.getString("email");
+				String oldPassword = JSONreq.getString("oldPassword");
+				String newPassword = JSONreq.getString("newPassword");
+				String repeatNewPassword = JSONreq.getString("repeatNewPassword");
+
+				System.out.println("...changePassword:" + email );
+
+				try {
+
+					DatabaseProvider db = new DatabaseProvider(context);
+					Connection conn = db.getPostgreSQLConnection();
+
+					PreparedStatement statement = conn.prepareStatement(
+//							"UPDATE USER_REG SET password =? WHERE email=? AND password=?" , email ,oldPassword );
+							"UPDATE USER_REG SET password =? WHERE email='"+ email +"'" + "AND password='" + oldPassword + "'" );
+//					"UPDATE USER_REG SET password =? WHERE email='"
+//					+ email + "&& password = " + oldPassword +"'" );
+					
+					statement.setString(1, newPassword);
+					statement.executeUpdate();
+					statement.closeOnCompletion();
+
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+
+				JSONObject response = new JSONObject();
+				response.put("passwordUpdated", "successfullUpdation");
 
 				return Response.status(200).entity(response.toString()).build();
 

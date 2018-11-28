@@ -22,25 +22,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0">
 
-        <Button
-            android:id="@+id/create_event_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Event" />
 
-        <Button
-            android:id="@+id/EventType_Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/create_event_button"
-            android:text="EventType" />
-
-        <Button
-            android:id="@+id/change_password_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/EventType_Button"
-            android:text="Change Password" />
     </RelativeLayout>
 
     <LinearLayout
@@ -80,8 +62,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
-            android:layout_marginTop="20dp"
             android:layout_marginRight="50dp"
+            android:layout_marginTop="20dp"
             android:background="@drawable/shape"
             android:text="@string/login_label"
             android:textColor="@color/white"
@@ -93,8 +75,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/login_button"
             android:layout_marginLeft="50dp"
-            android:layout_marginTop="5dp"
             android:layout_marginRight="50dp"
+            android:layout_marginTop="5dp"
             android:background="@drawable/shape"
             android:text="@string/signup_label"
 
@@ -108,8 +90,8 @@
             android:layout_below="@id/signup_button"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="50dp"
-            android:layout_marginTop="10dp"
             android:layout_marginRight="50dp"
+            android:layout_marginTop="10dp"
             android:text="@string/try_label"
             android:textAlignment="center"
             android:textColor="@color/white"

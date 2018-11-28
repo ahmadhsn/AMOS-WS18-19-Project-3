@@ -1,5 +1,6 @@
 package com.gr03.amos.bikerapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -91,6 +92,10 @@ public class ShowEventActivity extends AppCompatActivity
                     .add(R.id.create_event_fragment, new ShowEventsFragment())
                     .commit();
         } else if (id == R.id.settings) {
+        } else if (id == R.id.change_password) {
+            Intent intent = new Intent(this, ChangePasswordActivity.class);
+            startActivity(intent);
+
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

@@ -28,9 +28,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/event_name"
+            android:layout_marginStart="10dp"
             android:layout_toEndOf="@+id/event_date"
             android:contentDescription="calendar"
-            android:layout_marginStart="10dp"
             android:src="@drawable/ic_time" />
 
         <ImageView
@@ -40,6 +40,25 @@
             android:layout_below="@id/event_name"
             android:contentDescription="time"
             android:src="@drawable/ic_calendar" />
+
+        <ImageView
+            android:id="@+id/edit_event"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="5dp"
+            android:contentDescription="time"
+            android:src="@drawable/ic_calendar" />
+
+        <ImageView
+            android:id="@+id/delete_event"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_toStartOf="@id/edit_event"
+            android:contentDescription="time"
+            android:src="@drawable/ic_calendar" />
+
 
         <TextView
             android:id="@+id/event_date"
