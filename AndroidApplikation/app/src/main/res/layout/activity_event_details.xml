@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EventDetailsActivity">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="129dp"
+        tools:layout_editor_absoluteY="16dp">
+
+        <TextView
+            android:id="@+id/event_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:padding="20dp"
+            android:text="name"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="23sp"
+            android:textStyle="bold" />
+
+
+        <!--<ImageView-->
+        <!--android:layout_width="200dp"-->
+        <!--android:layout_height="200dp"-->
+        <!--android:layout_marginLeft="200dp"-->
+        <!--android:src="@drawable/ic_launcher_background" />-->
+
+        <TextView
+            android:id="@+id/event_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/event_name"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:padding="20dp"
+            android:text="description"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="23sp"
+            android:textStyle="bold" />
+        />
+
+        <TextView
+            android:id="@+id/event_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/event_description"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:padding="20dp"
+            android:text="date"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="23sp"
+            android:textStyle="bold" />
+        />
+
+        <TextView
+            android:id="@+id/event_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/event_date"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:padding="20dp"
+            android:text="time"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="23sp"
+            android:textStyle="bold" />
+
+        <!--<Button-->
+        <!--android:id="@+id/editEventButton"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@id/event_time"-->
+        <!--android:text="Edit Event" />-->
+
+        <!--<Button-->
+        <!--android:id="@+id/DeleteEventButton"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@id/editEventButton"-->
+        <!--android:onClick="deleteEvent"-->
+        <!--android:text="Delete Event" />-->
+        <!--/>-->
+
+        <ImageButton
+            android:id="@+id/editEventButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/event_time"
+            app:srcCompat="@android:drawable/ic_menu_edit"
+            />
+
+        <ImageButton
+            android:id="@+id/DeleteEventButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editEventButton"
+            app:srcCompat="@android:drawable/ic_menu_delete"
+            />
+    </RelativeLayout>
+
+
+
+</android.support.constraint.ConstraintLayout>

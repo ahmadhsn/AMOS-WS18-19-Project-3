@@ -27,7 +27,8 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".EditEventActivity" />
         <activity android:name=".ChangePasswordActivity" />
-        <activity android:name=".AddProfileBasicUserActivity"></activity>
+        <activity android:name=".AddProfileBasicUserActivity" />
+        <activity android:name=".EventDetailsActivity"></activity>
     </application>
 
 </manifest>

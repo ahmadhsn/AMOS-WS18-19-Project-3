@@ -614,5 +614,49 @@ public class Services {
 		System.out.println("InvalidRequestbody");
 		return Response.status(400).entity("InvalidRequestBody").build();
 	}
+	
+	@POST
+	@Path("/deleteEvent")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response deleteEvent(String urlReq)
+			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		JSONObject JSONreq = new JSONObject(urlReq);
+		System.out.println("...Delete Event Request");
+
+		if (JSONreq.has("id_event")) {
+			try {
+
+				int eventid = (int) JSONreq.get("id_event");
+
+				System.out.println("...Delete Event ID" + eventid);
+
+				try {
+
+					DatabaseProvider postgreSQLExample = new DatabaseProvider(context);
+					Connection conn = postgreSQLExample.getPostgreSQLConnection();
+
+					PreparedStatement statement = conn.prepareStatement("DELETE FROM EVENT WHERE id_event="+ eventid);
+
+					statement.executeUpdate();
+					statement.closeOnCompletion();
+
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+
+				JSONObject response = new JSONObject();
+
+				response.put("Event Deletion", "successfullDeletoion");
+
+				return Response.status(200).entity(response.toString()).build();
+
+			} catch (Exception e) {
+				System.out.println("Wrong JSONFormat:" + e.toString());
+			}
+		}
+		System.out.println("InvalidRequestbody");
+		return Response.status(400).entity("InvalidRequestBody").build();
+	}
+
 
 }
