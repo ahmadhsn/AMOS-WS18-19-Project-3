@@ -58,7 +58,7 @@ public class Services {
 	}
 
 	/**
-	 * TODO Checks users authentication.
+	 * Checks users authentication.
 	 * 
 	 * @param urlReq with user name and password
 	 * @return Response with status 200 and massage for valid user or status 400
@@ -75,20 +75,31 @@ public class Services {
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
 		JSONObject JSONreq = new JSONObject(urlReq);
 
-		if (JSONreq.has("username") && JSONreq.has("password")) {
-			String username = JSONreq.getString("username"); // or email
+		if (JSONreq.has("email") && JSONreq.has("password")) {
+			String email = JSONreq.getString("email");
 			String password = JSONreq.getString("password");
 
+			System.out.println("...userLoginRequest from " + email);
+
 			// check users info in DB
+			DatabaseProvider db = new DatabaseProvider(context);
+			ResultSet rs = db.querySelectDB("SELECT * FROM user_reg WHERE email = ? AND password = ?", email, password);
 
-			// TODO: response for client
 			JSONObject response = new JSONObject();
+			if (!rs.next()) {
+				response.put("login", "wrongCredentials");
+				return Response.status(200).entity(response.toString()).build();
+			}
 
+			response.put("login", "successfulLogin");
+			
 			return Response.status(200).entity(response.toString()).build();
 		} else {
 			return Response.status(400).entity("InvalidRequestBody").build();
 		}
 	}
+	
+	
 
 	/**
 	 * TODO Adds new user to database.
@@ -261,12 +272,116 @@ public class Services {
 	/**
 	 * Sets options for headers.
 	 */
+	@POST
+    @Path("/addUserBasic")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addUserBasic(String urlReq)
+            throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+        JSONObject JSONreq = new JSONObject(urlReq);
+        System.out.println("...addInfoBasicUserRequest");
+        if (JSONreq.has("first_name")&& JSONreq.has("last_name") && JSONreq.has("dob") && JSONreq.has("country") && JSONreq.has("state") && JSONreq.has("city") && JSONreq.has("street") && JSONreq.has("postcode") && JSONreq.has("housenumber")&& JSONreq.has("gender"))  {
+        	try {
+                String fname = JSONreq.getString("first_name");
+                String lname = JSONreq.getString("last_name");
+                String dob = JSONreq.getString("dob");
+                String country = JSONreq.getString("country");
+                String state = JSONreq.getString("state");
+                String city = JSONreq.getString("city");
+                String street = JSONreq.getString("street");
+                Integer postcode = JSONreq.getInt("postcode");
+                String housenumber = JSONreq.getString("housenumber");
+                String genderCol = JSONreq.getString("gender");
+                
+                System.out.println("...newInfoBasicUserAdded:");
+                try {
+                    DatabaseProvider postgreSQLExample = new DatabaseProvider(context);
+                    Connection conn = postgreSQLExample.getPostgreSQLConnection();
+                    
+                    PreparedStatement s1 = conn.prepareStatement(
+                            "INSERT INTO GENDER (gender) VALUES (?)");
+                    
+                    PreparedStatement s2 = conn.prepareStatement(
+                            "INSERT INTO ADDRESS (country, state, city, street, postcode, housenumber) VALUES (?,?,?,?,?,?)");
+                    
+                    PreparedStatement s3 = conn.prepareStatement(
+                            "INSERT INTO BASIC_USER (id_user, first_name,last_name,dob, id_gender, id_address) VALUES (?,?,?,?::date,?,?)");
+                   
+                    
+                    s1.setString(1, genderCol);
+                    s1.executeUpdate();
+                    s1.closeOnCompletion();
+                    
+                    s2.setString(1, country);
+                    s2.setString(2, state);
+                    s2.setString(3, city);
+                    s2.setString(4, street);
+                    s2.setInt(5, postcode);
+                    s2.setString(6, housenumber);
+                    s2.executeUpdate();
+                    s2.closeOnCompletion();
+                    
+                    String selectSQL = "SELECT ID_USER FROM USER_REG ORDER BY ID_USER DESC LIMIT 1";
+                    PreparedStatement preparedStatement = conn.prepareStatement(selectSQL);
+                    ResultSet rs = preparedStatement.executeQuery();
+                    int result;
+                    while (rs.next()) {
+                    	String userId = rs.getString("ID_USER");
+                    	result = Integer.parseInt(userId);	
+                    	s3.setInt(1, result);
+                    }
+                    
+                    s3.setString(2, fname);
+                    s3.setString(3, lname);
+                    s3.setString(4, dob);
+                    
+                    String selectSQL2 = "SELECT ID_GENDER FROM GENDER ORDER BY ID_GENDER DESC LIMIT 1";
+                    PreparedStatement preparedStatement2 = conn.prepareStatement(selectSQL2);
+                    ResultSet rs2 = preparedStatement2.executeQuery();
+                    int result2;
+                    while (rs2.next()) {
+                    	String genderId = rs2.getString("ID_GENDER");
+                    	result2 = Integer.parseInt(genderId);	
+                    	s3.setInt(5, result2);
+                     }
+                    
+                    String selectSQL3 = "SELECT ID_ADDRESS FROM ADDRESS ORDER BY ID_ADDRESS DESC LIMIT 1";
+                    PreparedStatement preparedStatement3 = conn.prepareStatement(selectSQL3);
+                    ResultSet rs3 = preparedStatement3.executeQuery();
+                    int result3;
+                    while (rs3.next()) {
+                    	String addressId = rs3.getString("ID_ADDRESS");
+                    	result3 = Integer.parseInt(addressId);	
+                    	s3.setInt(6, result3);
+                     }
+                   
+                    s3.executeUpdate();
+                    s3.closeOnCompletion();
+                    
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                JSONObject response = new JSONObject();
+                response.put("addUserBasic", "successfullCreation");
+                return Response.status(200).entity(response.toString()).build();
+            } catch (Exception e) {
+                System.out.println("Wrong JSONFormat:" + e.toString());
+            }
+        }
+        System.out.println("InvalidRequestbody");
+        return Response.status(400).entity("InvalidRequestBody").build();
+    }
+    /**
+     * Sets options for headers.
+     */
+   
 	@OPTIONS
 	public Response optionsOptions() {
 		return Response.ok().header("Allow-Control-Allow-Methods", "POST,GET,OPTIONS")
 				.header("Access-Control-Allow-Origin", "*").build();
 	}
 
+	
+	
 	@GET
 	@Path("/testMail")
 	public Response sendTestMail() throws JSONException {
@@ -297,7 +412,7 @@ public class Services {
 
 			Statement ss = conn.createStatement();
 			ResultSet result = ss.executeQuery("SELECT id_event,name,description,date,time FROM EVENT");
-			System.out.println("thiss" + result.getClass().getName());
+			System.out.println("this" + result.getClass().getName());
 
 			JSONArray jArray = new JSONArray();
 			while (result.next()) {
@@ -345,9 +460,9 @@ public class Services {
 
 			Statement statement = conn.createStatement();
 			ResultSet result = statement.executeQuery("SELECT * FROM EVENT WHERE id_event=" + id);
-			System.out.println("...Get Event By ID ssssss");
+			System.out.println("...Get Event By ID ");
 
-			System.out.println("thiss" + result.getClass().getName());
+			System.out.println("this" + result.getClass().getName());
 
 			if (result.next()) {
 				String id_json, name_json, desc_json, date_json, time_json;
@@ -431,5 +546,117 @@ public class Services {
 		System.out.println("InvalidRequestbody");
 		return Response.status(400).entity("InvalidRequestBody").build();
 	}
+	
+	@POST
+	@Path("/changePassword")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response changePassword(String urlReq)
+			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		JSONObject JSONreq = new JSONObject(urlReq);
+		
+		if (JSONreq.has("email") && JSONreq.has("oldPassword") && JSONreq.has("newPassword") && JSONreq.has("repeatNewPassword")
+//				&& (JSONreq.getString("newPassword").equals(JSONreq.getString("repeatNewPassword")))
+				) {
+			try {
+				
+				String email = JSONreq.getString("email");
+				String oldPassword = JSONreq.getString("oldPassword");
+				String newPassword = JSONreq.getString("newPassword");
+				String repeatNewPassword = JSONreq.getString("repeatNewPassword");
+
+				System.out.println("...changePassword:" + email );
+
+				try {
+
+					DatabaseProvider db = new DatabaseProvider(context);
+					Connection conn = db.getPostgreSQLConnection();
+//					Statement statement = conn.createStatement();
+//					
+//					ResultSet result = statement.executeQuery("UPDATE USER_REG SET password =? WHERE email='"+ email +"'" + "AND password='" + oldPassword + "'", newPassword);
+
+					PreparedStatement statement = conn.prepareStatement(
+							"UPDATE USER_REG SET password =? WHERE email='"+ email +"'" + "AND password='" + oldPassword + "'" );
+
+					
+					statement.setString(1, newPassword);
+					int count = statement.executeUpdate();
+					statement.closeOnCompletion();
+					JSONObject response = new JSONObject();
+					if (count>0) {
+						
+						response.put("passwordUpdated", "successfullUpdation");
+
+						return Response.status(200).entity(response.toString()).build();
+					
+					}
+					else {
+						response.put("passwordUpdated", "notUpdated");
+
+						return Response.status(200).entity(response.toString()).build();
+					}
+					
+
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+				
+				
+
+//				JSONObject response = new JSONObject();
+//				response.put("passwordUpdated", "successfullUpdation");
+//
+//				return Response.status(200).entity(response.toString()).build();
+
+			} catch (Exception e) {
+				System.out.println("Wrong JSONFormat:" + e.toString());
+			}
+		}
+		System.out.println("InvalidRequestbody");
+		return Response.status(400).entity("InvalidRequestBody").build();
+	}
+	
+	@POST
+	@Path("/deleteEvent")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response deleteEvent(String urlReq)
+			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		JSONObject JSONreq = new JSONObject(urlReq);
+		System.out.println("...Delete Event Request");
+
+		if (JSONreq.has("id_event")) {
+			try {
+
+				int eventid = (int) JSONreq.get("id_event");
+
+				System.out.println("...Delete Event ID" + eventid);
+
+				try {
+
+					DatabaseProvider postgreSQLExample = new DatabaseProvider(context);
+					Connection conn = postgreSQLExample.getPostgreSQLConnection();
+
+					PreparedStatement statement = conn.prepareStatement("DELETE FROM EVENT WHERE id_event="+ eventid);
+
+					statement.executeUpdate();
+					statement.closeOnCompletion();
+
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+
+				JSONObject response = new JSONObject();
+
+				response.put("Event Deletion", "successfullDeletoion");
+
+				return Response.status(200).entity(response.toString()).build();
+
+			} catch (Exception e) {
+				System.out.println("Wrong JSONFormat:" + e.toString());
+			}
+		}
+		System.out.println("InvalidRequestbody");
+		return Response.status(400).entity("InvalidRequestBody").build();
+	}
+
 
 }

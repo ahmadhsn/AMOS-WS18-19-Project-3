@@ -1,9 +1,10 @@
 package com.gr03.amos.bikerapp;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -12,15 +13,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.gr03.amos.bikerapp.Models.Event;
-
-import io.realm.Realm;
-import io.realm.RealmResults;
+import com.gr03.amos.bikerapp.FragmentActivity.CreateEventFragment;
+import com.gr03.amos.bikerapp.FragmentActivity.ShowEventsFragment;
 
 public class ShowEventActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    RecyclerView showEventsRecyclerView;
-    ShowEventRecylerViewAdapter showEventRecylerViewAdapter;
+    MenuItem menuItem;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,17 +27,6 @@ public class ShowEventActivity extends AppCompatActivity
         setContentView(R.layout.activity_show_event);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        Realm.init(this);
-        Realm realm = Realm.getDefaultInstance();
-
-        Requests.getJsonResponse("getEvents", this);
-        RealmResults<Event> events = realm.where(Event.class).findAll();
-
-        showEventsRecyclerView = findViewById(R.id.showEvents);
-        showEventsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        showEventRecylerViewAdapter = new ShowEventRecylerViewAdapter(this, events);
-        showEventsRecyclerView.setAdapter(showEventRecylerViewAdapter);
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -48,13 +36,22 @@ public class ShowEventActivity extends AppCompatActivity
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        menuItem = navigationView.getMenu().findItem(R.id.show_events);
+        menuItem.setChecked(true);
+        onNavigationItemSelected(menuItem);
     }
+
 
     @Override
     public void onBackPressed() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
+
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if (fragmentManager.getBackStackEntryCount() > 0) {
+            fragmentManager.popBackStackImmediate();
         } else {
             super.onBackPressed();
         }
@@ -69,36 +66,35 @@ public class ShowEventActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
 
+        if (id == R.id.action_add_event) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.create_event_fragment, new CreateEventFragment())
+                    .addToBackStack("CREATE_EVENT_FRAGMENT")
+                    .commit();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        if (id == R.id.show_events) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.create_event_fragment, new ShowEventsFragment())
+                    .commit();
+        } else if (id == R.id.settings) {
+        } else if (id == R.id.change_password) {
+            Intent intent = new Intent(this, ChangePasswordActivity.class);
+            startActivity(intent);
 
         }
 
@@ -106,4 +102,5 @@ public class ShowEventActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }

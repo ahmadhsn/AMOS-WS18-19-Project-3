@@ -110,7 +110,6 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
         } catch (Exception e) {
             Log.i("Exception --- not requested", e.toString());
         }
-
     }
 
 

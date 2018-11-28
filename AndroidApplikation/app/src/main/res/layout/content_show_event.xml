@@ -8,8 +8,9 @@
     tools:context=".ShowEventActivity"
     tools:showIn="@layout/app_bar_show_event">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/showEvents"
+    <FrameLayout
+        android:id="@+id/create_event_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
 </android.support.constraint.ConstraintLayout>

@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
-    tools:context=".CreateEventActivity">
+    android:background="@color/colorPrimary">
 
     <RelativeLayout
         android:id="@+id/relativeLayout2"
@@ -22,7 +21,7 @@
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
             android:layout_marginTop="10dp"
-            android:hint="Event Name"
+            android:hint="@string/create_event_name"
             android:inputType="text"
             android:textColor="@color/white"
             android:textColorHint="@color/white" />
@@ -30,13 +29,15 @@
         <EditText
             android:id="@+id/eventdescr"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_below="@id/eventname"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
             android:layout_marginTop="10dp"
-            android:hint="Event Description"
-            android:inputType="textMultiLine"
+            android:hint="@string/create_event_description"
+            android:inputType="textCapSentences|textMultiLine"
+            android:maxLength="2000"
+            android:maxLines="4"
             android:textColor="@color/white"
             android:textColorHint="@color/white" />
 
@@ -49,10 +50,10 @@
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
             android:layout_marginTop="10dp"
-            android:hint="Select Date"
+            android:focusableInTouchMode="false"
+            android:hint="@string/create_event_select_date"
             android:inputType="date"
             android:textColor="@color/white"
-            android:focusableInTouchMode="false"
             android:textColorHint="@color/white" />
 
         <EditText
@@ -63,9 +64,9 @@
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
             android:layout_marginTop="10dp"
-            android:hint="Select Time"
-            android:inputType="time"
             android:focusableInTouchMode="false"
+            android:hint="@string/create_event_select_time"
+            android:inputType="time"
             android:textColor="@color/white"
             android:textColorHint="@color/white" />
 
@@ -77,23 +78,32 @@
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
             android:layout_marginTop="10dp"
-            android:autofillHints=""
-            android:hint="Event Location"
+            android:hint="@string/create_event_location"
             android:inputType="text"
             android:textColor="@color/white"
             android:textColorHint="@color/white" />
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_below="@id/eventlocation"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="10dp"
+            android:theme="@style/Spinner"
+            />
 
         <Button
             android:id="@+id/createEvent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/eventlocation"
+            android:layout_below="@id/spinner"
             android:layout_marginLeft="50dp"
             android:layout_marginRight="50dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="30dp"
             android:background="@drawable/shape"
-            android:onClick="newEvent"
-            android:text=" Create Event"
+            android:text="@string/create_event_button"
             android:textColor="@color/white"
             android:textStyle="bold" />
 

@@ -21,7 +21,7 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
     private Context context;
 
     // data is passed into the constructor
-    ShowEventRecylerViewAdapter(Context context, RealmResults<Event> data) {
+    public ShowEventRecylerViewAdapter(Context context, RealmResults<Event> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
         this.context = context;
@@ -66,7 +66,7 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
         @Override
         public void onClick(View view) {
             Long id = mData.get(getAdapterPosition()).getId_event();
-            Intent intent = new Intent(context, EditEventActivity.class);
+            Intent intent = new Intent(context, EventDetailsActivity.class);
             intent.putExtra("id", id);
             context.startActivity(intent);
         }
