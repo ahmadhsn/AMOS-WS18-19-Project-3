@@ -272,12 +272,116 @@ public class Services {
 	/**
 	 * Sets options for headers.
 	 */
+	@POST
+    @Path("/addUserBasic")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addUserBasic(String urlReq)
+            throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+        JSONObject JSONreq = new JSONObject(urlReq);
+        System.out.println("...addInfoBasicUserRequest");
+        if (JSONreq.has("first_name")&& JSONreq.has("last_name") && JSONreq.has("dob") && JSONreq.has("country") && JSONreq.has("state") && JSONreq.has("city") && JSONreq.has("street") && JSONreq.has("postcode") && JSONreq.has("housenumber")&& JSONreq.has("gender"))  {
+        	try {
+                String fname = JSONreq.getString("first_name");
+                String lname = JSONreq.getString("last_name");
+                String dob = JSONreq.getString("dob");
+                String country = JSONreq.getString("country");
+                String state = JSONreq.getString("state");
+                String city = JSONreq.getString("city");
+                String street = JSONreq.getString("street");
+                Integer postcode = JSONreq.getInt("postcode");
+                String housenumber = JSONreq.getString("housenumber");
+                String genderCol = JSONreq.getString("gender");
+                
+                System.out.println("...newInfoBasicUserAdded:");
+                try {
+                    DatabaseProvider postgreSQLExample = new DatabaseProvider(context);
+                    Connection conn = postgreSQLExample.getPostgreSQLConnection();
+                    
+                    PreparedStatement s1 = conn.prepareStatement(
+                            "INSERT INTO GENDER (gender) VALUES (?)");
+                    
+                    PreparedStatement s2 = conn.prepareStatement(
+                            "INSERT INTO ADDRESS (country, state, city, street, postcode, housenumber) VALUES (?,?,?,?,?,?)");
+                    
+                    PreparedStatement s3 = conn.prepareStatement(
+                            "INSERT INTO BASIC_USER (id_user, first_name,last_name,dob, id_gender, id_address) VALUES (?,?,?,?::date,?,?)");
+                   
+                    
+                    s1.setString(1, genderCol);
+                    s1.executeUpdate();
+                    s1.closeOnCompletion();
+                    
+                    s2.setString(1, country);
+                    s2.setString(2, state);
+                    s2.setString(3, city);
+                    s2.setString(4, street);
+                    s2.setInt(5, postcode);
+                    s2.setString(6, housenumber);
+                    s2.executeUpdate();
+                    s2.closeOnCompletion();
+                    
+                    String selectSQL = "SELECT ID_USER FROM USER_REG ORDER BY ID_USER DESC LIMIT 1";
+                    PreparedStatement preparedStatement = conn.prepareStatement(selectSQL);
+                    ResultSet rs = preparedStatement.executeQuery();
+                    int result;
+                    while (rs.next()) {
+                    	String userId = rs.getString("ID_USER");
+                    	result = Integer.parseInt(userId);	
+                    	s3.setInt(1, result);
+                    }
+                    
+                    s3.setString(2, fname);
+                    s3.setString(3, lname);
+                    s3.setString(4, dob);
+                    
+                    String selectSQL2 = "SELECT ID_GENDER FROM GENDER ORDER BY ID_GENDER DESC LIMIT 1";
+                    PreparedStatement preparedStatement2 = conn.prepareStatement(selectSQL2);
+                    ResultSet rs2 = preparedStatement2.executeQuery();
+                    int result2;
+                    while (rs2.next()) {
+                    	String genderId = rs2.getString("ID_GENDER");
+                    	result2 = Integer.parseInt(genderId);	
+                    	s3.setInt(5, result2);
+                     }
+                    
+                    String selectSQL3 = "SELECT ID_ADDRESS FROM ADDRESS ORDER BY ID_ADDRESS DESC LIMIT 1";
+                    PreparedStatement preparedStatement3 = conn.prepareStatement(selectSQL3);
+                    ResultSet rs3 = preparedStatement3.executeQuery();
+                    int result3;
+                    while (rs3.next()) {
+                    	String addressId = rs3.getString("ID_ADDRESS");
+                    	result3 = Integer.parseInt(addressId);	
+                    	s3.setInt(6, result3);
+                     }
+                   
+                    s3.executeUpdate();
+                    s3.closeOnCompletion();
+                    
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                JSONObject response = new JSONObject();
+                response.put("addUserBasic", "successfullCreation");
+                return Response.status(200).entity(response.toString()).build();
+            } catch (Exception e) {
+                System.out.println("Wrong JSONFormat:" + e.toString());
+            }
+        }
+        System.out.println("InvalidRequestbody");
+        return Response.status(400).entity("InvalidRequestBody").build();
+    }
+    /**
+     * Sets options for headers.
+     */
+   
 	@OPTIONS
 	public Response optionsOptions() {
 		return Response.ok().header("Allow-Control-Allow-Methods", "POST,GET,OPTIONS")
 				.header("Access-Control-Allow-Origin", "*").build();
 	}
 
+	
+	
 	@GET
 	@Path("/testMail")
 	public Response sendTestMail() throws JSONException {
