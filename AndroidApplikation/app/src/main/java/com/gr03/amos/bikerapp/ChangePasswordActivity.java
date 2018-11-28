@@ -75,7 +75,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
                         startActivity(intent);
 //                    return;
                     } else {
-                        Toast.makeText(getApplicationContext(), "Password Not Changed", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Wrong Email or Old Password", Toast.LENGTH_LONG).show();
                         return;
                     }
 

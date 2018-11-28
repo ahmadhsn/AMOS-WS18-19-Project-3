@@ -308,7 +308,7 @@ public class Services {
 
 			Statement ss = conn.createStatement();
 			ResultSet result = ss.executeQuery("SELECT id_event,name,description,date,time FROM EVENT");
-			System.out.println("thiss" + result.getClass().getName());
+			System.out.println("this" + result.getClass().getName());
 
 			JSONArray jArray = new JSONArray();
 			while (result.next()) {
@@ -356,9 +356,9 @@ public class Services {
 
 			Statement statement = conn.createStatement();
 			ResultSet result = statement.executeQuery("SELECT * FROM EVENT WHERE id_event=" + id);
-			System.out.println("...Get Event By ID ssssss");
+			System.out.println("...Get Event By ID ");
 
-			System.out.println("thiss" + result.getClass().getName());
+			System.out.println("this" + result.getClass().getName());
 
 			if (result.next()) {
 				String id_json, name_json, desc_json, date_json, time_json;
@@ -466,25 +466,42 @@ public class Services {
 
 					DatabaseProvider db = new DatabaseProvider(context);
 					Connection conn = db.getPostgreSQLConnection();
+//					Statement statement = conn.createStatement();
+//					
+//					ResultSet result = statement.executeQuery("UPDATE USER_REG SET password =? WHERE email='"+ email +"'" + "AND password='" + oldPassword + "'", newPassword);
 
 					PreparedStatement statement = conn.prepareStatement(
-//							"UPDATE USER_REG SET password =? WHERE email=? AND password=?" , email ,oldPassword );
 							"UPDATE USER_REG SET password =? WHERE email='"+ email +"'" + "AND password='" + oldPassword + "'" );
-//					"UPDATE USER_REG SET password =? WHERE email='"
-//					+ email + "&& password = " + oldPassword +"'" );
+
 					
 					statement.setString(1, newPassword);
-					statement.executeUpdate();
+					int count = statement.executeUpdate();
 					statement.closeOnCompletion();
+					JSONObject response = new JSONObject();
+					if (count>0) {
+						
+						response.put("passwordUpdated", "successfullUpdation");
+
+						return Response.status(200).entity(response.toString()).build();
+					
+					}
+					else {
+						response.put("passwordUpdated", "notUpdated");
+
+						return Response.status(200).entity(response.toString()).build();
+					}
+					
 
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
+				
+				
 
-				JSONObject response = new JSONObject();
-				response.put("passwordUpdated", "successfullUpdation");
-
-				return Response.status(200).entity(response.toString()).build();
+//				JSONObject response = new JSONObject();
+//				response.put("passwordUpdated", "successfullUpdation");
+//
+//				return Response.status(200).entity(response.toString()).build();
 
 			} catch (Exception e) {
 				System.out.println("Wrong JSONFormat:" + e.toString());
