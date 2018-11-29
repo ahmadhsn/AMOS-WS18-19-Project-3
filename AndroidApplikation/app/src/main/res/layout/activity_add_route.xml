@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddRoute">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/routeName"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="40dp"
+            android:hint="@string/route_name"
+            android:inputType="text"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white" />
+
+        <EditText
+            android:id="@+id/routeDescription"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/routeName"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="40dp"
+            android:hint="@string/route_description"
+            android:inputType="textMultiLine"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white" />
+
+        <TextView
+            android:id="@+id/addStartPoint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/routeDescription"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="25dp"
+            android:text="@string/route_start"
+            android:textColor="@color/white" />
+
+            <EditText
+                android:id="@+id/startCountry"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_below="@id/addStartPoint"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="40dp"
+                android:hint="@string/country"
+                android:inputType="text"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white" />
+
+            <EditText
+                android:id="@+id/startCity"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_below="@id/startCountry"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="40dp"
+                android:hint="@string/city"
+                android:inputType="text"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white" />
+
+            <EditText
+                android:id="@+id/startStreet"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_below="@id/startCity"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="40dp"
+                android:hint="@string/street"
+                android:inputType="text"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white" />
+
+            <EditText
+                android:id="@+id/startPostcode"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_below="@id/startStreet"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="40dp"
+                android:hint="@string/postcode"
+                android:inputType="text"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white" />
+
+            <EditText
+                android:id="@+id/startHouseNr"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_below="@id/startPostcode"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="40dp"
+                android:hint="@string/house_nr"
+                android:inputType="text"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white" />
+
+
+
+        <TextView
+            android:id="@+id/addEndPoint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/startHouseNr"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="25dp"
+            android:text="@string/route_end"
+            android:textColor="@color/white" />
+
+            <EditText
+                android:id="@+id/endCountry"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_below="@id/addEndPoint"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="40dp"
+                android:hint="@string/country"
+                android:inputType="text"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white" />
+
+            <EditText
+                android:id="@+id/endCity"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_below="@id/endCountry"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="40dp"
+                android:hint="@string/city"
+                android:inputType="text"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white" />
+
+            <EditText
+                android:id="@+id/endStreet"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_below="@id/endCity"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="40dp"
+                android:hint="@string/street"
+                android:inputType="text"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white" />
+
+            <EditText
+                android:id="@+id/endPostcode"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_below="@id/endStreet"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="40dp"
+                android:hint="@string/postcode"
+                android:inputType="text"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white" />
+
+            <EditText
+                android:id="@+id/endHouseNr"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_below="@id/endPostcode"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="40dp"
+                android:hint="@string/house_nr"
+                android:inputType="text"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white" />
+
+
+        <Button
+            android:id="@+id/addRoute"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/endHouseNr"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginBottom="50dp"
+            android:background="@color/orange"
+            android:onClick="addRoute"
+            android:text="@string/route_add"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+
+</android.support.constraint.ConstraintLayout>

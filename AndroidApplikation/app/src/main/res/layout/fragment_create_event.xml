@@ -6,108 +6,174 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary">
 
-    <RelativeLayout
-        android:id="@+id/relativeLayout2"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_marginTop="40dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark">
 
-        <EditText
-            android:id="@+id/eventname"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:layout_marginTop="10dp"
-            android:hint="@string/create_event_name"
-            android:inputType="text"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white" />
-
-        <EditText
-            android:id="@+id/eventdescr"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/eventname"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:layout_marginTop="10dp"
-            android:hint="@string/create_event_description"
-            android:inputType="textCapSentences|textMultiLine"
-            android:maxLength="2000"
-            android:maxLines="4"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white" />
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/eventname"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="10dp"
+                android:hint="@string/create_event_name"
+                android:inputType="text"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white" />
+
+            <EditText
+                android:id="@+id/eventdescr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/eventname"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="10dp"
+                android:hint="@string/create_event_description"
+                android:inputType="textCapSentences|textMultiLine"
+                android:maxLength="2000"
+                android:maxLines="4"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white" />
+
+            <EditText
+                android:id="@+id/eventdate"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_below="@id/eventdescr"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="10dp"
+                android:focusableInTouchMode="false"
+                android:hint="@string/create_event_select_date"
+                android:inputType="date"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white" />
+
+            <EditText
+                android:id="@+id/eventtime"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_below="@id/eventdate"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="10dp"
+                android:focusableInTouchMode="false"
+                android:hint="@string/create_event_select_time"
+                android:inputType="time"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white" />
 
 
-        <EditText
-            android:id="@+id/eventdate"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_below="@id/eventdescr"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:layout_marginTop="10dp"
-            android:focusableInTouchMode="false"
-            android:hint="@string/create_event_select_date"
-            android:inputType="date"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white" />
+            <EditText
+                android:id="@+id/eventlocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/eventtime"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="25dp"
+                android:text="@string/create_event_location"
+                android:textColor="@color/white" />
 
-        <EditText
-            android:id="@+id/eventtime"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_below="@id/eventdate"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:layout_marginTop="10dp"
-            android:focusableInTouchMode="false"
-            android:hint="@string/create_event_select_time"
-            android:inputType="time"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white" />
+            <EditText
+                android:id="@+id/country"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_below="@id/eventlocation"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="40dp"
+                android:hint="@string/country"
+                android:inputType="text"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white" />
 
-        <EditText
-            android:id="@+id/eventlocation"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_below="@id/eventtime"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:layout_marginTop="10dp"
-            android:hint="@string/create_event_location"
-            android:inputType="text"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white" />
+            <EditText
+                android:id="@+id/city"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_below="@id/country"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="40dp"
+                android:hint="@string/city"
+                android:inputType="text"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white" />
 
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_below="@id/eventlocation"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:layout_marginTop="10dp"
-            android:theme="@style/Spinner"
-            />
+            <EditText
+                android:id="@+id/street"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_below="@id/city"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="40dp"
+                android:hint="@string/street"
+                android:inputType="text"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white" />
 
-        <Button
-            android:id="@+id/createEvent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/spinner"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="50dp"
-            android:layout_marginTop="30dp"
-            android:background="@drawable/shape"
-            android:text="@string/create_event_button"
-            android:textColor="@color/white"
-            android:textStyle="bold" />
+            <EditText
+                android:id="@+id/postcode"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_below="@id/street"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="40dp"
+                android:hint="@string/postcode"
+                android:inputType="text"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white" />
 
-    </RelativeLayout>
+            <EditText
+                android:id="@+id/houseNr"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_below="@id/postcode"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="40dp"
+                android:hint="@string/house_nr"
+                android:inputType="text"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white" />
 
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_below="@id/postcode"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="10dp"
+                android:theme="@style/Spinner"
+                />
+
+
+            <Button
+                android:id="@+id/createEvent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/spinner"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/shape"
+                android:text="@string/create_event_button"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </android.support.constraint.ConstraintLayout>

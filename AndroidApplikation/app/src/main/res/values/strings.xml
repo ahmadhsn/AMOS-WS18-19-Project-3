@@ -16,7 +16,6 @@
     <string name="signup_business_user">Business User</string>
     <string name="company_name">Enter Company Name</string>
     <string name="user_type">Select User Type</string>
-
     <string name="eventType">Enter Event Name</string>
     <string name="title_activity_show_event">ShowEventActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -39,7 +38,24 @@
     <string name="event_drawer_user_options">User Options</string>
     <string name="change_password">Change Password</string>
 
-
+    <string name="address_add">Add Address</string>
+    <string name="country">Country</string>
+    <string name="city">City</string>
+    <string name="state">State</string>
+    <string name="street">Street</string>
+    <string name="postcode">Postcode</string>
+    <string name="house_nr">House number</string>
+    <!--
+     Strings for Route creation
+     -->
+    <string name="route_name">Route name</string>
+    <string name="route_description">Route description</string>
+    <string name="route_start">Starting point for your route</string>
+    <string name="route_end">Ending point for your route</string>
+    <string name="route_add">Add route</string>
+    <!--
+     Strings for Address creation
+     -->
     <!--
         <string name="eventName">Enter Event Name</string>
         <string name="event_location">Enter Event Location</string>

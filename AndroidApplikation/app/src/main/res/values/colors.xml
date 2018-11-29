@@ -3,12 +3,10 @@
     <color name="colorPrimary">#585859</color>
     <color name="colorPrimaryDark">#4e4e4f</color>
     <color name="colorAccent">#ffffff</color>
-
     <color name="secondaryColor">#f7a20e</color>
     <color name="secondaryDarkColor">#ff7d00</color>
-
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
-
+    <color name="orange">#F77913</color>
 
 </resources>

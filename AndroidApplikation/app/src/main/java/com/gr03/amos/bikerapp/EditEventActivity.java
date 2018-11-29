@@ -26,7 +26,7 @@ import io.realm.Realm;
 public class EditEventActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
     Intent intent;
     Long eventId;
-    EditText event_name, event_description,event_date, event_time;
+    EditText event_name, event_description, event_date, event_time;
     SimpleDateFormat simpleDateFormat;
 
     @Override
