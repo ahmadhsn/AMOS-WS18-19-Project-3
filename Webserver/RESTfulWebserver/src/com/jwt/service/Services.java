@@ -21,12 +21,12 @@ import java.sql.PreparedStatement;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import java.time.format.DateTimeFormatter;
-import com.jwt.service.mail.Mailer;
-import com.sun.org.apache.bcel.internal.generic.Select;
 
-import java.util.*;
-import java.text.*;
+import com.jwt.DataBaseConnection.Config;
+import com.jwt.DataBaseConnection.DatabaseProvider;
+import com.jwt.dao.RouteDao;
+import com.jwt.dao.RouteDaoImplementation;
+import com.jwt.service.mail.Mailer;
 
 /**
  * This class provides all web services.
@@ -41,6 +41,10 @@ public class Services {
 	@Context
 	private ServletContext context;
 
+	private void setConfigContext(ServletContext context){
+		Config config = Config.getInstance();
+		config.setContext(context);
+	};
 	/**
 	 * Gives greetings to an Request. Testable with
 	 * http://localhost:8080/RESTfulWebserver/services/Tester
@@ -52,6 +56,7 @@ public class Services {
 	@GET
 	@Path("/{name}")
 	public Response getMsg(@PathParam("name") String name) throws JSONException {
+		setConfigContext(context);
 		JSONObject output = new JSONObject("{Welcome : " + name + "}");
 		System.out.println("...TestRequest from " + name);
 		return Response.status(200).entity(output.toString()).build();
@@ -73,6 +78,7 @@ public class Services {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response checkUser(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		setConfigContext(context);
 		JSONObject JSONreq = new JSONObject(urlReq);
 
 		if (JSONreq.has("email") && JSONreq.has("password")) {
@@ -82,8 +88,8 @@ public class Services {
 			System.out.println("...userLoginRequest from " + email);
 
 			// check users info in DB
-			DatabaseProvider db = new DatabaseProvider(context);
-			ResultSet rs = db.querySelectDB("SELECT * FROM user_reg WHERE email = ? AND password = ?", email, password);
+			DatabaseProvider provider = DatabaseProvider.getInstance();
+			ResultSet rs = provider.querySelectDB("SELECT * FROM user_reg WHERE email = ? AND password = ?", email, password);
 
 			JSONObject response = new JSONObject();
 			if (!rs.next()) {
@@ -117,6 +123,7 @@ public class Services {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response userRegistration(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		setConfigContext(context);
 		JSONObject JSONreq = new JSONObject(urlReq);
 
 		if (JSONreq.has("name") && JSONreq.has("password") && JSONreq.has("email")) {
@@ -132,14 +139,14 @@ public class Services {
 				System.out.println("...userRegistrationRequest from " + username);
 
 				// check if user already exists
-				DatabaseProvider db = new DatabaseProvider(context);
-
+				
+				DatabaseProvider db = DatabaseProvider.getInstance();
 				ResultSet result = db.querySelectDB("SELECT * FROM user_reg WHERE email = '" + email + "'");
 				while (result.next()) {
 					response.put("userRegistration", "emailExistsAlready");
 					return Response.status(200).entity(response.toString()).build();
 				}
-
+					
 				// insert into DB
 				db.queryInsertDB("INSERT INTO user_reg (password,email) VALUES (?,?)", password, email);
 
@@ -170,6 +177,7 @@ public class Services {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createEventType(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		setConfigContext(context);
 		JSONObject JSONreq = new JSONObject(urlReq);
 		System.out.println(".. Create New Event Type");
 
@@ -182,11 +190,8 @@ public class Services {
 				System.out.println("...New Event Type Created:" + eventname);
 
 				try {
-					DatabaseProvider postgreSQLExample = new DatabaseProvider(context);
-					Connection conn = postgreSQLExample.getPostgreSQLConnection();
-
-					PreparedStatement st = conn
-							.prepareStatement("INSERT INTO EVENT_TYPE (name,description) VALUES (?,?)");
+					DatabaseProvider provider = DatabaseProvider.getInstance();
+					PreparedStatement st = provider.getConnection().prepareStatement("INSERT INTO EVENT_TYPE (name,description) VALUES (?,?)");
 					st.setString(1, eventname);
 					st.setString(2, eventdescription);
 					st.executeUpdate();
@@ -225,6 +230,7 @@ public class Services {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createEvent(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		setConfigContext(context);
 		JSONObject JSONreq = new JSONObject(urlReq);
 		System.out.println("...createEventRequest");
 
@@ -239,10 +245,8 @@ public class Services {
 				System.out.println("...newEventCreated:" + eventname);
 
 				try {
-					DatabaseProvider postgreSQLExample = new DatabaseProvider(context);
-					Connection conn = postgreSQLExample.getPostgreSQLConnection();
-
-					PreparedStatement st = conn.prepareStatement(
+					DatabaseProvider provider = DatabaseProvider.getInstance();
+					PreparedStatement st = provider.getConnection().prepareStatement(
 							"INSERT INTO EVENT (name,description,date,time) VALUES (?,?,?::date,?::time)");
 					st.setString(1, eventname);
 					st.setString(2, eventdescription);
@@ -277,6 +281,7 @@ public class Services {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addUserBasic(String urlReq)
             throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		setConfigContext(context);
         JSONObject JSONreq = new JSONObject(urlReq);
         System.out.println("...addInfoBasicUserRequest");
         if (JSONreq.has("first_name")&& JSONreq.has("last_name") && JSONreq.has("dob") && JSONreq.has("country") && JSONreq.has("state") && JSONreq.has("city") && JSONreq.has("street") && JSONreq.has("postcode") && JSONreq.has("housenumber")&& JSONreq.has("gender"))  {
@@ -294,9 +299,8 @@ public class Services {
                 
                 System.out.println("...newInfoBasicUserAdded:");
                 try {
-                    DatabaseProvider postgreSQLExample = new DatabaseProvider(context);
-                    Connection conn = postgreSQLExample.getPostgreSQLConnection();
-                    
+                	DatabaseProvider provider = DatabaseProvider.getInstance();
+                    Connection conn = provider.getConnection();
                     PreparedStatement s1 = conn.prepareStatement(
                             "INSERT INTO GENDER (gender) VALUES (?)");
                     
@@ -380,11 +384,10 @@ public class Services {
 				.header("Access-Control-Allow-Origin", "*").build();
 	}
 
-	
-	
 	@GET
 	@Path("/testMail")
 	public Response sendTestMail() throws JSONException {
+		setConfigContext(context);
 		JSONObject output = new JSONObject("{Test: send Mail}");
 		System.out.println("...sendTestMail Request ");
 
@@ -400,18 +403,17 @@ public class Services {
 	@Path("/getEvents")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getAllEvents() throws JSONException {
+		setConfigContext(context);
 		JSONObject jobj1 = new JSONObject();
 
 		System.out.println("...getAllEvetns");
 		try {
-			DatabaseProvider postgreSQLExample = new DatabaseProvider(context);
-			Connection conn = postgreSQLExample.getPostgreSQLConnection();
+			DatabaseProvider provider = DatabaseProvider.getInstance();
 
 			// PreparedStatement st = conn.prepareStatement("SELECT
 			// name,description,date,time FROM EVENT");
 
-			Statement ss = conn.createStatement();
-			ResultSet result = ss.executeQuery("SELECT id_event,name,description,date,time FROM EVENT");
+			ResultSet result = provider.querySelectDB("SELECT id_event,name,description,date,time FROM EVENT");
 			System.out.println("this" + result.getClass().getName());
 
 			JSONArray jArray = new JSONArray();
@@ -451,14 +453,14 @@ public class Services {
 	@Path("/getEventById/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getEventById(@PathParam("id") int id) throws JSONException {
+		setConfigContext(context);
 		JSONObject jobj = new JSONObject();
 
 		System.out.println("...Get Event By ID ");
 		try {
-			DatabaseProvider postgreSQLExample = new DatabaseProvider(context);
-			Connection conn = postgreSQLExample.getPostgreSQLConnection();
-
-			Statement statement = conn.createStatement();
+			DatabaseProvider provider = DatabaseProvider.getInstance();
+			
+			Statement statement = provider.getConnection().createStatement();
 			ResultSet result = statement.executeQuery("SELECT * FROM EVENT WHERE id_event=" + id);
 			System.out.println("...Get Event By ID ");
 
@@ -497,6 +499,7 @@ public class Services {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateEvent(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		setConfigContext(context);
 		JSONObject JSONreq = new JSONObject(urlReq);
 		System.out.println("...updateEventRequest");
 
@@ -515,10 +518,8 @@ public class Services {
 
 				try {
 
-					DatabaseProvider postgreSQLExample = new DatabaseProvider(context);
-					Connection conn = postgreSQLExample.getPostgreSQLConnection();
-
-					PreparedStatement statement = conn.prepareStatement(
+					DatabaseProvider provider = DatabaseProvider.getInstance();
+					PreparedStatement statement = provider.getConnection().prepareStatement(
 							"UPDATE EVENT SET name =?, description =?, date=?::date, time=?::time WHERE id_event="
 									+ eventid);
 
@@ -552,6 +553,7 @@ public class Services {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response changePassword(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		setConfigContext(context);
 		JSONObject JSONreq = new JSONObject(urlReq);
 		
 		if (JSONreq.has("email") && JSONreq.has("oldPassword") && JSONreq.has("newPassword") && JSONreq.has("repeatNewPassword")
@@ -568,13 +570,12 @@ public class Services {
 
 				try {
 
-					DatabaseProvider db = new DatabaseProvider(context);
-					Connection conn = db.getPostgreSQLConnection();
 //					Statement statement = conn.createStatement();
 //					
 //					ResultSet result = statement.executeQuery("UPDATE USER_REG SET password =? WHERE email='"+ email +"'" + "AND password='" + oldPassword + "'", newPassword);
 
-					PreparedStatement statement = conn.prepareStatement(
+					DatabaseProvider provider = DatabaseProvider.getInstance();
+					PreparedStatement statement = provider.getConnection().prepareStatement(
 							"UPDATE USER_REG SET password =? WHERE email='"+ email +"'" + "AND password='" + oldPassword + "'" );
 
 					
@@ -620,6 +621,7 @@ public class Services {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response deleteEvent(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		setConfigContext(context);
 		JSONObject JSONreq = new JSONObject(urlReq);
 		System.out.println("...Delete Event Request");
 
@@ -632,10 +634,8 @@ public class Services {
 
 				try {
 
-					DatabaseProvider postgreSQLExample = new DatabaseProvider(context);
-					Connection conn = postgreSQLExample.getPostgreSQLConnection();
-
-					PreparedStatement statement = conn.prepareStatement("DELETE FROM EVENT WHERE id_event="+ eventid);
+					DatabaseProvider provider = DatabaseProvider.getInstance();;
+					PreparedStatement statement = provider.getConnection().prepareStatement("DELETE FROM EVENT WHERE id_event="+ eventid);
 
 					statement.executeUpdate();
 					statement.closeOnCompletion();
@@ -657,6 +657,37 @@ public class Services {
 		System.out.println("InvalidRequestbody");
 		return Response.status(400).entity("InvalidRequestBody").build();
 	}
-
-
+	/**
+	 * TODO
+	 * @param urlReq
+	 * @return
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 * @throws JSONException
+	 * @throws UnsupportedEncodingException
+	 */
+	@POST
+	@Path("/createRoute")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response createRoute(String urlReq)
+			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		setConfigContext(context);
+		JSONObject JSONreq = new JSONObject(urlReq);
+		System.out.println("...createRoute");
+		try {		
+			NewRouteRequest newRoute = new NewRouteRequest(JSONreq);
+			
+			RouteDao dao = new RouteDaoImplementation();
+			dao.createRoute(newRoute.getStartAddress(), newRoute.getEndAddress(), newRoute.getRoute());
+			
+			JSONObject response = new JSONObject();
+			
+			response.put("routeCreation", "successfullCreation");
+			return Response.status(200).entity(response.toString()).build();
+		} catch (Exception ex) {
+		    System.out.println("InvalidRequestbody");
+		    return Response.status(400).entity("InvalidRequestBody").build();
+		}
+	}
 }
+

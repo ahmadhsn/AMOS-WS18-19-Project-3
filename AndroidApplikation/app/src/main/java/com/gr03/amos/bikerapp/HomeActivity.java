@@ -14,6 +14,8 @@ public class HomeActivity extends AppCompatActivity {
     Button EventTypeButton;
     Button ChangePasswordButton;
     Button AddProfile;
+    Button createRouteButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +27,14 @@ public class HomeActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.login_button);
         ChangePasswordButton = findViewById(R.id.change_password_button);
         AddProfile = findViewById(R.id.AddProfile_Button);
-
+        
+        createRouteButton = findViewById(R.id.createRouteButton);
+        
+        createRouteButton.setOnClickListener(v -> {
+            Intent intent = new Intent(this, AddRoute.class);
+            startActivity(intent);
+        });
+        
         signUpButton.setOnClickListener(v -> {
             Intent intent = new Intent(this, SignUpActivity.class);
             startActivity(intent);
