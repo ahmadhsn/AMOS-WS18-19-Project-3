@@ -27,7 +27,8 @@
             android:name=".ShowEventActivity"
             android:label="@string/title_activity_show_event"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".EditEventActivity"></activity>
+        <activity android:name=".EditEventActivity" />
+        <activity android:name=".ProfileBasicUserActivity"></activity>
     </application>
 
 </manifest>
