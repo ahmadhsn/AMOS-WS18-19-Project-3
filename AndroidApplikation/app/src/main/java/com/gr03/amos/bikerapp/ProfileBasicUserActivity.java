@@ -37,25 +37,25 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         Realm.init(this);
         Realm realm = Realm.getDefaultInstance();
 
-        final ProfileB basic_user = realm.where(ProfileB.class).equalTo("id_user", userId).findFirst();
+        final ProfileBasic basic_user = realm.where(ProfileBasic.class).equalTo("id_user", userId).findFirst();
 
-        first_name = (TextView) findViewById(R.id.event_name);
-        last_name = (TextView) findViewById(R.id.event_description);
-        date_of_birth = (TextView) findViewById(R.id.event_date);
-        user_gender = (TextView) findViewById(R.id.event_time);
-        user_street = (TextView) findViewById(R.id.user_street);
+        first_name = (TextView) findViewById(R.id.fname);
+        last_name = (TextView) findViewById(R.id.lname);
+        date_of_birth = (TextView) findViewById(R.id.dob);
+        user_gender = (TextView) findViewById(R.id.choose_gender);
+        user_street = (TextView) findViewById(R.id.street);
         hnumber = (TextView) findViewById(R.id.hnumber);
-        user_postcode = (TextView) findViewById(R.id.user_postcode);
-        user_city = (TextView) findViewById(R.id.user_city);
-        user_country = (TextView) findViewById(R.id.user_country);
+        user_postcode = (TextView) findViewById(R.id.postcode);
+        user_city = (TextView) findViewById(R.id.city);
+        user_country = (TextView) findViewById(R.id.country);
 
 
 
-        first_name.setText(basic_user.getFirstName());
+        first_name.setText(ProfileBasic.getFirstName());
         last_name.setText(basic_user.getLastName());
         date_of_birth.setText(basic_user.getDateOfBirth());
         user_gender.setText(basic_user.getGender());
-        user_street.setText(basic_user.getstreet());
+        user_street.setText(basic_user.getStreet());
         hnumber.setText(basic_user.getstreet());
         hnumber.setText(basic_user.getstreet());
         user_postcode.setText(basic_user.getstreet());
