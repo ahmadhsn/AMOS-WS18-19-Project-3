@@ -11,6 +11,7 @@ package com.gr03.amos.bikerapp;
         import android.widget.TextView;
 
         import com.gr03.amos.bikerapp.Models.Event;
+        import com.gr03.amos.bikerapp.Models.ProfileBasic;
 
         import org.json.JSONException;
         import org.json.JSONObject;
@@ -49,18 +50,15 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         user_city = (TextView) findViewById(R.id.city);
         user_country = (TextView) findViewById(R.id.country);
 
-
-
-        first_name.setText(ProfileBasic.getFirstName());
+        first_name.setText(basic_user.getFirstName());
         last_name.setText(basic_user.getLastName());
         date_of_birth.setText(basic_user.getDateOfBirth());
         user_gender.setText(basic_user.getGender());
         user_street.setText(basic_user.getStreet());
-        hnumber.setText(basic_user.getstreet());
-        hnumber.setText(basic_user.getstreet());
-        user_postcode.setText(basic_user.getstreet());
-        user_city.setText(basic_user.getstreet());
-        user_country.setText(basic_user.getstreet());
+        hnumber.setText(basic_user.getNumber());
+        user_postcode.setText(basic_user.getPostcode());
+        user_city.setText(basic_user.getCity());
+        user_country.setText(basic_user.getCountry());
 
         final ImageButton button1 = findViewById(R.id.editProfilePage);
         button1.setOnClickListener(view -> {
