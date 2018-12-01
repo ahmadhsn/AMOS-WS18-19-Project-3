@@ -7,43 +7,31 @@ public class ProfileBasic extends RealmObject {
 
     @PrimaryKey
     private long id_user;
-    private long id_gender;
-    private long id_address;
+    //private long id_gender;
+    //private long id_address;
     private String first_name;
     private String last_name;
-    private String date_of_birth;
-    private String user_gender;
+    private String dob;
+    /*private String user_gender;
     private String user_street;
     private String hnumber;
     private String user_postcode;
     private String user_city;
-    private String user_country;
+    private String user_country;*/
 
-    public String getFirstName() {
-        return first_name;
-    }
+    public String getFirstName() { return first_name; }
 
-    public void setFirstName(String fname) {
-        this.first_name = fname;
-    }
+    public void setFirstName(String first_name) { this.first_name = first_name; }
 
-    public String getLastName() {
-        return last_name;
-    }
+    public String getLastName() { return last_name; }
 
-    public void setLastName(String lname) {
-        this.last_name = lname;
-    }
+    public void setLastName(String last_name) { this.last_name = last_name; }
 
-    public String getDateOfBirth() {
-        return date_of_birth;
-    }
+    public String getDateOfBirth() { return dob; }
 
-    public void setDateOfBirth(String dob) {
-        this.date_of_birth = dob;
-    }
+    public void setDateOfBirth(String dob) { this.dob = dob; }
 
-    public String getGender() {
+    /*public String getGender() {
         return user_gender;
     }
 
@@ -101,6 +89,6 @@ public class ProfileBasic extends RealmObject {
 
     public long getId_address() {
         return id_address;
-    }
+    }*/
 
 }

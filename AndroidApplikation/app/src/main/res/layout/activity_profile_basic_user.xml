@@ -37,7 +37,7 @@ tools:context=".ProfileBasicUserActivity">
             android:textSize="23sp"
             android:textStyle="bold" />
         <TextView
-            android:id="@+id/date_of_birth"
+            android:id="@+id/dob"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_below="@id/last_name"
@@ -52,7 +52,7 @@ tools:context=".ProfileBasicUserActivity">
             android:id="@+id/user_gender"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/date_of_birth"
+            android:layout_below="@+id/dob"
             android:layout_marginStart="40dp"
             android:layout_marginTop="10dp"
             android:text="Gender"
