@@ -25,6 +25,13 @@ public class ShowEventActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_event);
+
+        if (SaveSharedPreference.getUserEmail(this).length() == 0) {
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
+        }
+
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
