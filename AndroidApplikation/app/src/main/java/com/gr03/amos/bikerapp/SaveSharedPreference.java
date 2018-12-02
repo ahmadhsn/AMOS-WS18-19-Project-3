@@ -20,4 +20,12 @@ public class SaveSharedPreference {
     public static String getUserEmail(Context ctx) {
         return getSharedPreferences(ctx).getString(PREF_USER_EMAIL, "");
     }
+
+    public static void clearSharedPrefrences(Context ctx) {
+        SharedPreferences preferences = getSharedPreferences(ctx);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.clear();
+        editor.apply();
+    }
+
 }
