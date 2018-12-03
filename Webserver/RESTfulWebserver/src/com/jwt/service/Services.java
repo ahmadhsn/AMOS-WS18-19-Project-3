@@ -689,5 +689,52 @@ public class Services {
 		    return Response.status(400).entity("InvalidRequestBody").build();
 		}
 	}
+	
+	@GET
+	@Path("/getUserInfo")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response getUserInfo() throws JSONException {
+		setConfigContext(context);
+		JSONObject jobj1 = new JSONObject();
+
+		System.out.println("...getUserInfo");
+		try {
+			DatabaseProvider provider = DatabaseProvider.getInstance();
+
+			ResultSet result = provider.querySelectDB("SELECT first_name, last_name, dob FROM BASIC_USER ORDER BY ID_USER DESC LIMIT 1");
+			System.out.println("this" + result.getClass().getName());
+
+			JSONArray jArray = new JSONArray();
+			while (result.next()) {
+				String id_json = result.getString("id_user");
+				String name_json = result.getString("first_name");
+				String desc_json = result.getString("last_name");
+				String date_json = result.getString("dob");
+				System.out.println(result);
+
+				JSONObject jobj = new JSONObject();
+				jobj.put("id_user", id_json);
+				jobj.put("first_name", name_json);
+				jobj.put("last_name", desc_json);
+				jobj.put("dob", date_json);
+				jArray.put(jobj);
+
+			}
+
+			jobj1.put("UserInfo", jArray);
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		JSONObject response = new JSONObject();
+
+		response.put("eventCreation", jobj1);
+
+		return Response.status(200).entity(response.toString()).build();
+
+	}
+	
+	
 }
 

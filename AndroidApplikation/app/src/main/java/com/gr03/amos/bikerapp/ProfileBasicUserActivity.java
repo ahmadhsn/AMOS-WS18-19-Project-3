@@ -25,7 +25,7 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
 
     Intent intent;
     Long userId;
-    TextView first_name, last_name, date_of_birth, user_gender, user_street, hnumber, user_postcode, user_city, user_state, user_country;
+    TextView first_name, last_name, date_of_birth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
