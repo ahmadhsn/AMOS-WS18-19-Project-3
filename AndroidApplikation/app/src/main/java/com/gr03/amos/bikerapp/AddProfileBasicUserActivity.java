@@ -2,6 +2,8 @@ package com.gr03.amos.bikerapp;
         import android.app.DatePickerDialog;
         import android.content.Intent;
         import android.support.v7.app.AppCompatActivity;
+        import android.view.Menu;
+        import android.view.MenuItem;
         import android.os.Bundle;
         import android.util.Log;
         import android.view.View;
@@ -11,6 +13,7 @@ package com.gr03.amos.bikerapp;
         import android.widget.RadioButton;
         import android.widget.RadioGroup;
         import android.widget.TextView;
+        import android.widget.Button;
         import android.widget.Spinner;
         import org.json.JSONException;
         import org.json.JSONObject;
@@ -37,11 +40,18 @@ public class AddProfileBasicUserActivity extends AppCompatActivity implements Da
     EditText City;
     EditText BState;
     EditText Country;
+    Button add;
+    TextView textView;
     SimpleDateFormat simpleDateFormat;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mt("create activity1");
         setContentView(R.layout.activity_add_profile_basic_user2);
+
+        //Intent intent = new Intent(this, ProfileBasicUserActivity.class);
+
+
         fName = findViewById(R.id.fname);
         lName = findViewById(R.id.lname);
         Dob = findViewById(R.id.dob);
@@ -55,9 +65,21 @@ public class AddProfileBasicUserActivity extends AppCompatActivity implements Da
         City = findViewById(R.id.city);
         BState = findViewById(R.id.bstate);
         Country = findViewById(R.id.country);
+        add = findViewById(R.id.add);
         simpleDateFormat = new SimpleDateFormat("dd MM yyyy", Locale.US);
         Dob.setOnClickListener(v -> {
             showDatePicker(1980, 0, 1);
+        });
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(AddProfileBasicUserActivity.this , ProfileBasicUserActivity.class);
+                 intent1.putExtra("first_string",fName.getText().toString());
+                intent1.putExtra("last_string",lName.getText().toString());
+                intent1.putExtra("date_string",Dob.getText().toString());
+                startActivityForResult(intent1,1);
+
+            }
         });
     }
     @Override
@@ -68,6 +90,41 @@ public class AddProfileBasicUserActivity extends AppCompatActivity implements Da
         new DatePickerDialog(this, R.style.DateTimePicker, this, year, month, day)
                 .show();
     }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+     textView.setText(data.getStringExtra("confirmation"));
+    }
+    protected void onResume() {
+        super.onResume();
+        mt("resume activity");
+    }
+    protected void onPause() {
+        super.onPause();
+        mt("pause activity");
+    }
+    protected void onRestart() {
+        super.onRestart();
+        mt("restart activity");
+    }
+    //protected void onResume() {
+      //  super.onResume();
+        //mt("resume activity");
+    //}
+    protected void onStart() {
+        super.onStart();
+        mt("start activity");
+    }
+    protected void onStop() {
+        super.onStop();
+        mt("stop activity");
+    }
+    protected void onDestroy() {
+        super.onDestroy();
+        mt("destroy activity");
+    }
+    public void mt(String string){
+        Toast.makeText(this, string, Toast.LENGTH_LONG).show();
+    }
+
     public void newInfo(View view) throws JSONException {
         //TODO check all values are valid
         JSONObject json = new JSONObject();
