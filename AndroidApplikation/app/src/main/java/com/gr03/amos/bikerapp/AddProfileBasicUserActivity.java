@@ -49,9 +49,6 @@ public class AddProfileBasicUserActivity extends AppCompatActivity implements Da
         mt("create activity1");
         setContentView(R.layout.activity_add_profile_basic_user2);
 
-        //Intent intent = new Intent(this, ProfileBasicUserActivity.class);
-
-
         fName = findViewById(R.id.fname);
         lName = findViewById(R.id.lname);
         Dob = findViewById(R.id.dob);
@@ -82,8 +79,6 @@ public class AddProfileBasicUserActivity extends AppCompatActivity implements Da
                 } else {
                     intent1.putExtra("gender_string", "F");
                 }
-                //intent1.putExtra("male_string",male.getText().toString());
-                //intent1.putExtra("female_string",female.getText().toString());
                 intent1.putExtra("street_string",Street.getText().toString());
                 intent1.putExtra("hnumber_string",HNumber.getText().toString());
                 intent1.putExtra("postcode_string",PostCode.getText().toString());
@@ -118,10 +113,6 @@ public class AddProfileBasicUserActivity extends AppCompatActivity implements Da
         super.onRestart();
         mt("restart activity");
     }
-    //protected void onResume() {
-      //  super.onResume();
-        //mt("resume activity");
-    //}
     protected void onStart() {
         super.onStart();
         mt("start activity");
@@ -136,41 +127,5 @@ public class AddProfileBasicUserActivity extends AppCompatActivity implements Da
     }
     public void mt(String string){
         Toast.makeText(this, string, Toast.LENGTH_LONG).show();
-    }
-
-    public void newInfo(View view) throws JSONException {
-        //TODO check all values are valid
-        JSONObject json = new JSONObject();
-        json.put("first_name", fName.getText().toString());
-        json.put("last_name", lName.getText().toString());
-        json.put("dob", Dob.getText().toString());
-        json.put("street", Street.getText().toString());
-        json.put("housenumber", HNumber.getText().toString());
-        json.put("postcode", PostCode.getText().toString());
-        json.put("city", City.getText().toString());
-        json.put("state", BState.getText().toString());
-        json.put("country", Country.getText().toString());
-
-        if(male.isChecked()) {
-            json.put("gender", "M");
-        } else {
-            json.put("gender", "F");
-        }
-
-        try {
-            JSONObject response;
-            FutureTask<String> task = new FutureTask(new Callable<String>() {
-                public String call() {
-                    JSONObject threadResponse = Requests.getResponse("addUserBasic", json);
-                    return threadResponse.toString();
-                }
-            });
-            new Thread(task).start();
-            Log.i("Response", task.get());
-            response = new JSONObject(task.get());
-        } catch (Exception e) {
-            //TODO: Error-Handling
-            Log.i("Exception --- not requested", e.toString());
-        }
     }
 }

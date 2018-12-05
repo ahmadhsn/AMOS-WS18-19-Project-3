@@ -34,14 +34,6 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         mt("create activity2");
         setContentView(R.layout.activity_profile_basic_user);
 
-        //intent = getIntent();
-        //userId = intent.getLongExtra("id", 0);
-
-        //Realm.init(this);
-        //Realm realm = Realm.getDefaultInstance();
-
-        //final ProfileBasic basic_user = realm.where(ProfileBasic.class).equalTo("id_user", userId).findFirst();
-
         first_name = (TextView) findViewById(R.id.first_name);
         last_name = (TextView) findViewById(R.id.last_name);
         date_of_birth = (TextView) findViewById(R.id.dob);
@@ -59,7 +51,6 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         String last = bundle.getString("last_string");
         String dob = bundle.getString("date_string");
         String ugender = bundle.getString("gender_string");
-        // String ugenderf = bundle.getString("female_string");
         String ustreet = bundle.getString("street_string");
         String uhnum = bundle.getString("hnumber_string");
         String upost = bundle.getString("postcode_string");
@@ -78,35 +69,6 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         user_city.setText(""+ucity.toString());
         user_state.setText(""+ustate.toString());
         user_country.setText("Country: "+ucountry.toString());
-
-
-
-
-        /*user_gender = (TextView) findViewById(R.id.choose_gender);
-        user_street = (TextView) findViewById(R.id.street);
-        hnumber = (TextView) findViewById(R.id.hnumber);
-        user_postcode = (TextView) findViewById(R.id.postcode);
-        user_city = (TextView) findViewById(R.id.city);
-        user_country = (TextView) findViewById(R.id.country);*/
-
-        //first_name.setText(basic_user.getFirstName());
-        //last_name.setText(basic_user.getLastName());
-        //date_of_birth.setText(basic_user.getDateOfBirth());
-       /* user_gender.setText(basic_user.getGender());
-        user_street.setText(basic_user.getStreet());
-        hnumber.setText(basic_user.getNumber());
-        user_postcode.setText(basic_user.getPostcode());
-        user_city.setText(basic_user.getCity());
-        user_country.setText(basic_user.getCountry());*/
-
-        /*final ImageButton button1 = findViewById(R.id.editProfilePage);
-        button1.setOnClickListener(view -> {
-            Intent intent = new Intent(this, AddProfileBasicUserActivity.class);
-            intent.putExtra("id", userId);
-            this.startActivity(intent);
-        });*/
-
-
     }
     @Override
     protected void onResume() {
@@ -121,10 +83,6 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         super.onRestart();
         mt("restart activity2");
     }
-    //protected void onResume() {
-    //  super.onResume();
-    //mt("resume activity");
-    //}
     protected void onStart() {
         super.onStart();
         mt("start activity2");
@@ -139,6 +97,65 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
     }
     public void mt(String string){
         Toast.makeText(this, string, Toast.LENGTH_LONG).show();
+    }
+
+    public void newInfo(View view) throws JSONException {
+        //TODO check all values are valid
+        JSONObject json = new JSONObject();
+        json.put("first_name", first_name.getText().toString());
+        json.put("last_name", last_name.getText().toString());
+        json.put("dob", date_of_birth.getText().toString());
+        json.put("gender",user_gender.getText().toString());
+        json.put("street", user_street.getText().toString());
+        json.put("housenumber", hnumber.getText().toString());
+        json.put("postcode", user_postcode.getText().toString());
+        json.put("city", user_city.getText().toString());
+        json.put("state", user_state.getText().toString());
+        json.put("country", user_country.getText().toString());
+        try {
+            JSONObject response;
+            FutureTask<String> task = new FutureTask(new Callable<String>() {
+                public String call() {
+                    JSONObject threadResponse = Requests.getResponse("addUserBasic", json);
+                    return threadResponse.toString();
+                }
+            });
+            new Thread(task).start();
+            Log.i("Response", task.get());
+            response = new JSONObject(task.get());
+        } catch (Exception e) {
+            //TODO: Error-Handling
+            Log.i("Exception --- not requested", e.toString());
+        }
+    }
+    public void editInfo(View view) throws JSONException {
+        //TODO check all values are valid
+        /*JSONObject json = new JSONObject();
+        json.put("first_name", first_name.getText().toString());
+        json.put("last_name", last_name.getText().toString());
+        json.put("dob", date_of_birth.getText().toString());
+        json.put("gender",user_gender.getText().toString());
+        json.put("street", user_street.getText().toString());
+        json.put("housenumber", hnumber.getText().toString());
+        json.put("postcode", user_postcode.getText().toString());
+        json.put("city", user_city.getText().toString());
+        json.put("state", user_state.getText().toString());
+        json.put("country", user_country.getText().toString());
+        try {
+            JSONObject response;
+            FutureTask<String> task = new FutureTask(new Callable<String>() {
+                public String call() {
+                    JSONObject threadResponse = Requests.getResponse("addUserBasic", json);
+                    return threadResponse.toString();
+                }
+            });
+            new Thread(task).start();
+            Log.i("Response", task.get());
+            response = new JSONObject(task.get());
+        } catch (Exception e) {
+            //TODO: Error-Handling
+            Log.i("Exception --- not requested", e.toString());
+        }*/
     }
 
 }
