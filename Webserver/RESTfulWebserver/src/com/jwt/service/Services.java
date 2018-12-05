@@ -689,5 +689,81 @@ public class Services {
 		    return Response.status(400).entity("InvalidRequestBody").build();
 		}
 	}
+	
+	@GET
+	@Path("/searchUser/{input}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response searchUserByMail(@PathParam("input") String input)
+			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+
+		JSONObject allUser = new JSONObject();
+
+		//TODO not tested yet
+		System.out.println("...Get User By Mail or Name");
+		try {
+			DatabaseProvider db = DatabaseProvider.getInstance();
+			ResultSet result = db.querySelectDB("SELECT u.user_id, b.first_name, b.last_name, u.email FROM user_reg u, basic_user b WHERE b.id_user = u.id_user WHERE email = '" + input + "' OR first_name = '" + input + "' OR last_name = '" + input + "'");
+
+			String userId, firstName, lastName, email;
+
+			JSONArray userList = new JSONArray();
+
+			Boolean hasUser = false;
+
+			while (result.next()) {
+				hasUser = true;
+				JSONObject user = new JSONObject();
+
+				userId = result.getString("user_id");
+				firstName = result.getString("first_name");
+				lastName = result.getString("last_name");
+				email = result.getString("email");
+				System.out.println(result);
+
+				user.put("user_id", userId);
+				user.put("firstName", firstName);
+				user.put("lastName", lastName);
+				user.put("email", email);
+
+				userList.put(user);
+			}
+			if (hasUser) {
+				allUser.put("foundUser", "successful");
+				allUser.put("user", userList);
+			}else {
+				allUser.put("foundUser", "unsuccessful");
+			}
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return Response.status(200).entity("InvalidRequestBody".toString()).build();
+	}
+
+	@POST
+	@Path("/addFriend")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response addFriend(String urlReq)
+			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		JSONObject JSONreq = new JSONObject(urlReq);
+		System.out.println("...addFriendRequest");
+
+		//TODO not tested yet
+		if (JSONreq.has("idUser") && JSONreq.has("idFollower")) {
+
+			JSONObject response = new JSONObject();
+			DatabaseProvider db = DatabaseProvider.getInstance();
+			String idUser = JSONreq.getString("idUser");
+			String idFollower = JSONreq.getString("idFollower");
+
+			db.queryInsertDB("INSERT into FRIENDSHIP VALUES (?,?)", idUser, idFollower);
+
+			response.put("friendship", "successful");
+			return Response.status(200).entity(response.toString()).build();
+		}
+
+		return Response.status(400).entity("InvalidRequestBody").build();
+	}
+
 }
 

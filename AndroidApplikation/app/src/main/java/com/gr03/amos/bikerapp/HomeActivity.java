@@ -15,6 +15,7 @@ public class HomeActivity extends AppCompatActivity {
     Button ChangePasswordButton;
     Button AddProfile;
     Button createRouteButton;
+    Button findUser;
 
 
     @Override
@@ -27,7 +28,8 @@ public class HomeActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.login_button);
         ChangePasswordButton = findViewById(R.id.change_password_button);
         AddProfile = findViewById(R.id.AddProfile_Button);
-        
+        findUser = findViewById(R.id.finduser_button);
+
         createRouteButton = findViewById(R.id.createRouteButton);
         
         createRouteButton.setOnClickListener(v -> {
@@ -46,6 +48,10 @@ public class HomeActivity extends AppCompatActivity {
         });
         AddProfile.setOnClickListener(v -> {
             Intent intent = new Intent(this, AddProfileBasicUserActivity.class);
+            startActivity(intent);
+        });
+        findUser.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ShowFriendsActivity.class);
             startActivity(intent);
         });
 

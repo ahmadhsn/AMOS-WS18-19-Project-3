@@ -52,6 +52,13 @@
         app:layout_constraintVertical_bias="1.0">
 
 
+        <Button
+            android:id="@+id/finduser_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="120dp"
+            android:text="Find User" />
     </RelativeLayout>
 
     <LinearLayout
