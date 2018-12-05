@@ -1,6 +1,7 @@
 package com.gr03.amos.bikerapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -25,6 +26,13 @@ public class ShowEventActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_event);
+
+        if (SaveSharedPreference.getUserEmail(this).length() == 0) {
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
+        }
+
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -70,6 +78,12 @@ public class ShowEventActivity extends AppCompatActivity
 
         if (id == R.id.action_settings) {
             return true;
+        }
+
+        if (id == R.id.action_logout) {
+            SaveSharedPreference.clearSharedPrefrences(this);
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
         }
 
         if (id == R.id.action_add_event) {

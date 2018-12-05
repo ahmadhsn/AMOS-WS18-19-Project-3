@@ -15,7 +15,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 
 public class LoginActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +52,9 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 if(loginResponse.equals("successfulLogin")){
+
+                    SaveSharedPreference.setUserEmail(this,email.getText().toString());
+
                     Toast.makeText(getApplicationContext(), "You are logged in now!", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(this, ShowEventActivity.class);
                     startActivity(intent);
