@@ -58,7 +58,7 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         String first = bundle.getString("first_string");
         String last = bundle.getString("last_string");
         String dob = bundle.getString("date_string");
-       // String ugenderm = bundle.getString("male_string");
+        String ugender = bundle.getString("gender_string");
         // String ugenderf = bundle.getString("female_string");
         String ustreet = bundle.getString("street_string");
         String uhnum = bundle.getString("hnumber_string");
@@ -68,16 +68,16 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         String ucountry = bundle.getString("country_string");
 
 
-        first_name.setText(": "+first.toString());
-        last_name.setText(": "+last.toString());
-        date_of_birth.setText(": "+dob.toString());
-        //user_gender.setText(": "+ugenderm.toString());
-        user_street.setText(": "+ustreet.toString());
-        hnumber.setText(": "+uhnum.toString());
-        user_postcode.setText(": "+upost.toString());
-        user_city.setText(": "+ucity.toString());
-        user_state.setText(": "+ustate.toString());
-        user_country.setText(": "+ucountry.toString());
+        first_name.setText("First name: "+first.toString());
+        last_name.setText("Last name: "+last.toString());
+        date_of_birth.setText("DOB: "+dob.toString());
+        user_gender.setText("Gender: "+ugender.toString());
+        user_street.setText(ustreet.toString()+", ");
+        hnumber.setText(""+uhnum.toString());
+        user_postcode.setText(""+upost.toString());
+        user_city.setText(""+ucity.toString());
+        user_state.setText(""+ustate.toString());
+        user_country.setText("Country: "+ucountry.toString());
 
 
 
