@@ -16,7 +16,9 @@
         <activity android:name=".LoginActivity" />
         <activity android:name=".SignUpActivity" />
         <activity android:name=".AddRoute"></activity>
-        <activity android:name=".ShowFriendsActivity"/>
+        <activity
+            android:name=".ShowFriendsActivity"
+            android:label="@string/title_activity_search_user"/>
         <activity
             android:name=".ShowEventActivity"
             android:label="@string/title_activity_show_event"

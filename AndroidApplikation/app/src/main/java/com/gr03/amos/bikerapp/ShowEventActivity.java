@@ -93,6 +93,7 @@ public class ShowEventActivity extends AppCompatActivity
                     .commit();
             return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -110,6 +111,9 @@ public class ShowEventActivity extends AppCompatActivity
             Intent intent = new Intent(this, ChangePasswordActivity.class);
             startActivity(intent);
 
+        }else if(id == R.id.search_user){
+            Intent intent = new Intent(this, ShowFriendsActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
