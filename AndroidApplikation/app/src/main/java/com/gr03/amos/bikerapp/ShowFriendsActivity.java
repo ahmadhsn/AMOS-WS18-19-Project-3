@@ -3,27 +3,16 @@ package com.gr03.amos.bikerapp;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,17 +25,14 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
-import io.realm.Realm;
 
 public class ShowFriendsActivity extends AppCompatActivity {
 
     EditText userName;
-
     ListView listView;
-
-    JSONArray user_results;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +43,7 @@ public class ShowFriendsActivity extends AppCompatActivity {
         listView = findViewById(R.id.user_result);
     }
 
-    public void searchUsers(View view) throws JSONException {
+    public void searchUsers(View view) {
         String url = "searchUser/" + userName.getText();
 
         try {
@@ -131,10 +117,56 @@ public class ShowFriendsActivity extends AppCompatActivity {
             // Populate the data into the template view using the data object
             tvName.setText(user.getName());
             tvHome.setText(user.getEmail());
+
+            ImageButton btAddFriend = (ImageButton) convertView.findViewById(R.id.add_friend);
+            btAddFriend.setTag(position);
+            btAddFriend.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View view){
+                    int position = (Integer) view.getTag();
+                    BasicUser user = getItem(position);
+
+                    JSONObject friendRequest = new JSONObject();
+                    //TODO idUser from session
+                    try {
+                        JSONObject response;
+                        friendRequest.put("idUser", "0");
+                        friendRequest.put("idFollower", Long.toString(user.getUser_id()));
+
+                        FutureTask<String> task = new FutureTask(new Callable<String>() {
+                            public String call() {
+                                JSONObject threadResponse = Requests.getResponse("addFriend", friendRequest);
+                                return threadResponse.toString();
+                            }
+                        });
+                        new Thread(task).start();
+                        Log.i("Response", task.get());
+                        response = new JSONObject(task.get());
+
+                        //handle response
+                        if(response.has("friendship")){
+                            String friendshipStatus = response.getString("frienship");
+                            if(friendshipStatus.equals("successful")){
+                                String msg = String.format("You added  as a friend!", user.getName());
+                                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+                            }else if(friendshipStatus.equals("internalProblem")){
+                                Toast.makeText(getApplicationContext(), "Internal Problem", Toast.LENGTH_LONG).show();
+                            }
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            });
             // Return the completed view to render on screen
             return convertView;
         }
-
 
     }
 

@@ -759,12 +759,16 @@ public class Services {
 
 			JSONObject response = new JSONObject();
 			DatabaseProvider db = DatabaseProvider.getInstance();
-			String idUser = JSONreq.getString("idUser");
-			String idFollower = JSONreq.getString("idFollower");
+			int idUser = JSONreq.getInt("idUser");
+			int idFollower = JSONreq.getInt("idFollower");
 
-			db.queryInsertDB("INSERT into FRIENDSHIP VALUES (?,?)", idUser, idFollower);
+			boolean success = db.queryInsertDB("INSERT into FRIENDSHIP VALUES (?,?)", idUser, idFollower);
 
-			response.put("friendship", "successful");
+			if(success) {
+				response.put("friendship", "successful");
+			}else {
+				response.put("friendship", "internalProblems");
+			}
 			return Response.status(200).entity(response.toString()).build();
 		}
 
