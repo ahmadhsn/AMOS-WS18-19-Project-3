@@ -62,7 +62,9 @@ public class SignUpActivity extends AppCompatActivity {
             // this.setMessageOnScreen( "The passwords you entered do not match. Please try it again.",Color.RED);
             Toast.makeText(getApplicationContext(), "The passwords you entered do not match. Please try it again.", Toast.LENGTH_LONG).show();
             password.setText("");
+            password.setError("");
             confirm_pw.setText("");
+            confirm_pw.setError("");
             return;
         }
 
@@ -73,7 +75,7 @@ public class SignUpActivity extends AppCompatActivity {
         //check if email address is valid
         if(!isValidEmail(mail)){
             Log.i("VALIDATIONMAIL", "mail address is not valid");
-            this.setMessageOnScreen("Invalid E-Mail address. Please check again.", Color.RED);
+            email.setError("Invalid E-Mail address. Please check again");
             return;
         }
 
@@ -104,19 +106,26 @@ public class SignUpActivity extends AppCompatActivity {
             //handle response
             if(response.has("userRegistration")){
                 String statusReg = (String) response.get("userRegistration");
+                this.setMessageOnScreen(statusReg);
                 if(statusReg.equals("invalidMail")){
                     Log.i("VALIDATIONMAILSERVER", "invalid email address " + email.getText().toString());
-                    this.setMessageOnScreen("Invalid email address. Please check again.", Color.RED);
+                    Toast.makeText(getApplicationContext(), "Invalid email address. Please check again.", Toast.LENGTH_LONG).show();
                     return;
                 }
 
                 if(statusReg.equals("successfullRegistration")){
-                    this.setMessageOnScreen("You have successfully registered! You can login now.", Color.GREEN);
+                    Log.i("Registration","successfullRegistration");
+                    Toast.makeText(getApplicationContext(), "You have successfully registered! You can login now.", Toast.LENGTH_LONG).show();
+                    password.setText("");
+                    confirm_pw.setText("");
+                    name.setText("");
+                    email.setText("");
+
                 }
 
                 if(statusReg.equals("emailExistsAlready")){
                     Log.i("mailExists", "email address already exists");
-                    this.setMessageOnScreen("A user with this email address is already registered. Try to login.", Color.RED);
+                    Toast.makeText(getApplicationContext(), "A user with this email address is already registered. Try to login.", Toast.LENGTH_LONG).show();
                 }
             }
         } catch (Exception e) {

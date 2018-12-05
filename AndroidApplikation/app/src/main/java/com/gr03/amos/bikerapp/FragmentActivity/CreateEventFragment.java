@@ -5,6 +5,7 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -149,32 +150,59 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
         newTimePickerDialog.show();
     }
 
+    boolean isTextEmpty(EditText text){
+        CharSequence string = text.getText().toString();
+        return TextUtils.isEmpty(string);
+    }
     public void createEvent() throws JSONException {
 
-        if (eventName.getText().toString().isEmpty()) {
+        if (isTextEmpty(eventName)) {
             Log.i("VALIDATIONEVENT", "event name is empty");
-            Toast.makeText(getContext(), "Please enter a event name", Toast.LENGTH_LONG).show();
+            eventName.setError("Please enter a event name");
             return;
         }
-        if (eventDescr.getText().toString().isEmpty()) {
+        if (isTextEmpty(eventDescr)) {
             Log.i("VALIDATIONEVENT", "event description is empty");
-            Toast.makeText(getContext(), "Please enter a event discription", Toast.LENGTH_LONG).show();
+            eventDescr.setError("Please enter a event discription");
             return;
         }
-        if (eventDate.getText().toString().isEmpty()) {
+        if (isTextEmpty(eventDate)) {
             Log.i("VALIDATIONEVENT", "event date is empty");
-            Toast.makeText(getContext(), "Please enter a event date", Toast.LENGTH_LONG).show();
+            eventDate.setError("Please enter a event date");
             return;
         }
-        if (eventTime.getText().toString().isEmpty()) {
+        if (isTextEmpty(eventTime)) {
             Log.i("VALIDATIONEVENT", "event time is empty");
-            Toast.makeText(getContext(), "Please enter a event time", Toast.LENGTH_LONG).show();
+            eventTime.setError("Please enter a event time");
             return;
         }
-        if (eventLocation.getText().toString().isEmpty()) {
+        if (isTextEmpty(eventLocation)) {
             Log.i("VALIDATIONEVENT", "event location is empty");
-            Toast.makeText(getContext(), "Please enter a event location", Toast.LENGTH_LONG).show();
+            eventLocation.setError("Please enter a event location");
             return;
+        }
+
+        Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+        int minutes = c.get(Calendar.MINUTE);
+
+        String event_Date = eventDate.getText().toString();
+        String system_Date = (year + "/" + (month+1) + "/" + day).toString();
+
+        if (event_Date.equals(system_Date)){
+            int hour_ev = Integer.parseInt(eventTime.getText().toString().split(":")[0]);
+            int minutes_ev = Integer.parseInt(eventTime.getText().toString().split(":")[1]);
+            if (hour_ev < hour || minutes_ev < minutes ){
+                eventTime.setText(hour + ":" + minutes);
+                eventTime.setError("Please enter a future time.");
+                Log.i("VALIDATIONEVENT", "event time is not in the future");
+                Toast.makeText(getContext(), "Please enter a future time.", Toast.LENGTH_LONG).show();
+                return;
+            }
+
         }
 
         JSONObject json = new JSONObject();
@@ -198,10 +226,18 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
             startActivity(intent);
             response = new JSONObject(task.get());
 
-            if (response.has("createEvent")) {
-                String statusEv = (String) response.get("createEvent");
-                if (statusEv.equals("successful")) {
+            if (response.has("eventCreation")) {
+                String statusEv = (String) response.get("eventCreation");
+                if (statusEv.equals("successfullCreation")) {
+                    eventName.setText("");
+                    eventLocation.setText("");
+                    eventDescr.setText("");
+                    eventDate.setText("");
+                    eventTime.setText("");
                     Toast.makeText(getContext(), "Successful created Event.", Toast.LENGTH_LONG).show();
+                }
+                if (statusEv.equals("InvalidRequestBody")){
+                    Toast.makeText(getContext(),"Invalid Request Body",Toast.LENGTH_LONG).show();
                 }
             }
 
