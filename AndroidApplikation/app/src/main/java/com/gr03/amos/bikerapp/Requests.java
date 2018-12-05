@@ -40,18 +40,24 @@ public class Requests {
             return null;
         }
     }
+    
     public static JSONObject getResponse(String urlTail, JSONObject json) {
+        return Requests.getResponse(urlTail, json, "POST");
+    }
+
+    public static JSONObject getResponse(String urlTail, JSONObject json, String method) {
         try {
             URL url = new URL("http://10.0.2.2:8080/RESTfulWebserver/services/" + urlTail);
 
             HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
             urlConn.setRequestProperty("Content-Type", "application/json");
-            urlConn.setRequestMethod("POST");
-
-            DataOutputStream printout = new DataOutputStream(urlConn.getOutputStream());
-            printout.writeBytes(json.toString());
-            printout.flush();
-            printout.close();
+            urlConn.setRequestMethod(method);
+            if (json != null) {
+                DataOutputStream printout = new DataOutputStream(urlConn.getOutputStream());
+                printout.writeBytes(json.toString());
+                printout.flush();
+                printout.close();
+            }
 
             InputStream in = urlConn.getInputStream();
             JSONObject response = new JSONObject(new java.util.Scanner(in).useDelimiter("\\A").next());
@@ -68,7 +74,7 @@ public class Requests {
 
     public static void getJsonResponse(String urlTail, Context context) {
         try {
-            JsonObject jsonObject = new GetJson().AsJSONObject("http://10.0.2.2:8080/RESTfulWebserver/services/" + urlTail);
+            JsonObject jsonObject = new GetJson().AsJSONObject("http://192.168.0.4:8080/RESTfulWebserver/services/" + urlTail);
             JSONObject obj = new JSONObject(String.valueOf(jsonObject));
             String eventString = obj.getJSONObject("eventCreation").getString("event");
 

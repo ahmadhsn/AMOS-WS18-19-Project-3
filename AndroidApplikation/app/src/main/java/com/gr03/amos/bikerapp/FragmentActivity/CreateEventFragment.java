@@ -5,6 +5,7 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,10 +23,13 @@ import com.gr03.amos.bikerapp.R;
 import com.gr03.amos.bikerapp.Requests;
 import com.gr03.amos.bikerapp.ShowEventActivity;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.concurrent.Callable;
@@ -34,17 +38,12 @@ import java.util.concurrent.FutureTask;
 public class CreateEventFragment extends Fragment implements AdapterView.OnItemSelectedListener,
         DatePickerDialog.OnDateSetListener,
         TimePickerDialog.OnTimeSetListener {
-
-    private EditText eventName;
-    private EditText eventDescr;
-    private EditText eventDate;
-    private EditText eventTime;
-    private EditText eventLocation;
+    private int EVENTTYPEID = 1;
+    private EditText eventName,eventDescr, eventDate, eventTime, country, city, street, postcode, houseNr;
     private Button createEvent;
-    SimpleDateFormat simpleDateFormat;
+    private SimpleDateFormat simpleDateFormat;
 
     private Spinner spinner;
-    private static final String[] paths = {"Choose Event Type","Expo", "Rally", "Party"};
 
     public CreateEventFragment() {
     }
@@ -68,10 +67,14 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
         eventDescr = view.findViewById(R.id.eventdescr);
         eventDate = view.findViewById(R.id.eventdate);
         eventTime = view.findViewById(R.id.eventtime);
-        eventLocation = view.findViewById(R.id.eventlocation);
         createEvent = view.findViewById(R.id.createEvent);
         simpleDateFormat = new SimpleDateFormat("dd MM yyyy", Locale.US);
 
+        country = view.findViewById(R.id.country);
+        city = view.findViewById(R.id.city);
+        street = view.findViewById(R.id.street);
+        postcode = view.findViewById(R.id.postcode);
+        houseNr = view.findViewById(R.id.houseNr);
 
         eventDate.setOnClickListener(v -> {
             showDatePicker();
@@ -88,8 +91,9 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
             }
         });
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(container.getContext(),
-                android.R.layout.simple_spinner_item, paths);
+        List<String> eventType = getEventTypes();
+        ArrayAdapter<String> adapter = new ArrayAdapter(container.getContext(),
+                android.R.layout.simple_spinner_item, eventType);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
@@ -98,20 +102,27 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
         return view;
     }
 
-    public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
+    List<String> getEventTypes() {
+        JSONObject response = HTTPResponse("get_event_type", null, "GET");
+        List<String> eventTypesList = new ArrayList();
+        if (response != null && response.has("result")) {
+            try {
+                JSONArray eventTypes = response.getJSONArray("result");
+                for (int i = 0; i < eventTypes.length(); i++) {
+                    JSONObject  obj = eventTypes.getJSONObject(i);
+                    eventTypesList.add(obj.getString("name"));
+                }
 
-        switch (position) {
-            case 0:
-                // Whatever you want to happen when the first item gets selected
-                break;
-            case 1:
-                // Whatever you want to happen when the second item gets selected
-                break;
-            case 2:
-                // Whatever you want to happen when the thrid item gets selected
-                break;
-
+            } catch (Exception ex) {
+                Log.i("Exception --- not requested", ex.toString());
+                eventTypesList.add("No event types found");
+            }
         }
+        return eventTypesList;
+    }
+
+    public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
+        EVENTTYPEID = position+1;
     }
 
     @Override
@@ -121,14 +132,21 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
 
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-        eventDate.setText(year + "/" + (month + 1) + "/" + day);
+        eventDate.setText(year + "-" + (month + 1) + "-" + day);
     }
 
     @Override
     public void onTimeSet(TimePicker timePicker, int hour, int minutes) {
-        eventTime.setText(hour + ":" + minutes);
+        String hourRepresentation = String.valueOf(hour);
+        String minutesRepresentation = String.valueOf(minutes);
+        if (minutes < 10) {
+            minutesRepresentation = "0" + minutes;
+        }
+        if (hour < 10) {
+            hourRepresentation = "0" + hour;
+        }
+        eventTime.setText(hourRepresentation + ":" + minutesRepresentation);
     }
-
 
     public void showDatePicker() {
         Calendar c = Calendar.getInstance();
@@ -138,7 +156,6 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
         DatePickerDialog newDatePickerDialog = new DatePickerDialog(getContext(), R.style.DateTimePicker, this, year, month, day);
         newDatePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
         newDatePickerDialog.show();
-
     }
 
     private void showTimePicker() {
@@ -149,65 +166,89 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
         newTimePickerDialog.show();
     }
 
+    boolean isTextEmpty(EditText text) {
+        CharSequence string = text.getText().toString();
+        return TextUtils.isEmpty(string);
+    }
+    boolean checkEnteredData() {
+        boolean isDataNotSet = false;
+        if(isTextEmpty(eventName)) {
+            eventName.setError("Event name is required!");
+            isDataNotSet = true;
+        }
+        if(isTextEmpty(eventDescr)) {
+            eventDescr.setError("Please add a short description of the event!");
+            isDataNotSet = true;
+        }
+        if(isTextEmpty(country)) {
+            country.setError("Country is a required field!");
+            isDataNotSet = true;
+        }
+        if(isTextEmpty(city)) {
+            city.setError("City is a required field!");
+            isDataNotSet = true;
+        }
+        if (isTextEmpty(eventDate)) {
+            eventDate.setError("Date is a required field!");
+            isDataNotSet = true;
+        }
+        if (isTextEmpty(eventTime)) {
+            eventTime.setError("Date is a required field!");
+            isDataNotSet = true;
+        }
+
+        return isDataNotSet;
+    }
     public void createEvent() throws JSONException {
-
-        if (eventName.getText().toString().isEmpty()) {
-            Log.i("VALIDATIONEVENT", "event name is empty");
-            Toast.makeText(getContext(), "Please enter a event name", Toast.LENGTH_LONG).show();
-            return;
-        }
-        if (eventDescr.getText().toString().isEmpty()) {
-            Log.i("VALIDATIONEVENT", "event description is empty");
-            Toast.makeText(getContext(), "Please enter a event discription", Toast.LENGTH_LONG).show();
-            return;
-        }
-        if (eventDate.getText().toString().isEmpty()) {
-            Log.i("VALIDATIONEVENT", "event date is empty");
-            Toast.makeText(getContext(), "Please enter a event date", Toast.LENGTH_LONG).show();
-            return;
-        }
-        if (eventTime.getText().toString().isEmpty()) {
-            Log.i("VALIDATIONEVENT", "event time is empty");
-            Toast.makeText(getContext(), "Please enter a event time", Toast.LENGTH_LONG).show();
-            return;
-        }
-        if (eventLocation.getText().toString().isEmpty()) {
-            Log.i("VALIDATIONEVENT", "event location is empty");
-            Toast.makeText(getContext(), "Please enter a event location", Toast.LENGTH_LONG).show();
+        if (checkEnteredData()){
             return;
         }
 
-        JSONObject json = new JSONObject();
-        json.put("name", eventName.getText().toString());
-        json.put("description", eventDescr.getText().toString());
-        json.put("date", eventDate.getText().toString());
-        json.put("time", eventTime.getText().toString());
-        json.put("location", eventLocation.getText().toString());
+        JSONObject event = new JSONObject();
+        JSONObject address = new JSONObject();
+        JSONObject requestJSON = new JSONObject();
+        event.put("name", eventName.getText().toString());
+        event.put("description", eventDescr.getText().toString());
+        event.put("date", eventDate.getText().toString());
+        event.put("time", eventTime.getText().toString()+":00");
+        event.put("event_type_id", EVENTTYPEID);
+        address.put("street", street.getText().toString());
+        address.put("house_number", houseNr.getText().toString());
+        address.put("country", country.getText().toString());
+        address.put("state", "");
+        address.put("city", city.getText().toString());
+        address.put("postcode",  postcode.getText().toString());
 
+        requestJSON.put("address", address);
+        requestJSON.put("event", event);
+
+        JSONObject response = HTTPResponse("createEvent", requestJSON, "POST");
+
+        if (response.has("createEvent")) {
+            String statusEv = (String) response.get("createEvent");
+            if (statusEv.equals("successful")) {
+                Toast.makeText(getContext(), "Successful created Event.", Toast.LENGTH_LONG).show();
+            }
+        }
+        Intent intent = new Intent(getContext(), ShowEventActivity.class);
+        startActivity(intent);
+    }
+
+    JSONObject HTTPResponse(String urlTail, JSONObject payload, String method) {
         try {
-            JSONObject response;
-
-            FutureTask<String> task = new FutureTask((Callable<String>) () -> {
-                JSONObject threadResponse = Requests.getResponse("createEvent", json);
-                return threadResponse.toString();
+            FutureTask<String> task = new FutureTask(new Callable<String>() {
+                public String call() {
+                    JSONObject threadResponse = Requests.getResponse(urlTail, payload, method);
+                    return threadResponse.toString();
+                }
             });
 
             new Thread(task).start();
-            Log.i("Response", task.get());
-            Intent intent = new Intent(getContext(), ShowEventActivity.class);
-            startActivity(intent);
-            response = new JSONObject(task.get());
-
-            if (response.has("createEvent")) {
-                String statusEv = (String) response.get("createEvent");
-                if (statusEv.equals("successful")) {
-                    Toast.makeText(getContext(), "Successful created Event.", Toast.LENGTH_LONG).show();
-                }
-            }
-
+            return new JSONObject(task.get());
         } catch (Exception e) {
             //TODO: Error-Handling
             Log.i("Exception --- not requested", e.toString());
         }
+        return null;
     }
 }

@@ -51,7 +51,7 @@ public class ShowFriendsActivity extends AppCompatActivity {
 
             FutureTask<String> task = new FutureTask(new Callable<String>() {
                 public String call() {
-                    JSONObject threadResponse = Requests.getGETResponse(url);
+                    JSONObject threadResponse = Requests.getResponse(url, null,"GET");
                     return threadResponse.toString();
                 }
             });
