@@ -197,11 +197,33 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
             isDataNotSet = true;
         }
 
+        Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+        int minutes = c.get(Calendar.MINUTE);
+
+        String event_Date = eventDate.getText().toString();
+        String system_Date = (year + "/" + (month+1) + "/" + day).toString();
+
         return isDataNotSet;
     }
     public void createEvent() throws JSONException {
         if (checkEnteredData()){
             return;
+        }
+
+        if (event_Date.equals(system_Date)){
+            int hour_ev = Integer.parseInt(eventTime.getText().toString().split(":")[0]);
+            int minutes_ev = Integer.parseInt(eventTime.getText().toString().split(":")[1]);
+            if (hour_ev < hour || minutes_ev < minutes ) {
+                eventTime.setText(hour + ":" + minutes);
+                eventTime.setError("Please enter a future time.");
+                Log.i("VALIDATIONEVENT", "event time is not in the future");
+                Toast.makeText(getContext(), "Please enter a future time.", Toast.LENGTH_LONG).show();
+                return;
+            }
         }
 
         JSONObject event = new JSONObject();
