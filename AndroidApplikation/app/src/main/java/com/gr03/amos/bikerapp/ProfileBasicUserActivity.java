@@ -63,7 +63,7 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         last_name.setText(last.toString());
         date_of_birth.setText(dob.toString());
         user_gender.setText(ugender.toString());
-        user_street.setText(ustreet.toString()+", ");
+        user_street.setText(ustreet.toString());
         hnumber.setText(""+uhnum.toString());
         user_postcode.setText(""+upost.toString());
         user_city.setText(""+ucity.toString());
