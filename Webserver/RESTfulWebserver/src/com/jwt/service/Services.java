@@ -703,7 +703,7 @@ public class Services {
 		System.out.println("...Get User By Mail or Name");
 		try {
 			DatabaseProvider db = DatabaseProvider.getInstance();
-			ResultSet result = db.querySelectDB("SELECT u.id_user, b.first_name, b.last_name, u.email FROM user_reg u, basic_user b WHERE b.id_user = u.id_user AND email = '" + input + "' OR first_name = '" + input + "' OR last_name = '" + input + "'");
+			ResultSet result = db.querySelectDB("SELECT u.id_user, b.first_name, b.last_name, u.email FROM user_reg u, basic_user b WHERE b.id_user = u.id_user AND (email = ? OR first_name = ? OR last_name = ?)", input, input, input);
 
 			String userId, firstName, lastName, email;
 
