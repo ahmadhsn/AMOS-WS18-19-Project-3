@@ -133,12 +133,33 @@ tools:context=".ProfileBasicUserActivity">
             android:textColor="@color/colorPrimaryDark"
             android:textSize="23sp"
             android:textStyle="bold" />
-        <ImageButton
-            android:id="@+id/editProfilePage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <Button
+            android:id="@+id/addtodatabase"
+            android:layout_width="155dp"
+            android:layout_height="25dp"
             android:layout_below="@id/user_country"
-            app:srcCompat="@android:drawable/ic_menu_edit" />
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/shape"
+            android:text="Add"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold"
+            android:onClick="newInfo"
+            android:hint="Add"/>
+        <Button
+            android:id="@+id/editProfilePage"
+            android:layout_width="155dp"
+            android:layout_height="25dp"
+            android:layout_below="@id/addtodatabase"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="0dp"
+            android:background="@drawable/shape"
+            android:text="Edit"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold"
+            android:onClick="editInfo"
+            android:hint="Edit"/>
     </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>
