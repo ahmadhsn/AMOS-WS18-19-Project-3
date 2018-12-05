@@ -126,11 +126,16 @@ public class ShowFriendsActivity extends AppCompatActivity {
                     int position = (Integer) view.getTag();
                     BasicUser user = getItem(position);
 
+                    //TODO remove and instead remove comments around following code
+                    Toast.makeText(getApplicationContext(), "Insertion of Friendship temporarily disabled", Toast.LENGTH_LONG).show();
+
+                    /*
                     JSONObject friendRequest = new JSONObject();
-                    //TODO idUser from session
                     try {
                         JSONObject response;
-                        friendRequest.put("idUser", "0");
+                        //TODO take idUser from session
+
+                        friendRequest.put("idUser", "3");
                         friendRequest.put("idFollower", Long.toString(user.getUser_id()));
 
                         FutureTask<String> task = new FutureTask(new Callable<String>() {
@@ -145,14 +150,18 @@ public class ShowFriendsActivity extends AppCompatActivity {
 
                         //handle response
                         if(response.has("friendship")){
-                            String friendshipStatus = response.getString("frienship");
+                            String friendshipStatus = response.getString("friendship");
                             if(friendshipStatus.equals("successful")){
                                 String msg = String.format("You added  as a friend!", user.getName());
                                 Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
-                            }else if(friendshipStatus.equals("internalProblem")){
+                            }else if(friendshipStatus.equals("internalProblems")){
                                 Toast.makeText(getApplicationContext(), "Internal Problem", Toast.LENGTH_LONG).show();
                             }
+                        }else{
+                            //TODO remove only for debugging
+                            Toast.makeText(getApplicationContext(), "Invalid response", Toast.LENGTH_LONG).show();
                         }
+
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -161,6 +170,7 @@ public class ShowFriendsActivity extends AppCompatActivity {
                     } catch (ExecutionException e) {
                         e.printStackTrace();
                     }
+                    */
 
                 }
             });
