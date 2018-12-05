@@ -21,7 +21,25 @@ import io.realm.Realm;
 
 public class Requests {
 
+    public static JSONObject getGETResponse(String urlTail) {
+        try {
+            URL url = new URL("http://10.0.2.2:8080/RESTfulWebserver/services/" + urlTail);
 
+            HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
+            urlConn.setRequestMethod("GET");
+
+            InputStream in = urlConn.getInputStream();
+            JSONObject response = new JSONObject(new java.util.Scanner(in).useDelimiter("\\A").next());
+
+            urlConn.disconnect();
+
+            return response;
+
+        } catch (Exception e) {
+            Log.i("Could not execute!", e.toString());
+            return null;
+        }
+    }
     public static JSONObject getResponse(String urlTail, JSONObject json) {
         try {
             URL url = new URL("http://10.0.2.2:8080/RESTfulWebserver/services/" + urlTail);

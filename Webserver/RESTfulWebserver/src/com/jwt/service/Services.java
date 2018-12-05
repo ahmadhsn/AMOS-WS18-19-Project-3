@@ -695,6 +695,7 @@ public class Services {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response searchUserByMail(@PathParam("input") String input)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		setConfigContext(context);
 
 		JSONObject allUser = new JSONObject();
 
@@ -702,7 +703,7 @@ public class Services {
 		System.out.println("...Get User By Mail or Name");
 		try {
 			DatabaseProvider db = DatabaseProvider.getInstance();
-			ResultSet result = db.querySelectDB("SELECT u.user_id, b.first_name, b.last_name, u.email FROM user_reg u, basic_user b WHERE b.id_user = u.id_user WHERE email = '" + input + "' OR first_name = '" + input + "' OR last_name = '" + input + "'");
+			ResultSet result = db.querySelectDB("SELECT u.id_user, b.first_name, b.last_name, u.email FROM user_reg u, basic_user b WHERE b.id_user = u.id_user AND email = '" + input + "' OR first_name = '" + input + "' OR last_name = '" + input + "'");
 
 			String userId, firstName, lastName, email;
 
@@ -714,7 +715,7 @@ public class Services {
 				hasUser = true;
 				JSONObject user = new JSONObject();
 
-				userId = result.getString("user_id");
+				userId = result.getString("id_user");
 				firstName = result.getString("first_name");
 				lastName = result.getString("last_name");
 				email = result.getString("email");
@@ -732,7 +733,10 @@ public class Services {
 				allUser.put("user", userList);
 			}else {
 				allUser.put("foundUser", "unsuccessful");
+				
 			}
+
+			return Response.status(200).entity(allUser.toString()).build();
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -745,6 +749,8 @@ public class Services {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response addFriend(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		setConfigContext(context);
+
 		JSONObject JSONreq = new JSONObject(urlReq);
 		System.out.println("...addFriendRequest");
 

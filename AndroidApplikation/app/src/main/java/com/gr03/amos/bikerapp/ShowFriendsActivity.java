@@ -1,5 +1,6 @@
 package com.gr03.amos.bikerapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,20 +16,25 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gr03.amos.bikerapp.Models.BasicUser;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 
@@ -52,8 +58,6 @@ public class ShowFriendsActivity extends AppCompatActivity {
     }
 
     public void searchUsers(View view) throws JSONException {
-        JSONObject json = new JSONObject();
-        json.put("searchUsers", userName.getText());
         String url = "searchUser/" + userName.getText();
 
         try {
@@ -61,7 +65,7 @@ public class ShowFriendsActivity extends AppCompatActivity {
 
             FutureTask<String> task = new FutureTask(new Callable<String>() {
                 public String call() {
-                    JSONObject threadResponse = Requests.getResponse(url, null);
+                    JSONObject threadResponse = Requests.getGETResponse(url);
                     return threadResponse.toString();
                 }
             });
@@ -82,7 +86,7 @@ public class ShowFriendsActivity extends AppCompatActivity {
 
 
                 Log.i("allUser:", response.toString());
-                listUsers(response.getJSONArray("users"));
+                listUsers(response.getJSONArray("user"));
             }
 
         } catch (Exception e) {
@@ -93,43 +97,45 @@ public class ShowFriendsActivity extends AppCompatActivity {
 
 
     private void listUsers(JSONArray users){
-        UserAdapter userAdapter = new UserAdapter();
+        ArrayList<BasicUser> arrayUsers = new ArrayList<>();
+
+        for(int i=0; i<users.length(); i++){
+            try {
+                JSONObject curr = users.getJSONObject(i);
+                arrayUsers.add(new BasicUser(curr.getLong("user_id"), curr.getString("firstName"), curr.getString("lastName"), curr.getString("email")));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        UserAdapter userAdapter = new UserAdapter(this, arrayUsers);
         listView.setAdapter(userAdapter);
     }
 
-    class UserAdapter extends BaseAdapter {
+    class UserAdapter extends ArrayAdapter<BasicUser> {
 
-        @Override
-        public int getCount() {
-            return user_results.length();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
+        public UserAdapter(Context context, ArrayList<BasicUser> users) {
+            super(context, 0, users);
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            convertView = getLayoutInflater().inflate(R.layout.show_user_row, null);
-
-            TextView name = (TextView)convertView.findViewById(R.id.name);
-            TextView email = (TextView)convertView.findViewById(R.id.email);
-
-            try {
-                JSONObject user = user_results.getJSONObject(position);
-                name.setText(user.get("firstName") + " " + user.get("lastName"));
-                email.setText((String)user.get("email"));
-            } catch (JSONException e) {
-                e.printStackTrace();
+            // Get the data item for this position
+            BasicUser user = getItem(position);
+            // Check if an existing view is being reused, otherwise inflate the view
+            if (convertView == null) {
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.show_user_row, parent, false);
             }
-            return null;
+            // Lookup view for data population
+            TextView tvName = (TextView) convertView.findViewById(R.id.user_name);
+            TextView tvHome = (TextView) convertView.findViewById(R.id.user_mail);
+            // Populate the data into the template view using the data object
+            tvName.setText(user.getName());
+            tvHome.setText(user.getEmail());
+            // Return the completed view to render on screen
+            return convertView;
         }
+
+
     }
 
 
