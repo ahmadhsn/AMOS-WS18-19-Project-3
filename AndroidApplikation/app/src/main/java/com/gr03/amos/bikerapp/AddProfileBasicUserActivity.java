@@ -76,8 +76,9 @@ public class AddProfileBasicUserActivity extends AppCompatActivity implements Da
                 Intent intent1 = new Intent(AddProfileBasicUserActivity.this , ProfileBasicUserActivity.class);
                  intent1.putExtra("first_string",fName.getText().toString());
                 intent1.putExtra("last_string",lName.getText().toString());
-                intent1.putExtra("male_string",male.getText().toString());
-                intent1.putExtra("female_string",female.getText().toString());
+                intent1.putExtra("date_string",Dob.getText().toString());
+                //intent1.putExtra("male_string",male.getText().toString());
+                //intent1.putExtra("female_string",female.getText().toString());
                 intent1.putExtra("street_string",Street.getText().toString());
                 intent1.putExtra("hnumber_string",HNumber.getText().toString());
                 intent1.putExtra("postcode_string",PostCode.getText().toString());

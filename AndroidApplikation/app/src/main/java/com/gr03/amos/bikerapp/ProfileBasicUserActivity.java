@@ -58,8 +58,8 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         String first = bundle.getString("first_string");
         String last = bundle.getString("last_string");
         String dob = bundle.getString("date_string");
-        String ugenderm = bundle.getString("male_string");
-        String ugenderf = bundle.getString("female_string");
+       // String ugenderm = bundle.getString("male_string");
+        // String ugenderf = bundle.getString("female_string");
         String ustreet = bundle.getString("street_string");
         String uhnum = bundle.getString("hnumber_string");
         String upost = bundle.getString("postcode_string");
@@ -71,7 +71,7 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         first_name.setText(": "+first.toString());
         last_name.setText(": "+last.toString());
         date_of_birth.setText(": "+dob.toString());
-        user_gender.setText(": "+ugenderm.toString());
+        //user_gender.setText(": "+ugenderm.toString());
         user_street.setText(": "+ustreet.toString());
         hnumber.setText(": "+uhnum.toString());
         user_postcode.setText(": "+upost.toString());
