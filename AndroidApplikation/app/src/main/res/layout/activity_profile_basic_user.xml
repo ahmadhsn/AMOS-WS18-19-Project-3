@@ -84,7 +84,6 @@ tools:context=".ProfileBasicUserActivity">
             android:textColor="@color/colorPrimaryDark"
             android:textSize="23sp"
             android:textStyle="bold" />
-
         <TextView
             android:id="@+id/user_postcode"
             android:layout_width="328dp"
