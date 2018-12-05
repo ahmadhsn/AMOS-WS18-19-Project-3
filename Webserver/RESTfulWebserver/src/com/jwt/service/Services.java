@@ -622,7 +622,7 @@ public class Services {
 
 				try {
 
-					DatabaseProvider provider = DatabaseProvider.getInstance(context);;
+					DatabaseProvider provider = DatabaseProvider.getInstance(context);
 					PreparedStatement statement = provider.getConnection().prepareStatement("DELETE FROM EVENT WHERE id_event="+ eventid);
 
 					statement.executeUpdate();
@@ -663,8 +663,9 @@ public class Services {
 		JSONObject JSONreq = new JSONObject(urlReq);
 		System.out.println("...createRoute");
 		try {		
-			NewRouteRequest newRoute = new NewRouteRequest(JSONreq);
+			DatabaseProvider.getInstance(context);
 			
+			NewRouteRequest newRoute = new NewRouteRequest(JSONreq);
 			RouteDao dao = new RouteDaoImplementation();
 			dao.createRoute(newRoute.getStartAddress(), newRoute.getEndAddress(), newRoute.getRoute());
 			

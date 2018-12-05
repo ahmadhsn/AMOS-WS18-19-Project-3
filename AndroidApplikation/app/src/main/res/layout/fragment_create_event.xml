@@ -72,7 +72,7 @@
                 android:textColorHint="@color/white" />
 
 
-            <EditText
+            <TextView
                 android:id="@+id/eventlocation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

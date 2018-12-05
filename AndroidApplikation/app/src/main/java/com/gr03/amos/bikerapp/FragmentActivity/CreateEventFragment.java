@@ -197,6 +197,12 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
             isDataNotSet = true;
         }
 
+        return isDataNotSet;
+    }
+    public void createEvent() throws JSONException {
+        if (checkEnteredData()){
+            return;
+        }
         Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
@@ -205,15 +211,7 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
         int minutes = c.get(Calendar.MINUTE);
 
         String event_Date = eventDate.getText().toString();
-        String system_Date = (year + "/" + (month+1) + "/" + day).toString();
-
-        return isDataNotSet;
-    }
-    public void createEvent() throws JSONException {
-        if (checkEnteredData()){
-            return;
-        }
-
+        String system_Date = (year + "/" + (month+1) + "/" + day);
         if (event_Date.equals(system_Date)){
             int hour_ev = Integer.parseInt(eventTime.getText().toString().split(":")[0]);
             int minutes_ev = Integer.parseInt(eventTime.getText().toString().split(":")[1]);
