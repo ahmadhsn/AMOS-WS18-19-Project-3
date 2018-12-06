@@ -178,10 +178,17 @@ tools:context=".AddProfileBasicUserActivity">
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/shape"
-        android:textColor="@color/white"
+        android:textColor="@color/secondaryColor"
         android:textStyle="bold"
-        android:onClick="newInfo"
-        android:hint="Add Profile"/>
+        android:hint="Show To My Profile"/>
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/add"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/white"/>
 </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

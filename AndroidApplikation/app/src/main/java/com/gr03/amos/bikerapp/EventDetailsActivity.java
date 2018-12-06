@@ -38,10 +38,10 @@ public class EventDetailsActivity extends AppCompatActivity {
 
         final Event event = realm.where(Event.class).equalTo("id_event", eventId).findFirst();
 
-        event_name = (TextView) findViewById(R.id.event_name);
-        event_description = (TextView) findViewById(R.id.event_description);
-        event_date = (TextView) findViewById(R.id.event_date);
-        event_time = (TextView) findViewById(R.id.event_time);
+        event_name = findViewById(R.id.event_name);
+        event_description = findViewById(R.id.event_description);
+        event_date = findViewById(R.id.event_date);
+        event_time = findViewById(R.id.event_time);
 
         event_name.setText(event.getName());
         event_description.setText(event.getDescription());

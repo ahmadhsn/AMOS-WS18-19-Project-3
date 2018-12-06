@@ -24,8 +24,8 @@ public class RouteDaoImplementation implements RouteDao {
  };
 
  void createRoute(Route route, int startAddressId, int endAddressId) throws SQLException {
-  DatabaseProvider provider = DatabaseProvider.getInstance();
   String sqlQuerry = "INSERT INTO route(id_user, name, description, startpoint, endpoint)VALUES (?, ?, ?, ?, ?);";
+  DatabaseProvider provider = DatabaseProvider.getInstance();
   PreparedStatement st = provider.getConnection().prepareStatement(sqlQuerry, Statement.RETURN_GENERATED_KEYS);
   st.setInt(1, route.getUser_id());
   st.setString(2, route.getName());

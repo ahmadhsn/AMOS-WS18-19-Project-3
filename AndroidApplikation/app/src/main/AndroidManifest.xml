@@ -12,22 +12,28 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".HomeActivity">
+        <activity android:name=".HomeActivity"></activity>
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".SignUpActivity" />
+        <activity android:name=".AddRoute"></activity>
+        <activity android:name=".CreateEventActivity" />
+        <activity android:name=".EventTypeActivity" />
+        <activity
+            android:name=".ShowFriendsActivity"
+            android:label="@string/title_activity_search_user"/>
+        <activity
+            android:name=".ShowEventActivity"
+            android:label="@string/title_activity_show_event"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".AddRoute"></activity>
-        <activity
-            android:name=".ShowEventActivity"
-            android:label="@string/title_activity_show_event"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".EditEventActivity" />
         <activity android:name=".ChangePasswordActivity" />
+        <activity android:name=".ProfileBasicUserActivity"></activity>
         <activity android:name=".AddProfileBasicUserActivity" />
         <activity android:name=".EventDetailsActivity"></activity>
     </application>

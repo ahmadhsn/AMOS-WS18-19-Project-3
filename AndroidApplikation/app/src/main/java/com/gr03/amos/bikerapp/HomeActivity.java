@@ -10,11 +10,10 @@ import java.util.Objects;
 public class HomeActivity extends AppCompatActivity {
     Button loginButton;
     Button signUpButton;
-    Button createEventButton;
-    Button EventTypeButton;
     Button ChangePasswordButton;
     Button AddProfile;
     Button createRouteButton;
+    Button findUser;
 
 
     @Override
@@ -27,9 +26,9 @@ public class HomeActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.login_button);
         ChangePasswordButton = findViewById(R.id.change_password_button);
         AddProfile = findViewById(R.id.AddProfile_Button);
-        
         createRouteButton = findViewById(R.id.createRouteButton);
-        
+        findUser = findViewById(R.id.finduser_button);
+
         createRouteButton.setOnClickListener(v -> {
             Intent intent = new Intent(this, AddRoute.class);
             startActivity(intent);
@@ -46,6 +45,10 @@ public class HomeActivity extends AppCompatActivity {
         });
         AddProfile.setOnClickListener(v -> {
             Intent intent = new Intent(this, AddProfileBasicUserActivity.class);
+            startActivity(intent);
+        });
+        findUser.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ShowFriendsActivity.class);
             startActivity(intent);
         });
 

@@ -1,6 +1,7 @@
 package com.gr03.amos.bikerapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -25,6 +26,13 @@ public class ShowEventActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_event);
+
+        if (SaveSharedPreference.getUserEmail(this).length() == 0) {
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
+        }
+
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -72,6 +80,12 @@ public class ShowEventActivity extends AppCompatActivity
             return true;
         }
 
+        if (id == R.id.action_logout) {
+            SaveSharedPreference.clearSharedPrefrences(this);
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
+        }
+
         if (id == R.id.action_add_event) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.create_event_fragment, new CreateEventFragment())
@@ -79,6 +93,7 @@ public class ShowEventActivity extends AppCompatActivity
                     .commit();
             return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -96,6 +111,9 @@ public class ShowEventActivity extends AppCompatActivity
             Intent intent = new Intent(this, ChangePasswordActivity.class);
             startActivity(intent);
 
+        }else if(id == R.id.search_user){
+            Intent intent = new Intent(this, ShowFriendsActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

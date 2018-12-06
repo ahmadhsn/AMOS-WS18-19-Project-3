@@ -18,12 +18,14 @@
     <string name="user_type">Select User Type</string>
     <string name="eventType">Enter Event Name</string>
     <string name="title_activity_show_event">ShowEventActivity</string>
+    <string name="title_activity_search_user">ShowFriendsActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string name="event_drawer_search_user_title">Search User</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -53,6 +55,8 @@
     <string name="route_start">Starting point for your route</string>
     <string name="route_end">Ending point for your route</string>
     <string name="route_add">Add route</string>
+    <string name="action_logout">Logout</string>
+    <string name="action_add_event">Add event</string>
     <!--
      Strings for Address creation
      -->
