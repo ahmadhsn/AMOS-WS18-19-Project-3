@@ -31,7 +31,10 @@ import com.jwt.dao.EventTypeDao;
 import com.jwt.dao.EventTypeDaoImplementation;
 import com.jwt.dao.RouteDao;
 import com.jwt.dao.RouteDaoImplementation;
+import com.jwt.dao.UserDao;
+import com.jwt.dao.UserDaoImplementation;
 import com.jwt.model.Address;
+import com.jwt.model.BasicUser;
 import com.jwt.model.Event;
 import com.jwt.model.EventType;
 import com.jwt.service.mail.Mailer;
@@ -858,5 +861,37 @@ public class Services {
 		return Response.status(200).entity(response.toString()).build();
 
 	}
+	
+	/**
+	 * TODO add comments
+	 * 
+	 * @param userId
+	 * @return
+	 * @throws JSONException
+	 */
+	@GET
+	@Path("/getFriends/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response getFriends(@PathParam("id") int userId) throws JSONException {
+
+		JSONObject response = new JSONObject();
+		System.out.println("Get Friends... ");
+		try {
+			// Setting the DB context in case its not set
+			DatabaseProvider.getInstance(context);
+			UserDao userD = new UserDaoImplementation();
+			List<BasicUser> friends = userD.getFriends(userId);
+			response.put("friends", BasicUser.serializeUserList(friends));
+			System.out.println("Response: " + response.toString());
+			return Response.status(200).entity(response.toString()).build();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			response.put("error_code", "failed_to_get_friends");
+			response.put("description", "Failed to get Friends");
+			System.out.println("Response: " + response.toString());
+			return Response.status(500).entity(response.toString()).build();
+		}
+	}
+
 }
 
