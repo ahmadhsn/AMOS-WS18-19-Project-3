@@ -12,12 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".HomeActivity"></activity>
+        <activity android:name=".HomeActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".SignUpActivity" />
-        <activity android:name=".AddRoute"></activity>
-        <activity android:name=".CreateEventActivity" />
-        <activity android:name=".EventTypeActivity" />
+        <activity android:name=".AddRoute" />
         <activity
             android:name=".ShowFriendsActivity"
             android:label="@string/title_activity_search_user"/>
@@ -33,9 +31,9 @@
         </activity>
         <activity android:name=".EditEventActivity" />
         <activity android:name=".ChangePasswordActivity" />
-        <activity android:name=".ProfileBasicUserActivity"></activity>
+        <activity android:name=".ProfileBasicUserActivity" />
         <activity android:name=".AddProfileBasicUserActivity" />
-        <activity android:name=".EventDetailsActivity"></activity>
+        <activity android:name=".EventDetailsActivity" />
     </application>
 
 </manifest>
