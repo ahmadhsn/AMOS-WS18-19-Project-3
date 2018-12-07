@@ -823,5 +823,40 @@ public class Services {
 			return Response.status(500).entity(response.toString()).build();
 		}
 	}
+	
+	/**
+	 * Get UserID for user with given mail
+	 * 
+	 * @param mail 
+	 * @return userID
+	 * @throws JSONException
+	 */
+	@GET
+	@Path("/getUserID/{mail}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response getUserID(@PathParam("mail") String mail) throws JSONException {
+		
+		JSONObject jobj = new JSONObject();
+
+		System.out.println("...Get UserID By Email ");
+		try {
+			DatabaseProvider provider = DatabaseProvider.getInstance(context);
+			ResultSet result = provider.querySelectDB("SELECT id_user FROM user_reg WHERE email = ?", mail);
+	
+			if (result.next()) {
+				jobj.put("user_id", result.getString("id_user"));
+			}
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		JSONObject response = new JSONObject();
+
+		response.put("getUserID", jobj);
+
+		return Response.status(200).entity(response.toString()).build();
+
+	}
 }
 

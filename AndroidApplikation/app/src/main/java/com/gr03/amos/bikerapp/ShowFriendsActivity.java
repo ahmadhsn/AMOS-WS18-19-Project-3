@@ -126,15 +126,41 @@ public class ShowFriendsActivity extends AppCompatActivity {
                     int position = (Integer) view.getTag();
                     BasicUser user = getItem(position);
 
+
                     //TODO remove and instead remove comments around following code
                     Toast.makeText(getApplicationContext(), "Insertion of Friendship temporarily disabled", Toast.LENGTH_LONG).show();
 
-                    /*
+
                     JSONObject friendRequest = new JSONObject();
+
                     try {
                         JSONObject response;
-                        //TODO take idUser from session
+                        /*
+                        //TODO remove and take userID from session instead
+                        Requests.getResponse("getUserId/" + SaveSharedPreference.getUserEmail(getContext()), null,"GET");
+                        FutureTask<String> taskID = new FutureTask(new Callable<String>() {
+                            public String call() {
+                                JSONObject threadResponse = Requests.getResponse("getUserId/" + SaveSharedPreference.getUserEmail(getContext()), null,"GET");
+                                return threadResponse.toString();
+                            }
+                        });
 
+                        new Thread(taskID).start();
+                        Log.i("Response", taskID.get());
+
+                        response = new JSONObject(taskID.get());
+
+                        int userID;
+                        if(response.has("getUserID") && response.getJSONObject("getUserID").has("user_id")){
+                            userID= response.getJSONObject("getUserID").getInt("user_id");
+                        }else{
+                            Toast.makeText(getApplicationContext(), "Internal Problem.", Toast.LENGTH_LONG).show();
+
+                            Log.i("GetUserByID", "No User found with session mail.");
+                            return;
+                        }
+                        //TODO end remove
+                        */
                         friendRequest.put("idUser", "3");
                         friendRequest.put("idFollower", Long.toString(user.getUser_id()));
 
@@ -170,7 +196,7 @@ public class ShowFriendsActivity extends AppCompatActivity {
                     } catch (ExecutionException e) {
                         e.printStackTrace();
                     }
-                    */
+
 
                 }
             });
