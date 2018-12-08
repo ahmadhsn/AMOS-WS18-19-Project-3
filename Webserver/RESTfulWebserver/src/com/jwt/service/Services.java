@@ -731,45 +731,117 @@ public class Services {
 		return Response.status(500).entity("InvalidRequestBody".toString()).build();
 	}
 	
-	@GET
-	@Path("/getUserInfo")
+	@POST
+	@Path("/editUserInfo")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response getUserInfo() throws JSONException {
-		JSONObject jobj1 = new JSONObject();
+	public Response editUserInfo(String urlReq)
+			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		
+		JSONObject JSONreq = new JSONObject(urlReq);
+		
+		 if (JSONreq.has("first_name")&& JSONreq.has("last_name") && JSONreq.has("dob") && JSONreq.has("country") && JSONreq.has("state") && JSONreq.has("city") && JSONreq.has("street") && JSONreq.has("postcode") && JSONreq.has("housenumber")&& JSONreq.has("gender"))  {
+	        	try {
+	                String fname = JSONreq.getString("first_name");
+	                String lname = JSONreq.getString("last_name");
+	                //String newlname = JSONreq.getString("new_last_name");
+	                String dob = JSONreq.getString("dob");
+	                String country = JSONreq.getString("country");
+	                //String newcountry = JSONreq.getString("new_country");
+	                String state = JSONreq.getString("state");
+	                //String new_state = JSONreq.getString("new_state");
+	                String city = JSONreq.getString("city");
+	                //String new_city = JSONreq.getString("new_city");
+	                String street = JSONreq.getString("street");
+	                //String new_street = JSONreq.getString("new_street");
+	                Integer postcode = JSONreq.getInt("postcode");
+	                //Integer new_postcode = JSONreq.getInt("new_postcode");
+	                String housenumber = JSONreq.getString("housenumber");
+	                //String new_housenumber = JSONreq.getString("new_housenumber");
+	                String genderCol = JSONreq.getString("gender");
+	                
+	                System.out.println("...editBasicUserInfo:");
 
-		System.out.println("...getUserInfo");
-		try {
-			DatabaseProvider provider = DatabaseProvider.getInstance(context);
+				try {
 
-			ResultSet result = provider.querySelectDB("SELECT first_name, last_name, dob FROM BASIC_USER ORDER BY ID_USER DESC LIMIT 1");
-			System.out.println("this" + result.getClass().getName());
+					DatabaseProvider provider = DatabaseProvider.getInstance(context);
+					
+					PreparedStatement s1 = provider.getConnection().prepareStatement(
+							"UPDATE GENDER SET gender =? WHERE gender_id = (SELECT MAX(gender_id) FROM GENDER)");
+                    
+					PreparedStatement s2 = provider.getConnection().prepareStatement(
+                           // "INSERT INTO ADDRESS (country, state, city, street, postcode, housenumber) VALUES (?,?,?,?,?,?)");
+							"UPDATE ADDRESS SET country =?, state =?, city =?, street =?, postcode =?, housenumber =? WHERE address_id = (SELECT MAX(address_id) FROM ADDRESS");
+					PreparedStatement s3 = provider.getConnection().prepareStatement(
+                           // "INSERT INTO BASIC_USER (id_user, first_name,last_name,dob, id_gender, id_address) VALUES (?,?,?,?::date,?,?)");
+							"UPDATE BASIC_USER SET first_name =?, last_name =?, dob =? WHERE user_id = (SELECT MAX(user_id) FROM BASIC_USER");
+                    
+                    s1.setString(1, genderCol);
+                    s1.executeUpdate();
+                    s1.closeOnCompletion();
+                    
+                    s2.setString(1, country);
+                    s2.setString(2, state);
+                    s2.setString(3, city);
+                    s2.setString(4, street);
+                    s2.setInt(5, postcode);
+                    s2.setString(6, housenumber);
+                    s2.executeUpdate();
+                    s2.closeOnCompletion();
+                    
+                    s3.setString(1, fname);
+                    s3.setString(2, lname);
+                    s3.setString(3, dob);
+                    s3.executeUpdate();
+                    s3.closeOnCompletion();
+                    
+                    /*String selectSQL = "SELECT ID_USER FROM USER_REG ORDER BY ID_USER DESC LIMIT 1";
+                    PreparedStatement preparedStatement = provider.getConnection().prepareStatement(selectSQL);
+                    ResultSet rs = preparedStatement.executeQuery();
+                    int result;
+                    while (rs.next()) {
+                    	String userId = rs.getString("ID_USER");
+                    	result = Integer.parseInt(userId);	
+                    	s3.setInt(1, result);
+                    }
+                    
+                    s3.setString(2, fname);
+                    s3.setString(3, lname);
+                    s3.setString(4, dob);
+                    
+                    String selectSQL2 = "SELECT ID_GENDER FROM GENDER ORDER BY ID_GENDER DESC LIMIT 1";
+                    PreparedStatement preparedStatement2 = provider.getConnection().prepareStatement(selectSQL2);
+                    ResultSet rs2 = preparedStatement2.executeQuery();
+                    int result2;
+                    while (rs2.next()) {
+                    	String genderId = rs2.getString("ID_GENDER");
+                    	result2 = Integer.parseInt(genderId);	
+                    	s3.setInt(5, result2);
+                     }
+                    
+                    String selectSQL3 = "SELECT ID_ADDRESS FROM ADDRESS ORDER BY ID_ADDRESS DESC LIMIT 1";
+                    PreparedStatement preparedStatement3 = provider.getConnection().prepareStatement(selectSQL3);
+                    ResultSet rs3 = preparedStatement3.executeQuery();
+                    int result3;
+                    while (rs3.next()) {
+                    	String addressId = rs3.getString("ID_ADDRESS");
+                    	result3 = Integer.parseInt(addressId);	
+                    	s3.setInt(6, result3);
+                     }
+                   
+                    s3.executeUpdate();
+                    s3.closeOnCompletion();
+					*/
 
-			JSONArray jArray = new JSONArray();
-			while (result.next()) {
-				String id_json = result.getString("id_user");
-				String name_json = result.getString("first_name");
-				String desc_json = result.getString("last_name");
-				String date_json = result.getString("dob");
-				System.out.println(result);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
 
-				JSONObject jobj = new JSONObject();
-				jobj.put("id_user", id_json);
-				jobj.put("first_name", name_json);
-				jobj.put("last_name", desc_json);
-				jobj.put("dob", date_json);
-				jArray.put(jobj);
-
+			} catch (Exception e) {
+				System.out.println("Wrong JSONFormat:" + e.toString());
 			}
-
-			jobj1.put("UserInfo", jArray);
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
 		}
-		JSONObject response = new JSONObject();
-		response.put("eventCreation", jobj1);
-
-		return Response.status(200).entity(response.toString()).build();
+		System.out.println("InvalidRequestbody");
+		return Response.status(400).entity("InvalidRequestBody").build();
 	}
 
 	@POST
