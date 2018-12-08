@@ -165,8 +165,8 @@ tools:context=".ProfileBasicUserActivity">
         <EditText
             android:id="@+id/user_postcode"
             android:layout_width="328dp"
-            android:layout_height="43dp"
-            android:layout_below="@id/hnumber"
+            android:layout_height="40dp"
+            android:layout_below="@id/user_street"
             android:layout_marginLeft="40dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
@@ -182,7 +182,7 @@ tools:context=".ProfileBasicUserActivity">
             android:id="@+id/user_city"
             android:layout_width="155dp"
             android:layout_height="40dp"
-            android:layout_below="@id/user_street"
+            android:layout_below="@id/hnumber"
             android:layout_alignRight="@id/user_postcode"
             android:layout_marginLeft="0dp"
             android:layout_marginRight="0dp"
@@ -271,6 +271,19 @@ tools:context=".ProfileBasicUserActivity">
             android:textStyle="bold"
             android:onClick="editInfo"
             android:hint="Edit"/>
+        <Button
+            android:id="@+id/saveEditedInfo"
+            android:layout_width="155dp"
+            android:layout_height="25dp"
+            android:layout_below="@id/editProfilePage"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="0dp"
+            android:background="@drawable/shape"
+            android:text="Save edited Info"
+            android:textColor="@color/secondaryColor"
+            android:textStyle="bold"
+            android:onClick="saveEditedInfo"
+            android:hint="Save"/>
     </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>
