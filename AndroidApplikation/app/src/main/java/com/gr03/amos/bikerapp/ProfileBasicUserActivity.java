@@ -129,8 +129,7 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         }
     }
     public void editInfo(View view) throws JSONException {
-        //TODO check all values are valid
-        /*JSONObject json = new JSONObject();
+        JSONObject json = new JSONObject();
         json.put("first_name", first_name.getText().toString());
         json.put("last_name", last_name.getText().toString());
         json.put("dob", date_of_birth.getText().toString());
@@ -145,7 +144,7 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
             JSONObject response;
             FutureTask<String> task = new FutureTask(new Callable<String>() {
                 public String call() {
-                    JSONObject threadResponse = Requests.getResponse("addUserBasic", json);
+                    JSONObject threadResponse = Requests.getResponse("editUserInfo", json);
                     return threadResponse.toString();
                 }
             });
@@ -155,7 +154,7 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         } catch (Exception e) {
             //TODO: Error-Handling
             Log.i("Exception --- not requested", e.toString());
-        }*/
+        }
     }
 
 }
