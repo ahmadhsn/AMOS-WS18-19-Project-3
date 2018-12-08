@@ -128,18 +128,33 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
             Log.i("Exception --- not requested", e.toString());
         }
     }
-    public void editInfo(View view) throws JSONException {
+    public void editInfo(View view){
         //THIS METHOD ONLY MAKES ALL FIELDS EXCEPT DOB EDITABLE
 
-        first_name.setEnabled(true);
+        //first_name.setEnabled(true);
+        //first_name.setFocusableInTouchMode(true);
+        //first_name.setClickable(true);
         last_name.setEnabled(true);
-        user_gender.setEnabled(true);
+        last_name.setFocusableInTouchMode(true);
+        last_name.setClickable(true);
         user_street.setEnabled(true);
+        user_street.setFocusableInTouchMode(true);
+        user_street.setClickable(true);
         hnumber.setEnabled(true);
+        hnumber.setFocusableInTouchMode(true);
+        hnumber.setClickable(true);
         user_postcode.setEnabled(true);
+        user_postcode.setFocusableInTouchMode(true);
+        user_postcode.setClickable(true);
         user_city.setEnabled(true);
+        user_city.setFocusableInTouchMode(true);
+        user_city.setClickable(true);
         user_state.setEnabled(true);
+        user_state.setFocusableInTouchMode(true);
+        user_state.setClickable(true);
         user_country.setEnabled(true);
+        user_country.setFocusableInTouchMode(true);
+        user_country.setClickable(true);
     }
 
     public void saveEditedInfo(View view) throws JSONException {

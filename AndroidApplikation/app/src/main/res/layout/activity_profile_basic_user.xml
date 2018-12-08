@@ -36,7 +36,7 @@ tools:context=".ProfileBasicUserActivity">
             android:textColor="@color/colorPrimaryDark"
             android:textSize="18.5sp"
             android:textStyle="bold"
-            android:editable="false" />
+            android:focusable="false" />
         <TextView
             android:id="@+id/last_name_text"
             android:layout_width="328dp"
@@ -63,7 +63,7 @@ tools:context=".ProfileBasicUserActivity">
             android:textColor="@color/colorPrimaryDark"
             android:textSize="18.5sp"
             android:textStyle="bold"
-            android:editable="false" />
+            android:focusable="false" />
         <TextView
             android:id="@+id/dob_text"
             android:layout_width="328dp"
@@ -128,7 +128,7 @@ tools:context=".ProfileBasicUserActivity">
             android:textColor="@color/colorPrimaryDark"
             android:textSize="18.5sp"
             android:textStyle="bold"
-            android:editable="false" />
+            android:focusable="false" />
         <EditText
             android:id="@+id/hnumber"
             android:layout_width="155dp"
@@ -142,7 +142,7 @@ tools:context=".ProfileBasicUserActivity">
             android:textColor="@color/colorPrimaryDark"
             android:textSize="18.5sp"
             android:textStyle="bold"
-            android:editable="false" />
+            android:focusable="false" />
         <EditText
             android:id="@+id/user_postcode"
             android:layout_width="328dp"
@@ -155,7 +155,7 @@ tools:context=".ProfileBasicUserActivity">
             android:textColor="@color/colorPrimaryDark"
             android:textSize="18.5sp"
             android:textStyle="bold"
-            android:editable="false" />
+            android:focusable="false" />
         <EditText
             android:id="@+id/user_city"
             android:layout_width="155dp"
@@ -169,7 +169,7 @@ tools:context=".ProfileBasicUserActivity">
             android:textColor="@color/colorPrimaryDark"
             android:textSize="18.5sp"
             android:textStyle="bold"
-            android:editable="false" />
+            android:focusable="false" />
         <EditText
             android:id="@+id/user_state"
             android:layout_width="match_parent"
@@ -182,8 +182,8 @@ tools:context=".ProfileBasicUserActivity">
             android:textColor="@color/colorPrimaryDark"
             android:textSize="18.5sp"
             android:textStyle="bold"
-            android:editable="false" />
-        <EditText
+            android:focusable="false" />
+        <TextView
             android:id="@+id/country_text"
             android:layout_width="328dp"
             android:layout_height="40dp"
@@ -194,8 +194,7 @@ tools:context=".ProfileBasicUserActivity">
             android:text="Country: "
             android:textColor="@color/colorPrimaryDark"
             android:textSize="18.5sp"
-            android:textStyle="bold"
-            android:editable="false" />
+            android:textStyle="bold" />
         <EditText
             android:id="@+id/user_country"
             android:layout_width="155dp"
@@ -209,7 +208,7 @@ tools:context=".ProfileBasicUserActivity">
             android:textColor="@color/colorPrimaryDark"
             android:textSize="18.5sp"
             android:textStyle="bold"
-            android:editable="false" />
+            android:focusable="false" />
         <Button
             android:id="@+id/addtodatabase"
             android:layout_width="155dp"
