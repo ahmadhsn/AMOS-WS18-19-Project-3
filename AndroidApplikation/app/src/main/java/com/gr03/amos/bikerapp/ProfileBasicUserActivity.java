@@ -131,32 +131,15 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
     public void editInfo(View view) throws JSONException {
         //THIS METHOD ONLY MAKES ALL FIELDS EXCEPT DOB EDITABLE
 
-        JSONObject json = new JSONObject();
-        json.put("first_name", first_name.getText().toString());
-        json.put("last_name", last_name.getText().toString());
-        json.put("dob", date_of_birth.getText().toString());
-        json.put("gender",user_gender.getText().toString());
-        json.put("street", user_street.getText().toString());
-        json.put("housenumber", hnumber.getText().toString());
-        json.put("postcode", user_postcode.getText().toString());
-        json.put("city", user_city.getText().toString());
-        json.put("state", user_state.getText().toString());
-        json.put("country", user_country.getText().toString());
-        try {
-            JSONObject response;
-            FutureTask<String> task = new FutureTask(new Callable<String>() {
-                public String call() {
-                    JSONObject threadResponse = Requests.getResponse("editUserInfo", json);
-                    return threadResponse.toString();
-                }
-            });
-            new Thread(task).start();
-            Log.i("Response", task.get());
-            response = new JSONObject(task.get());
-        } catch (Exception e) {
-            //TODO: Error-Handling
-            Log.i("Exception --- not requested", e.toString());
-        }
+        first_name.setEnabled(true);
+        last_name.setEnabled(true);
+        user_gender.setEnabled(true);
+        user_street.setEnabled(true);
+        hnumber.setEnabled(true);
+        user_postcode.setEnabled(true);
+        user_city.setEnabled(true);
+        user_state.setEnabled(true);
+        user_country.setEnabled(true);
     }
 
     public void saveEditedInfo(View view) throws JSONException {
