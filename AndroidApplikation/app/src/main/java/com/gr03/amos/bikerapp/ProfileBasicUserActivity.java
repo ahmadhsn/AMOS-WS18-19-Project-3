@@ -158,6 +158,29 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
     }
 
     public void saveEditedInfo(View view) throws JSONException {
+        last_name.setEnabled(false);
+        last_name.setFocusableInTouchMode(false);
+        last_name.setClickable(false);
+        user_street.setEnabled(false);
+        user_street.setFocusableInTouchMode(false);
+        user_street.setClickable(false);
+        hnumber.setEnabled(false);
+        hnumber.setFocusableInTouchMode(false);
+        hnumber.setClickable(false);
+        user_postcode.setEnabled(false);
+        user_postcode.setFocusableInTouchMode(false);
+        user_postcode.setClickable(false);
+        user_city.setEnabled(false);
+        user_city.setFocusableInTouchMode(false);
+        user_city.setClickable(false);
+        user_state.setEnabled(false);
+        user_state.setFocusableInTouchMode(false);
+        user_state.setClickable(false);
+        user_country.setEnabled(false);
+        user_country.setFocusableInTouchMode(false);
+        user_country.setClickable(false);
+
+
         JSONObject json = new JSONObject();
         json.put("first_name", first_name.getText().toString());
         json.put("last_name", last_name.getText().toString());
