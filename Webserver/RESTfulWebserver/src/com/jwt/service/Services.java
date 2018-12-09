@@ -739,12 +739,12 @@ public class Services {
 		
 		JSONObject JSONreq = new JSONObject(urlReq);
 		
-		 if (JSONreq.has("first_name")&& JSONreq.has("last_name") && JSONreq.has("dob") && JSONreq.has("country") && JSONreq.has("state") && JSONreq.has("city") && JSONreq.has("street") && JSONreq.has("postcode") && JSONreq.has("housenumber")&& JSONreq.has("gender"))  {
+		 if (JSONreq.has("first_name")&& JSONreq.has("last_name") && JSONreq.has("country") && JSONreq.has("state") && JSONreq.has("city") && JSONreq.has("street") && JSONreq.has("postcode") && JSONreq.has("housenumber"))  {
 	        	try {
 	                String fname = JSONreq.getString("first_name");
 	                String lname = JSONreq.getString("last_name");
 	                //String newlname = JSONreq.getString("new_last_name");
-	                String dob = JSONreq.getString("dob");
+	                //String dob = JSONreq.getString("dob");
 	                String country = JSONreq.getString("country");
 	                //String newcountry = JSONreq.getString("new_country");
 	                String state = JSONreq.getString("state");
@@ -757,7 +757,7 @@ public class Services {
 	                //Integer new_postcode = JSONreq.getInt("new_postcode");
 	                String housenumber = JSONreq.getString("housenumber");
 	                //String new_housenumber = JSONreq.getString("new_housenumber");
-	                String genderCol = JSONreq.getString("gender");
+	                //String genderCol = JSONreq.getString("gender");
 	                
 	                System.out.println("...editBasicUserInfo:");
 
@@ -765,19 +765,19 @@ public class Services {
 
 					DatabaseProvider provider = DatabaseProvider.getInstance(context);
 					
-					PreparedStatement s1 = provider.getConnection().prepareStatement(
-							"UPDATE GENDER SET gender =? WHERE gender_id = (SELECT MAX(gender_id) FROM GENDER)");
+					//PreparedStatement s1 = provider.getConnection().prepareStatement(
+					//		"UPDATE GENDER SET gender =? WHERE gender_id = (SELECT MAX(gender_id) FROM GENDER)");
                     
 					PreparedStatement s2 = provider.getConnection().prepareStatement(
                            // "INSERT INTO ADDRESS (country, state, city, street, postcode, housenumber) VALUES (?,?,?,?,?,?)");
-							"UPDATE ADDRESS SET country =?, state =?, city =?, street =?, postcode =?, housenumber =? WHERE address_id = (SELECT MAX(address_id) FROM ADDRESS");
-					PreparedStatement s3 = provider.getConnection().prepareStatement(
+							"UPDATE ADDRESS SET country =?, state =?, city =?, street =?, postcode =?, housenumber =? WHERE id_address = (SELECT max(id_address) FROM ADDRESS)");
+					//PreparedStatement s3 = provider.getConnection().prepareStatement(
                            // "INSERT INTO BASIC_USER (id_user, first_name,last_name,dob, id_gender, id_address) VALUES (?,?,?,?::date,?,?)");
-							"UPDATE BASIC_USER SET first_name =?, last_name =?, dob =? WHERE user_id = (SELECT MAX(user_id) FROM BASIC_USER");
+						//	"UPDATE BASIC_USER SET first_name =?, last_name =?, WHERE (id_user = (SELECT max(id_user) FROM BASIC_USER))");
                     
-                    s1.setString(1, genderCol);
-                    s1.executeUpdate();
-                    s1.closeOnCompletion();
+                   // s1.setString(1, genderCol);
+                   // s1.executeUpdate();
+                   // s1.closeOnCompletion();
                     
                     s2.setString(1, country);
                     s2.setString(2, state);
@@ -788,49 +788,12 @@ public class Services {
                     s2.executeUpdate();
                     s2.closeOnCompletion();
                     
-                    s3.setString(1, fname);
-                    s3.setString(2, lname);
-                    s3.setString(3, dob);
-                    s3.executeUpdate();
-                    s3.closeOnCompletion();
+               //     s3.setString(1, fname);
+              //      s3.setString(2, lname);
+               //     s3.executeUpdate();
+               //     s3.closeOnCompletion();
                     
-                    /*String selectSQL = "SELECT ID_USER FROM USER_REG ORDER BY ID_USER DESC LIMIT 1";
-                    PreparedStatement preparedStatement = provider.getConnection().prepareStatement(selectSQL);
-                    ResultSet rs = preparedStatement.executeQuery();
-                    int result;
-                    while (rs.next()) {
-                    	String userId = rs.getString("ID_USER");
-                    	result = Integer.parseInt(userId);	
-                    	s3.setInt(1, result);
-                    }
-                    
-                    s3.setString(2, fname);
-                    s3.setString(3, lname);
-                    s3.setString(4, dob);
-                    
-                    String selectSQL2 = "SELECT ID_GENDER FROM GENDER ORDER BY ID_GENDER DESC LIMIT 1";
-                    PreparedStatement preparedStatement2 = provider.getConnection().prepareStatement(selectSQL2);
-                    ResultSet rs2 = preparedStatement2.executeQuery();
-                    int result2;
-                    while (rs2.next()) {
-                    	String genderId = rs2.getString("ID_GENDER");
-                    	result2 = Integer.parseInt(genderId);	
-                    	s3.setInt(5, result2);
-                     }
-                    
-                    String selectSQL3 = "SELECT ID_ADDRESS FROM ADDRESS ORDER BY ID_ADDRESS DESC LIMIT 1";
-                    PreparedStatement preparedStatement3 = provider.getConnection().prepareStatement(selectSQL3);
-                    ResultSet rs3 = preparedStatement3.executeQuery();
-                    int result3;
-                    while (rs3.next()) {
-                    	String addressId = rs3.getString("ID_ADDRESS");
-                    	result3 = Integer.parseInt(addressId);	
-                    	s3.setInt(6, result3);
-                     }
-                   
-                    s3.executeUpdate();
-                    s3.closeOnCompletion();
-					*/
+      
 
 				} catch (Exception ex) {
 					ex.printStackTrace();
