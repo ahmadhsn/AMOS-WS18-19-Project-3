@@ -113,11 +113,24 @@ tools:context=".ProfileBasicUserActivity">
             android:textColor="@color/colorPrimaryDark"
             android:textSize="18.5sp"
             android:textStyle="bold" />
+        <TextView
+            android:id="@+id/address_text"
+            android:layout_width="328dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/gender_text"
+            android:text="Address: "
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18.5sp"
+            android:textStyle="bold" />
+
         <EditText
             android:id="@+id/user_street"
             android:layout_width="328dp"
             android:layout_height="40dp"
-            android:layout_below="@id/user_gender"
+            android:layout_below="@id/address_text"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
@@ -130,7 +143,7 @@ tools:context=".ProfileBasicUserActivity">
             android:id="@+id/hnumber"
             android:layout_width="155dp"
             android:layout_height="40dp"
-            android:layout_below="@id/user_gender"
+            android:layout_below="@id/address_text"
             android:layout_alignRight="@id/user_street"
             android:layout_marginLeft="0dp"
             android:layout_marginRight="0dp"
