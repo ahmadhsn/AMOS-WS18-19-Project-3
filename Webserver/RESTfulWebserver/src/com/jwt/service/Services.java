@@ -795,7 +795,7 @@ public class Services {
                     s3.setString(1, lname);
                    s3.executeUpdate();
                    s3.closeOnCompletion();
-                   System.out.println("Hi");
+      
       
 
 				} catch (Exception ex) {
@@ -806,7 +806,7 @@ public class Services {
 				System.out.println("Wrong JSONFormat:" + e.toString());
 			}
 		}
-		System.out.println("InvalidRequestbody");
+		System.out.println("...EditedInfoGotInserted");
 		return Response.status(400).entity("InvalidRequestBody").build();
 	}
 
