@@ -771,14 +771,15 @@ public class Services {
 					PreparedStatement s2 = provider.getConnection().prepareStatement(
                            // "INSERT INTO ADDRESS (country, state, city, street, postcode, housenumber) VALUES (?,?,?,?,?,?)");
 							"UPDATE ADDRESS SET country =?, state =?, city =?, street =?, postcode =?, housenumber =? WHERE id_address = (SELECT max(id_address) FROM ADDRESS)");
-					//PreparedStatement s3 = provider.getConnection().prepareStatement(
+					PreparedStatement s3 = provider.getConnection().prepareStatement(
                            // "INSERT INTO BASIC_USER (id_user, first_name,last_name,dob, id_gender, id_address) VALUES (?,?,?,?::date,?,?)");
-						//	"UPDATE BASIC_USER SET first_name =?, last_name =?, WHERE (id_user = (SELECT max(id_user) FROM BASIC_USER))");
+							"UPDATE BASIC_USER SET last_name =? WHERE id_user = (SELECT max(id_user) FROM BASIC_USER)");
                     
                    // s1.setString(1, genderCol);
                    // s1.executeUpdate();
                    // s1.closeOnCompletion();
-                    
+					
+					
                     s2.setString(1, country);
                     s2.setString(2, state);
                     s2.setString(3, city);
@@ -788,11 +789,13 @@ public class Services {
                     s2.executeUpdate();
                     s2.closeOnCompletion();
                     
-               //     s3.setString(1, fname);
-              //      s3.setString(2, lname);
-               //     s3.executeUpdate();
-               //     s3.closeOnCompletion();
                     
+                    
+               //     s3.setString(1, fname);
+                    s3.setString(1, lname);
+                   s3.executeUpdate();
+                   s3.closeOnCompletion();
+                   System.out.println("Hi");
       
 
 				} catch (Exception ex) {
