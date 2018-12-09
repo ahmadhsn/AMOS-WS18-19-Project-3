@@ -6,19 +6,26 @@ import android.preference.PreferenceManager;
 
 public class SaveSharedPreference {
     private static final String PREF_USER_EMAIL = "email";
+    private static final String PREF_USER_ID = "user_id";
 
     private static SharedPreferences getSharedPreferences(Context ctx) {
         return PreferenceManager.getDefaultSharedPreferences(ctx);
     }
 
-    public static void setUserEmail(Context ctx, String userName) {
+    public static void saveUserInforamtion(Context ctx, String userEmail, int user_id) {
         SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
-        editor.putString(PREF_USER_EMAIL, userName);
+        editor.putString(PREF_USER_EMAIL, userEmail);
+        editor.putInt(PREF_USER_ID, user_id);
+
         editor.apply();
     }
 
     public static String getUserEmail(Context ctx) {
         return getSharedPreferences(ctx).getString(PREF_USER_EMAIL, "");
+    }
+
+    public static int getUserID(Context ctx) {
+        return getSharedPreferences(ctx).getInt(PREF_USER_ID, -999);
     }
 
     public static void clearSharedPrefrences(Context ctx) {
