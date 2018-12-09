@@ -4,7 +4,6 @@ import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
-import java.sql.Array;
 import java.sql.Connection;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
@@ -23,7 +22,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.jwt.DataBaseConnection.Config;
 import com.jwt.DataBaseConnection.DatabaseProvider;
 import com.jwt.dao.EventDao;
 import com.jwt.dao.EventDaoImplementation;
