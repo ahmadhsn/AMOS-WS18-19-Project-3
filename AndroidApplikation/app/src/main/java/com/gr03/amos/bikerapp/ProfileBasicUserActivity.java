@@ -44,6 +44,7 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         user_city = (TextView) findViewById(R.id.user_city);
         user_state = (TextView) findViewById(R.id.user_state);
         user_country = (TextView) findViewById(R.id.user_country);
+
         Intent intent2 = getIntent();
 
         Bundle bundle = intent2.getExtras();
@@ -101,6 +102,13 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
 
     public void newInfo(View view) throws JSONException {
         //TODO check all values are valid
+        Button edit_profile_page=(Button)findViewById(R.id.editProfilePage);
+        Button save_edited_info=(Button)findViewById(R.id.saveEditedInfo);
+        Button add_to_database=(Button)findViewById(R.id.addtodatabase);
+        edit_profile_page.setVisibility(View.VISIBLE);
+        save_edited_info.setVisibility(View.VISIBLE);
+        add_to_database.setVisibility(View.INVISIBLE);
+
         JSONObject json = new JSONObject();
         json.put("first_name", first_name.getText().toString());
         json.put("last_name", last_name.getText().toString());
