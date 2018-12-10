@@ -57,6 +57,7 @@
     <string name="route_add">Add route</string>
     <string name="action_logout">Logout</string>
     <string name="action_add_event">Add event</string>
+    <string name="show_friends">Show Friends</string>
     <!--
      Strings for Address creation
      -->
