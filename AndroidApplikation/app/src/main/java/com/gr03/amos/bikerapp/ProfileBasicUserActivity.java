@@ -101,7 +101,7 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
     }
 
     public void newInfo(View view) throws JSONException {
-        //TODO check all values are valid
+        //button visibility
         Button edit_profile_page=(Button)findViewById(R.id.editProfilePage);
         Button save_edited_info=(Button)findViewById(R.id.saveEditedInfo);
         Button add_to_database=(Button)findViewById(R.id.addtodatabase);
@@ -109,6 +109,7 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         save_edited_info.setVisibility(View.VISIBLE);
         add_to_database.setVisibility(View.INVISIBLE);
 
+        //JSON request (first time insertion of user information to database)
         JSONObject json = new JSONObject();
         json.put("first_name", first_name.getText().toString());
         json.put("last_name", last_name.getText().toString());
@@ -137,11 +138,8 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         }
     }
     public void editInfo(View view){
-        //THIS METHOD ONLY MAKES ALL FIELDS EXCEPT DOB EDITABLE
 
-        //first_name.setEnabled(true);
-        //first_name.setFocusableInTouchMode(true);
-        //first_name.setClickable(true);
+        //makes all fields (except first_name, dob, gender) editable
         last_name.setEnabled(true);
         last_name.setFocusableInTouchMode(true);
         last_name.setClickable(true);
@@ -166,6 +164,8 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
     }
 
     public void saveEditedInfo(View view) throws JSONException {
+
+        //makes all fields non-editable again
         last_name.setEnabled(false);
         last_name.setFocusableInTouchMode(false);
         last_name.setClickable(false);
@@ -188,12 +188,9 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         user_country.setFocusableInTouchMode(false);
         user_country.setClickable(false);
 
-
+        //JSON request (updating edited info in the database)
         JSONObject json = new JSONObject();
-        json.put("first_name", first_name.getText().toString());
         json.put("last_name", last_name.getText().toString());
-        json.put("dob", date_of_birth.getText().toString());
-        json.put("gender",user_gender.getText().toString());
         json.put("street", user_street.getText().toString());
         json.put("housenumber", hnumber.getText().toString());
         json.put("postcode", user_postcode.getText().toString());
