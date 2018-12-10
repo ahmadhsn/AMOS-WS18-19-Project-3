@@ -126,21 +126,16 @@ public class ShowFriendsActivity extends AppCompatActivity {
                     int position = (Integer) view.getTag();
                     BasicUser user = getItem(position);
 
-
-                    //TODO remove and instead remove comments around following code
-                    Toast.makeText(getApplicationContext(), "Insertion of Friendship temporarily disabled", Toast.LENGTH_LONG).show();
-
-
                     JSONObject friendRequest = new JSONObject();
 
                     try {
                         JSONObject response;
-                        /*
+
                         //TODO remove and take userID from session instead
                         Requests.getResponse("getUserId/" + SaveSharedPreference.getUserEmail(getContext()), null,"GET");
                         FutureTask<String> taskID = new FutureTask(new Callable<String>() {
                             public String call() {
-                                JSONObject threadResponse = Requests.getResponse("getUserId/" + SaveSharedPreference.getUserEmail(getContext()), null,"GET");
+                                JSONObject threadResponse = Requests.getResponse("getUserID/" + SaveSharedPreference.getUserEmail(getContext()), null,"GET");
                                 return threadResponse.toString();
                             }
                         });
@@ -160,8 +155,8 @@ public class ShowFriendsActivity extends AppCompatActivity {
                             return;
                         }
                         //TODO end remove
-                        */
-                        friendRequest.put("idUser", "3");
+
+                        friendRequest.put("idUser", userID);
                         friendRequest.put("idFollower", Long.toString(user.getUser_id()));
 
                         FutureTask<String> task = new FutureTask(new Callable<String>() {
