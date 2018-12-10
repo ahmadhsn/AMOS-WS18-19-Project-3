@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gr03.amos.bikerapp.Adapters.UserAdapter;
 import com.gr03.amos.bikerapp.Models.BasicUser;
 
 import org.json.JSONArray;
@@ -97,114 +98,6 @@ public class ShowFriendsActivity extends AppCompatActivity {
         listView.setAdapter(userAdapter);
     }
 
-    class UserAdapter extends ArrayAdapter<BasicUser> {
-
-        public UserAdapter(Context context, ArrayList<BasicUser> users) {
-            super(context, 0, users);
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            // Get the data item for this position
-            BasicUser user = getItem(position);
-            // Check if an existing view is being reused, otherwise inflate the view
-            if (convertView == null) {
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.show_user_row, parent, false);
-            }
-            // Lookup view for data population
-            TextView tvName = (TextView) convertView.findViewById(R.id.user_name);
-            TextView tvHome = (TextView) convertView.findViewById(R.id.user_mail);
-            // Populate the data into the template view using the data object
-            tvName.setText(user.getName());
-            tvHome.setText(user.getEmail());
-
-            ImageButton btAddFriend = (ImageButton) convertView.findViewById(R.id.add_friend);
-            btAddFriend.setTag(position);
-            btAddFriend.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View view){
-                    int position = (Integer) view.getTag();
-                    BasicUser user = getItem(position);
-
-
-                    //TODO remove and instead remove comments around following code
-                    Toast.makeText(getApplicationContext(), "Insertion of Friendship temporarily disabled", Toast.LENGTH_LONG).show();
-
-
-                    JSONObject friendRequest = new JSONObject();
-
-                    try {
-                        JSONObject response;
-                        /*
-                        //TODO remove and take userID from session instead
-                        Requests.getResponse("getUserId/" + SaveSharedPreference.getUserEmail(getContext()), null,"GET");
-                        FutureTask<String> taskID = new FutureTask(new Callable<String>() {
-                            public String call() {
-                                JSONObject threadResponse = Requests.getResponse("getUserId/" + SaveSharedPreference.getUserEmail(getContext()), null,"GET");
-                                return threadResponse.toString();
-                            }
-                        });
-
-                        new Thread(taskID).start();
-                        Log.i("Response", taskID.get());
-
-                        response = new JSONObject(taskID.get());
-
-                        int userID;
-                        if(response.has("getUserID") && response.getJSONObject("getUserID").has("user_id")){
-                            userID= response.getJSONObject("getUserID").getInt("user_id");
-                        }else{
-                            Toast.makeText(getApplicationContext(), "Internal Problem.", Toast.LENGTH_LONG).show();
-
-                            Log.i("GetUserByID", "No User found with session mail.");
-                            return;
-                        }
-                        //TODO end remove
-                        */
-                        friendRequest.put("idUser", "3");
-                        friendRequest.put("idFollower", Long.toString(user.getUser_id()));
-
-                        FutureTask<String> task = new FutureTask(new Callable<String>() {
-                            public String call() {
-                                JSONObject threadResponse = Requests.getResponse("addFriend", friendRequest);
-                                return threadResponse.toString();
-                            }
-                        });
-                        new Thread(task).start();
-                        Log.i("Response", task.get());
-                        response = new JSONObject(task.get());
-
-                        //handle response
-                        if(response.has("friendship")){
-                            String friendshipStatus = response.getString("friendship");
-                            if(friendshipStatus.equals("successful")){
-                                String msg = String.format("You added  as a friend!", user.getName());
-                                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
-                            }else if(friendshipStatus.equals("internalProblems")){
-                                Toast.makeText(getApplicationContext(), "Internal Problem", Toast.LENGTH_LONG).show();
-                            }
-                        }else{
-                            //TODO remove only for debugging
-                            Toast.makeText(getApplicationContext(), "Invalid response", Toast.LENGTH_LONG).show();
-                        }
-
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    } catch (ExecutionException e) {
-                        e.printStackTrace();
-                    }
-
-
-                }
-            });
-            // Return the completed view to render on screen
-            return convertView;
-        }
-
-    }
 
 
 }
