@@ -19,4 +19,10 @@
         android:title="@string/action_add_event"
         app:showAsAction="ifRoom" />
 
+    <item
+        android:id="@+id/action_event_filter"
+        android:icon="@drawable/ic_filter"
+        android:title="@string/action_event_filter"
+        app:showAsAction="ifRoom" />
+
 </menu>

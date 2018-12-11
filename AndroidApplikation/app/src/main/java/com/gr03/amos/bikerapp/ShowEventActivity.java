@@ -94,6 +94,10 @@ public class ShowEventActivity extends AppCompatActivity
             return true;
         }
 
+        if (id == R.id.action_event_filter) {
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
