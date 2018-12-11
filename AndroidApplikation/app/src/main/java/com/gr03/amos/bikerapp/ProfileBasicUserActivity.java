@@ -24,8 +24,8 @@ package com.gr03.amos.bikerapp;
 
 public class ProfileBasicUserActivity extends AppCompatActivity {
 
-    //Intent intent;
-    //Long userId;
+    Intent intent;
+    Long userId;
     TextView first_name, last_name, date_of_birth, user_gender, user_street, hnumber, user_postcode, user_city, user_state, user_country  ;
 
     @Override
@@ -33,6 +33,9 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mt("create activity2");
         setContentView(R.layout.activity_profile_basic_user);
+        intent = getIntent();
+        //TODO add Session ID as default value
+        userId = intent.getLongExtra("id", 0);
 
         first_name = (TextView) findViewById(R.id.first_name);
         last_name = (TextView) findViewById(R.id.last_name);
