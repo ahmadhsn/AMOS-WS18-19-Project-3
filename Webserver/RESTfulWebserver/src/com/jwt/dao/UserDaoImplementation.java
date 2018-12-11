@@ -46,6 +46,43 @@ public class UserDaoImplementation implements UserDao {
 		return getListByRS(rsFriends);
 	}
 	
+	public boolean getFriendById(int userId, int friendId) {
+		ResultSet rsFriend = db.querySelectDB("SELECT * FROM friendship WHERE id_user1 = ? AND id_user2 = ?", userId, friendId);
+		
+		try {
+			if(rsFriend.next()) {
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
+	public List<BasicUser> searchUser(String input, int userId){
+		
+		//TODO add more advanced search methods to handle input
+		ResultSet rs = db.querySelectDB("SELECT u.id_user, b.first_name, b.last_name, u.email FROM user_reg u, basic_user b WHERE b.id_user = u.id_user AND (email = ? OR first_name = ? OR last_name = ?)", input, input, input);
+	
+		List<BasicUser> user = new ArrayList<>();
+		try {
+			while(rs.next()) {
+				if(getFriendById(userId, rs.getInt("id_user"))) {
+					//add user with friendship status "friends"
+					user.add(new BasicUser(rs.getInt("id_user"), rs.getString("first_name"), rs.getString("last_name"), rs.getString("email"), true ));					
+				}else {
+					//add user without friendship status
+					user.add(new BasicUser(rs.getInt("id_user"), rs.getString("first_name"), rs.getString("last_name"), rs.getString("email") ));					
+				}
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return user;
+	}
+	
 	private List<BasicUser> getListByRS(ResultSet rs){
 		List<BasicUser> user = new ArrayList<>();
 		try {

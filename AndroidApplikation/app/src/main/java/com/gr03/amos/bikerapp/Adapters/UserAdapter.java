@@ -56,7 +56,7 @@ public class UserAdapter extends ArrayAdapter<BasicUser> {
 
         //onitemlistenenr for each user
         ListView userList = (ListView) convertView.findViewById(R.id.user_result);
-        userList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*userList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //Long userId = UserAdapter.super.getItem(position).getUser_id();
@@ -64,7 +64,7 @@ public class UserAdapter extends ArrayAdapter<BasicUser> {
                 //intent.putExtra("id", userId);
                 //UserAdapter.super.getContext().startActivity(intent);
             }
-        });
+        });*/
 
         // Return the completed view to render on screen
         return convertView;
@@ -77,6 +77,7 @@ public class UserAdapter extends ArrayAdapter<BasicUser> {
             BasicUser user = getItem(position);
 
             JSONObject friendRequest = new JSONObject();
+
 
             try {
                 JSONObject response;

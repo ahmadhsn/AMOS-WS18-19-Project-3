@@ -45,17 +45,46 @@ public class ShowFriendsActivity extends AppCompatActivity {
     }
 
     public void searchUsers(View view) {
-        String url = "searchUser/" + userName.getText();
+        String url = "searchUser";
 
         try {
             JSONObject response;
 
-            FutureTask<String> task = new FutureTask(new Callable<String>() {
+            //TODO remove and replace with session id
+            FutureTask<String> taskID = new FutureTask(new Callable<String>() {
                 public String call() {
-                    JSONObject threadResponse = Requests.getResponse(url, null,"GET");
+                    JSONObject threadResponse = Requests.getResponse("getUserID/" + SaveSharedPreference.getUserEmail(getApplicationContext()), null,"GET");
                     return threadResponse.toString();
                 }
             });
+
+            new Thread(taskID).start();
+            Log.i("Response", taskID.get());
+
+            response = new JSONObject(taskID.get());
+
+            int userID;
+            if(response.has("getUserID") && response.getJSONObject("getUserID").has("user_id")){
+                userID= response.getJSONObject("getUserID").getInt("user_id");
+            }else{
+                Toast.makeText(getApplicationContext(), "Internal Problem.", Toast.LENGTH_LONG).show();
+
+                Log.i("GetUserByID", "No User found with session mail.");
+                return;
+            }
+            //TODO end remove and replace with session id
+
+            JSONObject request = new JSONObject();
+            request.put("id", userID);
+            request.put("input",userName.getText());
+
+            FutureTask<String> task = new FutureTask(new Callable<String>() {
+                public String call() {
+                    JSONObject threadResponse = Requests.getResponse(url, request,"POST");
+                    return threadResponse.toString();
+                }
+            });
+
 
             new Thread(task).start();
             Log.i("Response", task.get());
@@ -70,7 +99,6 @@ public class ShowFriendsActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "No such User.", Toast.LENGTH_LONG).show();
                     return;
                 }
-
 
                 Log.i("allUser:", response.toString());
                 listUsers(response.getJSONArray("user"));
@@ -89,7 +117,7 @@ public class ShowFriendsActivity extends AppCompatActivity {
         for(int i=0; i<users.length(); i++){
             try {
                 JSONObject curr = users.getJSONObject(i);
-                arrayUsers.add(new BasicUser(curr.getLong("user_id"), curr.getString("firstName"), curr.getString("lastName"), curr.getString("email")));
+                arrayUsers.add(new BasicUser(curr.getLong("id"), curr.getString("first_name"), curr.getString("last_name"), curr.getString("email")));
             } catch (JSONException e) {
                 e.printStackTrace();
             }

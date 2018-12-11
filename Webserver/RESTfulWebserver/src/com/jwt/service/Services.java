@@ -51,7 +51,7 @@ public class Services {
 
 	@Context
 	private ServletContext context;
-	
+
 	/**
 	 * Gives greetings to an Request. Testable with
 	 * http://localhost:8080/RESTfulWebserver/services/Tester
@@ -63,7 +63,7 @@ public class Services {
 	@GET
 	@Path("/{name}")
 	public Response getMsg(@PathParam("name") String name) throws JSONException {
-		
+
 		JSONObject output = new JSONObject("{Welcome : " + name + "}");
 		System.out.println("...TestRequest from " + name);
 		return Response.status(200).entity(output.toString()).build();
@@ -85,7 +85,7 @@ public class Services {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response checkUser(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
-		
+
 		JSONObject JSONreq = new JSONObject(urlReq);
 
 		if (JSONreq.has("email") && JSONreq.has("password")) {
@@ -96,7 +96,8 @@ public class Services {
 
 			// check users info in DB
 			DatabaseProvider provider = DatabaseProvider.getInstance(context);
-			ResultSet rs = provider.querySelectDB("SELECT * FROM user_reg WHERE email = ? AND password = ?", email, password);
+			ResultSet rs = provider.querySelectDB("SELECT * FROM user_reg WHERE email = ? AND password = ?", email,
+					password);
 
 			JSONObject response = new JSONObject();
 			if (!rs.next()) {
@@ -105,14 +106,12 @@ public class Services {
 			}
 
 			response.put("login", "successfulLogin");
-			
+
 			return Response.status(200).entity(response.toString()).build();
 		} else {
 			return Response.status(400).entity("InvalidRequestBody").build();
 		}
 	}
-	
-	
 
 	/**
 	 * TODO Adds new user to database.
@@ -130,7 +129,7 @@ public class Services {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response userRegistration(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
-		
+
 		JSONObject JSONreq = new JSONObject(urlReq);
 
 		if (JSONreq.has("name") && JSONreq.has("password") && JSONreq.has("email")) {
@@ -146,14 +145,14 @@ public class Services {
 				System.out.println("...userRegistrationRequest from " + username);
 
 				// check if user already exists
-				
+
 				DatabaseProvider db = DatabaseProvider.getInstance(context);
 				ResultSet result = db.querySelectDB("SELECT * FROM user_reg WHERE email = '" + email + "'");
 				while (result.next()) {
 					response.put("userRegistration", "emailExistsAlready");
 					return Response.status(200).entity(response.toString()).build();
 				}
-					
+
 				// insert into DB
 				db.queryInsertDB("INSERT INTO user_reg (password,email) VALUES (?,?)", password, email);
 
@@ -184,7 +183,7 @@ public class Services {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createEventType(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
-		
+
 		JSONObject JSONreq = new JSONObject(urlReq);
 		System.out.println(".. Create New Event Type");
 
@@ -198,7 +197,8 @@ public class Services {
 
 				try {
 					DatabaseProvider provider = DatabaseProvider.getInstance(context);
-					PreparedStatement st = provider.getConnection().prepareStatement("INSERT INTO EVENT_TYPE (name,description) VALUES (?,?)");
+					PreparedStatement st = provider.getConnection()
+							.prepareStatement("INSERT INTO EVENT_TYPE (name,description) VALUES (?,?)");
 					st.setString(1, eventname);
 					st.setString(2, eventdescription);
 					st.executeUpdate();
@@ -243,13 +243,13 @@ public class Services {
 
 		if (JSONreq.has("event") && JSONreq.has("address")) {
 			try {
-				
+
 				Event newEvent = new Event(JSONreq.getJSONObject("event"));
 				Address address = new Address(JSONreq.getJSONObject("address"));
-				
+
 				EventDao eventDao = new EventDaoImplementation();
 				eventDao.createEvent(newEvent, address);
-				
+
 				JSONObject response = new JSONObject();
 
 				response.put("eventCreation", "successfullCreation");
@@ -268,107 +268,108 @@ public class Services {
 	 * Sets options for headers.
 	 */
 	@POST
-    @Path("/addUserBasic")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response addUserBasic(String urlReq)
-            throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
-		
-        JSONObject JSONreq = new JSONObject(urlReq);
-        System.out.println("...addInfoBasicUserRequest");
-        if (JSONreq.has("first_name")&& JSONreq.has("last_name") && JSONreq.has("dob") && JSONreq.has("country") && JSONreq.has("state") && JSONreq.has("city") && JSONreq.has("street") && JSONreq.has("postcode") && JSONreq.has("housenumber")&& JSONreq.has("gender"))  {
-        	try {
-                String fname = JSONreq.getString("first_name");
-                String lname = JSONreq.getString("last_name");
-                String dob = JSONreq.getString("dob");
-                String country = JSONreq.getString("country");
-                String state = JSONreq.getString("state");
-                String city = JSONreq.getString("city");
-                String street = JSONreq.getString("street");
-                Integer postcode = JSONreq.getInt("postcode");
-                String housenumber = JSONreq.getString("housenumber");
-                String genderCol = JSONreq.getString("gender");
-                
-                System.out.println("...newInfoBasicUserAdded:");
-                try {
-                	DatabaseProvider provider = DatabaseProvider.getInstance(context);
-                    Connection conn = provider.getConnection();
-                    PreparedStatement s1 = conn.prepareStatement(
-                            "INSERT INTO GENDER (gender) VALUES (?)");
-                    
-                    PreparedStatement s2 = conn.prepareStatement(
-                            "INSERT INTO ADDRESS (country, state, city, street, postcode, housenumber) VALUES (?,?,?,?,?,?)");
-                    
-                    PreparedStatement s3 = conn.prepareStatement(
-                            "INSERT INTO BASIC_USER (id_user, first_name,last_name,dob, id_gender, id_address) VALUES (?,?,?,?::date,?,?)");
-                   
-                    
-                    s1.setString(1, genderCol);
-                    s1.executeUpdate();
-                    s1.closeOnCompletion();
-                    
-                    s2.setString(1, country);
-                    s2.setString(2, state);
-                    s2.setString(3, city);
-                    s2.setString(4, street);
-                    s2.setInt(5, postcode);
-                    s2.setString(6, housenumber);
-                    s2.executeUpdate();
-                    s2.closeOnCompletion();
-                    
-                    String selectSQL = "SELECT ID_USER FROM USER_REG ORDER BY ID_USER DESC LIMIT 1";
-                    PreparedStatement preparedStatement = conn.prepareStatement(selectSQL);
-                    ResultSet rs = preparedStatement.executeQuery();
-                    int result;
-                    while (rs.next()) {
-                    	String userId = rs.getString("ID_USER");
-                    	result = Integer.parseInt(userId);	
-                    	s3.setInt(1, result);
-                    }
-                    
-                    s3.setString(2, fname);
-                    s3.setString(3, lname);
-                    s3.setString(4, dob);
-                    
-                    String selectSQL2 = "SELECT ID_GENDER FROM GENDER ORDER BY ID_GENDER DESC LIMIT 1";
-                    PreparedStatement preparedStatement2 = conn.prepareStatement(selectSQL2);
-                    ResultSet rs2 = preparedStatement2.executeQuery();
-                    int result2;
-                    while (rs2.next()) {
-                    	String genderId = rs2.getString("ID_GENDER");
-                    	result2 = Integer.parseInt(genderId);	
-                    	s3.setInt(5, result2);
-                     }
-                    
-                    String selectSQL3 = "SELECT ID_ADDRESS FROM ADDRESS ORDER BY ID_ADDRESS DESC LIMIT 1";
-                    PreparedStatement preparedStatement3 = conn.prepareStatement(selectSQL3);
-                    ResultSet rs3 = preparedStatement3.executeQuery();
-                    int result3;
-                    while (rs3.next()) {
-                    	String addressId = rs3.getString("ID_ADDRESS");
-                    	result3 = Integer.parseInt(addressId);	
-                    	s3.setInt(6, result3);
-                     }
-                   
-                    s3.executeUpdate();
-                    s3.closeOnCompletion();
-                    
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-                JSONObject response = new JSONObject();
-                response.put("addUserBasic", "successfullCreation");
-                return Response.status(200).entity(response.toString()).build();
-            } catch (Exception e) {
-                System.out.println("Wrong JSONFormat:" + e.toString());
-            }
-        }
-        System.out.println("InvalidRequestbody");
-        return Response.status(400).entity("InvalidRequestBody").build();
-    }
-    /**
-     * Sets options for headers.
-     */
-   
+	@Path("/addUserBasic")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response addUserBasic(String urlReq)
+			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+
+		JSONObject JSONreq = new JSONObject(urlReq);
+		System.out.println("...addInfoBasicUserRequest");
+		if (JSONreq.has("first_name") && JSONreq.has("last_name") && JSONreq.has("dob") && JSONreq.has("country")
+				&& JSONreq.has("state") && JSONreq.has("city") && JSONreq.has("street") && JSONreq.has("postcode")
+				&& JSONreq.has("housenumber") && JSONreq.has("gender")) {
+			try {
+				String fname = JSONreq.getString("first_name");
+				String lname = JSONreq.getString("last_name");
+				String dob = JSONreq.getString("dob");
+				String country = JSONreq.getString("country");
+				String state = JSONreq.getString("state");
+				String city = JSONreq.getString("city");
+				String street = JSONreq.getString("street");
+				Integer postcode = JSONreq.getInt("postcode");
+				String housenumber = JSONreq.getString("housenumber");
+				String genderCol = JSONreq.getString("gender");
+
+				System.out.println("...newInfoBasicUserAdded:");
+				try {
+					DatabaseProvider provider = DatabaseProvider.getInstance(context);
+					Connection conn = provider.getConnection();
+					PreparedStatement s1 = conn.prepareStatement("INSERT INTO GENDER (gender) VALUES (?)");
+
+					PreparedStatement s2 = conn.prepareStatement(
+							"INSERT INTO ADDRESS (country, state, city, street, postcode, housenumber) VALUES (?,?,?,?,?,?)");
+
+					PreparedStatement s3 = conn.prepareStatement(
+							"INSERT INTO BASIC_USER (id_user, first_name,last_name,dob, id_gender, id_address) VALUES (?,?,?,?::date,?,?)");
+
+					s1.setString(1, genderCol);
+					s1.executeUpdate();
+					s1.closeOnCompletion();
+
+					s2.setString(1, country);
+					s2.setString(2, state);
+					s2.setString(3, city);
+					s2.setString(4, street);
+					s2.setInt(5, postcode);
+					s2.setString(6, housenumber);
+					s2.executeUpdate();
+					s2.closeOnCompletion();
+
+					String selectSQL = "SELECT ID_USER FROM USER_REG ORDER BY ID_USER DESC LIMIT 1";
+					PreparedStatement preparedStatement = conn.prepareStatement(selectSQL);
+					ResultSet rs = preparedStatement.executeQuery();
+					int result;
+					while (rs.next()) {
+						String userId = rs.getString("ID_USER");
+						result = Integer.parseInt(userId);
+						s3.setInt(1, result);
+					}
+
+					s3.setString(2, fname);
+					s3.setString(3, lname);
+					s3.setString(4, dob);
+
+					String selectSQL2 = "SELECT ID_GENDER FROM GENDER ORDER BY ID_GENDER DESC LIMIT 1";
+					PreparedStatement preparedStatement2 = conn.prepareStatement(selectSQL2);
+					ResultSet rs2 = preparedStatement2.executeQuery();
+					int result2;
+					while (rs2.next()) {
+						String genderId = rs2.getString("ID_GENDER");
+						result2 = Integer.parseInt(genderId);
+						s3.setInt(5, result2);
+					}
+
+					String selectSQL3 = "SELECT ID_ADDRESS FROM ADDRESS ORDER BY ID_ADDRESS DESC LIMIT 1";
+					PreparedStatement preparedStatement3 = conn.prepareStatement(selectSQL3);
+					ResultSet rs3 = preparedStatement3.executeQuery();
+					int result3;
+					while (rs3.next()) {
+						String addressId = rs3.getString("ID_ADDRESS");
+						result3 = Integer.parseInt(addressId);
+						s3.setInt(6, result3);
+					}
+
+					s3.executeUpdate();
+					s3.closeOnCompletion();
+
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+				JSONObject response = new JSONObject();
+				response.put("addUserBasic", "successfullCreation");
+				return Response.status(200).entity(response.toString()).build();
+			} catch (Exception e) {
+				System.out.println("Wrong JSONFormat:" + e.toString());
+			}
+		}
+		System.out.println("InvalidRequestbody");
+		return Response.status(400).entity("InvalidRequestBody").build();
+	}
+
+	/**
+	 * Sets options for headers.
+	 */
+
 	@OPTIONS
 	public Response optionsOptions() {
 		return Response.ok().header("Allow-Control-Allow-Methods", "POST,GET,OPTIONS")
@@ -378,7 +379,7 @@ public class Services {
 	@GET
 	@Path("/testMail")
 	public Response sendTestMail() throws JSONException {
-		
+
 		JSONObject output = new JSONObject("{Test: send Mail}");
 		System.out.println("...sendTestMail Request ");
 
@@ -394,7 +395,7 @@ public class Services {
 	@Path("/getEvents")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getAllEvents() throws JSONException {
-		
+
 		JSONObject jobj1 = new JSONObject();
 
 		System.out.println("...getAllEvetns");
@@ -444,13 +445,13 @@ public class Services {
 	@Path("/getEventById/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getEventById(@PathParam("id") int id) throws JSONException {
-		
+
 		JSONObject jobj = new JSONObject();
 
 		System.out.println("...Get Event By ID ");
 		try {
 			DatabaseProvider provider = DatabaseProvider.getInstance(context);
-			
+
 			Statement statement = provider.getConnection().createStatement();
 			ResultSet result = statement.executeQuery("SELECT * FROM EVENT WHERE id_event=" + id);
 			System.out.println("...Get Event By ID ");
@@ -490,7 +491,7 @@ public class Services {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateEvent(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
-		
+
 		JSONObject JSONreq = new JSONObject(urlReq);
 		System.out.println("...updateEventRequest");
 
@@ -538,26 +539,27 @@ public class Services {
 		System.out.println("InvalidRequestbody");
 		return Response.status(400).entity("InvalidRequestBody").build();
 	}
-	
+
 	@POST
 	@Path("/changePassword")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response changePassword(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
-		
+
 		JSONObject JSONreq = new JSONObject(urlReq);
-		
-		if (JSONreq.has("email") && JSONreq.has("oldPassword") && JSONreq.has("newPassword") && JSONreq.has("repeatNewPassword")
+
+		if (JSONreq.has("email") && JSONreq.has("oldPassword") && JSONreq.has("newPassword")
+				&& JSONreq.has("repeatNewPassword")
 //				&& (JSONreq.getString("newPassword").equals(JSONreq.getString("repeatNewPassword")))
-				) {
+		) {
 			try {
-				
+
 				String email = JSONreq.getString("email");
 				String oldPassword = JSONreq.getString("oldPassword");
 				String newPassword = JSONreq.getString("newPassword");
 				String repeatNewPassword = JSONreq.getString("repeatNewPassword");
 
-				System.out.println("...changePassword:" + email );
+				System.out.println("...changePassword:" + email);
 
 				try {
 
@@ -566,33 +568,29 @@ public class Services {
 //					ResultSet result = statement.executeQuery("UPDATE USER_REG SET password =? WHERE email='"+ email +"'" + "AND password='" + oldPassword + "'", newPassword);
 
 					DatabaseProvider provider = DatabaseProvider.getInstance(context);
-					PreparedStatement statement = provider.getConnection().prepareStatement(
-							"UPDATE USER_REG SET password =? WHERE email='"+ email +"'" + "AND password='" + oldPassword + "'" );
+					PreparedStatement statement = provider.getConnection()
+							.prepareStatement("UPDATE USER_REG SET password =? WHERE email='" + email + "'"
+									+ "AND password='" + oldPassword + "'");
 
-					
 					statement.setString(1, newPassword);
 					int count = statement.executeUpdate();
 					statement.closeOnCompletion();
 					JSONObject response = new JSONObject();
-					if (count>0) {
-						
+					if (count > 0) {
+
 						response.put("passwordUpdated", "successfullUpdation");
 
 						return Response.status(200).entity(response.toString()).build();
-					
-					}
-					else {
+
+					} else {
 						response.put("passwordUpdated", "notUpdated");
 
 						return Response.status(200).entity(response.toString()).build();
 					}
-					
 
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
-				
-				
 
 //				JSONObject response = new JSONObject();
 //				response.put("passwordUpdated", "successfullUpdation");
@@ -606,13 +604,13 @@ public class Services {
 		System.out.println("InvalidRequestbody");
 		return Response.status(400).entity("InvalidRequestBody").build();
 	}
-	
+
 	@POST
 	@Path("/deleteEvent")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response deleteEvent(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
-		
+
 		JSONObject JSONreq = new JSONObject(urlReq);
 		System.out.println("...Delete Event Request");
 
@@ -626,7 +624,8 @@ public class Services {
 				try {
 
 					DatabaseProvider provider = DatabaseProvider.getInstance(context);
-					PreparedStatement statement = provider.getConnection().prepareStatement("DELETE FROM EVENT WHERE id_event="+ eventid);
+					PreparedStatement statement = provider.getConnection()
+							.prepareStatement("DELETE FROM EVENT WHERE id_event=" + eventid);
 
 					statement.executeUpdate();
 					statement.closeOnCompletion();
@@ -648,8 +647,10 @@ public class Services {
 		System.out.println("InvalidRequestbody");
 		return Response.status(400).entity("InvalidRequestBody").build();
 	}
+
 	/**
 	 * TODO
+	 * 
 	 * @param urlReq
 	 * @return
 	 * @throws ClassNotFoundException
@@ -662,69 +663,55 @@ public class Services {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createRoute(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
-		
+
 		JSONObject JSONreq = new JSONObject(urlReq);
 		System.out.println("...createRoute");
-		try {		
+		try {
 			DatabaseProvider.getInstance(context);
-			
+
 			NewRouteRequest newRoute = new NewRouteRequest(JSONreq);
 			RouteDao dao = new RouteDaoImplementation();
 			dao.createRoute(newRoute.getStartAddress(), newRoute.getEndAddress(), newRoute.getRoute());
-			
+
 			JSONObject response = new JSONObject();
-			
+
 			response.put("routeCreation", "successfullCreation");
 			return Response.status(200).entity(response.toString()).build();
 		} catch (Exception ex) {
-		    System.out.println("InvalidRequestbody");
-		    return Response.status(400).entity("InvalidRequestBody").build();
+			System.out.println("InvalidRequestbody");
+			return Response.status(400).entity("InvalidRequestBody").build();
 		}
 	}
-	
-	@GET
-	@Path("/searchUser/{input}")
+
+	@POST
+	@Path("/searchUser")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response searchUserByMail(@PathParam("input") String input)
+	public Response searchUserByMail(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
-
+		JSONObject JSONreq = new JSONObject(urlReq);
 		JSONObject allUser = new JSONObject();
+		String input;
 
-		//TODO not tested yet
 		System.out.println("...Get User By Mail or Name");
 		try {
-			DatabaseProvider db = DatabaseProvider.getInstance(context);
-			ResultSet result = db.querySelectDB("SELECT u.id_user, b.first_name, b.last_name, u.email FROM user_reg u, basic_user b WHERE b.id_user = u.id_user AND (email = ? OR first_name = ? OR last_name = ?)", input, input, input);
 
-			String userId, firstName, lastName, email;
+			UserDaoImplementation dao = new UserDaoImplementation();
 
-			JSONArray userList = new JSONArray();
-
-			Boolean hasUser = false;
-
-			while (result.next()) {
-				hasUser = true;
-				JSONObject user = new JSONObject();
-
-				userId = result.getString("id_user");
-				firstName = result.getString("first_name");
-				lastName = result.getString("last_name");
-				email = result.getString("email");
-				System.out.println(result);
-
-				user.put("user_id", userId);
-				user.put("firstName", firstName);
-				user.put("lastName", lastName);
-				user.put("email", email);
-
-				userList.put(user);
-			}
-			if (hasUser) {
-				allUser.put("foundUser", "successful");
-				allUser.put("user", userList);
+			int userId;
+			if(JSONreq.has("id") && JSONreq.has("input")) {
+				userId = JSONreq.getInt("id");
+				input = JSONreq.getString("input");
 			}else {
+				return Response.status(500).entity("InvalidRequestBody".toString()).build();
+			}
+			
+			List<BasicUser> searchResults = dao.searchUser(input, userId);
+
+			if (searchResults != null && searchResults.isEmpty()) {
 				allUser.put("foundUser", "unsuccessful");
-				
+			} else {
+				allUser.put("foundUser", "successful");
+				allUser.put("user", BasicUser.serializeUserList(searchResults));
 			}
 
 			return Response.status(200).entity(allUser.toString()).build();
@@ -733,7 +720,7 @@ public class Services {
 		}
 		return Response.status(500).entity("InvalidRequestBody".toString()).build();
 	}
-	
+
 	@GET
 	@Path("/getUserInfo")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -744,7 +731,8 @@ public class Services {
 		try {
 			DatabaseProvider provider = DatabaseProvider.getInstance(context);
 
-			ResultSet result = provider.querySelectDB("SELECT first_name, last_name, dob FROM BASIC_USER ORDER BY ID_USER DESC LIMIT 1");
+			ResultSet result = provider
+					.querySelectDB("SELECT first_name, last_name, dob FROM BASIC_USER ORDER BY ID_USER DESC LIMIT 1");
 			System.out.println("this" + result.getClass().getName());
 
 			JSONArray jArray = new JSONArray();
@@ -784,14 +772,14 @@ public class Services {
 		JSONObject JSONreq = new JSONObject(urlReq);
 		System.out.println("...addFriendRequest");
 
-		//TODO not tested yet
+		// TODO not tested yet
 		if (JSONreq.has("idUser") && JSONreq.has("idFollower")) {
 
 			JSONObject response = new JSONObject();
 			DatabaseProvider db = DatabaseProvider.getInstance(context);
 			int idUser = JSONreq.getInt("idUser");
 			int idFollower = JSONreq.getInt("idFollower");
-			try{
+			try {
 				db.queryInsertDB("INSERT into FRIENDSHIP VALUES (?,?)", idUser, idFollower);
 				response.put("friendship", "successful");
 			} catch (Exception ex) {
@@ -819,18 +807,18 @@ public class Services {
 			return Response.status(200).entity(response.toString()).build();
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			
+
 			response.put("error_code", "failed_to_get_event_type");
 			response.put("description", "Failed to get event types");
 			System.out.println("Response: " + response.toString());
 			return Response.status(500).entity(response.toString()).build();
 		}
 	}
-	
+
 	/**
 	 * Get UserID for user with given mail
 	 * 
-	 * @param mail 
+	 * @param mail
 	 * @return userID
 	 * @throws JSONException
 	 */
@@ -838,14 +826,14 @@ public class Services {
 	@Path("/getUserID/{mail}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getUserID(@PathParam("mail") String mail) throws JSONException {
-		
+
 		JSONObject jobj = new JSONObject();
 
 		System.out.println("...Get UserID By Email ");
 		try {
 			DatabaseProvider provider = DatabaseProvider.getInstance(context);
 			ResultSet result = provider.querySelectDB("SELECT id_user FROM user_reg WHERE email = ?", mail);
-	
+
 			if (result.next()) {
 				jobj.put("user_id", result.getString("id_user"));
 			}
@@ -861,9 +849,9 @@ public class Services {
 		return Response.status(200).entity(response.toString()).build();
 
 	}
-	
+
 	/**
-	 * TODO add comments
+	 * Returns list with every friend
 	 * 
 	 * @param userId
 	 * @return
@@ -894,4 +882,3 @@ public class Services {
 	}
 
 }
-

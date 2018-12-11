@@ -9,5 +9,9 @@ public interface UserDao {
 	List<BasicUser> getAllUser();
 
 	List<BasicUser> getFriends(int id);
+	
+	boolean getFriendById(int userId, int friendId);
+	
+	List<BasicUser> searchUser(String input, int userId);
 
 }

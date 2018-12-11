@@ -10,12 +10,22 @@ public class BasicUser {
 	private String firstName;
 	private String lastName;
 	private String email;
+	private boolean friendstatus;
 
 	public BasicUser(int userId, String firstName, String lastName, String email) {
 		this.userId = userId;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
+		this.friendstatus = false;
+	}
+	
+	public BasicUser(int userId, String firstName, String lastName, String email, boolean friendstatus) {
+		this.userId = userId;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.friendstatus = friendstatus;
 	}
 	
 	public int getUserId() {
@@ -54,18 +64,21 @@ public class BasicUser {
 	public static JSONArray serializeUserList(List<BasicUser> userList) { 
 		JSONArray userListJSON = new JSONArray();
 		for (BasicUser user : userList) {
-			JSONObject userObject = BasicUser.serializeEventType(user);
+			JSONObject userObject = BasicUser.serializeUser(user);
 			userListJSON.put(userObject);
 		}
 		return userListJSON;
 	}
 	
-	public static JSONObject serializeEventType(BasicUser user) {
+	public static JSONObject serializeUser(BasicUser user) {
 		JSONObject userJSON = new JSONObject();
 		userJSON.put("id", user.userId);
 		userJSON.put("first_name", user.firstName);
 		userJSON.put("last_name", user.lastName);
 		userJSON.put("email", user.email);
+		if(user.friendstatus) {
+			userJSON.put("friendstatus", "friends");
+		}
 		return userJSON;
 	}
 
