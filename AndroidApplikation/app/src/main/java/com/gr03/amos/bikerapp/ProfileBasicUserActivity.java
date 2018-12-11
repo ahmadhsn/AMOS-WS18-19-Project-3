@@ -24,29 +24,27 @@ package com.gr03.amos.bikerapp;
 
 public class ProfileBasicUserActivity extends AppCompatActivity {
 
-    Intent intent;
-    Long userId;
-    TextView first_name, last_name, date_of_birth, user_gender, user_street, hnumber, user_postcode, user_city, user_state, user_country  ;
+    //Intent intent;
+    //Long userId;
+    TextView first_name, date_of_birth, user_gender;
+    EditText last_name, user_street, hnumber, user_postcode, user_city, user_state, user_country;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mt("create activity2");
         setContentView(R.layout.activity_profile_basic_user);
-        intent = getIntent();
-        //TODO add Session ID as default value
-        userId = intent.getLongExtra("id", 0);
 
         first_name = (TextView) findViewById(R.id.first_name);
-        last_name = (TextView) findViewById(R.id.last_name);
+        last_name = (EditText) findViewById(R.id.last_name);
         date_of_birth = (TextView) findViewById(R.id.dob);
         user_gender = (TextView) findViewById(R.id.user_gender);
-        user_street = (TextView) findViewById(R.id.user_street);
-        hnumber = (TextView) findViewById(R.id.hnumber);
-        user_postcode = (TextView) findViewById(R.id.user_postcode);
-        user_city = (TextView) findViewById(R.id.user_city);
-        user_state = (TextView) findViewById(R.id.user_state);
-        user_country = (TextView) findViewById(R.id.user_country);
+        user_street = (EditText) findViewById(R.id.user_street);
+        hnumber = (EditText) findViewById(R.id.hnumber);
+        user_postcode = (EditText) findViewById(R.id.user_postcode);
+        user_city = (EditText) findViewById(R.id.user_city);
+        user_state = (EditText) findViewById(R.id.user_state);
+        user_country = (EditText) findViewById(R.id.user_country);
 
         Intent intent2 = getIntent();
 
