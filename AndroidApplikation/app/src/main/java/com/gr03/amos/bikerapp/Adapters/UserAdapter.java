@@ -2,19 +2,17 @@ package com.gr03.amos.bikerapp.Adapters;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.gr03.amos.bikerapp.EventDetailsActivity;
 import com.gr03.amos.bikerapp.Models.BasicUser;
 import com.gr03.amos.bikerapp.R;
 import com.gr03.amos.bikerapp.Requests;
@@ -48,6 +46,15 @@ public class UserAdapter extends ArrayAdapter<BasicUser> {
         // Populate the data into the template view using the data object
         tvName.setText(user.getName());
         tvHome.setText(user.getEmail());
+
+        //enable and disable addFriend and isFriend buttons
+        if(user.isFriends()){
+            ImageButton btAddFriend = (ImageButton) convertView.findViewById(R.id.add_friend);
+            btAddFriend.setVisibility(View.GONE);
+        }else{
+            ImageView btIsFriend = (ImageView) convertView.findViewById(R.id.is_friend);
+            btIsFriend.setVisibility(View.GONE);
+        }
 
         //listener for add friend button
         ImageButton btAddFriend = (ImageButton) convertView.findViewById(R.id.add_friend);
@@ -125,6 +132,9 @@ public class UserAdapter extends ArrayAdapter<BasicUser> {
                     String friendshipStatus = response.getString("friendship");
                     if(friendshipStatus.equals("successful")){
                         String msg = String.format("You added %s as a friend!", user.getName());
+                        ImageButton btAddFriend = (ImageButton) view.findViewById(R.id.add_friend);
+                        btAddFriend.setImageResource(R.drawable.ic_check_box);
+                        btAddFriend.setEnabled(false);
                         Toast.makeText(UserAdapter.super.getContext(), msg, Toast.LENGTH_LONG).show();
                     }else if(friendshipStatus.equals("internalProblems")){
                         Toast.makeText(UserAdapter.super.getContext(), "Internal Problem", Toast.LENGTH_LONG).show();

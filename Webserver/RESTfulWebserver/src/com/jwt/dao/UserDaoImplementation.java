@@ -63,7 +63,7 @@ public class UserDaoImplementation implements UserDao {
 	public List<BasicUser> searchUser(String input, int userId){
 		
 		//TODO add more advanced search methods to handle input
-		ResultSet rs = db.querySelectDB("SELECT u.id_user, b.first_name, b.last_name, u.email FROM user_reg u, basic_user b WHERE b.id_user = u.id_user AND (email = ? OR first_name = ? OR last_name = ?)", input, input, input);
+		ResultSet rs = db.querySelectDB("SELECT u.id_user, b.first_name, b.last_name, u.email FROM user_reg u, basic_user b WHERE b.id_user = u.id_user AND u.id_user != ? AND (email = ? OR first_name = ? OR last_name = ?)", userId, input, input, input);
 	
 		List<BasicUser> user = new ArrayList<>();
 		try {

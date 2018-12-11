@@ -43,7 +43,14 @@
             android:contentDescription="time"
             android:src="@drawable/ic_menu_plus_gray" />
 
-
+        <ImageView
+            android:id="@+id/is_friend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="5dp"
+            android:contentDescription="time"
+            android:src="@drawable/ic_check_box" />
         <TextView
             android:id="@+id/user_mail"
             android:layout_width="wrap_content"

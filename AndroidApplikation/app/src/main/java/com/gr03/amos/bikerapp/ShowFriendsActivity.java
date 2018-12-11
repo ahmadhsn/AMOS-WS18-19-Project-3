@@ -96,6 +96,7 @@ public class ShowFriendsActivity extends AppCompatActivity {
             if (response.has("foundUser")) {
                 String statusEv = (String) response.get("foundUser");
                 if (statusEv.equals("unsuccessful")) {
+                    listUsers(new JSONArray());
                     Toast.makeText(getApplicationContext(), "No such User.", Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -117,7 +118,11 @@ public class ShowFriendsActivity extends AppCompatActivity {
         for(int i=0; i<users.length(); i++){
             try {
                 JSONObject curr = users.getJSONObject(i);
-                arrayUsers.add(new BasicUser(curr.getLong("id"), curr.getString("first_name"), curr.getString("last_name"), curr.getString("email")));
+                if(curr.has("friendstatus") && curr.getString("friendstatus").equals("friends")){
+                    arrayUsers.add(new BasicUser(curr.getLong("id"), curr.getString("first_name"), curr.getString("last_name"), curr.getString("email"), true));
+                }else {
+                    arrayUsers.add(new BasicUser(curr.getLong("id"), curr.getString("first_name"), curr.getString("last_name"), curr.getString("email")));
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
