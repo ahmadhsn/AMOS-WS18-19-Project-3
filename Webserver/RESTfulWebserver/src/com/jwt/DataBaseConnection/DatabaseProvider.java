@@ -15,7 +15,7 @@ public class DatabaseProvider {
 	private static DatabaseProvider instance;
 	private Connection connection;
 	Config config = Config.getInstance();
-	private String postgresURL = "jdbc:postgresql://" + config.host + ":5432/" + config.database;
+	private String postgresURL = "jdbc:postgresql://" + config.host + ":5433/" + config.database;
 
 	private DatabaseProvider() throws SQLException {
 		try {
