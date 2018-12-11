@@ -27,6 +27,8 @@ public final class Config {
 	String database;
     String username;
     String password;
+    String port;
+    
     private static Config instance;
     public static Config getInstance(){
         if(instance == null){
@@ -48,5 +50,6 @@ public final class Config {
 		this.database = props.getProperty("POSTGRES_DB");
 		this.username = props.getProperty("POSTGRES_USERNAME");
 		this.password = props.getProperty("POSTGRES_PASSWORD");
+		this.port = props.getProperty("POSTGRES_PORT");
     }
 }
