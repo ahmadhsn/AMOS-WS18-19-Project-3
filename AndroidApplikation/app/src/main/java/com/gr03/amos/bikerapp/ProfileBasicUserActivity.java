@@ -44,6 +44,7 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         user_city = (TextView) findViewById(R.id.user_city);
         user_state = (TextView) findViewById(R.id.user_state);
         user_country = (TextView) findViewById(R.id.user_country);
+
         Intent intent2 = getIntent();
 
         Bundle bundle = intent2.getExtras();
@@ -100,7 +101,15 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
     }
 
     public void newInfo(View view) throws JSONException {
-        //TODO check all values are valid
+        //button visibility
+        Button edit_profile_page=(Button)findViewById(R.id.editProfilePage);
+        Button save_edited_info=(Button)findViewById(R.id.saveEditedInfo);
+        Button add_to_database=(Button)findViewById(R.id.addtodatabase);
+        edit_profile_page.setVisibility(View.VISIBLE);
+        save_edited_info.setVisibility(View.VISIBLE);
+        add_to_database.setVisibility(View.INVISIBLE);
+
+        //JSON request (first time insertion of user information to database)
         JSONObject json = new JSONObject();
         json.put("first_name", first_name.getText().toString());
         json.put("last_name", last_name.getText().toString());
@@ -128,13 +137,60 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
             Log.i("Exception --- not requested", e.toString());
         }
     }
-    public void editInfo(View view) throws JSONException {
-        //TODO check all values are valid
-        /*JSONObject json = new JSONObject();
-        json.put("first_name", first_name.getText().toString());
+    public void editInfo(View view){
+
+        //makes all fields (except first_name, dob, gender) editable
+        last_name.setEnabled(true);
+        last_name.setFocusableInTouchMode(true);
+        last_name.setClickable(true);
+        user_street.setEnabled(true);
+        user_street.setFocusableInTouchMode(true);
+        user_street.setClickable(true);
+        hnumber.setEnabled(true);
+        hnumber.setFocusableInTouchMode(true);
+        hnumber.setClickable(true);
+        user_postcode.setEnabled(true);
+        user_postcode.setFocusableInTouchMode(true);
+        user_postcode.setClickable(true);
+        user_city.setEnabled(true);
+        user_city.setFocusableInTouchMode(true);
+        user_city.setClickable(true);
+        user_state.setEnabled(true);
+        user_state.setFocusableInTouchMode(true);
+        user_state.setClickable(true);
+        user_country.setEnabled(true);
+        user_country.setFocusableInTouchMode(true);
+        user_country.setClickable(true);
+    }
+
+    public void saveEditedInfo(View view) throws JSONException {
+
+        //makes all fields non-editable again
+        last_name.setEnabled(false);
+        last_name.setFocusableInTouchMode(false);
+        last_name.setClickable(false);
+        user_street.setEnabled(false);
+        user_street.setFocusableInTouchMode(false);
+        user_street.setClickable(false);
+        hnumber.setEnabled(false);
+        hnumber.setFocusableInTouchMode(false);
+        hnumber.setClickable(false);
+        user_postcode.setEnabled(false);
+        user_postcode.setFocusableInTouchMode(false);
+        user_postcode.setClickable(false);
+        user_city.setEnabled(false);
+        user_city.setFocusableInTouchMode(false);
+        user_city.setClickable(false);
+        user_state.setEnabled(false);
+        user_state.setFocusableInTouchMode(false);
+        user_state.setClickable(false);
+        user_country.setEnabled(false);
+        user_country.setFocusableInTouchMode(false);
+        user_country.setClickable(false);
+
+        //JSON request (updating edited info in the database)
+        JSONObject json = new JSONObject();
         json.put("last_name", last_name.getText().toString());
-        json.put("dob", date_of_birth.getText().toString());
-        json.put("gender",user_gender.getText().toString());
         json.put("street", user_street.getText().toString());
         json.put("housenumber", hnumber.getText().toString());
         json.put("postcode", user_postcode.getText().toString());
@@ -145,7 +201,7 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
             JSONObject response;
             FutureTask<String> task = new FutureTask(new Callable<String>() {
                 public String call() {
-                    JSONObject threadResponse = Requests.getResponse("addUserBasic", json);
+                    JSONObject threadResponse = Requests.getResponse("editUserInfo", json);
                     return threadResponse.toString();
                 }
             });
@@ -155,7 +211,7 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         } catch (Exception e) {
             //TODO: Error-Handling
             Log.i("Exception --- not requested", e.toString());
-        }*/
+        }
     }
 
 }

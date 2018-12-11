@@ -22,7 +22,7 @@ tools:context=".ProfileBasicUserActivity">
             android:layout_marginTop="10dp"
             android:text="First Name: "
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="23sp"
+            android:textSize="18.5sp"
             android:textStyle="bold" />
         <TextView
             android:id="@+id/first_name"
@@ -34,7 +34,7 @@ tools:context=".ProfileBasicUserActivity">
             android:layout_marginTop="10dp"
             android:text="First Name"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="23sp"
+            android:textSize="18.5sp"
             android:textStyle="bold" />
         <TextView
             android:id="@+id/last_name_text"
@@ -46,21 +46,23 @@ tools:context=".ProfileBasicUserActivity">
             android:layout_marginTop="10dp"
             android:text="Last Name: "
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="23sp"
+            android:textSize="18.5sp"
             android:textStyle="bold" />
-        <TextView
+
+        <EditText
             android:id="@+id/last_name"
             android:layout_width="155dp"
             android:layout_height="40dp"
             android:layout_below="@id/first_name"
             android:layout_alignRight="@id/first_name_text"
             android:layout_marginLeft="0dp"
-            android:layout_marginRight="0dp"
             android:layout_marginTop="10dp"
+            android:layout_marginRight="0dp"
             android:text="Last Name"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="23sp"
-            android:textStyle="bold" />
+            android:textSize="18.5sp"
+            android:textStyle="bold"
+            android:focusable="false" />
         <TextView
             android:id="@+id/dob_text"
             android:layout_width="328dp"
@@ -71,7 +73,7 @@ tools:context=".ProfileBasicUserActivity">
             android:layout_marginTop="10dp"
             android:text="DOB: "
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="23sp"
+            android:textSize="18.5sp"
             android:textStyle="bold" />
         <TextView
             android:id="@+id/dob"
@@ -84,8 +86,9 @@ tools:context=".ProfileBasicUserActivity">
             android:layout_marginTop="10dp"
             android:text="Date of Birth"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="23sp"
+            android:textSize="18.5sp"
             android:textStyle="bold" />
+
         <TextView
             android:id="@+id/gender_text"
             android:layout_width="328dp"
@@ -96,7 +99,7 @@ tools:context=".ProfileBasicUserActivity">
             android:layout_marginTop="10dp"
             android:text="Gender: "
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="23sp"
+            android:textSize="18.5sp"
             android:textStyle="bold" />
         <TextView
             android:id="@+id/user_gender"
@@ -108,59 +111,76 @@ tools:context=".ProfileBasicUserActivity">
             android:layout_marginTop="10dp"
             android:text="Gender"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="23sp"
+            android:textSize="18.5sp"
             android:textStyle="bold" />
         <TextView
+            android:id="@+id/address_text"
+            android:layout_width="328dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/gender_text"
+            android:text="Address: "
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18.5sp"
+            android:textStyle="bold" />
+
+        <EditText
             android:id="@+id/user_street"
             android:layout_width="328dp"
             android:layout_height="40dp"
-            android:layout_below="@id/user_gender"
+            android:layout_below="@id/address_text"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:text="Street"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="23sp"
-            android:textStyle="bold" />
-        <TextView
+            android:textSize="18.5sp"
+            android:textStyle="bold"
+            android:focusable="false" />
+        <EditText
             android:id="@+id/hnumber"
             android:layout_width="155dp"
             android:layout_height="40dp"
-            android:layout_below="@id/user_gender"
+            android:layout_below="@id/address_text"
             android:layout_alignRight="@id/user_street"
             android:layout_marginLeft="0dp"
             android:layout_marginRight="0dp"
             android:layout_marginTop="10dp"
             android:text="House No."
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="23sp"
-            android:textStyle="bold" />
-        <TextView
+            android:textSize="18.5sp"
+            android:textStyle="bold"
+            android:focusable="false" />
+        <EditText
             android:id="@+id/user_postcode"
             android:layout_width="328dp"
             android:layout_height="40dp"
-            android:layout_below="@id/hnumber"
+            android:layout_below="@id/user_street"
             android:layout_marginLeft="40dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
             android:text="Postcode"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="23sp"
-            android:textStyle="bold"/>
-        <TextView
+            android:textSize="18.5sp"
+            android:textStyle="bold"
+            android:focusable="false" />
+        <EditText
             android:id="@+id/user_city"
             android:layout_width="155dp"
             android:layout_height="40dp"
-            android:layout_below="@id/user_street"
+            android:layout_below="@id/hnumber"
             android:layout_alignRight="@id/user_postcode"
             android:layout_marginLeft="0dp"
             android:layout_marginRight="0dp"
             android:layout_marginTop="10dp"
             android:text="City"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="23sp"
-            android:textStyle="bold"/>
-        <TextView
+            android:textSize="18.5sp"
+            android:textStyle="bold"
+            android:focusable="false" />
+        <EditText
             android:id="@+id/user_state"
             android:layout_width="match_parent"
             android:layout_height="40dp"
@@ -170,8 +190,9 @@ tools:context=".ProfileBasicUserActivity">
             android:layout_marginTop="10dp"
             android:text="State"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="23sp"
-            android:textStyle="bold" />
+            android:textSize="18.5sp"
+            android:textStyle="bold"
+            android:focusable="false" />
         <TextView
             android:id="@+id/country_text"
             android:layout_width="328dp"
@@ -182,9 +203,9 @@ tools:context=".ProfileBasicUserActivity">
             android:layout_marginTop="10dp"
             android:text="Country: "
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="23sp"
+            android:textSize="18.5sp"
             android:textStyle="bold" />
-        <TextView
+        <EditText
             android:id="@+id/user_country"
             android:layout_width="155dp"
             android:layout_height="40dp"
@@ -195,8 +216,9 @@ tools:context=".ProfileBasicUserActivity">
             android:layout_marginTop="10dp"
             android:text="Country"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="23sp"
-            android:textStyle="bold" />
+            android:textSize="18.5sp"
+            android:textStyle="bold"
+            android:focusable="false" />
         <Button
             android:id="@+id/addtodatabase"
             android:layout_width="155dp"
@@ -206,7 +228,7 @@ tools:context=".ProfileBasicUserActivity">
             android:layout_marginRight="50dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/shape"
-            android:text="Add"
+            android:text="Save Profile Page"
             android:textColor="@color/secondaryColor"
             android:textStyle="bold"
             android:onClick="newInfo"
@@ -219,11 +241,26 @@ tools:context=".ProfileBasicUserActivity">
             android:layout_marginLeft="40dp"
             android:layout_marginRight="0dp"
             android:background="@drawable/shape"
-            android:text="Edit"
+            android:text="Edit Fields"
             android:textColor="@color/secondaryColor"
             android:textStyle="bold"
             android:onClick="editInfo"
-            android:hint="Edit"/>
+            android:hint="Edit"
+            android:visibility="invisible"/>
+        <Button
+            android:id="@+id/saveEditedInfo"
+            android:layout_width="155dp"
+            android:layout_height="25dp"
+            android:layout_below="@id/editProfilePage"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="0dp"
+            android:background="@drawable/shape"
+            android:text="Save edited Info"
+            android:textColor="@color/secondaryColor"
+            android:textStyle="bold"
+            android:onClick="saveEditedInfo"
+            android:hint="Save"
+            android:visibility="invisible"/>
     </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>

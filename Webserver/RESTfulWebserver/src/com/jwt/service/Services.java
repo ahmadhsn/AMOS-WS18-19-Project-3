@@ -698,13 +698,13 @@ public class Services {
 			UserDaoImplementation dao = new UserDaoImplementation();
 
 			int userId;
-			if(JSONreq.has("id") && JSONreq.has("input")) {
+			if (JSONreq.has("id") && JSONreq.has("input")) {
 				userId = JSONreq.getInt("id");
 				input = JSONreq.getString("input");
-			}else {
+			} else {
 				return Response.status(500).entity("InvalidRequestBody".toString()).build();
 			}
-			
+
 			List<BasicUser> searchResults = dao.searchUser(input, userId);
 
 			if (searchResults != null && searchResults.isEmpty()) {
@@ -721,46 +721,59 @@ public class Services {
 		return Response.status(500).entity("InvalidRequestBody".toString()).build();
 	}
 
-	@GET
-	@Path("/getUserInfo")
+	@POST
+	@Path("/editUserInfo")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response getUserInfo() throws JSONException {
-		JSONObject jobj1 = new JSONObject();
+	public Response editUserInfo(String urlReq)
+			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
 
-		System.out.println("...getUserInfo");
-		try {
-			DatabaseProvider provider = DatabaseProvider.getInstance(context);
+		JSONObject JSONreq = new JSONObject(urlReq);
 
-			ResultSet result = provider
-					.querySelectDB("SELECT first_name, last_name, dob FROM BASIC_USER ORDER BY ID_USER DESC LIMIT 1");
-			System.out.println("this" + result.getClass().getName());
+		if (JSONreq.has("last_name") && JSONreq.has("country") && JSONreq.has("state") && JSONreq.has("city")
+				&& JSONreq.has("street") && JSONreq.has("postcode") && JSONreq.has("housenumber")) {
+			try {
 
-			JSONArray jArray = new JSONArray();
-			while (result.next()) {
-				String id_json = result.getString("id_user");
-				String name_json = result.getString("first_name");
-				String desc_json = result.getString("last_name");
-				String date_json = result.getString("dob");
-				System.out.println(result);
+				String lname = JSONreq.getString("last_name");
+				String country = JSONreq.getString("country");
+				String state = JSONreq.getString("state");
+				String city = JSONreq.getString("city");
+				String street = JSONreq.getString("street");
+				Integer postcode = JSONreq.getInt("postcode");
+				String housenumber = JSONreq.getString("housenumber");
 
-				JSONObject jobj = new JSONObject();
-				jobj.put("id_user", id_json);
-				jobj.put("first_name", name_json);
-				jobj.put("last_name", desc_json);
-				jobj.put("dob", date_json);
-				jArray.put(jobj);
+				try {
 
+					DatabaseProvider provider = DatabaseProvider.getInstance(context);
+
+					PreparedStatement s1 = provider.getConnection().prepareStatement(
+							"UPDATE ADDRESS SET country =?, state =?, city =?, street =?, postcode =?, housenumber =? WHERE id_address = (SELECT max(id_address) FROM ADDRESS)");
+
+					PreparedStatement s2 = provider.getConnection().prepareStatement(
+							"UPDATE BASIC_USER SET last_name =? WHERE id_user = (SELECT max(id_user) FROM BASIC_USER)");
+
+					s1.setString(1, country);
+					s1.setString(2, state);
+					s1.setString(3, city);
+					s1.setString(4, street);
+					s1.setInt(5, postcode);
+					s1.setString(6, housenumber);
+					s1.executeUpdate();
+					s1.closeOnCompletion();
+
+					s2.setString(1, lname);
+					s2.executeUpdate();
+					s2.closeOnCompletion();
+
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+
+			} catch (Exception e) {
+				System.out.println("Wrong JSONFormat:" + e.toString());
 			}
-
-			jobj1.put("UserInfo", jArray);
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
 		}
-		JSONObject response = new JSONObject();
-		response.put("eventCreation", jobj1);
-
-		return Response.status(200).entity(response.toString()).build();
+		System.out.println("...EditedInfoGotInserted");
+		return Response.status(400).entity("InvalidRequestBody").build();
 	}
 
 	@POST
