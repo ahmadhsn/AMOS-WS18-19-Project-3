@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.gr03.amos.bikerapp.R;
 import com.gr03.amos.bikerapp.Requests;
+import com.gr03.amos.bikerapp.SaveSharedPreference;
 import com.gr03.amos.bikerapp.ShowEventActivity;
 
 import org.json.JSONArray;
@@ -241,6 +242,7 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
 
         requestJSON.put("address", address);
         requestJSON.put("event", event);
+        requestJSON.put("user_id", SaveSharedPreference.getUserID(this.getContext()));
 
         JSONObject response = HTTPResponse("createEvent", requestJSON, "POST");
 

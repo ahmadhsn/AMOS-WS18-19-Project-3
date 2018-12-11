@@ -43,26 +43,20 @@ public class LoginActivity extends AppCompatActivity {
             response = new JSONObject(task.get());
 
             //handle response
-            if(response.has("login")){
-                String loginResponse = response.getString("login");
+            if(response.has("success")) {
+                String eml = response.getString("email");
+                int userId = response.getInt("user_id");
+                SaveSharedPreference.saveUserInforamtion(this, eml, userId);
+                Toast.makeText(getApplicationContext(), "You are logged in now!", Toast.LENGTH_LONG).show();
 
-                if(loginResponse.equals("wrongCredentials")){
-                    Toast.makeText(getApplicationContext(), "Wrong email or password", Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-                if(loginResponse.equals("successfulLogin")){
-
-                    SaveSharedPreference.setUserEmail(this,email.getText().toString());
-
-                    Toast.makeText(getApplicationContext(), "You are logged in now!", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(this, ShowEventActivity.class);
-                    startActivity(intent);
-                    //TODO create session and redirect to home screen
-                }
+                Intent intent = new Intent(this, ShowEventActivity.class);
+                startActivity(intent);
+                //TODO create session and redirect to home screen
             }
         } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "Wrong email or password", Toast.LENGTH_LONG).show();
             Log.i("Exception --- not requested", e.toString());
+            return;
         }
     }
 }

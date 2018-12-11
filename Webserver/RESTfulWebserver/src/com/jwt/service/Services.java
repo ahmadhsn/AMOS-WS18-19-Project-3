@@ -4,7 +4,6 @@ import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
-import java.sql.Array;
 import java.sql.Connection;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
@@ -23,7 +22,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.jwt.DataBaseConnection.Config;
 import com.jwt.DataBaseConnection.DatabaseProvider;
 import com.jwt.dao.EventDao;
 import com.jwt.dao.EventDaoImplementation;
@@ -31,9 +29,12 @@ import com.jwt.dao.EventTypeDao;
 import com.jwt.dao.EventTypeDaoImplementation;
 import com.jwt.dao.RouteDao;
 import com.jwt.dao.RouteDaoImplementation;
+import com.jwt.dao.UserDao;
+import com.jwt.dao.UserDaoImplementation;
 import com.jwt.model.Address;
 import com.jwt.model.Event;
 import com.jwt.model.EventType;
+import com.jwt.model.User;
 import com.jwt.service.mail.Mailer;
 
 /**
@@ -82,26 +83,26 @@ public class Services {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response checkUser(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
-		
+		DatabaseProvider.getInstance(context);
 		JSONObject JSONreq = new JSONObject(urlReq);
-
 		if (JSONreq.has("email") && JSONreq.has("password")) {
+			
 			String email = JSONreq.getString("email");
 			String password = JSONreq.getString("password");
 
 			System.out.println("...userLoginRequest from " + email);
-
-			// check users info in DB
-			DatabaseProvider provider = DatabaseProvider.getInstance(context);
-			ResultSet rs = provider.querySelectDB("SELECT * FROM user_reg WHERE email = ? AND password = ?", email, password);
-
-			JSONObject response = new JSONObject();
-			if (!rs.next()) {
-				response.put("login", "wrongCredentials");
-				return Response.status(200).entity(response.toString()).build();
+			UserDao userDao = new UserDaoImplementation();
+			User user = userDao.getUser(email, password);
+			
+			if (user == null) {
+				return Response.status(401).entity("Unauthorized").build();
 			}
-
-			response.put("login", "successfulLogin");
+			
+			JSONObject response = new JSONObject();
+			response.put("user_id", user.getUser_id());
+			response.put("email", user.getEmail());
+			
+			response.put("success", true);
 			
 			return Response.status(200).entity(response.toString()).build();
 		} else {
@@ -238,10 +239,10 @@ public class Services {
 		JSONObject JSONreq = new JSONObject(urlReq);
 		System.out.println("...createEventRequest");
 
-		if (JSONreq.has("event") && JSONreq.has("address")) {
+		if (JSONreq.has("event") && JSONreq.has("address") && JSONreq.has("user_id")) {
 			try {
-				
-				Event newEvent = new Event(JSONreq.getJSONObject("event"));
+				int user_id = JSONreq.getInt("user_id");
+				Event newEvent = new Event(JSONreq.getJSONObject("event"), user_id);
 				Address address = new Address(JSONreq.getJSONObject("address"));
 				
 				EventDao eventDao = new EventDaoImplementation();
