@@ -894,4 +894,35 @@ public class Services {
 		}
 	}
 
+	/**
+	 * Returns user information.
+	 * 
+	 * @param userId
+	 * @return
+	 * @throws JSONException
+	 */
+	@GET
+	@Path("/getUserInfo/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response getUserInfo(@PathParam("id") int userId) throws JSONException {
+
+		JSONObject response = new JSONObject();
+		System.out.println("Get Additional User Info... ");
+		try {
+			// Setting the DB context in case its not set
+			DatabaseProvider.getInstance(context);
+			UserDao userD = new UserDaoImplementation();
+			BasicUser userInfo = userD.getAdditionalInfo(userId);
+			
+			response.put("UserInfo", BasicUser.serializeUser(userInfo));
+			System.out.println("Response: " + response.toString());
+			return Response.status(200).entity(response.toString()).build();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			response.put("error_code", "failed_to_get_user_info");
+			response.put("description", "Failed to get userInfo");
+			System.out.println("Response: " + response.toString());
+			return Response.status(500).entity(response.toString()).build();
+		}
+	}
 }

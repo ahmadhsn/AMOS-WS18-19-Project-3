@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.jwt.DataBaseConnection.DatabaseProvider;
+import com.jwt.model.Address;
 import com.jwt.model.BasicUser;
 
 public class UserDaoImplementation implements UserDao {
@@ -58,6 +59,23 @@ public class UserDaoImplementation implements UserDao {
 		}
 		
 		return false;
+	}
+	
+	public BasicUser getAdditionalInfo(int userId) {
+		ResultSet rs = db.querySelectDB("SELECT b.id_user, u.email, b.first_name, b.last_name, b.dob, a.country, a.state, a.city, a.street, a.postcode, a.housenumber, a.longitude, a.latitude, g.gender FROM basic_user b, address a, gender g, user_reg u WHERE b.id_address = a.id_address AND u.id_user = b.id_user AND b.id_gender = g.id_gender AND b.id_user = ?", userId);
+		BasicUser user = null;
+		try {
+			if(rs.next()) {
+				user = new BasicUser(rs.getInt("id_user"), rs.getString("first_name"), rs.getString("last_name"), rs.getString("email"));
+				user.setUserAddress(new Address(rs.getString("country"), rs.getString("state"), rs.getString("city"), rs.getInt("postcode"),rs.getString("street"),rs.getString("housenumber"), rs.getDouble("longitude"), rs.getDouble("latitude")));
+				user.setGender(rs.getString("gender"));
+				user.setDob(rs.getString("dob"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return user;
 	}
 	
 	public List<BasicUser> searchUser(String input, int userId){

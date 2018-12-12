@@ -13,5 +13,7 @@ public interface UserDao {
 	boolean getFriendById(int userId, int friendId);
 	
 	List<BasicUser> searchUser(String input, int userId);
+	
+	BasicUser getAdditionalInfo(int userId);
 
 }

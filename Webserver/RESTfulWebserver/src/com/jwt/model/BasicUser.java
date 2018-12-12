@@ -11,6 +11,9 @@ public class BasicUser {
 	private String lastName;
 	private String email;
 	private boolean friendstatus;
+	private Address userAddress;
+	private String gender;
+	private String dob;
 
 	public BasicUser(int userId, String firstName, String lastName, String email) {
 		this.userId = userId;
@@ -61,6 +64,30 @@ public class BasicUser {
 	}
 
 	
+	public Address getUserAddress() {
+		return userAddress;
+	}
+
+	public void setUserAddress(Address userAddress) {
+		this.userAddress = userAddress;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public String getDob() {
+		return dob;
+	}
+
+	public void setDob(String dob) {
+		this.dob = dob;
+	}
+
 	public static JSONArray serializeUserList(List<BasicUser> userList) { 
 		JSONArray userListJSON = new JSONArray();
 		for (BasicUser user : userList) {
@@ -78,6 +105,17 @@ public class BasicUser {
 		userJSON.put("email", user.email);
 		if(user.friendstatus) {
 			userJSON.put("friendstatus", "friends");
+		}
+		if(user.gender != null) {
+			userJSON.put("gender", user.gender);
+		}
+		
+		if(user.userAddress != null) {
+			userJSON.put("address", Address.serializeAddress(user.userAddress));
+		}
+		
+		if(user.dob != null) {
+			userJSON.put("dob", user.dob);
 		}
 		return userJSON;
 	}
