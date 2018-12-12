@@ -51,6 +51,7 @@ public class ShowFriendsActivity extends AppCompatActivity {
             JSONObject response;
 
             //TODO remove and replace with session id
+
             FutureTask<String> taskID = new FutureTask(new Callable<String>() {
                 public String call() {
                     JSONObject threadResponse = Requests.getResponse("getUserID/" + SaveSharedPreference.getUserEmail(getApplicationContext()), null,"GET");

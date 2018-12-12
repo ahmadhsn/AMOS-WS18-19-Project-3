@@ -2,10 +2,12 @@ package com.gr03.amos.bikerapp.Adapters;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gr03.amos.bikerapp.Models.BasicUser;
+import com.gr03.amos.bikerapp.ProfileBasicUserActivity;
 import com.gr03.amos.bikerapp.R;
 import com.gr03.amos.bikerapp.Requests;
 import com.gr03.amos.bikerapp.SaveSharedPreference;
@@ -62,16 +65,17 @@ public class UserAdapter extends ArrayAdapter<BasicUser> {
         btAddFriend.setOnClickListener(new AddFriendOnClickListener());
 
         //onitemlistenenr for each user
-        ListView userList = (ListView) convertView.findViewById(R.id.user_result);
-        /*userList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        ListView userList = convertView.findViewById(R.id.user_result);
+        userList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //Long userId = UserAdapter.super.getItem(position).getUser_id();
-                //Intent intent = new Intent(UserAdapter.super.getContext(), EventDetailsActivity.class);
-                //intent.putExtra("id", userId);
-                //UserAdapter.super.getContext().startActivity(intent);
+
+                Long userId = UserAdapter.super.getItem(position).getUser_id();
+                Intent intent = new Intent(UserAdapter.super.getContext(), ProfileBasicUserActivity.class);
+                intent.putExtra("id", userId);
+                UserAdapter.super.getContext().startActivity(intent);
             }
-        });*/
+        });
 
         // Return the completed view to render on screen
         return convertView;
