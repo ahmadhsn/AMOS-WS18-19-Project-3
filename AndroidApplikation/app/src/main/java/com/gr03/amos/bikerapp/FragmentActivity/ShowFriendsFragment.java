@@ -41,13 +41,13 @@ public class ShowFriendsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_show_friends, container, false);
 
 
-
-        Requests.getJsonResponseForFriends("getFriends/1", container.getContext());
+        //TODO use sessionID instead
+        int userId = 1;
+        Requests.getJsonResponseForFriends("getFriends/" + userId, container.getContext());
 
         Realm.init(container.getContext());
         Realm realm = Realm.getDefaultInstance();
         RealmResults<Friend> friends = realm.where(Friend.class).findAll();
-
 
         showFriendsRecyclerView = view.findViewById(R.id.showFriends);
         showFriendsRecyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));

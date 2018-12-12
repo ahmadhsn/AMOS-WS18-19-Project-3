@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.gr03.amos.bikerapp.EventDetailsActivity;
 import com.gr03.amos.bikerapp.Models.Event;
 import com.gr03.amos.bikerapp.Models.Friend;
+import com.gr03.amos.bikerapp.ProfileBasicUserActivity;
 import com.gr03.amos.bikerapp.R;
 import com.gr03.amos.bikerapp.ShowEventRecylerViewAdapter;
 
@@ -65,10 +66,11 @@ public class ShowFriendsListRecyclerViewAdapter extends RecyclerView.Adapter<Sho
 
         @Override
         public void onClick(View view) {
-//            Long id = mData.get(getAdapterPosition()).getId_event();
-//            Intent intent = new Intent(context, EventDetailsActivity.class);
-//            intent.putExtra("id", id);
-//            context.startActivity(intent);
+            int position = getAdapterPosition();
+            Long id = mData.get(getAdapterPosition()).getId();
+            Intent intent = new Intent(context, ProfileBasicUserActivity.class);
+            intent.putExtra("id", id);
+            context.startActivity(intent);
         }
     }
 }

@@ -12,6 +12,7 @@ package com.gr03.amos.bikerapp;
         import android.widget.Toast;
 
         import com.gr03.amos.bikerapp.Models.Event;
+        import com.gr03.amos.bikerapp.Models.Friend;
         import com.gr03.amos.bikerapp.Models.ProfileBasic;
 
         import org.json.JSONException;
@@ -24,29 +25,14 @@ package com.gr03.amos.bikerapp;
 
 public class ProfileBasicUserActivity extends AppCompatActivity {
 
-    //Intent intent;
-    //Long userId;
+    Intent intent;
+    Long userId;
     TextView first_name, date_of_birth, user_gender;
     EditText last_name, user_street, hnumber, user_postcode, user_city, user_state, user_country;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mt("create activity2");
-        setContentView(R.layout.activity_profile_basic_user);
-
-        first_name = (TextView) findViewById(R.id.first_name);
-        last_name = (EditText) findViewById(R.id.last_name);
-        date_of_birth = (TextView) findViewById(R.id.dob);
-        user_gender = (TextView) findViewById(R.id.user_gender);
-        user_street = (EditText) findViewById(R.id.user_street);
-        hnumber = (EditText) findViewById(R.id.hnumber);
-        user_postcode = (EditText) findViewById(R.id.user_postcode);
-        user_city = (EditText) findViewById(R.id.user_city);
-        user_state = (EditText) findViewById(R.id.user_state);
-        user_country = (EditText) findViewById(R.id.user_country);
-
+    private void onCreateAfterAddProfile(Bundle savedInstanceState){
         Intent intent2 = getIntent();
+
 
         Bundle bundle = intent2.getExtras();
         String first = bundle.getString("first_string");
@@ -71,6 +57,90 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         user_city.setText(""+ucity.toString());
         user_state.setText(""+ustate.toString());
         user_country.setText(ucountry.toString());
+    }
+
+    private JSONObject getAdditionalUserInfo(){
+        JSONObject userInfo;
+        try {
+            FutureTask<String> task = new FutureTask(new Callable<String>() {
+                public String call() {
+                    JSONObject threadResponse = Requests.getResponse("getUserInfo/" + userId, null, "GET");
+                    return threadResponse.toString();
+                }
+            });
+            new Thread(task).start();
+            Log.i("Response", task.get());
+            userInfo = new JSONObject(task.get());
+            userInfo = userInfo.getJSONObject("UserInfo");
+            date_of_birth.setText(userInfo.getString("dob"));
+            user_gender.setText(userInfo.getString("gender"));
+
+            JSONObject address = userInfo.getJSONObject("address");
+            user_street.setText(address.getString("street"));
+            hnumber.setText(address.getString("housenumber"));
+            user_postcode.setText(address.getString("postcode"));
+            user_city.setText(address.getString("city"));
+            user_state.setText(address.getString("state"));
+            user_country.setText(address.getString("country"));
+        } catch (Exception e) {
+            //TODO: Error-Handling
+            Log.i("Exception --- not requested", e.toString());
+            return null;
+        }
+
+        return userInfo;
+    }
+
+    private void onCreateAfterProfileId(){
+        Realm.init(this);
+        Realm realm = Realm.getDefaultInstance();
+
+        final Friend friend = realm.where(Friend.class).equalTo("id", userId).findFirst();
+
+        first_name.setText(friend.getFirst_name());
+        last_name.setText(friend.getLast_name());
+
+        Button btDatabase = findViewById(R.id.addtodatabase);
+        btDatabase.setVisibility(View.INVISIBLE);
+        //TODO if logged in user show edit button
+        Button btEdit = findViewById(R.id.editProfilePage);
+        btEdit.setVisibility(View.INVISIBLE);
+        Button btSave = findViewById(R.id.saveEditedInfo);
+        btSave.setVisibility(View.INVISIBLE);
+
+        JSONObject userInfo = getAdditionalUserInfo();
+
+
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mt("create activity2");
+        setContentView(R.layout.activity_profile_basic_user);
+
+        first_name = (TextView) findViewById(R.id.first_name);
+        last_name = (EditText) findViewById(R.id.last_name);
+        date_of_birth = (TextView) findViewById(R.id.dob);
+        user_gender = (TextView) findViewById(R.id.user_gender);
+        user_street = (EditText) findViewById(R.id.user_street);
+        hnumber = (EditText) findViewById(R.id.hnumber);
+        user_postcode = (EditText) findViewById(R.id.user_postcode);
+        user_city = (EditText) findViewById(R.id.user_city);
+        user_state = (EditText) findViewById(R.id.user_state);
+        user_country = (EditText) findViewById(R.id.user_country);
+
+        intent = getIntent();
+        userId = intent.getLongExtra("id", 0);
+
+        if(userId == 0){
+            //intent from add profile page
+            //use Roxanas code now
+            onCreateAfterAddProfile(savedInstanceState);
+        }else{
+            onCreateAfterProfileId();
+        }
+
     }
     @Override
     protected void onResume() {

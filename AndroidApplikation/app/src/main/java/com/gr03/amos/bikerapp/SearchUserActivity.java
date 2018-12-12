@@ -31,7 +31,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
 
-public class ShowFriendsActivity extends AppCompatActivity {
+public class SearchUserActivity extends AppCompatActivity {
 
     EditText userName;
     ListView listView;

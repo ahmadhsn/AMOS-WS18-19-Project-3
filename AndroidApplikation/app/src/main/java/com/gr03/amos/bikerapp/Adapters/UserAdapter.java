@@ -29,7 +29,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
-public class UserAdapter extends ArrayAdapter<BasicUser> {
+public class UserAdapter extends ArrayAdapter<BasicUser> implements AdapterView.OnItemClickListener{
 
     public UserAdapter(Context context, ArrayList<BasicUser> users) {
         super(context, 0, users);
@@ -64,21 +64,16 @@ public class UserAdapter extends ArrayAdapter<BasicUser> {
         btAddFriend.setTag(position);
         btAddFriend.setOnClickListener(new AddFriendOnClickListener());
 
-        //onitemlistenenr for each user
-        ListView userList = convertView.findViewById(R.id.user_result);
-        userList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                Long userId = UserAdapter.super.getItem(position).getUser_id();
-                Intent intent = new Intent(UserAdapter.super.getContext(), ProfileBasicUserActivity.class);
-                intent.putExtra("id", userId);
-                UserAdapter.super.getContext().startActivity(intent);
-            }
-        });
-
         // Return the completed view to render on screen
         return convertView;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Long userId = super.getItem(position).getUser_id();
+        Intent intent = new Intent(super.getContext(), ProfileBasicUserActivity.class);
+        intent.putExtra("id", userId);
+        super.getContext().startActivity(intent);
     }
 
     class AddFriendOnClickListener implements View.OnClickListener {

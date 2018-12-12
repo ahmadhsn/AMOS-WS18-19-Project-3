@@ -6,7 +6,7 @@ import io.realm.annotations.PrimaryKey;
 public class Friend extends RealmObject {
     private String last_name;
     @PrimaryKey
-    private String id;
+    private Long id;
     private String first_name;
     private String email;
 
@@ -34,7 +34,7 @@ public class Friend extends RealmObject {
         this.email = email;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 }
