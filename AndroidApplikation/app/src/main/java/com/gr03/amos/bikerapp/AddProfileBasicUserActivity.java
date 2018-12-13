@@ -23,7 +23,7 @@ package com.gr03.amos.bikerapp;
         import java.util.Locale;
         import java.util.concurrent.Callable;
         import java.util.concurrent.FutureTask;
-
+        import  android.text.TextUtils;
         import static android.view.View.VISIBLE;
 
 public class AddProfileBasicUserActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
@@ -70,6 +70,83 @@ public class AddProfileBasicUserActivity extends AppCompatActivity implements Da
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (isTextEmpty(fName)) {
+                    Log.i("VALIDATIONEVENT", "First name is empty");
+                    fName.setError("Please enter a First name");
+                    return;
+                }
+                if (isTextEmpty(lName)) {
+                    Log.i("VALIDATIONEVENT", "last name is empty");
+                    lName.setError("Please enter a Last name");
+                    return;
+                }
+                if (isTextEmpty(Dob)) {
+                    Log.i("VALIDATIONEVENT", "Date of birth is empty");
+                    Dob.setError("Please enter date of birth");
+                    return;
+                }
+                if (isTextEmpty(Street)) {
+                    Log.i("VALIDATIONEVENT", "Street name is empty");
+                    Street.setError("Please enter Street name");
+                    return;
+                }
+                if (isTextEmpty(HNumber)) {
+                    Log.i("VALIDATIONEVENT", "House number is empty");
+                    HNumber.setError("Please enter House num");
+                    return;
+                }
+                if (isTextEmpty(PostCode)) {
+                    Log.i("VALIDATIONEVENT", "Postcode is empty");
+                    PostCode.setError("Please enter Post code");
+                    return;
+                }
+                if (isTextEmpty(City)) {
+                    Log.i("VALIDATIONEVENT", "City name is empty");
+                    PostCode.setError("Please enter a City name");
+                    return;
+                }
+                if (isTextEmpty(BState)) {
+                    Log.i("VALIDATIONEVENT", "State name is empty");
+                    PostCode.setError("Please enter State name");
+                    return;
+                }
+                if (isTextEmpty(Country)) {
+                    Log.i("VALIDATIONEVENT", "Country name is empty");
+                    Country.setError("Please enter Country name");
+                    return;
+                }
+                Calendar c = Calendar.getInstance();
+                int year = c.get(Calendar.YEAR);
+                int month = c.get(Calendar.MONTH);
+                int day = c.get(Calendar.DAY_OF_MONTH);
+
+                String DateOfBirth = Dob.getText().toString();
+                //String system_Date = (year + "/" + (month+1) + "/" + day).toString();
+
+                if (Integer.parseInt(DateOfBirth.split("/")[0])> year-16 ){
+                    Log.i("VALIDATIONUSER", "User is younger than 16");
+                    Dob.setError("You must be at least 16 years old to use this app.");
+                    Toast.makeText(getApplicationContext(),"You must be at least 16 years old to use this app.",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (Integer.parseInt(DateOfBirth.split("/")[0]) == year-16){
+                    if (Integer.parseInt(DateOfBirth.split("/")[1]) > month+1){
+                        Log.i("VALIDATIONUSER", "User is younger than 16");
+                        Dob.setError("You must be at least 16 years old to use this app.");
+                        Toast.makeText(getApplicationContext(),"You must be at least 16 years old to use this app.",Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    if (Integer.parseInt(DateOfBirth.split("/")[1]) == month+1){
+                        if (Integer.parseInt(DateOfBirth.split("/")[2]) > day){
+                            Log.i("VALIDATIONUSER", "User is younger than 16");
+                            Dob.setError("You must be at least 16 years old to use this app.");
+                            Toast.makeText(getApplicationContext(),"You must be at least 16 years old to use this app.",Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                    }
+                }
+
                 Intent intent1 = new Intent(AddProfileBasicUserActivity.this , ProfileBasicUserActivity.class);
                  intent1.putExtra("first_string",fName.getText().toString());
                 intent1.putExtra("last_string",lName.getText().toString());
@@ -100,6 +177,11 @@ public class AddProfileBasicUserActivity extends AppCompatActivity implements Da
     }
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
      textView.setText(data.getStringExtra("confirmation"));
+    }
+
+    boolean isTextEmpty(EditText text){
+        CharSequence string = text.getText().toString();
+        return TextUtils.isEmpty(string);
     }
     protected void onResume() {
         super.onResume();
