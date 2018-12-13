@@ -23,6 +23,7 @@ import com.gr03.amos.bikerapp.Models.Friend;
 import com.gr03.amos.bikerapp.R;
 import com.gr03.amos.bikerapp.RecylerViewAdapter.ShowFriendsListRecyclerViewAdapter;
 import com.gr03.amos.bikerapp.Requests;
+import com.gr03.amos.bikerapp.SaveSharedPreference;
 import com.gr03.amos.bikerapp.SearchUserActivity;
 import com.gr03.amos.bikerapp.ShowEventActivity;
 import com.gr03.amos.bikerapp.ShowEventRecylerViewAdapter;
@@ -51,11 +52,9 @@ public class ShowFriendsFragment extends Fragment {
         Activity currActivity = getActivity();
         //Set Title to My Friends
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.title_fragment_friendlist);
+        toolbar.setTitle("");
 
-        //TODO use sessionID instead
-        int userId = 1;
-        Requests.getJsonResponseForFriends("getFriends/" + userId, container.getContext());
+        Requests.getJsonResponseForFriends("getFriends/" + SaveSharedPreference.getUserID(container.getContext()), container.getContext());
 
         Realm.init(container.getContext());
         Realm realm = Realm.getDefaultInstance();
