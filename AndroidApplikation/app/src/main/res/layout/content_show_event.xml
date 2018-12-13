@@ -8,9 +8,21 @@
     tools:context=".ShowEventActivity"
     tools:showIn="@layout/app_bar_show_event">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:src="@drawable/ic_filter" />
+    </RelativeLayout>
+
     <FrameLayout
         android:id="@+id/create_event_fragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="25dp" />
 
 </android.support.constraint.ConstraintLayout>
