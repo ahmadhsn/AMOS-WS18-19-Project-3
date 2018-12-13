@@ -56,7 +56,7 @@ public class Requests {
         try {
             JsonObject jsonObject = new GetJson().AsJSONObject("http://10.0.2.2:8080/RESTfulWebserver/services/" + urlTail);
             JSONObject obj = new JSONObject(String.valueOf(jsonObject));
-            String eventString = obj.getJSONObject("eventCreation").getString("event");
+            String eventString = obj.getJSONObject("eventCreation").getString("events");
 
             JSONArray object = new JSONArray(eventString); // parse the array
 

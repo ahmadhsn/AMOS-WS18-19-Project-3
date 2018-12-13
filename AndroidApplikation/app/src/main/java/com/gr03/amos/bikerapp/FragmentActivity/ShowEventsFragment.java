@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.gr03.amos.bikerapp.Models.Event;
 import com.gr03.amos.bikerapp.R;
@@ -20,6 +22,7 @@ import io.realm.RealmResults;
 public class ShowEventsFragment extends Fragment {
     RecyclerView showEventsRecyclerView;
     ShowEventRecylerViewAdapter showEventRecylerViewAdapter;
+    private ImageView eventFilterImage;
 
     public ShowEventsFragment() {
     }
@@ -38,6 +41,13 @@ public class ShowEventsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_show_events, container, false);
+
+        eventFilterImage = view.findViewById(R.id.event_filter);
+
+        eventFilterImage.setOnClickListener(v -> {
+
+        });
+
         Realm.init(container.getContext());
         Realm realm = Realm.getDefaultInstance();
 
