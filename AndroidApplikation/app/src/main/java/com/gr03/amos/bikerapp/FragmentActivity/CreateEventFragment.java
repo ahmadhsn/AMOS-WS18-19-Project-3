@@ -40,7 +40,7 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
         DatePickerDialog.OnDateSetListener,
         TimePickerDialog.OnTimeSetListener {
     private int EVENTTYPEID = 1;
-    private EditText eventName,eventDescr, eventDate, eventTime, country, city, street, postcode, houseNr;
+    private EditText eventName, eventDescr, eventDate, eventTime, country, city, street, postcode, houseNr;
     private Button createEvent;
     private SimpleDateFormat simpleDateFormat;
 
@@ -110,7 +110,7 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
             try {
                 JSONArray eventTypes = response.getJSONArray("result");
                 for (int i = 0; i < eventTypes.length(); i++) {
-                    JSONObject  obj = eventTypes.getJSONObject(i);
+                    JSONObject obj = eventTypes.getJSONObject(i);
                     eventTypesList.add(obj.getString("name"));
                 }
 
@@ -123,7 +123,7 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
     }
 
     public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
-        EVENTTYPEID = position+1;
+        EVENTTYPEID = position + 1;
     }
 
     @Override
@@ -171,21 +171,22 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
         CharSequence string = text.getText().toString();
         return TextUtils.isEmpty(string);
     }
+
     boolean checkEnteredData() {
         boolean isDataNotSet = false;
-        if(isTextEmpty(eventName)) {
+        if (isTextEmpty(eventName)) {
             eventName.setError("Event name is required!");
             isDataNotSet = true;
         }
-        if(isTextEmpty(eventDescr)) {
+        if (isTextEmpty(eventDescr)) {
             eventDescr.setError("Please add a short description of the event!");
             isDataNotSet = true;
         }
-        if(isTextEmpty(country)) {
+        if (isTextEmpty(country)) {
             country.setError("Country is a required field!");
             isDataNotSet = true;
         }
-        if(isTextEmpty(city)) {
+        if (isTextEmpty(city)) {
             city.setError("City is a required field!");
             isDataNotSet = true;
         }
@@ -200,8 +201,10 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
 
         return isDataNotSet;
     }
+
+
     public void createEvent() throws JSONException {
-        if (checkEnteredData()){
+        if (checkEnteredData()) {
             return;
         }
         Calendar c = Calendar.getInstance();
@@ -210,13 +213,17 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
         int day = c.get(Calendar.DAY_OF_MONTH);
         int hour = c.get(Calendar.HOUR_OF_DAY);
         int minutes = c.get(Calendar.MINUTE);
-
+        Log.i("step 1", "IGI");
         String event_Date = eventDate.getText().toString();
-        String system_Date = (year + "/" + (month+1) + "/" + day);
-        if (event_Date.equals(system_Date)){
+        String system_Date = (year + "-" + (month + 1) + "-" + day);
+
+        Log.i("step Date", event_Date + " system" + system_Date);
+
+        if (event_Date.equals(system_Date)) {
+            Log.i("step 2", "IGI");
             int hour_ev = Integer.parseInt(eventTime.getText().toString().split(":")[0]);
             int minutes_ev = Integer.parseInt(eventTime.getText().toString().split(":")[1]);
-            if (hour_ev < hour || minutes_ev < minutes ) {
+            if (hour_ev < hour || minutes_ev < minutes) {
                 eventTime.setText(hour + ":" + minutes);
                 eventTime.setError("Please enter a future time.");
                 Log.i("VALIDATIONEVENT", "event time is not in the future");
@@ -225,20 +232,21 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
             }
         }
 
+        Log.i("step 3", "IGI");
         JSONObject event = new JSONObject();
         JSONObject address = new JSONObject();
         JSONObject requestJSON = new JSONObject();
         event.put("name", eventName.getText().toString());
         event.put("description", eventDescr.getText().toString());
         event.put("date", eventDate.getText().toString());
-        event.put("time", eventTime.getText().toString()+":00");
+        event.put("time", eventTime.getText().toString() + ":00");
         event.put("event_type_id", EVENTTYPEID);
         address.put("street", street.getText().toString());
         address.put("house_number", houseNr.getText().toString());
         address.put("country", country.getText().toString());
         address.put("state", "");
         address.put("city", city.getText().toString());
-        address.put("postcode",  postcode.getText().toString());
+        address.put("postcode", postcode.getText().toString());
 
         requestJSON.put("address", address);
         requestJSON.put("event", event);
@@ -246,11 +254,10 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
 
         JSONObject response = HTTPResponse("createEvent", requestJSON, "POST");
 
-        if (response.has("createEvent")) {
-            String statusEv = (String) response.get("createEvent");
-            if (statusEv.equals("successful")) {
-                Toast.makeText(getContext(), "Successful created Event.", Toast.LENGTH_LONG).show();
-            }
+
+        if (response.has("eventCreation")) {
+
+            Toast.makeText(getContext(), "Successful created Event.", Toast.LENGTH_LONG).show();
         }
         Intent intent = new Intent(getContext(), ShowEventActivity.class);
         startActivity(intent);
