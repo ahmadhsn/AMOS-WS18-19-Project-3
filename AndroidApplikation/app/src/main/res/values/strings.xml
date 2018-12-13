@@ -19,6 +19,7 @@
     <string name="eventType">Enter Event Name</string>
     <string name="title_activity_show_event">ShowEventActivity</string>
     <string name="title_activity_search_user">ShowFriendsActivity</string>
+    <string name = "title_fragment_friendlist">My Friends</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -57,6 +58,7 @@
     <string name="route_add">Add route</string>
     <string name="action_logout">Logout</string>
     <string name="action_add_event">Add event</string>
+    <string name="show_friends">Show Friends</string>
     <!--
      Strings for Address creation
      -->

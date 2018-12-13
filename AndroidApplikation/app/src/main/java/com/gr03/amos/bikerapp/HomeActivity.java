@@ -48,7 +48,7 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(intent);
         });
         findUser.setOnClickListener(v -> {
-            Intent intent = new Intent(this, ShowFriendsActivity.class);
+            Intent intent = new Intent(this, SearchUserActivity.class);
             startActivity(intent);
         });
 

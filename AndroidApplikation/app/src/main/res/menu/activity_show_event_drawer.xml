@@ -12,6 +12,11 @@
             android:id="@+id/search_user"
             android:icon="@drawable/ic_menu_plus"
             android:title="@string/event_drawer_search_user_title" />
+
+        <item
+            android:id="@+id/show_friends"
+            android:icon="@drawable/ic_menu_share"
+            android:title="@string/show_friends" />
     </group>
 
     <item android:title="@string/event_drawer_user_options">
@@ -25,6 +30,7 @@
                 android:id="@+id/change_password"
                 android:icon="@drawable/ic_menu_share"
                 android:title="@string/change_password" />
+
 
         </menu>
     </item>

@@ -16,6 +16,7 @@ import android.view.MenuItem;
 
 import com.gr03.amos.bikerapp.FragmentActivity.CreateEventFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.ShowEventsFragment;
+import com.gr03.amos.bikerapp.FragmentActivity.ShowFriendsFragment;
 
 public class ShowEventActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -35,6 +36,8 @@ public class ShowEventActivity extends AppCompatActivity
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        getSupportActionBar().setTitle("Events");
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -60,6 +63,7 @@ public class ShowEventActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else if (fragmentManager.getBackStackEntryCount() > 0) {
             fragmentManager.popBackStackImmediate();
+            getSupportActionBar().setTitle("Events");
         } else {
             super.onBackPressed();
         }
@@ -88,7 +92,7 @@ public class ShowEventActivity extends AppCompatActivity
 
         if (id == R.id.action_add_event) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.create_event_fragment, new CreateEventFragment())
+                    .replace(R.id.create_event_fragment, new CreateEventFragment())
                     .addToBackStack("CREATE_EVENT_FRAGMENT")
                     .commit();
             return true;
@@ -104,16 +108,21 @@ public class ShowEventActivity extends AppCompatActivity
 
         if (id == R.id.show_events) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.create_event_fragment, new ShowEventsFragment())
+                    .replace(R.id.create_event_fragment, new ShowEventsFragment())
                     .commit();
         } else if (id == R.id.settings) {
         } else if (id == R.id.change_password) {
             Intent intent = new Intent(this, ChangePasswordActivity.class);
             startActivity(intent);
 
-        }else if(id == R.id.search_user){
-            Intent intent = new Intent(this, ShowFriendsActivity.class);
+        } else if (id == R.id.search_user) {
+            Intent intent = new Intent(this, SearchUserActivity.class);
             startActivity(intent);
+        } else if (id == R.id.show_friends) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.create_event_fragment, new ShowFriendsFragment())
+                    .addToBackStack("FRIEND_LIST_FRAGMENT")
+                    .commit();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

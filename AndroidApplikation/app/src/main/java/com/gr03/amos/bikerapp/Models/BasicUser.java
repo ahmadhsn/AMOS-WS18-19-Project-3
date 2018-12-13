@@ -10,13 +10,24 @@ public class BasicUser  {
     private String firstName;
     private String lastName;
     private String email;
+    private boolean friends;
 
     public BasicUser(Long user_id, String firstName, String lastName, String email){
         this.user_id = user_id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.friends = false;
     }
+
+    public BasicUser(Long user_id, String firstName, String lastName, String email, boolean friends){
+        this.user_id = user_id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.friends = friends;
+    }
+
     public String getName() {
         return firstName + " " + lastName;
     }
@@ -48,6 +59,14 @@ public class BasicUser  {
 
     public long getUser_id() {
         return user_id;
+    }
+
+    public boolean isFriends() {
+        return friends;
+    }
+
+    public void setFriends(boolean friends) {
+        this.friends = friends;
     }
 
 
