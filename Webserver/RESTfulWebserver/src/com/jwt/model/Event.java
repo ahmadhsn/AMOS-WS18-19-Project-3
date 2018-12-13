@@ -76,8 +76,8 @@ public class Event {
 		this.time = time;
 	}
 
-	public Event(JSONObject JSONOobj) {
- 		this.user_id = 1; // TODO: this should be the callers ID
+	public Event(JSONObject JSONOobj, int user_id) {
+ 		this.user_id = user_id;
 		this.name = JSONOobj.getString("name");
 		this.description = JSONOobj.getString("description");
 		this.date = JSONOobj.getString("date");
