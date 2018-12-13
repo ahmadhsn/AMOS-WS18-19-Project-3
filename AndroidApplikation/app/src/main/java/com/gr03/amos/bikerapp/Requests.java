@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.dezlum.codelabs.getjson.GetJson;
 import com.google.gson.JsonObject;
+import com.gr03.amos.bikerapp.Models.Address;
 import com.gr03.amos.bikerapp.Models.Event;
 import com.gr03.amos.bikerapp.Models.Friend;
 
@@ -56,16 +57,16 @@ public class Requests {
         try {
             JsonObject jsonObject = new GetJson().AsJSONObject("http://10.0.2.2:8080/RESTfulWebserver/services/" + urlTail);
             JSONObject obj = new JSONObject(String.valueOf(jsonObject));
-            String eventString = obj.getJSONObject("eventCreation").getString("event");
 
-            JSONArray object = new JSONArray(eventString); // parse the array
+            JSONArray eventString = obj.getJSONArray("event");
 
             Realm.init(context);
             Realm realm = Realm.getDefaultInstance();
             realm.beginTransaction();
-            realm.createOrUpdateAllFromJson(Event.class, object);
+            realm.createOrUpdateAllFromJson(Event.class, eventString);
             realm.commitTransaction();
             realm.close();
+
 
         } catch (ExecutionException | InterruptedException | JSONException e) {
             e.printStackTrace();
