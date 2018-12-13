@@ -3,6 +3,7 @@ package com.gr03.amos.bikerapp;
         import android.content.Intent;
         import android.support.v7.app.AppCompatActivity;
         import android.os.Bundle;
+        import android.text.TextUtils;
         import android.util.Log;
         import android.view.View;
         import android.widget.Button;
@@ -167,6 +168,10 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         super.onDestroy();
         mt("destroy activity2");
     }
+    boolean isTextEmpty(EditText text){
+        CharSequence string = text.getText().toString();
+        return TextUtils.isEmpty(string);
+    }
     public void mt(String string){
         Toast.makeText(this, string, Toast.LENGTH_LONG).show();
     }
@@ -258,6 +263,42 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         user_country.setEnabled(false);
         user_country.setFocusableInTouchMode(false);
         user_country.setClickable(false);
+
+        if (isTextEmpty(last_name)) {
+            Log.i("VALIDATIONEVENT", "Last name is empty");
+            last_name.setError("Please enter last name");
+            return;
+        }
+        if (isTextEmpty(user_street)) {
+            Log.i("VALIDATIONEVENT", "Street name is empty");
+            user_street.setError("Please enter Street name");
+            return;
+        }
+        if (isTextEmpty(hnumber)) {
+            Log.i("VALIDATIONEVENT", "House number is empty");
+            hnumber.setError("Please enter house number");
+            return;
+        }
+        if (isTextEmpty(user_postcode)) {
+            Log.i("VALIDATIONEVENT", "Postcode is empty");
+            user_postcode.setError("Please enter postcode");
+            return;
+        }
+        if (isTextEmpty(user_city)) {
+            Log.i("VALIDATIONEVENT", "City name is empty");
+            user_city.setError("Please enter a City name");
+            return;
+        }
+        if (isTextEmpty(user_state)) {
+            Log.i("VALIDATIONEVENT", "State name is empty");
+            user_state.setError("Please enter State name");
+            return;
+        }
+        if (isTextEmpty(user_country)) {
+            Log.i("VALIDATIONEVENT", "Country name is empty");
+            user_country.setError("Please enter Country name");
+            return;
+        }
 
         //JSON request (updating edited info in the database)
         JSONObject json = new JSONObject();

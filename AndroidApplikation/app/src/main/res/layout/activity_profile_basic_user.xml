@@ -161,6 +161,7 @@ tools:context=".ProfileBasicUserActivity">
             android:layout_marginLeft="40dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
+            android:inputType="number"
             android:text="Postcode"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="18.5sp"
