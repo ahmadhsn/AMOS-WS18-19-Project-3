@@ -6,13 +6,11 @@ import io.realm.annotations.LinkingObjects;
 import io.realm.annotations.PrimaryKey;
 
 public class Address extends RealmObject {
+    private String country;
     @PrimaryKey
     private long id_address;
-    private String country;
     private String city;
 
-    @LinkingObjects("address")
-    private final RealmResults<Event> event = null;
 
     public long getId_address() {
         return id_address;
@@ -34,7 +32,4 @@ public class Address extends RealmObject {
         this.city = city;
     }
 
-    public RealmResults<Event> getEvent() {
-        return event;
-    }
 }

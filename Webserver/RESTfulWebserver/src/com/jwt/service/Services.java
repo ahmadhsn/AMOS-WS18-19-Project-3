@@ -401,6 +401,7 @@ public class Services {
 
 		JSONObject jobj1 = new JSONObject();
 		JSONArray jArray = new JSONArray();
+		JSONObject j = new JSONObject();
 		
 		System.out.println("...getAllEvetns");
 		try {
@@ -414,7 +415,7 @@ public class Services {
 			
 			while (result.next()) {	
 				
-				JSONObject j = new JSONObject();
+				
 					
 				String id_json = result.getString("id_event");
 				String id_address_json = result.getString("id_address");
@@ -430,20 +431,19 @@ public class Services {
 
 				JSONObject jobj = new JSONObject();
 				jobj.put("id_event", id_json);
-				jobj.put("id_address", id_address_json);
 				jobj.put("name", name_json);
 				jobj.put("description", desc_json);
 				jobj.put("date", date_json);
 				jobj.put("time", time_json);
-				j.put("event",jobj);
 				
 				JSONObject jobj2 = new JSONObject();
 				jobj2.put("city", city_json);
 				jobj2.put("country", country_json);
 				jobj2.put("id_address", id_add_json);
-				j.put("address",jobj2);
+				
+				jobj.put("address", jobj2);
+				j.append("event",jobj);
 
-				jobj1.append("events", j);
 			}
 
 			
@@ -452,11 +452,7 @@ public class Services {
 			ex.printStackTrace();
 		}
 
-		JSONObject response = new JSONObject();
-
-		response.put("eventCreation",jobj1);
-
-		return Response.status(200).entity(response.toString()).build();
+		return Response.status(200).entity(j.toString()).build();
 
 	}
 	
