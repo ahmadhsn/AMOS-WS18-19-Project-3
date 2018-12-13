@@ -3,6 +3,8 @@ package com.jwt.dao;
 import java.util.List;
 
 import com.jwt.model.BasicUser;
+import com.jwt.model.User;
+
 
 public interface UserDao {
     BasicUser getUser(int id);

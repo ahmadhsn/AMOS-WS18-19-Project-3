@@ -41,9 +41,11 @@ public class LoginActivity extends AppCompatActivity {
             new Thread(task).start();
             Log.i("Response", task.get());
             response = new JSONObject(task.get());
-
+            Log.i("this is response", String.valueOf(response));
             //handle response
-            if(response.has("success")) {
+            if (response.has("success")) {
+
+                Log.i("IGI", String.valueOf(response));
                 String eml = response.getString("email");
                 int userId = response.getInt("user_id");
                 SaveSharedPreference.saveUserInforamtion(this, eml, userId);
@@ -51,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(this, ShowEventActivity.class);
                 startActivity(intent);
-                //TODO create session and redirect to home screen
+
             }
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), "Wrong email or password", Toast.LENGTH_LONG).show();
