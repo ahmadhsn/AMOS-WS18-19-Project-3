@@ -410,7 +410,10 @@ public class Services {
 			// PreparedStatement st = conn.prepareStatement("SELECT
 			// name,description,date,time FROM EVENT");
 			
-			ResultSet result = provider.querySelectDB("SELECT DISTINCT ON (e.id_event) * FROM EVENT e LEFT JOIN ADDRESS a USING (id_address) ORDER BY e.id_event, a.id_address");
+			ResultSet result = provider.querySelectDB("SELECT DISTINCT ON (e.id_event) * FROM EVENT e"
+					+ " LEFT JOIN ADDRESS a USING (id_address)"
+					+ " WHERE e.date >= now() "
+					+ " ORDER BY e.id_event, a.id_address" );
 			System.out.println(result);
 			
 			while (result.next()) {	
