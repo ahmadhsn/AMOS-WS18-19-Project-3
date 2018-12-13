@@ -41,11 +41,10 @@ public class ShowEventActivity extends AppCompatActivity
             startActivity(intent);
         }
 
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setTitle("Events");
+        getSupportActionBar().setTitle("Event Feed");
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
