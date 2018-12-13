@@ -3,8 +3,12 @@ package com.jwt.service;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.sql.Connection;
+import java.sql.Date;
+
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -396,37 +400,53 @@ public class Services {
 	public Response getAllEvents() throws JSONException {
 
 		JSONObject jobj1 = new JSONObject();
-
+		JSONArray jArray = new JSONArray();
+		
 		System.out.println("...getAllEvetns");
 		try {
 			DatabaseProvider provider = DatabaseProvider.getInstance(context);
 
 			// PreparedStatement st = conn.prepareStatement("SELECT
 			// name,description,date,time FROM EVENT");
-
-			ResultSet result = provider.querySelectDB("SELECT id_event,name,description,date,time FROM EVENT");
-			System.out.println("this" + result.getClass().getName());
-
-			JSONArray jArray = new JSONArray();
-			while (result.next()) {
+			
+			ResultSet result = provider.querySelectDB("SELECT DISTINCT ON (e.id_event) * FROM EVENT e LEFT JOIN ADDRESS a USING (id_address) ORDER BY e.id_event, a.id_address");
+			System.out.println(result);
+			
+			while (result.next()) {	
+				
+				JSONObject j = new JSONObject();
+					
 				String id_json = result.getString("id_event");
+				String id_address_json = result.getString("id_address");
 				String name_json = result.getString("name");
 				String desc_json = result.getString("description");
 				String date_json = result.getString("date");
 				String time_json = result.getString("time");
+			
+				String id_add_json = result.getString("id_address");
+				String city_json = result.getString("city");
+				String country_json = result.getString("country");
 				System.out.println(result);
 
 				JSONObject jobj = new JSONObject();
 				jobj.put("id_event", id_json);
+				jobj.put("id_address", id_address_json);
 				jobj.put("name", name_json);
 				jobj.put("description", desc_json);
 				jobj.put("date", date_json);
 				jobj.put("time", time_json);
-				jArray.put(jobj);
+				j.put("event",jobj);
+				
+				JSONObject jobj2 = new JSONObject();
+				jobj2.put("city", city_json);
+				jobj2.put("country", country_json);
+				jobj2.put("id_address", id_add_json);
+				j.put("address",jobj2);
 
+				jobj1.append("events", j);
 			}
 
-			jobj1.put("event", jArray);
+			
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -434,7 +454,51 @@ public class Services {
 
 		JSONObject response = new JSONObject();
 
-		response.put("eventCreation", jobj1);
+		response.put("eventCreation",jobj1);
+
+		return Response.status(200).entity(response.toString()).build();
+
+	}
+	
+
+	@GET
+	@Path("/getAddress")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response getAddress() throws JSONException {
+
+		JSONObject jobj1 = new JSONObject();
+
+		System.out.println("...get All Addresses");
+		try {
+			DatabaseProvider provider = DatabaseProvider.getInstance(context);
+
+			ResultSet result = provider.querySelectDB("SELECT id_address, country, city FROM ADDRESS ");
+			System.out.println("this" + result.getClass().getName());
+
+			JSONArray jArray = new JSONArray();
+			while (result.next()) {
+				String id_json = result.getString("id_address");
+				String country = result.getString("country");
+				String city_json = result.getString("city");
+				System.out.println(result);
+
+				JSONObject jobj = new JSONObject();
+				jobj.put("id_address", id_json);
+				jobj.put("country", country);
+				jobj.put("city", city_json);
+				jArray.put(jobj);
+
+			}
+
+			jobj1.put("Address", jArray);
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		JSONObject response = new JSONObject();
+
+		response.put("Address Display", jobj1);
 
 		return Response.status(200).entity(response.toString()).build();
 
