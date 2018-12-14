@@ -1,3 +1,7 @@
+#build files
+*.class
+*.ini
+*.log
 
 # Created by https://www.gitignore.io/api/eclipse
 
