@@ -297,17 +297,12 @@ public class Services {
 				try {
 					DatabaseProvider provider = DatabaseProvider.getInstance(context);
 					Connection conn = provider.getConnection();
-					PreparedStatement s1 = conn.prepareStatement("INSERT INTO GENDER (gender) VALUES (?)");
 
 					PreparedStatement s2 = conn.prepareStatement(
 							"INSERT INTO ADDRESS (country, state, city, street, postcode, housenumber) VALUES (?,?,?,?,?,?)");
 
 					PreparedStatement s3 = conn.prepareStatement(
 							"INSERT INTO BASIC_USER (id_user, first_name,last_name,dob, id_gender, id_address) VALUES (?,?,?,?::date,?,?)");
-
-					s1.setString(1, genderCol);
-					s1.executeUpdate();
-					s1.closeOnCompletion();
 
 					s2.setString(1, country);
 					s2.setString(2, state);
@@ -331,16 +326,16 @@ public class Services {
 					s3.setString(2, fname);
 					s3.setString(3, lname);
 					s3.setString(4, dob);
-
-					String selectSQL2 = "SELECT ID_GENDER FROM GENDER ORDER BY ID_GENDER DESC LIMIT 1";
-					PreparedStatement preparedStatement2 = conn.prepareStatement(selectSQL2);
-					ResultSet rs2 = preparedStatement2.executeQuery();
-					int result2;
-					while (rs2.next()) {
-						String genderId = rs2.getString("ID_GENDER");
-						result2 = Integer.parseInt(genderId);
-						s3.setInt(5, result2);
-					}
+					
+					String man = "M";
+					String female = "F";
+					
+					if (genderCol.equals(man)) {
+						s3.setInt(5, 1);
+					} 
+					if (genderCol.equals(female)) {
+						s3.setInt(5, 2);
+					} 
 
 					String selectSQL3 = "SELECT ID_ADDRESS FROM ADDRESS ORDER BY ID_ADDRESS DESC LIMIT 1";
 					PreparedStatement preparedStatement3 = conn.prepareStatement(selectSQL3);
