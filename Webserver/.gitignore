@@ -1,3 +1,12 @@
+#build files
+*.class
+*.ini
+*.log
+
+#folders to ignore
+RESTfulWebserver/build/
+RESTfulWebserver/target/
+
 
 # Created by https://www.gitignore.io/api/eclipse
 
