@@ -280,8 +280,9 @@ public class Services {
 		System.out.println("...addInfoBasicUserRequest");
 		if (JSONreq.has("first_name") && JSONreq.has("last_name") && JSONreq.has("dob") && JSONreq.has("country")
 				&& JSONreq.has("state") && JSONreq.has("city") && JSONreq.has("street") && JSONreq.has("postcode")
-				&& JSONreq.has("housenumber") && JSONreq.has("gender")) {
+				&& JSONreq.has("housenumber") && JSONreq.has("gender") && JSONreq.has("user_id")) {
 			try {
+				int user_id = JSONreq.getInt("user_id");
 				String fname = JSONreq.getString("first_name");
 				String lname = JSONreq.getString("last_name");
 				String dob = JSONreq.getString("dob");
@@ -313,16 +314,17 @@ public class Services {
 					s2.executeUpdate();
 					s2.closeOnCompletion();
 
-					String selectSQL = "SELECT ID_USER FROM USER_REG ORDER BY ID_USER DESC LIMIT 1";
-					PreparedStatement preparedStatement = conn.prepareStatement(selectSQL);
-					ResultSet rs = preparedStatement.executeQuery();
-					int result;
-					while (rs.next()) {
-						String userId = rs.getString("ID_USER");
-						result = Integer.parseInt(userId);
-						s3.setInt(1, result);
-					}
+					//String selectSQL = "SELECT ID_USER FROM USER_REG ORDER BY ID_USER DESC LIMIT 1";
+					//PreparedStatement preparedStatement = conn.prepareStatement(selectSQL);
+					//ResultSet rs = preparedStatement.executeQuery();
+					//int result;
+					//while (rs.next()) {
+					//	String userId = rs.getString("ID_USER");
+					//	result = Integer.parseInt(userId);
+					//	s3.setInt(1, result);
+					//}
 
+					s3.setInt(1, user_id);
 					s3.setString(2, fname);
 					s3.setString(3, lname);
 					s3.setString(4, dob);

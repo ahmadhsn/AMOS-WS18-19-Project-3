@@ -1,5 +1,6 @@
 package com.gr03.amos.bikerapp;
 
+        import android.content.Context;
         import android.content.Intent;
         import android.support.v7.app.AppCompatActivity;
         import android.os.Bundle;
@@ -11,6 +12,7 @@ package com.gr03.amos.bikerapp;
         import android.widget.ImageButton;
         import android.widget.TextView;
         import android.widget.Toast;
+        import com.gr03.amos.bikerapp.SaveSharedPreference;
 
         import com.gr03.amos.bikerapp.Models.Event;
         import com.gr03.amos.bikerapp.Models.Friend;
@@ -187,6 +189,8 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
 
         //JSON request (first time insertion of user information to database)
         JSONObject json = new JSONObject();
+        Context context = ProfileBasicUserActivity.this;
+        json.put("user_id", SaveSharedPreference.getUserID(context));
         json.put("first_name", first_name.getText().toString());
         json.put("last_name", last_name.getText().toString());
         json.put("dob", date_of_birth.getText().toString());
