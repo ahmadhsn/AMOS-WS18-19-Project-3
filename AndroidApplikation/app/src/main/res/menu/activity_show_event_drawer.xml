@@ -31,6 +31,11 @@
                 android:icon="@drawable/ic_menu_share"
                 android:title="@string/change_password" />
 
+            <item
+                android:id="@+id/add_profile"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Add Profile" />
+
 
         </menu>
     </item>

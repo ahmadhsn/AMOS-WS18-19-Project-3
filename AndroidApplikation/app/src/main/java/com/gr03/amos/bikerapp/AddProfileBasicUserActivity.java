@@ -147,6 +147,9 @@ public class AddProfileBasicUserActivity extends AppCompatActivity implements Da
                     }
                 }
 
+                Intent intent = new Intent(AddProfileBasicUserActivity.this, ShowEventActivity.class);
+                startActivity(intent);
+
                 Intent intent1 = new Intent(AddProfileBasicUserActivity.this , ProfileBasicUserActivity.class);
                  intent1.putExtra("first_string",fName.getText().toString());
                 intent1.putExtra("last_string",lName.getText().toString());

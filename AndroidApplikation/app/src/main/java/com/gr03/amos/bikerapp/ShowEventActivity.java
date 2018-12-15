@@ -121,6 +121,9 @@ public class ShowEventActivity extends AppCompatActivity
         } else if (id == R.id.change_password) {
             Intent intent = new Intent(this, ChangePasswordActivity.class);
             startActivity(intent);
+        } else if (id == R.id.add_profile) {
+            Intent intent = new Intent(this, AddProfileBasicUserActivity.class);
+            startActivity(intent);
 
         } else if (id == R.id.search_user) {
             Intent intent = new Intent(this, SearchUserActivity.class);
