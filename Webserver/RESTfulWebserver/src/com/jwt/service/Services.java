@@ -314,16 +314,6 @@ public class Services {
 					s2.executeUpdate();
 					s2.closeOnCompletion();
 
-					//String selectSQL = "SELECT ID_USER FROM USER_REG ORDER BY ID_USER DESC LIMIT 1";
-					//PreparedStatement preparedStatement = conn.prepareStatement(selectSQL);
-					//ResultSet rs = preparedStatement.executeQuery();
-					//int result;
-					//while (rs.next()) {
-					//	String userId = rs.getString("ID_USER");
-					//	result = Integer.parseInt(userId);
-					//	s3.setInt(1, result);
-					//}
-
 					s3.setInt(1, user_id);
 					s3.setString(2, fname);
 					s3.setString(3, lname);
@@ -789,9 +779,10 @@ public class Services {
 		JSONObject JSONreq = new JSONObject(urlReq);
 
 		if (JSONreq.has("last_name") && JSONreq.has("country") && JSONreq.has("state") && JSONreq.has("city")
-				&& JSONreq.has("street") && JSONreq.has("postcode") && JSONreq.has("housenumber")) {
+				&& JSONreq.has("street") && JSONreq.has("postcode") && JSONreq.has("housenumber")&& JSONreq.has("user_id")) {
 			try {
 
+				int user_id = JSONreq.getInt("user_id");			
 				String lname = JSONreq.getString("last_name");
 				String country = JSONreq.getString("country");
 				String state = JSONreq.getString("state");
@@ -803,13 +794,21 @@ public class Services {
 				try {
 
 					DatabaseProvider provider = DatabaseProvider.getInstance(context);
+					
+					String selectSQL3 = "SELECT id_address FROM BASIC_USER WHERE id_user =" + user_id;
+					PreparedStatement preparedStatement3 = provider.getConnection().prepareStatement(selectSQL3);
+					ResultSet rs3 = preparedStatement3.executeQuery();
+					int addressId = 0;
+					while (rs3.next()) {
+						addressId = rs3.getInt("ID_ADDRESS");
+					}
 
 					PreparedStatement s1 = provider.getConnection().prepareStatement(
-							"UPDATE ADDRESS SET country =?, state =?, city =?, street =?, postcode =?, housenumber =? WHERE id_address = (SELECT max(id_address) FROM ADDRESS)");
+							"UPDATE ADDRESS SET country =?, state =?, city =?, street =?, postcode =?, housenumber =? WHERE id_address = " + addressId);
 
 					PreparedStatement s2 = provider.getConnection().prepareStatement(
-							"UPDATE BASIC_USER SET last_name =? WHERE id_user = (SELECT max(id_user) FROM BASIC_USER)");
-
+							"UPDATE BASIC_USER SET last_name =? WHERE id_user="+user_id);
+					
 					s1.setString(1, country);
 					s1.setString(2, state);
 					s1.setString(3, city);

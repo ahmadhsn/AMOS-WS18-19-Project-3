@@ -306,6 +306,8 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
 
         //JSON request (updating edited info in the database)
         JSONObject json = new JSONObject();
+        Context context = ProfileBasicUserActivity.this;
+        json.put("user_id", SaveSharedPreference.getUserID(context));
         json.put("last_name", last_name.getText().toString());
         json.put("street", user_street.getText().toString());
         json.put("housenumber", hnumber.getText().toString());
