@@ -24,7 +24,6 @@ public class HomeActivity extends AppCompatActivity {
         signUpButton = findViewById(R.id.signup_button);
         loginButton = findViewById(R.id.login_button);
         ChangePasswordButton = findViewById(R.id.change_password_button);
-        //AddProfile = findViewById(R.id.AddProfile_Button);
         createRouteButton = findViewById(R.id.createRouteButton);
         findUser = findViewById(R.id.finduser_button);
 
