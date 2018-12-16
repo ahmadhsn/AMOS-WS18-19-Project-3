@@ -2,8 +2,6 @@ package com.gr03.amos.bikerapp;
         import android.app.DatePickerDialog;
         import android.content.Intent;
         import android.support.v7.app.AppCompatActivity;
-        import android.view.Menu;
-        import android.view.MenuItem;
         import android.os.Bundle;
         import android.util.Log;
         import android.view.View;
@@ -13,18 +11,11 @@ package com.gr03.amos.bikerapp;
         import android.widget.RadioButton;
         import android.widget.RadioGroup;
         import android.widget.TextView;
-        import android.widget.Button;
-        import android.widget.Spinner;
-        import org.json.JSONException;
-        import org.json.JSONObject;
+        import android.widget.Button;;
         import java.text.SimpleDateFormat;
         import java.util.Calendar;
-        import java.util.GregorianCalendar;
         import java.util.Locale;
-        import java.util.concurrent.Callable;
-        import java.util.concurrent.FutureTask;
         import  android.text.TextUtils;
-        import static android.view.View.VISIBLE;
 
 public class AddProfileBasicUserActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
     EditText fName;
@@ -46,7 +37,6 @@ public class AddProfileBasicUserActivity extends AppCompatActivity implements Da
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mt("create activity1");
         setContentView(R.layout.activity_add_profile_basic_user2);
 
         fName = findViewById(R.id.fname);
@@ -185,32 +175,5 @@ public class AddProfileBasicUserActivity extends AppCompatActivity implements Da
     boolean isTextEmpty(EditText text){
         CharSequence string = text.getText().toString();
         return TextUtils.isEmpty(string);
-    }
-    protected void onResume() {
-        super.onResume();
-        mt("resume activity");
-    }
-    protected void onPause() {
-        super.onPause();
-        mt("pause activity");
-    }
-    protected void onRestart() {
-        super.onRestart();
-        mt("restart activity");
-    }
-    protected void onStart() {
-        super.onStart();
-        mt("start activity");
-    }
-    protected void onStop() {
-        super.onStop();
-        mt("stop activity");
-    }
-    protected void onDestroy() {
-        super.onDestroy();
-        mt("destroy activity");
-    }
-    public void mt(String string){
-        Toast.makeText(this, string, Toast.LENGTH_LONG).show();
     }
 }

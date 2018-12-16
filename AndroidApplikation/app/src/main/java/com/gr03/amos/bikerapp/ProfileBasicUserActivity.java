@@ -9,21 +9,13 @@ package com.gr03.amos.bikerapp;
         import android.view.View;
         import android.widget.Button;
         import android.widget.EditText;
-        import android.widget.ImageButton;
         import android.widget.TextView;
         import android.widget.Toast;
-        import com.gr03.amos.bikerapp.SaveSharedPreference;
-
-        import com.gr03.amos.bikerapp.Models.Event;
         import com.gr03.amos.bikerapp.Models.Friend;
-        import com.gr03.amos.bikerapp.Models.ProfileBasic;
-
         import org.json.JSONException;
         import org.json.JSONObject;
-
         import java.util.concurrent.Callable;
         import java.util.concurrent.FutureTask;
-
         import io.realm.Realm;
 
 public class ProfileBasicUserActivity extends AppCompatActivity {
@@ -50,16 +42,16 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         String ucountry = bundle.getString("country_string");
 
 
-        first_name.setText(first.toString());
-        last_name.setText(last.toString());
-        date_of_birth.setText(dob.toString());
-        user_gender.setText(ugender.toString());
-        user_street.setText(ustreet.toString());
-        hnumber.setText(""+uhnum.toString());
-        user_postcode.setText(""+upost.toString());
-        user_city.setText(""+ucity.toString());
-        user_state.setText(""+ustate.toString());
-        user_country.setText(ucountry.toString());
+        first_name.setText(first);
+        last_name.setText(last);
+        date_of_birth.setText(dob);
+        user_gender.setText(ugender);
+        user_street.setText(ustreet);
+        hnumber.setText(""+uhnum);
+        user_postcode.setText(""+upost);
+        user_city.setText(""+ucity);
+        user_state.setText(""+ustate);
+        user_country.setText(ucountry);
     }
 
     private JSONObject getAdditionalUserInfo(){
@@ -112,26 +104,23 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         btSave.setVisibility(View.INVISIBLE);
 
         JSONObject userInfo = getAdditionalUserInfo();
-
-
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mt("create activity2");
         setContentView(R.layout.activity_profile_basic_user);
 
-        first_name = (TextView) findViewById(R.id.first_name);
-        last_name = (EditText) findViewById(R.id.last_name);
-        date_of_birth = (TextView) findViewById(R.id.dob);
-        user_gender = (TextView) findViewById(R.id.user_gender);
-        user_street = (EditText) findViewById(R.id.user_street);
-        hnumber = (EditText) findViewById(R.id.hnumber);
-        user_postcode = (EditText) findViewById(R.id.user_postcode);
-        user_city = (EditText) findViewById(R.id.user_city);
-        user_state = (EditText) findViewById(R.id.user_state);
-        user_country = (EditText) findViewById(R.id.user_country);
+        first_name = findViewById(R.id.first_name);
+        last_name = findViewById(R.id.last_name);
+        date_of_birth = findViewById(R.id.dob);
+        user_gender = findViewById(R.id.user_gender);
+        user_street = findViewById(R.id.user_street);
+        hnumber = findViewById(R.id.hnumber);
+        user_postcode = findViewById(R.id.user_postcode);
+        user_city = findViewById(R.id.user_city);
+        user_state = findViewById(R.id.user_state);
+        user_country = findViewById(R.id.user_country);
 
         intent = getIntent();
         userId = intent.getLongExtra("id", 0);
@@ -145,37 +134,10 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         }
 
     }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mt("resume activity2");
-    }
-    protected void onPause() {
-        super.onPause();
-        mt("pause activity2");
-    }
-    protected void onRestart() {
-        super.onRestart();
-        mt("restart activity2");
-    }
-    protected void onStart() {
-        super.onStart();
-        mt("start activity2");
-    }
-    protected void onStop() {
-        super.onStop();
-        mt("stop activity2");
-    }
-    protected void onDestroy() {
-        super.onDestroy();
-        mt("destroy activity2");
-    }
+
     boolean isTextEmpty(EditText text){
         CharSequence string = text.getText().toString();
         return TextUtils.isEmpty(string);
-    }
-    public void mt(String string){
-        Toast.makeText(this, string, Toast.LENGTH_LONG).show();
     }
 
     public void newInfo(View view) throws JSONException {
@@ -269,37 +231,37 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         user_country.setClickable(false);
 
         if (isTextEmpty(last_name)) {
-            Log.i("VALIDATIONEVENT", "Last name is empty");
+            Log.i("VALIDATIONUSER", "Last name is empty");
             last_name.setError("Please enter last name");
             return;
         }
         if (isTextEmpty(user_street)) {
-            Log.i("VALIDATIONEVENT", "Street name is empty");
+            Log.i("VALIDATIONUSER", "Street name is empty");
             user_street.setError("Please enter Street name");
             return;
         }
         if (isTextEmpty(hnumber)) {
-            Log.i("VALIDATIONEVENT", "House number is empty");
+            Log.i("VALIDATIONUSER", "House number is empty");
             hnumber.setError("Please enter house number");
             return;
         }
         if (isTextEmpty(user_postcode)) {
-            Log.i("VALIDATIONEVENT", "Postcode is empty");
+            Log.i("VALIDATIONUSER", "Postcode is empty");
             user_postcode.setError("Please enter postcode");
             return;
         }
         if (isTextEmpty(user_city)) {
-            Log.i("VALIDATIONEVENT", "City name is empty");
+            Log.i("VALIDATIONUSER", "City name is empty");
             user_city.setError("Please enter a City name");
             return;
         }
         if (isTextEmpty(user_state)) {
-            Log.i("VALIDATIONEVENT", "State name is empty");
+            Log.i("VALIDATIONUSER", "State name is empty");
             user_state.setError("Please enter State name");
             return;
         }
         if (isTextEmpty(user_country)) {
-            Log.i("VALIDATIONEVENT", "Country name is empty");
+            Log.i("VALIDATIONUSER", "Country name is empty");
             user_country.setError("Please enter Country name");
             return;
         }
