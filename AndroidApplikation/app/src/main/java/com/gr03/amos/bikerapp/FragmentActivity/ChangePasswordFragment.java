@@ -18,6 +18,7 @@ import java.util.concurrent.FutureTask;
 import android.widget.Toast;
 import com.gr03.amos.bikerapp.R;
 import com.gr03.amos.bikerapp.Requests;
+import com.gr03.amos.bikerapp.SaveSharedPreference;
 import com.gr03.amos.bikerapp.ShowEventActivity;
 
 import org.json.JSONException;
@@ -60,10 +61,10 @@ public class ChangePasswordFragment extends Fragment {
         String np = editTextNewPassword.getText().toString();
         String rnp = editTextRepeatPassword.getText().toString();
         JSONObject json = new JSONObject();
-        json.put("email", email.getText().toString());
         json.put("oldPassword", editTextOldPassword.getText().toString());
         json.put("newPassword", editTextNewPassword.getText().toString());
         json.put("repeatNewPassword", editTextRepeatPassword.getText().toString());
+        json.put("user_id", SaveSharedPreference.getUserID(this.getContext()));
         if (np.equals(rnp)) {
             try {
 
@@ -89,7 +90,7 @@ public class ChangePasswordFragment extends Fragment {
                         startActivity(intent);
 //                    return;
                     } else {
-                        Toast.makeText(getContext(), "Wrong Email or Old Password", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "Wrong Old Password", Toast.LENGTH_LONG).show();
                         return;
                     }
                 }
