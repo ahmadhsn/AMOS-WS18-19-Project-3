@@ -3,17 +3,15 @@ package com.jwt.service;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.sql.Connection;
-import java.sql.Date;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
@@ -986,5 +984,40 @@ public class Services {
 			System.out.println("Response: " + response.toString());
 			return Response.status(500).entity(response.toString()).build();
 		}
+	}
+	
+	@PUT
+	@Path("/resetPassword")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response resetPassword(String urlReq)
+			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
+		
+		JSONObject response = new JSONObject();
+		
+		JSONObject JSONreq = new JSONObject(urlReq);
+	
+		try {
+			String currentEmail = JSONreq.getString("reset_email");
+			UserDao userDao = new UserDaoImplementation();
+			System.out.println("Reset User Password");
+			String newPassword = userDao.changeUserPassword(currentEmail);
+			if (newPassword == null) {
+				return Response.status(200).entity(response.toString()).build();
+			}
+			// send registration mail
+			Mailer mailer = new Mailer(context);
+			boolean messageSent = mailer.sendRegistrationMail(currentEmail, newPassword);
+			if (!messageSent) {
+				System.out.println("Failed to send mail?!");
+			}
+			
+			return Response.status(200).entity(response.toString()).build();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		response.put("success", true);
+		return Response.status(200).entity(response.toString()).build();
 	}
 }

@@ -78,4 +78,9 @@ public class Mailer {
 		return sendMail("registration@adrenaline.com", to, "Your registration for adrenaline", text);
 	}
 	
+	public boolean sendResetPasswordMail(String to, String newPassword) {
+		String text = String.format("<h1>You have requested a password update</h1><p>You successfully registered for our app. Your new password is %s.</p>", newPassword);
+		
+		return sendMail("registration@adrenaline.com", to, "Your Password was restored", text);
+	}
 }
