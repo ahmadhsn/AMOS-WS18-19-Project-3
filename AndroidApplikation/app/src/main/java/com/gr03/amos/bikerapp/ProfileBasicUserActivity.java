@@ -22,21 +22,21 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
 
     Intent intent;
     Long userId;
-    TextView first_name, date_of_birth, user_gender;
-    EditText last_name, user_street, hnumber, user_postcode, user_city, user_state, user_country;
+    TextView user_fname, user_dob, user_gender;
+    EditText user_lname, user_street, user_hnumber, user_pcode, user_city, user_state, user_country;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_basic_user);
 
-        first_name = findViewById(R.id.first_name);
-        last_name = findViewById(R.id.last_name);
-        date_of_birth = findViewById(R.id.dob);
+        user_fname = findViewById(R.id.first_name);
+        user_lname = findViewById(R.id.last_name);
+        user_dob = findViewById(R.id.dob);
         user_gender = findViewById(R.id.user_gender);
         user_street = findViewById(R.id.user_street);
-        hnumber = findViewById(R.id.hnumber);
-        user_postcode = findViewById(R.id.user_postcode);
+        user_hnumber = findViewById(R.id.hnumber);
+        user_pcode = findViewById(R.id.user_postcode);
         user_city = findViewById(R.id.user_city);
         user_state = findViewById(R.id.user_state);
         user_country = findViewById(R.id.user_country);
@@ -68,13 +68,13 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         String state = bundle.getString("state_string");
         String country = bundle.getString("country_string");
 
-        first_name.setText(first);
-        last_name.setText(last);
-        date_of_birth.setText(dob);
+        user_fname.setText(first);
+        user_lname.setText(last);
+        user_dob.setText(dob);
         user_gender.setText(gender);
         user_street.setText(street);
-        hnumber.setText(""+hnum);
-        user_postcode.setText(""+post);
+        user_hnumber.setText(""+hnum);
+        user_pcode.setText(""+post);
         user_city.setText(""+city);
         user_state.setText(""+state);
         user_country.setText(country);
@@ -83,28 +83,26 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
     private JSONObject getAdditionalUserInfo(){
         JSONObject userInfo;
         try {
-            FutureTask<String> task = new FutureTask(new Callable<String>() {
-                public String call() {
-                    JSONObject threadResponse = Requests.getResponse("getUserInfo/" + userId, null, "GET");
-                    return threadResponse.toString();
-                }
+            FutureTask<String> task = new FutureTask((Callable<String>) () -> {
+                JSONObject threadResponse = Requests.getResponse("getUserInfo/" + userId, null, "GET");
+                return threadResponse.toString();
             });
+
             new Thread(task).start();
             Log.i("Response", task.get());
             userInfo = new JSONObject(task.get());
             userInfo = userInfo.getJSONObject("UserInfo");
-            date_of_birth.setText(userInfo.getString("dob"));
+            user_dob.setText(userInfo.getString("dob"));
             user_gender.setText(userInfo.getString("gender"));
 
             JSONObject address = userInfo.getJSONObject("address");
             user_street.setText(address.getString("street"));
-            hnumber.setText(address.getString("housenumber"));
-            user_postcode.setText(address.getString("postcode"));
+            user_hnumber.setText(address.getString("housenumber"));
+            user_pcode.setText(address.getString("postcode"));
             user_city.setText(address.getString("city"));
             user_state.setText(address.getString("state"));
             user_country.setText(address.getString("country"));
         } catch (Exception e) {
-            //TODO: Error-Handling
             Log.i("Exception --- not requested", e.toString());
             return null;
         }
@@ -117,8 +115,8 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
 
         final Friend friend = realm.where(Friend.class).equalTo("id", userId).findFirst();
 
-        first_name.setText(friend.getFirst_name());
-        last_name.setText(friend.getLast_name());
+        user_fname.setText(friend.getFirst_name());
+        user_lname.setText(friend.getLast_name());
 
         Button btDatabase = findViewById(R.id.addtodatabase);
         btDatabase.setVisibility(View.INVISIBLE);
@@ -144,13 +142,13 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         JSONObject json = new JSONObject();
         Context context = ProfileBasicUserActivity.this;
         json.put("user_id", SaveSharedPreference.getUserID(context));
-        json.put("first_name", first_name.getText().toString());
-        json.put("last_name", last_name.getText().toString());
-        json.put("dob", date_of_birth.getText().toString());
+        json.put("first_name", user_fname.getText().toString());
+        json.put("last_name", user_lname.getText().toString());
+        json.put("dob", user_dob.getText().toString());
         json.put("gender",user_gender.getText().toString());
         json.put("street", user_street.getText().toString());
-        json.put("housenumber", hnumber.getText().toString());
-        json.put("postcode", user_postcode.getText().toString());
+        json.put("housenumber", user_hnumber.getText().toString());
+        json.put("postcode", user_pcode.getText().toString());
         json.put("city", user_city.getText().toString());
         json.put("state", user_state.getText().toString());
         json.put("country", user_country.getText().toString());
@@ -168,18 +166,18 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
 
     public void editInfo(View view){
         //makes all fields (except first_name, dob, gender) editable
-        last_name.setEnabled(true);
-        last_name.setFocusableInTouchMode(true);
-        last_name.setClickable(true);
+        user_lname.setEnabled(true);
+        user_lname.setFocusableInTouchMode(true);
+        user_lname.setClickable(true);
         user_street.setEnabled(true);
         user_street.setFocusableInTouchMode(true);
         user_street.setClickable(true);
-        hnumber.setEnabled(true);
-        hnumber.setFocusableInTouchMode(true);
-        hnumber.setClickable(true);
-        user_postcode.setEnabled(true);
-        user_postcode.setFocusableInTouchMode(true);
-        user_postcode.setClickable(true);
+        user_hnumber.setEnabled(true);
+        user_hnumber.setFocusableInTouchMode(true);
+        user_hnumber.setClickable(true);
+        user_pcode.setEnabled(true);
+        user_pcode.setFocusableInTouchMode(true);
+        user_pcode.setClickable(true);
         user_city.setEnabled(true);
         user_city.setFocusableInTouchMode(true);
         user_city.setClickable(true);
@@ -192,20 +190,19 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
     }
 
     public void saveEditedInfo(View view) throws JSONException {
-
         //makes all fields non-editable again
-        last_name.setEnabled(false);
-        last_name.setFocusableInTouchMode(false);
-        last_name.setClickable(false);
+        user_lname.setEnabled(false);
+        user_lname.setFocusableInTouchMode(false);
+        user_lname.setClickable(false);
         user_street.setEnabled(false);
         user_street.setFocusableInTouchMode(false);
         user_street.setClickable(false);
-        hnumber.setEnabled(false);
-        hnumber.setFocusableInTouchMode(false);
-        hnumber.setClickable(false);
-        user_postcode.setEnabled(false);
-        user_postcode.setFocusableInTouchMode(false);
-        user_postcode.setClickable(false);
+        user_hnumber.setEnabled(false);
+        user_hnumber.setFocusableInTouchMode(false);
+        user_hnumber.setClickable(false);
+        user_pcode.setEnabled(false);
+        user_pcode.setFocusableInTouchMode(false);
+        user_pcode.setClickable(false);
         user_city.setEnabled(false);
         user_city.setFocusableInTouchMode(false);
         user_city.setClickable(false);
@@ -216,9 +213,9 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         user_country.setFocusableInTouchMode(false);
         user_country.setClickable(false);
 
-        if (isTextEmpty(last_name)) {
+        if (isTextEmpty(user_lname)) {
             Log.i("VALIDATIONUSER", "Last name is empty");
-            last_name.setError("Please enter last name");
+            user_lname.setError("Please enter last name");
             return;
         }
         if (isTextEmpty(user_street)) {
@@ -226,14 +223,14 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
             user_street.setError("Please enter Street name");
             return;
         }
-        if (isTextEmpty(hnumber)) {
+        if (isTextEmpty(user_hnumber)) {
             Log.i("VALIDATIONUSER", "House number is empty");
-            hnumber.setError("Please enter house number");
+            user_hnumber.setError("Please enter house number");
             return;
         }
-        if (isTextEmpty(user_postcode)) {
+        if (isTextEmpty(user_pcode)) {
             Log.i("VALIDATIONUSER", "Postcode is empty");
-            user_postcode.setError("Please enter postcode");
+            user_pcode.setError("Please enter postcode");
             return;
         }
         if (isTextEmpty(user_city)) {
@@ -256,10 +253,10 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         JSONObject json = new JSONObject();
         Context context = ProfileBasicUserActivity.this;
         json.put("user_id", SaveSharedPreference.getUserID(context));
-        json.put("last_name", last_name.getText().toString());
+        json.put("last_name", user_lname.getText().toString());
         json.put("street", user_street.getText().toString());
-        json.put("housenumber", hnumber.getText().toString());
-        json.put("postcode", user_postcode.getText().toString());
+        json.put("housenumber", user_hnumber.getText().toString());
+        json.put("postcode", user_pcode.getText().toString());
         json.put("city", user_city.getText().toString());
         json.put("state", user_state.getText().toString());
         json.put("country", user_country.getText().toString());

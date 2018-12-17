@@ -18,6 +18,7 @@ package com.gr03.amos.bikerapp;
         import  android.text.TextUtils;
 
 public class AddProfileBasicUserActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
+
     EditText FName, LName, Dob, Street, HNumber, Postcode, City, State, Country;
     TextView choose_gender;
     RadioGroup radio;
