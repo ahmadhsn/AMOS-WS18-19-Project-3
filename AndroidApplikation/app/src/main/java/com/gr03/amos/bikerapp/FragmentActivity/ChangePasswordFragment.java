@@ -23,14 +23,6 @@ import com.gr03.amos.bikerapp.ShowEventActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ChangePasswordFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ChangePasswordFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ChangePasswordFragment extends Fragment {
 
     private EditText email, editTextOldPassword, editTextNewPassword, editTextRepeatPassword, country;
@@ -64,29 +56,6 @@ public class ChangePasswordFragment extends Fragment {
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    /*public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    /*@Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }*/
     public void changePassword() throws JSONException {
         String np = editTextNewPassword.getText().toString();
         String rnp = editTextRepeatPassword.getText().toString();
@@ -134,16 +103,6 @@ public class ChangePasswordFragment extends Fragment {
         }
 
     }
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
