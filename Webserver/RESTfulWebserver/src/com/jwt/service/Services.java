@@ -277,11 +277,13 @@ public class Services {
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
 
 		JSONObject JSONreq = new JSONObject(urlReq);
-		System.out.println("...addInfoBasicUserRequest");
+		
 		if (JSONreq.has("first_name") && JSONreq.has("last_name") && JSONreq.has("dob") && JSONreq.has("country")
 				&& JSONreq.has("state") && JSONreq.has("city") && JSONreq.has("street") && JSONreq.has("postcode")
 				&& JSONreq.has("housenumber") && JSONreq.has("gender") && JSONreq.has("user_id")) {
+		
 			try {
+				
 				int user_id = JSONreq.getInt("user_id");
 				String fname = JSONreq.getString("first_name");
 				String lname = JSONreq.getString("last_name");
@@ -293,61 +295,63 @@ public class Services {
 				Integer postcode = JSONreq.getInt("postcode");
 				String housenumber = JSONreq.getString("housenumber");
 				String genderCol = JSONreq.getString("gender");
-
-				System.out.println("...newInfoBasicUserAdded:");
 				try {
+					
 					DatabaseProvider provider = DatabaseProvider.getInstance(context);
 					Connection conn = provider.getConnection();
 
-					PreparedStatement s2 = conn.prepareStatement(
+					PreparedStatement s1 = conn.prepareStatement(
 							"INSERT INTO ADDRESS (country, state, city, street, postcode, housenumber) VALUES (?,?,?,?,?,?)");
 
-					PreparedStatement s3 = conn.prepareStatement(
+					PreparedStatement s2 = conn.prepareStatement(
 							"INSERT INTO BASIC_USER (id_user, first_name,last_name,dob, id_gender, id_address) VALUES (?,?,?,?::date,?,?)");
 
-					s2.setString(1, country);
-					s2.setString(2, state);
-					s2.setString(3, city);
-					s2.setString(4, street);
-					s2.setInt(5, postcode);
-					s2.setString(6, housenumber);
-					s2.executeUpdate();
-					s2.closeOnCompletion();
+					s1.setString(1, country);
+					s1.setString(2, state);
+					s1.setString(3, city);
+					s1.setString(4, street);
+					s1.setInt(5, postcode);
+					s1.setString(6, housenumber);
+					s1.executeUpdate();
+					s1.closeOnCompletion();
 
-					s3.setInt(1, user_id);
-					s3.setString(2, fname);
-					s3.setString(3, lname);
-					s3.setString(4, dob);
+					s2.setInt(1, user_id);
+					s2.setString(2, fname);
+					s2.setString(3, lname);
+					s2.setString(4, dob);
 					
 					String man = "M";
 					String female = "F";
 					
 					if (genderCol.equals(man)) {
-						s3.setInt(5, 1);
-					} 
-					if (genderCol.equals(female)) {
-						s3.setInt(5, 2);
+						s2.setInt(5, 1);
+					}else if (genderCol.equals(female)) {
+						s2.setInt(5, 2);
 					} 
 
-					String selectSQL3 = "SELECT ID_ADDRESS FROM ADDRESS ORDER BY ID_ADDRESS DESC LIMIT 1";
-					PreparedStatement preparedStatement3 = conn.prepareStatement(selectSQL3);
-					ResultSet rs3 = preparedStatement3.executeQuery();
-					int result3;
-					while (rs3.next()) {
-						String addressId = rs3.getString("ID_ADDRESS");
-						result3 = Integer.parseInt(addressId);
-						s3.setInt(6, result3);
+					String selectSQL = "SELECT ID_ADDRESS FROM ADDRESS ORDER BY ID_ADDRESS DESC LIMIT 1";
+					PreparedStatement preparedStatement3 = conn.prepareStatement(selectSQL);
+					ResultSet rs = preparedStatement3.executeQuery();
+					int result;
+					while (rs.next()) {
+						String addressId = rs.getString("ID_ADDRESS");
+						result = Integer.parseInt(addressId);
+						s2.setInt(6, result);
 					}
 
-					s3.executeUpdate();
-					s3.closeOnCompletion();
+					s2.executeUpdate();
+					s2.closeOnCompletion();
+					
+					System.out.println("UserInfoGotInserted");
 
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
+				
 				JSONObject response = new JSONObject();
 				response.put("addUserBasic", "successfullCreation");
 				return Response.status(200).entity(response.toString()).build();
+				
 			} catch (Exception e) {
 				System.out.println("Wrong JSONFormat:" + e.toString());
 			}
@@ -780,6 +784,7 @@ public class Services {
 
 		if (JSONreq.has("last_name") && JSONreq.has("country") && JSONreq.has("state") && JSONreq.has("city")
 				&& JSONreq.has("street") && JSONreq.has("postcode") && JSONreq.has("housenumber")&& JSONreq.has("user_id")) {
+			
 			try {
 
 				int user_id = JSONreq.getInt("user_id");			
@@ -821,7 +826,8 @@ public class Services {
 					s2.setString(1, lname);
 					s2.executeUpdate();
 					s2.closeOnCompletion();
-
+					
+					System.out.println("UserInfoGotUpdated");
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
@@ -830,7 +836,6 @@ public class Services {
 				System.out.println("Wrong JSONFormat:" + e.toString());
 			}
 		}
-		System.out.println("...EditedInfoGotInserted");
 		return Response.status(400).entity("InvalidRequestBody").build();
 	}
 

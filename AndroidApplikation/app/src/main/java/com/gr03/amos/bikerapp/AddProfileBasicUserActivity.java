@@ -54,7 +54,7 @@ public class AddProfileBasicUserActivity extends AppCompatActivity implements Da
 
         add.setOnClickListener(v -> {
 
-            //Validation
+            //Validation, can't be extracted to an own method, causes problems with intents
             if (isTextEmpty(FName)) {
                 Log.i("VALIDATIONUSER", "First name is empty");
                 FName.setError("Please enter a First name");

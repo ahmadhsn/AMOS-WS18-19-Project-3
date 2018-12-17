@@ -213,6 +213,37 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         user_country.setFocusableInTouchMode(false);
         user_country.setClickable(false);
 
+        validation();
+
+        //JSON request (updating edited info in the database)
+        JSONObject json = new JSONObject();
+        Context context = ProfileBasicUserActivity.this;
+        json.put("user_id", SaveSharedPreference.getUserID(context));
+        json.put("last_name", user_lname.getText().toString());
+        json.put("street", user_street.getText().toString());
+        json.put("housenumber", user_hnumber.getText().toString());
+        json.put("postcode", user_pcode.getText().toString());
+        json.put("city", user_city.getText().toString());
+        json.put("state", user_state.getText().toString());
+        json.put("country", user_country.getText().toString());
+        try {
+            FutureTask<String> task = new FutureTask((Callable<String>) () -> {
+                JSONObject threadResponse = Requests.getResponse("editUserInfo", json);
+                return threadResponse.toString();
+            });
+            new Thread(task).start();
+            Log.i("Response", task.get());
+        } catch (Exception e) {
+            Log.i("Exception --- not requested", e.toString());
+        }
+    }
+
+    boolean isTextEmpty(EditText text){
+        CharSequence string = text.getText().toString();
+        return TextUtils.isEmpty(string);
+    }
+
+    private void validation(){
         if (isTextEmpty(user_lname)) {
             Log.i("VALIDATIONUSER", "Last name is empty");
             user_lname.setError("Please enter last name");
@@ -248,33 +279,6 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
             user_country.setError("Please enter Country name");
             return;
         }
-
-        //JSON request (updating edited info in the database)
-        JSONObject json = new JSONObject();
-        Context context = ProfileBasicUserActivity.this;
-        json.put("user_id", SaveSharedPreference.getUserID(context));
-        json.put("last_name", user_lname.getText().toString());
-        json.put("street", user_street.getText().toString());
-        json.put("housenumber", user_hnumber.getText().toString());
-        json.put("postcode", user_pcode.getText().toString());
-        json.put("city", user_city.getText().toString());
-        json.put("state", user_state.getText().toString());
-        json.put("country", user_country.getText().toString());
-        try {
-            FutureTask<String> task = new FutureTask((Callable<String>) () -> {
-                JSONObject threadResponse = Requests.getResponse("editUserInfo", json);
-                return threadResponse.toString();
-            });
-            new Thread(task).start();
-            Log.i("Response", task.get());
-        } catch (Exception e) {
-            Log.i("Exception --- not requested", e.toString());
-        }
-    }
-
-    boolean isTextEmpty(EditText text){
-        CharSequence string = text.getText().toString();
-        return TextUtils.isEmpty(string);
     }
 
 }
