@@ -1,7 +1,9 @@
 package com.gr03.amos.bikerapp;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -50,24 +52,33 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             return;
         }
         else
+            createAlertView();
             try {
                 FutureTask<String> task = new FutureTask(new Callable<String>() {
                     public String call() {
-                        JSONObject threadResponse = Requests.getResponse("resetPassword", generateRequestJSON(email));
+                        JSONObject threadResponse = Requests.getResponse("resetPassword", generateRequestJSON(email), "PUT");
                         return threadResponse.toString();
                     }
                 });
 
                 new Thread(task).start();
-                Log.i("Response", task.get());
-                finish();
             } catch (Exception e) {
                 //TODO: ErrorHandling
                 Log.i("Exception --- not requested", e.toString());
             }
     }
 
-
+    private void createAlertView() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MyDialogTheme);
+        builder.setMessage("We sent you a new password check it out.")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        finish();
+                    }
+                });
+        // Create the AlertDialog object and show it
+        builder.create().show();
+    }
     private JSONObject generateRequestJSON(String email) {
         JSONObject requestJSON = new JSONObject();
         try {
