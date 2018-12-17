@@ -5,10 +5,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.RandomStringUtils;
+
 import com.jwt.DataBaseConnection.DatabaseProvider;
 import com.jwt.model.Address;
 import com.jwt.model.BasicUser;
-import com.jwt.DataBaseConnection.DatabaseProvider;
 import com.jwt.model.User;
 
 public class UserDaoImplementation implements UserDao {
@@ -124,6 +125,26 @@ public class UserDaoImplementation implements UserDao {
             return null;
         }
     }
+    
+    public String changeUserPassword(String email) {
+        String newPassword = null;
+        String selectSQL = "SELECT * FROM user_reg WHERE email=\'" + email + "\'";;
+        try {
+            DatabaseProvider conn = DatabaseProvider.getInstance();
+            ResultSet result = conn.querySelectDB(selectSQL, false);
+        	while (result.next()) {
+            	newPassword = generateString();
+            	result.updateString("password", newPassword);
+            	result.updateRow();
+            	conn.getConnection().close();
+            	return newPassword;
+            }
+            return newPassword;
+        } catch (SQLException ex) {
+        	ex.printStackTrace();
+            return newPassword;
+        }
+    }
 
     private List<BasicUser> getListByRS(ResultSet rs) {
         List<BasicUser> user = new ArrayList<>();
@@ -138,4 +159,10 @@ public class UserDaoImplementation implements UserDao {
 
         return user;
     }
+    private String generateString() {
+    	int length = 8;
+        boolean useLetters = true;
+        boolean useNumbers = false;
+        return RandomStringUtils.random(length, useLetters, useNumbers);
     }
+}
