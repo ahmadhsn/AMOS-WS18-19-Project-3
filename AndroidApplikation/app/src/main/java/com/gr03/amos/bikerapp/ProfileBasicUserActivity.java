@@ -10,7 +10,6 @@ package com.gr03.amos.bikerapp;
         import android.widget.Button;
         import android.widget.EditText;
         import android.widget.TextView;
-        import android.widget.Toast;
         import com.gr03.amos.bikerapp.Models.Friend;
         import org.json.JSONException;
         import org.json.JSONObject;
