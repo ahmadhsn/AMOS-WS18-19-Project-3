@@ -25,33 +25,59 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
     TextView first_name, date_of_birth, user_gender;
     EditText last_name, user_street, hnumber, user_postcode, user_city, user_state, user_country;
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_profile_basic_user);
+
+        first_name = findViewById(R.id.first_name);
+        last_name = findViewById(R.id.last_name);
+        date_of_birth = findViewById(R.id.dob);
+        user_gender = findViewById(R.id.user_gender);
+        user_street = findViewById(R.id.user_street);
+        hnumber = findViewById(R.id.hnumber);
+        user_postcode = findViewById(R.id.user_postcode);
+        user_city = findViewById(R.id.user_city);
+        user_state = findViewById(R.id.user_state);
+        user_country = findViewById(R.id.user_country);
+
+        intent = getIntent();
+        userId = intent.getLongExtra("id", 0);
+
+        if(userId == 0){
+            //intent from add profile page
+            //use Roxanas code now
+            onCreateAfterAddProfile(savedInstanceState);
+        }else{
+            onCreateAfterProfileId();
+        }
+    }
+
     private void onCreateAfterAddProfile(Bundle savedInstanceState){
         Intent intent2 = getIntent();
-
 
         Bundle bundle = intent2.getExtras();
         String first = bundle.getString("first_string");
         String last = bundle.getString("last_string");
         String dob = bundle.getString("date_string");
-        String ugender = bundle.getString("gender_string");
-        String ustreet = bundle.getString("street_string");
-        String uhnum = bundle.getString("hnumber_string");
-        String upost = bundle.getString("postcode_string");
-        String ucity = bundle.getString("city_string");
-        String ustate = bundle.getString("state_string");
-        String ucountry = bundle.getString("country_string");
-
+        String gender = bundle.getString("gender_string");
+        String street = bundle.getString("street_string");
+        String hnum = bundle.getString("hnumber_string");
+        String post = bundle.getString("postcode_string");
+        String city = bundle.getString("city_string");
+        String state = bundle.getString("state_string");
+        String country = bundle.getString("country_string");
 
         first_name.setText(first);
         last_name.setText(last);
         date_of_birth.setText(dob);
-        user_gender.setText(ugender);
-        user_street.setText(ustreet);
-        hnumber.setText(""+uhnum);
-        user_postcode.setText(""+upost);
-        user_city.setText(""+ucity);
-        user_state.setText(""+ustate);
-        user_country.setText(ucountry);
+        user_gender.setText(gender);
+        user_street.setText(street);
+        hnumber.setText(""+hnum);
+        user_postcode.setText(""+post);
+        user_city.setText(""+city);
+        user_state.setText(""+state);
+        user_country.setText(country);
     }
 
     private JSONObject getAdditionalUserInfo(){
@@ -82,7 +108,6 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
             Log.i("Exception --- not requested", e.toString());
             return null;
         }
-
         return userInfo;
     }
 
@@ -103,48 +128,14 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         Button btSave = findViewById(R.id.saveEditedInfo);
         btSave.setVisibility(View.INVISIBLE);
 
-        JSONObject userInfo = getAdditionalUserInfo();
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile_basic_user);
-
-        first_name = findViewById(R.id.first_name);
-        last_name = findViewById(R.id.last_name);
-        date_of_birth = findViewById(R.id.dob);
-        user_gender = findViewById(R.id.user_gender);
-        user_street = findViewById(R.id.user_street);
-        hnumber = findViewById(R.id.hnumber);
-        user_postcode = findViewById(R.id.user_postcode);
-        user_city = findViewById(R.id.user_city);
-        user_state = findViewById(R.id.user_state);
-        user_country = findViewById(R.id.user_country);
-
-        intent = getIntent();
-        userId = intent.getLongExtra("id", 0);
-
-        if(userId == 0){
-            //intent from add profile page
-            //use Roxanas code now
-            onCreateAfterAddProfile(savedInstanceState);
-        }else{
-            onCreateAfterProfileId();
-        }
-
-    }
-
-    boolean isTextEmpty(EditText text){
-        CharSequence string = text.getText().toString();
-        return TextUtils.isEmpty(string);
+        getAdditionalUserInfo();
     }
 
     public void newInfo(View view) throws JSONException {
         //button visibility
-        Button edit_profile_page=(Button)findViewById(R.id.editProfilePage);
-        Button save_edited_info=(Button)findViewById(R.id.saveEditedInfo);
-        Button add_to_database=(Button)findViewById(R.id.addtodatabase);
+        Button edit_profile_page = findViewById(R.id.editProfilePage);
+        Button save_edited_info = findViewById(R.id.saveEditedInfo);
+        Button add_to_database = findViewById(R.id.addtodatabase);
         edit_profile_page.setVisibility(View.VISIBLE);
         save_edited_info.setVisibility(View.VISIBLE);
         add_to_database.setVisibility(View.INVISIBLE);
@@ -164,23 +155,18 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         json.put("state", user_state.getText().toString());
         json.put("country", user_country.getText().toString());
         try {
-            JSONObject response;
-            FutureTask<String> task = new FutureTask(new Callable<String>() {
-                public String call() {
-                    JSONObject threadResponse = Requests.getResponse("addUserBasic", json);
-                    return threadResponse.toString();
-                }
+            FutureTask<String> task = new FutureTask((Callable<String>) () -> {
+                JSONObject threadResponse = Requests.getResponse("addUserBasic", json);
+                return threadResponse.toString();
             });
             new Thread(task).start();
             Log.i("Response", task.get());
-            response = new JSONObject(task.get());
         } catch (Exception e) {
-            //TODO: Error-Handling
             Log.i("Exception --- not requested", e.toString());
         }
     }
-    public void editInfo(View view){
 
+    public void editInfo(View view){
         //makes all fields (except first_name, dob, gender) editable
         last_name.setEnabled(true);
         last_name.setFocusableInTouchMode(true);
@@ -278,20 +264,20 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         json.put("state", user_state.getText().toString());
         json.put("country", user_country.getText().toString());
         try {
-            JSONObject response;
-            FutureTask<String> task = new FutureTask(new Callable<String>() {
-                public String call() {
-                    JSONObject threadResponse = Requests.getResponse("editUserInfo", json);
-                    return threadResponse.toString();
-                }
+            FutureTask<String> task = new FutureTask((Callable<String>) () -> {
+                JSONObject threadResponse = Requests.getResponse("editUserInfo", json);
+                return threadResponse.toString();
             });
             new Thread(task).start();
             Log.i("Response", task.get());
-            response = new JSONObject(task.get());
         } catch (Exception e) {
-            //TODO: Error-Handling
             Log.i("Exception --- not requested", e.toString());
         }
+    }
+
+    boolean isTextEmpty(EditText text){
+        CharSequence string = text.getText().toString();
+        return TextUtils.isEmpty(string);
     }
 
 }
