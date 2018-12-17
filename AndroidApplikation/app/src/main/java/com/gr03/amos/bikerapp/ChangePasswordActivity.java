@@ -78,14 +78,6 @@ public class ChangePasswordActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Wrong Email or Old Password", Toast.LENGTH_LONG).show();
                         return;
                     }
-
-//                if(loginResponse.equals("successfulLogin")){
-//                    Toast.makeText(getApplicationContext(), "You are logged in now!", Toast.LENGTH_LONG).show();
-//                    Intent intent = new Intent(this, ShowEventActivity.class);
-//                    startActivity(intent);
-//
-//                    //TODO create session and redirect to home screen
-//                }
                 }
 
             } catch (Exception e) {

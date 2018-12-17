@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.gr03.amos.bikerapp.FragmentActivity.ChangePasswordFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.CreateEventFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.ShowEventsFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.ShowFriendsFragment;
@@ -117,21 +118,28 @@ public class ShowEventActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.create_event_fragment, new ShowEventsFragment())
                     .commit();
-        } else if (id == R.id.settings) {
-        } else if (id == R.id.change_password) {
-            Intent intent = new Intent(this, ChangePasswordActivity.class);
-            startActivity(intent);
-
-        } else if (id == R.id.search_user) {
+        }
+        else if (id == R.id.settings)
+        { }
+        else if (id == R.id.search_user)
+        {
             Intent intent = new Intent(this, SearchUserActivity.class);
             startActivity(intent);
-        } else if (id == R.id.show_friends) {
+        }
+        else if (id == R.id.show_friends)
+        {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.create_event_fragment, new ShowFriendsFragment())
                     .addToBackStack("FRIEND_LIST_FRAGMENT")
                     .commit();
         }
-
+        else if (id == R.id.change_password)
+        {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.create_event_fragment, new ChangePasswordFragment())
+                    .addToBackStack("CHANGE_PASSWORD_FRAGMENT")
+                    .commit();
+        }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
