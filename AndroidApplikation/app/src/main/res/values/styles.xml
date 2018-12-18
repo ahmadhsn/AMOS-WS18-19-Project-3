@@ -31,4 +31,5 @@
         <item name="android:backgroundTint">@color/black</item>
         <item name="android:textSize">16sp</item>
     </style>
+
 </resources>
