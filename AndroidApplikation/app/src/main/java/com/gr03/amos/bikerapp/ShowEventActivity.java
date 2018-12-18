@@ -125,9 +125,6 @@ public class ShowEventActivity extends AppCompatActivity
             Intent intent = new Intent(this, AddProfileBasicUserActivity.class);
             startActivity(intent);
 
-        } else if (id == R.id.search_user) {
-            Intent intent = new Intent(this, SearchUserActivity.class);
-            startActivity(intent);
         } else if (id == R.id.show_friends) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.create_event_fragment, new ShowFriendsFragment())

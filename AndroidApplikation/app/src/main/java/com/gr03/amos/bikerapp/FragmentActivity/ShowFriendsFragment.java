@@ -1,19 +1,13 @@
 package com.gr03.amos.bikerapp.FragmentActivity;
 
 import android.app.Activity;
-import android.content.ClipData;
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -23,15 +17,11 @@ import android.widget.Toast;
 
 import com.gr03.amos.bikerapp.Adapters.UserAdapter;
 import com.gr03.amos.bikerapp.Models.BasicUser;
-import com.gr03.amos.bikerapp.Models.Event;
 import com.gr03.amos.bikerapp.Models.Friend;
 import com.gr03.amos.bikerapp.R;
 import com.gr03.amos.bikerapp.RecylerViewAdapter.ShowFriendsListRecyclerViewAdapter;
 import com.gr03.amos.bikerapp.Requests;
 import com.gr03.amos.bikerapp.SaveSharedPreference;
-import com.gr03.amos.bikerapp.SearchUserActivity;
-import com.gr03.amos.bikerapp.ShowEventActivity;
-import com.gr03.amos.bikerapp.ShowEventRecylerViewAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;

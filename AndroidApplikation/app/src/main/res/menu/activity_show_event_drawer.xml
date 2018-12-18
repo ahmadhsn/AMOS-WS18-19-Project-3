@@ -8,10 +8,6 @@
         android:id="@+id/show_events"
         android:icon="@drawable/ic_menu_gallery"
         android:title="@string/event_drawer_show_events_title" />
-        <item
-            android:id="@+id/search_user"
-            android:icon="@drawable/ic_menu_plus"
-            android:title="@string/event_drawer_search_user_title" />
 
         <item
             android:id="@+id/show_friends"
