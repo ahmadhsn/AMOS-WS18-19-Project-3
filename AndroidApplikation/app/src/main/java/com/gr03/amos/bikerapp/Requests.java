@@ -76,7 +76,7 @@ public class Requests {
 
     public static void getJsonResponseForFriends(String urlTail, Context context) {
         try {
-            JsonObject jsonObject = new GetJson().AsJSONObject("http://10.0.2.2:8086/RESTfulWebserver/services/" + urlTail);
+            JsonObject jsonObject = new GetJson().AsJSONObject("http://10.0.2.2:8080/RESTfulWebserver/services/" + urlTail);
             JSONObject obj = new JSONObject(String.valueOf(jsonObject));
             String eventString = obj.getString("friends");
 

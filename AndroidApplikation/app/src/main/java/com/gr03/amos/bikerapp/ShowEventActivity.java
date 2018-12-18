@@ -119,6 +119,7 @@ public class ShowEventActivity extends AppCompatActivity
                     .replace(R.id.create_event_fragment, new ShowEventsFragment())
                     .commit();
         } else if (id == R.id.settings) {
+            //TODO implement settings
         } else if (id == R.id.change_password) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.create_event_fragment, new ChangePasswordFragment())

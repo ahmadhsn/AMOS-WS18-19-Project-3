@@ -620,6 +620,7 @@ public class Services {
 //					ResultSet result = statement.executeQuery("UPDATE USER_REG SET password =? WHERE email='"+ email +"'" + "AND password='" + oldPassword + "'", newPassword);
 
 					DatabaseProvider provider = DatabaseProvider.getInstance(context);
+					
 					PreparedStatement statement = provider.getConnection()
 							.prepareStatement("UPDATE USER_REG SET password =? WHERE id_user='" + user_id + "'"
 									+ "AND password='" + oldPassword + "'");

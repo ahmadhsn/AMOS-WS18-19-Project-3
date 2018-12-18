@@ -30,7 +30,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".EditEventActivity" />
-        <activity android:name=".ChangePasswordActivity" />
+        <activity android:name=".OldActivities.ChangePasswordActivity" />
         <activity android:name=".ProfileBasicUserActivity" />
         <activity android:name=".AddProfileBasicUserActivity" />
         <activity android:name=".EventDetailsActivity" />
