@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import io.realm.Realm;
+
 public class SaveSharedPreference {
     private static final String PREF_USER_EMAIL = "email";
     private static final String PREF_USER_ID = "user_id";
@@ -33,6 +35,15 @@ public class SaveSharedPreference {
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear();
         editor.apply();
+
+        //delete realm data
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.deleteAll();
+            }
+        });
     }
 
 }
