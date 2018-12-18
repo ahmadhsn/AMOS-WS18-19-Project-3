@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 
+import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -60,7 +61,7 @@ public class ShowFriendsFragment extends Fragment {
         Activity currActivity = getActivity();
         //Set Title to My Friends
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
-        toolbar.setTitle("Friendslist");
+        toolbar.setTitle("");
 
         Requests.getJsonResponseForFriends("getFriends/" + SaveSharedPreference.getUserID(container.getContext()), container.getContext());
 
@@ -127,12 +128,16 @@ public class ShowFriendsFragment extends Fragment {
 
         private void listUsers(JSONArray users, View view){
             ArrayList<BasicUser> arrayUsers = new ArrayList<>();
+            OrderedRealmCollection<Friend> friends = ShowFriendsFragment.this.showFriendsListRecyclerViewAdapter.getData();
 
             for(int i=0; i<users.length(); i++){
+
                 try {
                     JSONObject curr = users.getJSONObject(i);
                     if(curr.has("friendstatus") && curr.getString("friendstatus").equals("friends")){
-                        arrayUsers.add(new BasicUser(curr.getLong("id"), curr.getString("first_name"), curr.getString("last_name"), curr.getString("email"), true));
+                        //is already shown in friendslist
+                        //do nothing
+                        //arrayUsers.add(new BasicUser(curr.getLong("id"), curr.getString("first_name"), curr.getString("last_name"), curr.getString("email"), true));
                     }else {
                         arrayUsers.add(new BasicUser(curr.getLong("id"), curr.getString("first_name"), curr.getString("last_name"), curr.getString("email")));
                     }

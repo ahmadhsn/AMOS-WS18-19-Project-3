@@ -118,8 +118,6 @@ public class UserAdapter extends ArrayAdapter<BasicUser> implements AdapterView.
                         UserAdapter.this.notifyDataSetChanged();
                         //add user to friendslist
                         UserAdapter.this.showFriendsListRecyclerViewAdapter.addFriend(user);
-
-                        Toast.makeText(UserAdapter.super.getContext(), msg, Toast.LENGTH_LONG).show();
                     }else if(friendshipStatus.equals("internalProblems")){
                         Toast.makeText(UserAdapter.super.getContext(), "Internal Problem", Toast.LENGTH_LONG).show();
                     }
