@@ -119,9 +119,14 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
 
         Button btDatabase = findViewById(R.id.addtodatabase);
         btDatabase.setVisibility(View.INVISIBLE);
-        //TODO if logged in user show edit button
+
+        //show edit button if it is own users profile
         Button btEdit = findViewById(R.id.editProfilePage);
-        btEdit.setVisibility(View.INVISIBLE);
+        if(userId == SaveSharedPreference.getUserID(this)){
+            btEdit.setVisibility(View.VISIBLE);
+        }else{
+            btEdit.setVisibility(View.INVISIBLE);
+        }
         Button btSave = findViewById(R.id.saveEditedInfo);
         btSave.setVisibility(View.INVISIBLE);
 

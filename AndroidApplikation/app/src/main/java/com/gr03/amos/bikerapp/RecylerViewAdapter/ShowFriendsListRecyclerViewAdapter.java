@@ -11,12 +11,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.gr03.amos.bikerapp.EventDetailsActivity;
+import com.gr03.amos.bikerapp.Models.BasicUser;
 import com.gr03.amos.bikerapp.Models.Event;
 import com.gr03.amos.bikerapp.Models.Friend;
 import com.gr03.amos.bikerapp.ProfileBasicUserActivity;
 import com.gr03.amos.bikerapp.R;
 import com.gr03.amos.bikerapp.ShowEventRecylerViewAdapter;
 
+import io.realm.Realm;
 import io.realm.RealmResults;
 
 public class ShowFriendsListRecyclerViewAdapter extends RecyclerView.Adapter<ShowFriendsListRecyclerViewAdapter.ViewHolder> {
@@ -47,6 +49,20 @@ public class ShowFriendsListRecyclerViewAdapter extends RecyclerView.Adapter<Sho
     @Override
     public int getItemCount() {
         return mData.size();
+    }
+
+    public void addFriend(BasicUser user){
+        Realm.init(context);
+        Realm realm = Realm.getDefaultInstance();
+
+        mData = realm.where(Friend.class).findAll();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                Friend newFriend = Friend.getUserAsFriend(user);
+                realm.insertOrUpdate(newFriend);
+            }
+        });
     }
 
 

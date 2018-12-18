@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +21,8 @@ import android.widget.Toast;
 
 import com.gr03.amos.bikerapp.Adapters.UserAdapter;
 import com.gr03.amos.bikerapp.Models.BasicUser;
+import com.gr03.amos.bikerapp.Models.Friend;
+import com.gr03.amos.bikerapp.RecylerViewAdapter.ShowFriendsListRecyclerViewAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,8 +33,13 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
+
 
 public class SearchUserActivity extends AppCompatActivity {
+    RecyclerView showFriendsRecyclerView;
+    ShowFriendsListRecyclerViewAdapter showFriendsListRecyclerViewAdapter;
 
     EditText userName;
     ListView listView;
@@ -43,6 +51,18 @@ public class SearchUserActivity extends AppCompatActivity {
 
         userName = findViewById(R.id.userName);
         listView = findViewById(R.id.user_result);
+
+        Requests.getJsonResponseForFriends("getFriends/" + SaveSharedPreference.getUserID(this), this);
+
+        Realm.init(this);
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<Friend> friends = realm.where(Friend.class).findAll();
+
+        showFriendsRecyclerView = findViewById(R.id.showFriends);
+        showFriendsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        showFriendsListRecyclerViewAdapter = new ShowFriendsListRecyclerViewAdapter(this, friends);
+        showFriendsRecyclerView.setAdapter(showFriendsListRecyclerViewAdapter);
+
     }
 
     public void searchUsers(View view) {
@@ -51,33 +71,8 @@ public class SearchUserActivity extends AppCompatActivity {
         try {
             JSONObject response;
 
-            //TODO remove and replace with session id
-
-            FutureTask<String> taskID = new FutureTask(new Callable<String>() {
-                public String call() {
-                    JSONObject threadResponse = Requests.getResponse("getUserID/" + SaveSharedPreference.getUserEmail(getApplicationContext()), null,"GET");
-                    return threadResponse.toString();
-                }
-            });
-
-            new Thread(taskID).start();
-            Log.i("Response", taskID.get());
-
-            response = new JSONObject(taskID.get());
-
-            int userID;
-            if(response.has("getUserID") && response.getJSONObject("getUserID").has("user_id")){
-                userID= response.getJSONObject("getUserID").getInt("user_id");
-            }else{
-                Toast.makeText(getApplicationContext(), "Internal Problem.", Toast.LENGTH_LONG).show();
-
-                Log.i("GetUserByID", "No User found with session mail.");
-                return;
-            }
-            //TODO end remove and replace with session id
-
             JSONObject request = new JSONObject();
-            request.put("id", userID);
+            request.put("id", SaveSharedPreference.getUserID(this));
             request.put("input",userName.getText());
 
             FutureTask<String> task = new FutureTask(new Callable<String>() {
@@ -108,7 +103,6 @@ public class SearchUserActivity extends AppCompatActivity {
             }
 
         } catch (Exception e) {
-            //TODO: Error-Handling
             Log.i("Exception --- not requested", e.toString());
         }
     }
@@ -129,7 +123,7 @@ public class SearchUserActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-        UserAdapter userAdapter = new UserAdapter(this, arrayUsers);
+        UserAdapter userAdapter = new UserAdapter(this, arrayUsers, showFriendsRecyclerView, showFriendsListRecyclerViewAdapter);
         listView.setAdapter(userAdapter);
         listView.setOnItemClickListener(userAdapter);
     }

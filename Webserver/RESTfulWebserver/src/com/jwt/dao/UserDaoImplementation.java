@@ -49,9 +49,8 @@ public class UserDaoImplementation implements UserDao {
 
     @Override
     public List<BasicUser> getFriends(int id) {
-        //TODO change to arguments syntax
-        ResultSet rsFriends = db.querySelectDB("SELECT b.id_user, b.first_name, b.last_name, b.dob, u.email FROM basic_user b, friendship f, user_reg u WHERE u.id_user = b.id_user AND b.id_user = f.id_user2 AND f.id_user1 = " + id);
-
+        ResultSet rsFriends = db.querySelectDB("SELECT b.id_user, b.first_name, b.last_name, b.dob, u.email FROM basic_user b, friendship f, user_reg u WHERE u.id_user = b.id_user AND b.id_user = f.id_user2 AND f.id_user1 = ?", id);
+        
         return getListByRS(rsFriends);
     }
 
@@ -90,7 +89,8 @@ public class UserDaoImplementation implements UserDao {
 
         //TODO add more advanced search methods to handle input
         ResultSet rs = db.querySelectDB("SELECT u.id_user, b.first_name, b.last_name, u.email FROM user_reg u, basic_user b WHERE b.id_user = u.id_user AND u.id_user != ? AND (email = ? OR first_name = ? OR last_name = ?)", userId, input, input, input);
-
+        //users without profile
+        ResultSet rs2 = db.querySelectDB("SELECT id_user, email FROM user_reg WHERE email = ?", input);
         List<BasicUser> user = new ArrayList<>();
         try {
             while (rs.next()) {
@@ -100,6 +100,15 @@ public class UserDaoImplementation implements UserDao {
                 } else {
                     //add user without friendship status
                     user.add(new BasicUser(rs.getInt("id_user"), rs.getString("first_name"), rs.getString("last_name"), rs.getString("email")));
+                }
+            }
+            while (rs2.next()) {
+                if (getFriendById(userId, rs.getInt("id_user"))) {
+                    //add user with friendship status "friends"
+                    user.add(new BasicUser(rs2.getInt("id_user"), "No", "Name", rs2.getString("email"), true));
+                } else {
+                    //add user without friendship status
+                    user.add(new BasicUser(rs2.getInt("id_user"), "No", "Name", rs2.getString("email")));
                 }
             }
         } catch (SQLException e) {
