@@ -32,13 +32,11 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
 public class UserAdapter extends ArrayAdapter<BasicUser> implements AdapterView.OnItemClickListener{
-    RecyclerView showFriendsRecyclerView;
     ShowFriendsListRecyclerViewAdapter showFriendsListRecyclerViewAdapter;
 
     public UserAdapter(Context context, ArrayList<BasicUser> users, RecyclerView showFriendsRecyclerView, ShowFriendsListRecyclerViewAdapter showFriendsListRecyclerViewAdapter ) {
         super(context, 0, users);
         this.showFriendsListRecyclerViewAdapter = showFriendsListRecyclerViewAdapter;
-        this.showFriendsRecyclerView = showFriendsRecyclerView;
     }
 
     public UserAdapter(Context context, ArrayList<BasicUser> users) {
@@ -115,13 +113,13 @@ public class UserAdapter extends ArrayAdapter<BasicUser> implements AdapterView.
                     String friendshipStatus = response.getString("friendship");
                     if(friendshipStatus.equals("successful")){
                         String msg = String.format("You added %s as a friend!", user.getName());
-                        ImageButton btAddFriend = (ImageButton) view.findViewById(R.id.add_friend);
-                        btAddFriend.setImageResource(R.drawable.ic_check_box);
-                        btAddFriend.setEnabled(false);
-                        Toast.makeText(UserAdapter.super.getContext(), msg, Toast.LENGTH_LONG).show();
-
+                        //delete user from search results
+                        UserAdapter.this.remove(getItem(position));
+                        UserAdapter.this.notifyDataSetChanged();
                         //add user to friendslist
                         UserAdapter.this.showFriendsListRecyclerViewAdapter.addFriend(user);
+
+                        Toast.makeText(UserAdapter.super.getContext(), msg, Toast.LENGTH_LONG).show();
                     }else if(friendshipStatus.equals("internalProblems")){
                         Toast.makeText(UserAdapter.super.getContext(), "Internal Problem", Toast.LENGTH_LONG).show();
                     }

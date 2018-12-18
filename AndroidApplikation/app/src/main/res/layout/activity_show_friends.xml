@@ -19,7 +19,7 @@
             android:id="@+id/userName"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_marginLeft="40dp"
+            android:layout_marginLefat="40dp"
             android:layout_marginRight="40dp"
             android:layout_marginTop="10dp"
             android:hint="Name or E-Mail of User"
@@ -52,11 +52,23 @@
             android:layout_marginTop="136dp"
             android:layout_marginEnd="-4dp" />
 
+        <TextView
+            android:id="@+id/friends_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/user_result"
+            android:text="@string/header_friendslist"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:background="@color/colorPrimaryDark"
+            android:layout_marginTop="10dp"/>
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/showFriends"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/user_result"/>
+            android:layout_below="@+id/friends_header"/>
 
     </RelativeLayout>
 
