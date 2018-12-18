@@ -1008,7 +1008,7 @@ public class Services {
 			}
 			// send registration mail
 			Mailer mailer = new Mailer(context);
-			boolean messageSent = mailer.sendRegistrationMail(currentEmail, newPassword);
+			boolean messageSent = mailer.sendResetPasswordMail(currentEmail, newPassword);
 			if (!messageSent) {
 				System.out.println("Failed to send mail?!");
 			}

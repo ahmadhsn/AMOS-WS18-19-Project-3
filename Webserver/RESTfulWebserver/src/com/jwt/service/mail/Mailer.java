@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
@@ -22,10 +23,11 @@ public class Mailer {
 
 	public Mailer(ServletContext context) {
 		props = new Properties();
-		props.put("mail.smtp.auth", "true");
-		props.put("mail.smtp.starttls.enable", "true");
-		props.put("mail.smtp.host", "smtp.gmail.com");
-		props.put("mail.smtp.port", "587");
+		 String host = "smtp.gmail.com";
+	     props.put("mail.smtp.starttls.enable", "true");
+	     props.put("mail.smtp.host", host);
+	     props.put("mail.smtp.port", "587");
+	     props.put("mail.smtp.auth", "true");
 
 		String realPath = context.getRealPath("/WEB-INF/mail.properties");
 		try {
@@ -42,15 +44,15 @@ public class Mailer {
 
 	public boolean sendMail(String from, String to, String subject, String text) {
 		boolean success = true;
+		Authenticator authenticator = new Authenticator() {
+		    protected PasswordAuthentication getPasswordAuthentication() {
+		        return new PasswordAuthentication(username, password);
+		    }
+		};
 		
-		Session session = Session.getInstance(props, new javax.mail.Authenticator() {
-			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(username, password);
-			}
-		});
+		Session session = Session.getInstance(props, authenticator);
 
 		try {
-
 			Message message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(from));
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
@@ -58,8 +60,9 @@ public class Mailer {
 			//message.setText(text);
 			//html texts
 			message.setContent(text, "text/html");
-
+			Transport transport = session.getTransport("smtp");
 			Transport.send(message);
+	        transport.close();
 
 			System.out.println("Message send to " + to);
 
@@ -79,7 +82,7 @@ public class Mailer {
 	}
 	
 	public boolean sendResetPasswordMail(String to, String newPassword) {
-		String text = String.format("<h1>You have requested a password update</h1><p>You successfully registered for our app. Your new password is %s.</p>", newPassword);
+		String text = String.format("<h1>You have requested a password update</h1><p>Your new password is %s.</p>", newPassword);
 		
 		return sendMail("registration@adrenaline.com", to, "Your Password was restored", text);
 	}
