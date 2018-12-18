@@ -601,19 +601,18 @@ public class Services {
 
 		JSONObject JSONreq = new JSONObject(urlReq);
 
-		if (JSONreq.has("email") && JSONreq.has("oldPassword") && JSONreq.has("newPassword")
-				&& JSONreq.has("repeatNewPassword")
-//				&& (JSONreq.getString("newPassword").equals(JSONreq.getString("repeatNewPassword")))
+		if (JSONreq.has("user_id") && JSONreq.has("oldPassword") && JSONreq.has("newPassword")
+				&& JSONreq.has("repeatNewPassword") 
+//          && (JSONreq.getString("newPassword").equals(JSONreq.getString("repeatNewPassword")))
 		) {
 			try {
-
-				String email = JSONreq.getString("email");
+				int user_id = (int) JSONreq.get("user_id");
 				String oldPassword = JSONreq.getString("oldPassword");
 				String newPassword = JSONreq.getString("newPassword");
 				String repeatNewPassword = JSONreq.getString("repeatNewPassword");
 
-				System.out.println("...changePassword:" + email);
-
+				System.out.println("...changePassword:" + newPassword + "...checkUser Id:" + user_id);
+				
 				try {
 
 //					Statement statement = conn.createStatement();
@@ -622,7 +621,7 @@ public class Services {
 
 					DatabaseProvider provider = DatabaseProvider.getInstance(context);
 					PreparedStatement statement = provider.getConnection()
-							.prepareStatement("UPDATE USER_REG SET password =? WHERE email='" + email + "'"
+							.prepareStatement("UPDATE USER_REG SET password =? WHERE id_user='" + user_id + "'"
 									+ "AND password='" + oldPassword + "'");
 
 					statement.setString(1, newPassword);

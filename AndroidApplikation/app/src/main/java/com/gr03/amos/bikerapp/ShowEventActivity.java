@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.gr03.amos.bikerapp.FragmentActivity.ChangePasswordFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.CreateEventFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.ShowEventsFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.ShowFriendsFragment;
@@ -119,8 +120,10 @@ public class ShowEventActivity extends AppCompatActivity
                     .commit();
         } else if (id == R.id.settings) {
         } else if (id == R.id.change_password) {
-            Intent intent = new Intent(this, ChangePasswordActivity.class);
-            startActivity(intent);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.create_event_fragment, new ChangePasswordFragment())
+                    .addToBackStack("CHANGE_PASSWORD_FRAGMENT")
+                    .commit();
         } else if (id == R.id.add_profile) {
             Intent intent = new Intent(this, AddProfileBasicUserActivity.class);
             startActivity(intent);
