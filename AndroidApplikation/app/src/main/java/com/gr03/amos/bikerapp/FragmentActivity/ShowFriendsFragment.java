@@ -82,10 +82,6 @@ public class ShowFriendsFragment extends Fragment implements SearchView.OnQueryT
         showFriendsListRecyclerViewAdapter = new ShowFriendsListRecyclerViewAdapter(container.getContext(), friends);
         showFriendsRecyclerView.setAdapter(showFriendsListRecyclerViewAdapter);
 
-        //set onClickListener for Button
-        //TODO remove if successful
-        //Button btSearch = (Button) view.findViewById(R.id.searchUsers);
-        //btSearch.setOnClickListener(new SearchOnClickListener());
         return view;
     }
 
