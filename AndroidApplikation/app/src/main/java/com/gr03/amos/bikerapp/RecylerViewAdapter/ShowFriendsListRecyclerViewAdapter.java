@@ -19,9 +19,10 @@ import com.gr03.amos.bikerapp.R;
 import com.gr03.amos.bikerapp.ShowEventRecylerViewAdapter;
 
 import io.realm.Realm;
+import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
 
-public class ShowFriendsListRecyclerViewAdapter extends RecyclerView.Adapter<ShowFriendsListRecyclerViewAdapter.ViewHolder> {
+public class ShowFriendsListRecyclerViewAdapter extends RealmRecyclerViewAdapter<Friend, ShowFriendsListRecyclerViewAdapter.ViewHolder> {
 
     private RealmResults<Friend> mData;
     private LayoutInflater mInflater;
@@ -29,6 +30,7 @@ public class ShowFriendsListRecyclerViewAdapter extends RecyclerView.Adapter<Sho
 
     // data is passed into the constructor
     public ShowFriendsListRecyclerViewAdapter(Context context, RealmResults<Friend> data) {
+        super(data, true);
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
         this.context = context;
