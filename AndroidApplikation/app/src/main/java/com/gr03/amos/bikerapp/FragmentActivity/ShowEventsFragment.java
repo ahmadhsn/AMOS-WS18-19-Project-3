@@ -17,6 +17,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gr03.amos.bikerapp.Models.Address;
 import com.gr03.amos.bikerapp.Models.Event;
@@ -108,21 +109,18 @@ public class ShowEventsFragment extends Fragment {
                 .setPositiveButton("OK", (dialog, id) -> {
                     Realm.init(Objects.requireNonNull(getContext()));
                     Realm realm = Realm.getDefaultInstance();
-                    RealmResults<Event> result;
+                    RealmResults<Event> result = null;
                     if (!countries.getSelectedItem().toString().equals("Choose a Country")
                             && cities.getSelectedItem().toString().equals("Choose a City")) {
                         result = realm.where(Event.class)
                                 .equalTo("address.country", countries.getSelectedItem().toString()).findAll();
                         populateRecyclerView(result);
-                    }
-                    if (!cities.getSelectedItem().toString().equals("Choose a City")
+                    } else if (!cities.getSelectedItem().toString().equals("Choose a City")
                             && countries.getSelectedItem().toString().equals("Choose a Country")) {
                         result = realm.where(Event.class)
                                 .equalTo("address.city", cities.getSelectedItem().toString()).findAll();
                         populateRecyclerView(result);
-                    }
-
-                    if (!cities.getSelectedItem().toString().equals("Choose a City")
+                    } else if (!cities.getSelectedItem().toString().equals("Choose a City")
                             && !countries.getSelectedItem().toString().equals("Choose a Country")) {
                         result = realm.where(Event.class)
                                 .equalTo("address.city", cities.getSelectedItem().toString())
@@ -130,6 +128,16 @@ public class ShowEventsFragment extends Fragment {
                                 .equalTo("address.country", countries.getSelectedItem().toString())
                                 .findAll();
                         populateRecyclerView(result);
+                        if (result.size() == 0) {
+                            Toast.makeText(getContext(),
+                                    "No Result(s) Found",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+                    else{
+                        Toast.makeText(getContext(),
+                                "Nothing Selected",
+                                Toast.LENGTH_LONG).show();
                     }
 
                 })
