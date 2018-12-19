@@ -22,13 +22,17 @@ import java.util.concurrent.ExecutionException;
 import io.realm.Realm;
 
 public class Requests {
+
+    public static final String HOST = "10.0.2.2";
+    public static final String PORT = "8080";
+
     public static JSONObject getResponse(String urlTail, JSONObject json) {
         return Requests.getResponse(urlTail, json, "POST");
     }
 
     public static JSONObject getResponse(String urlTail, JSONObject json, String method) {
         try {
-            URL url = new URL("http://10.0.2.2:8080/RESTfulWebserver/services/" + urlTail);
+            URL url = new URL("http://" + HOST + ":" + PORT + "/RESTfulWebserver/services/" + urlTail);
 
             HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
             urlConn.setRequestProperty("Content-Type", "application/json");
@@ -55,7 +59,7 @@ public class Requests {
 
     public static void getJsonResponse(String urlTail, Context context) {
         try {
-            JsonObject jsonObject = new GetJson().AsJSONObject("http://10.0.2.2:8080/RESTfulWebserver/services/" + urlTail);
+            JsonObject jsonObject = new GetJson().AsJSONObject("http://" + HOST + ":" + PORT + "/RESTfulWebserver/services/" + urlTail);
             JSONObject obj = new JSONObject(String.valueOf(jsonObject));
 
             JSONArray eventString = obj.getJSONArray("event");
@@ -76,7 +80,7 @@ public class Requests {
 
     public static void getJsonResponseForFriends(String urlTail, Context context) {
         try {
-            JsonObject jsonObject = new GetJson().AsJSONObject("http://10.0.2.2:8080/RESTfulWebserver/services/" + urlTail);
+            JsonObject jsonObject = new GetJson().AsJSONObject("http://" + HOST + ":" + PORT + "/RESTfulWebserver/services/" + urlTail);
             JSONObject obj = new JSONObject(String.valueOf(jsonObject));
             String eventString = obj.getString("friends");
 
