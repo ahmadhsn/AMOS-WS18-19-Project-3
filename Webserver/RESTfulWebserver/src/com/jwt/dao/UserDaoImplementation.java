@@ -91,7 +91,7 @@ public class UserDaoImplementation implements UserDao {
         //TODO add more advanced search methods to handle input
         ResultSet rs = db.querySelectDB("SELECT u.id_user, b.first_name, b.last_name, u.email FROM user_reg u, basic_user b WHERE b.id_user = u.id_user AND u.id_user != ? AND (email = ? OR first_name = ? OR last_name = ?)", userId, input, input, input);
         //users without profile
-        ResultSet rs2 = db.querySelectDB("SELECT id_user, email FROM user_reg WHERE email = ?", input);
+        ResultSet rs2 = db.querySelectDB("SELECT id_user, email FROM user_reg WHERE email = ? AND id_user != ?", input, userId);
         List<BasicUser> user = new ArrayList<>();
         try {
             while (rs.next()) {
@@ -104,7 +104,7 @@ public class UserDaoImplementation implements UserDao {
                 }
             }
             while (rs2.next()) {
-                if (getFriendById(userId, rs.getInt("id_user"))) {
+                if (getFriendById(userId, rs2.getInt("id_user"))) {
                     //add user with friendship status "friends"
                     user.add(new BasicUser(rs2.getInt("id_user"), "No", "Name", rs2.getString("email"), true));
                 } else {

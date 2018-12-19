@@ -130,6 +130,8 @@ public class Services {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response userRegistration(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
 
 		JSONObject JSONreq = new JSONObject(urlReq);
 
@@ -238,6 +240,9 @@ public class Services {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createEvent(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
+
 		DatabaseProvider.getInstance(context);
 		JSONObject JSONreq = new JSONObject(urlReq);
 		System.out.println("...createEventRequest");
@@ -273,6 +278,8 @@ public class Services {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response addUserBasic(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
 
 		JSONObject JSONreq = new JSONObject(urlReq);
 		
@@ -368,20 +375,6 @@ public class Services {
 				.header("Access-Control-Allow-Origin", "*").build();
 	}
 
-	@GET
-	@Path("/testMail")
-	public Response sendTestMail() throws JSONException {
-
-		JSONObject output = new JSONObject("{Test: send Mail}");
-		System.out.println("...sendTestMail Request ");
-
-		Mailer mailer = new Mailer(context);
-		// send test registration mail
-
-		// mailer.sendRegistrationMail("anika.apel@gmx.de", "test");
-
-		return Response.status(200).entity(output.toString()).build();
-	}
 
 	@GET
 	@Path("/getEvents")
@@ -453,7 +446,6 @@ public class Services {
 	@Path("/getAddress")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getAddress() throws JSONException {
-
 		JSONObject jobj1 = new JSONObject();
 
 		System.out.println("...get All Addresses");
@@ -495,7 +487,9 @@ public class Services {
 	@GET
 	@Path("/getEventById/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response getEventById(@PathParam("id") int id) throws JSONException {
+	public Response getEventById(@PathParam("id") int id) throws JSONException, SQLException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
 
 		JSONObject jobj = new JSONObject();
 
@@ -542,6 +536,8 @@ public class Services {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateEvent(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
 
 		JSONObject JSONreq = new JSONObject(urlReq);
 		System.out.println("...updateEventRequest");
@@ -596,6 +592,8 @@ public class Services {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response changePassword(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
 
 		JSONObject JSONreq = new JSONObject(urlReq);
 
@@ -661,6 +659,8 @@ public class Services {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response deleteEvent(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
 
 		JSONObject JSONreq = new JSONObject(urlReq);
 		System.out.println("...Delete Event Request");
@@ -714,6 +714,8 @@ public class Services {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createRoute(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
 
 		JSONObject JSONreq = new JSONObject(urlReq);
 		System.out.println("...createRoute");
@@ -739,6 +741,9 @@ public class Services {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response searchUserByMail(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
+
 		JSONObject JSONreq = new JSONObject(urlReq);
 		JSONObject allUser = new JSONObject();
 		String input;
@@ -777,6 +782,8 @@ public class Services {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response editUserInfo(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
 
 		JSONObject JSONreq = new JSONObject(urlReq);
 
@@ -842,6 +849,8 @@ public class Services {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response addFriend(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
 
 		JSONObject JSONreq = new JSONObject(urlReq);
 		System.out.println("...addFriendRequest");
@@ -868,7 +877,10 @@ public class Services {
 	@GET
 	@Path("/get_event_type")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response getEventType() throws JSONException {
+	public Response getEventType() throws JSONException, SQLException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
+
 		JSONObject response = new JSONObject();
 		System.out.println("Get Event Type... ");
 		try {
@@ -895,11 +907,14 @@ public class Services {
 	 * @param mail
 	 * @return userID
 	 * @throws JSONException
+	 * @throws SQLException 
 	 */
 	@GET
 	@Path("/getUserID/{mail}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response getUserID(@PathParam("mail") String mail) throws JSONException {
+	public Response getUserID(@PathParam("mail") String mail) throws JSONException, SQLException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
 
 		JSONObject jobj = new JSONObject();
 
@@ -930,11 +945,14 @@ public class Services {
 	 * @param userId
 	 * @return
 	 * @throws JSONException
+	 * @throws SQLException 
 	 */
 	@GET
 	@Path("/getFriends/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response getFriends(@PathParam("id") int userId) throws JSONException {
+	public Response getFriends(@PathParam("id") int userId) throws JSONException, SQLException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
 
 		JSONObject response = new JSONObject();
 		System.out.println("Get Friends... ");
@@ -961,11 +979,14 @@ public class Services {
 	 * @param userId
 	 * @return
 	 * @throws JSONException
+	 * @throws SQLException 
 	 */
 	@GET
 	@Path("/getUserInfo/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response getUserInfo(@PathParam("id") int userId) throws JSONException {
+	public Response getUserInfo(@PathParam("id") int userId) throws JSONException, SQLException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
 
 		JSONObject response = new JSONObject();
 		System.out.println("Get Additional User Info... ");
