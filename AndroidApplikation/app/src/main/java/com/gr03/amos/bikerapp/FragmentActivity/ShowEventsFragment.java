@@ -26,8 +26,10 @@ import com.gr03.amos.bikerapp.ShowEventRecylerViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import io.realm.Realm;
+import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
 
@@ -37,7 +39,7 @@ public class ShowEventsFragment extends Fragment {
     private ImageView eventFilterImage;
     private Spinner countries;
     private Spinner cities;
-
+    private View view;
     List<String> country = new ArrayList<>();
     List<String> city = new ArrayList<>();
 
@@ -57,10 +59,11 @@ public class ShowEventsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_show_events, container, false);
+        view = inflater.inflate(R.layout.fragment_show_events, container, false);
 
         eventFilterImage = view.findViewById(R.id.event_filter);
-
+        city.add("Choose a City");
+        country.add("Choose a Country");
 
         Realm.init(container.getContext());
         Realm realm = Realm.getDefaultInstance();
@@ -79,43 +82,21 @@ public class ShowEventsFragment extends Fragment {
             city.add(address.getCity());
         }
 
-
-        showEventsRecyclerView = view.findViewById(R.id.showEvents);
-        showEventsRecyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
-        showEventRecylerViewAdapter = new ShowEventRecylerViewAdapter(container.getContext(), events);
-        showEventsRecyclerView.setAdapter(showEventRecylerViewAdapter);
-
-
+        populateRecyclerView(events);
         eventFilterImage.setOnClickListener(v -> showInputDialog());
 
         return view;
     }
 
+    private void populateRecyclerView(RealmResults<Event> events) {
+        showEventsRecyclerView = view.findViewById(R.id.showEvents);
+        showEventsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        showEventRecylerViewAdapter = new ShowEventRecylerViewAdapter(getContext(), events);
+        showEventsRecyclerView.setAdapter(showEventRecylerViewAdapter);
+    }
+
     protected void showInputDialog() {
 
-        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
-        View promptView = layoutInflater.inflate(R.layout.event_filter_dialog, null);
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext(), R.style.MyDialogTheme);
-        countries = promptView.findViewById(R.id.country_spinner);
-        cities = promptView.findViewById(R.id.city_spinner);
-
-        alertDialogBuilder.setView(promptView);
-        alertDialogBuilder.setCancelable(false).setTitle("Select Filter")
-                .setPositiveButton("OK", (dialog, id) -> dialog.dismiss())
-                .setNegativeButton("Cancel",
-                        (dialog, id) -> dialog.cancel());
-
-
-        ArrayAdapter countryAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, country);
-        countryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        countries.setAdapter(countryAdapter);
-
-        ArrayAdapter cityAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, city);
-        cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        cities.setAdapter(cityAdapter);
-
-        AlertDialog alert = alertDialogBuilder.create();
-        alert.show();
 
     }
 
