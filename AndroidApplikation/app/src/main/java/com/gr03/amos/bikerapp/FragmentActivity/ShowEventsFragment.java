@@ -97,6 +97,56 @@ public class ShowEventsFragment extends Fragment {
 
     protected void showInputDialog() {
 
+        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+        View promptView = layoutInflater.inflate(R.layout.event_filter_dialog, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext(), R.style.MyDialogTheme);
+        countries = promptView.findViewById(R.id.country_spinner);
+        cities = promptView.findViewById(R.id.city_spinner);
+
+        alertDialogBuilder.setView(promptView);
+        alertDialogBuilder.setCancelable(false).setTitle("Select Filter")
+                .setPositiveButton("OK", (dialog, id) -> {
+                    Realm.init(Objects.requireNonNull(getContext()));
+                    Realm realm = Realm.getDefaultInstance();
+                    RealmResults<Event> result;
+                    if (!countries.getSelectedItem().toString().equals("Choose a Country")
+                            && cities.getSelectedItem().toString().equals("Choose a City")) {
+                        result = realm.where(Event.class)
+                                .equalTo("address.country", countries.getSelectedItem().toString()).findAll();
+                        populateRecyclerView(result);
+                    }
+                    if (!cities.getSelectedItem().toString().equals("Choose a City")
+                            && countries.getSelectedItem().toString().equals("Choose a Country")) {
+                        result = realm.where(Event.class)
+                                .equalTo("address.city", cities.getSelectedItem().toString()).findAll();
+                        populateRecyclerView(result);
+                    }
+
+                    if (!cities.getSelectedItem().toString().equals("Choose a City")
+                            && !countries.getSelectedItem().toString().equals("Choose a Country")) {
+                        result = realm.where(Event.class)
+                                .equalTo("address.city", cities.getSelectedItem().toString())
+                                .and()
+                                .equalTo("address.country", countries.getSelectedItem().toString())
+                                .findAll();
+                        populateRecyclerView(result);
+                    }
+
+                })
+                .setNegativeButton("Cancel",
+                        (dialog, id) -> dialog.cancel());
+
+
+        ArrayAdapter countryAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, country);
+        countryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        countries.setAdapter(countryAdapter);
+
+        ArrayAdapter cityAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, city);
+        cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        cities.setAdapter(cityAdapter);
+
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
 
     }
 
