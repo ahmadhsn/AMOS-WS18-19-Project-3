@@ -31,4 +31,9 @@
         <item name="android:backgroundTint">@color/black</item>
         <item name="android:textSize">16sp</item>
     </style>
+
+    <style name="MyDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorPrimary">@color/secondaryColor</item>
+    </style>
+
 </resources>
