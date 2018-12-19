@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -15,10 +16,18 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 
 public class LoginActivity extends AppCompatActivity {
+    TextView forgotPassword;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        forgotPassword = findViewById(R.id.forgot_password);
+        forgotPassword.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ForgotPasswordActivity.class);
+            startActivity(intent);
+        });
     }
 
     public void login(View view) throws JSONException {

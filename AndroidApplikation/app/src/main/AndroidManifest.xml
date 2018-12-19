@@ -14,11 +14,9 @@
         android:usesCleartextTraffic="true">
         <activity android:name=".HomeActivity" />
         <activity android:name=".LoginActivity" />
+        <activity android:name=".ForgotPasswordActivity" />
         <activity android:name=".SignUpActivity" />
         <activity android:name=".AddRoute" />
-        <activity
-            android:name=".SearchUserActivity"
-            android:label="@string/title_activity_search_user"/>
         <activity
             android:name=".ShowEventActivity"
             android:label="@string/title_activity_show_event"

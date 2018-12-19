@@ -113,21 +113,25 @@ public class DatabaseProvider {
 		System.out.println("...... Select Statement Successful");
 		return rs;
 	}
-
-	public ResultSet querySelectDB(String query) {
+	
+	public ResultSet querySelectDB(String query){
+		return querySelectDB(query, true);
+	}
+	
+	public ResultSet querySelectDB(String query, boolean closeConnection) {
 		ResultSet rs = null;
 		System.out.println("...... Execute Select Query: " + query);
 		try {
 			if (this.connection.isClosed()) {
 				this.connection = DriverManager.getConnection(postgresURL, config.username, config.password);
 			}
-			Statement ss = this.connection.createStatement();
+			Statement ss = this.connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			rs = ss.executeQuery(query);
 			ss.closeOnCompletion();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
-			if (this.connection != null) {
+			if (this.connection != null && closeConnection) {
 				try {
 					this.connection.close();
 				} catch (SQLException e) {
