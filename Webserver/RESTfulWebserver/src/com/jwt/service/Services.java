@@ -375,6 +375,72 @@ public class Services {
 				.header("Access-Control-Allow-Origin", "*").build();
 	}
 
+	
+	@GET
+	@Path("/myEvents")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response myEvents() throws JSONException {
+
+		JSONObject jobj1 = new JSONObject();
+		JSONArray jArray = new JSONArray();
+		JSONObject j = new JSONObject();
+		
+		System.out.println("...myallEvents");
+		try {
+			DatabaseProvider provider = DatabaseProvider.getInstance(context);
+
+			// PreparedStatement st = conn.prepareStatement("SELECT
+			// name,description,date,time FROM EVENT");
+			
+			ResultSet result = provider.querySelectDB("SELECT DISTINCT ON (e.id_event) * FROM EVENT e"
+					+ " LEFT JOIN ADDRESS a USING (id_address)"
+					+ " WHERE e.date >= now() "
+					+ " ORDER BY e.id_event, a.id_address" );
+			System.out.println(result);
+			
+			while (result.next()) {	
+				
+				
+					
+				String id_json = result.getString("id_event");
+				String id_address_json = result.getString("id_address");
+				String name_json = result.getString("name");
+				String desc_json = result.getString("description");
+				String date_json = result.getString("date");
+				String time_json = result.getString("time");
+			
+				String id_add_json = result.getString("id_address");
+				String city_json = result.getString("city");
+				String country_json = result.getString("country");
+				System.out.println(result);
+
+				JSONObject jobj = new JSONObject();
+				jobj.put("id_event", id_json);
+				jobj.put("name", name_json);
+				jobj.put("description", desc_json);
+				jobj.put("date", date_json);
+				jobj.put("time", time_json);
+				
+				JSONObject jobj2 = new JSONObject();
+				jobj2.put("city", city_json);
+				jobj2.put("country", country_json);
+				jobj2.put("id_address", id_add_json);
+				
+				jobj.put("address", jobj2);
+				j.append("event",jobj);
+
+			}
+
+			
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		return Response.status(200).entity(j.toString()).build();
+
+	}
+	
 
 	@GET
 	@Path("/getEvents")
@@ -440,6 +506,7 @@ public class Services {
 		return Response.status(200).entity(j.toString()).build();
 
 	}
+	
 	
 
 	@GET

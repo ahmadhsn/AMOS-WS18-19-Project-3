@@ -24,6 +24,11 @@
     <item android:title="@string/event_drawer_user_options">
         <menu>
             <item
+                android:id="@+id/myevent_list"
+                android:icon="@drawable/ic_menu_share"
+                android:title="My Event List" />
+
+            <item
                 android:id="@+id/add_profile"
                 android:icon="@drawable/ic_menu_share"
                 android:title="Add Profile" />
