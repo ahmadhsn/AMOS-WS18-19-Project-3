@@ -1,5 +1,6 @@
 package com.gr03.amos.bikerapp.FragmentActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,11 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.app.AlertDialog;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.gr03.amos.bikerapp.AddRoute;
 import com.gr03.amos.bikerapp.Models.Address;
 import com.gr03.amos.bikerapp.Models.Event;
 import com.gr03.amos.bikerapp.R;
@@ -22,6 +25,7 @@ import com.gr03.amos.bikerapp.Adapters.ShowEventRecylerViewAdapter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import com.gr03.amos.bikerapp.ShowEventActivity;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -48,6 +52,7 @@ public class ShowEventsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -58,6 +63,7 @@ public class ShowEventsFragment extends Fragment {
         eventFilterImage = view.findViewById(R.id.event_filter);
         city.add("Choose a City");
         country.add("Choose a Country");
+
 
         Realm.init(container.getContext());
         Realm realm = Realm.getDefaultInstance();
@@ -78,6 +84,25 @@ public class ShowEventsFragment extends Fragment {
 
         populateRecyclerView(events);
         eventFilterImage.setOnClickListener(v -> showInputDialog());
+
+        Button btAddRoute = view.findViewById(R.id.add_route);
+        btAddRoute.setOnClickListener(view -> {
+            Intent intent = new Intent(container.getContext(),AddRoute.class );
+            startActivity(intent);
+
+        });
+
+        Button btAddEvent = view.findViewById(R.id.add_event);
+        btAddEvent.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                ShowEventsFragment.this.getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.create_event_fragment, new CreateEventFragment())
+                        .addToBackStack("FRIEND_LIST_FRAGMENT")
+                        .commit();
+            }
+        });
 
         return view;
     }
