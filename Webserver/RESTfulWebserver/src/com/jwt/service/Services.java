@@ -381,8 +381,6 @@ public class Services {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response myEvents() throws JSONException {
 
-		JSONObject jobj1 = new JSONObject();
-		JSONArray jArray = new JSONArray();
 		JSONObject j = new JSONObject();
 		
 		System.out.println("...myallEvents");
@@ -413,21 +411,6 @@ public class Services {
 				String city_json = result.getString("city");
 				String country_json = result.getString("country");
 				System.out.println(result);
-
-				JSONObject jobj = new JSONObject();
-				jobj.put("id_event", id_json);
-				jobj.put("name", name_json);
-				jobj.put("description", desc_json);
-				jobj.put("date", date_json);
-				jobj.put("time", time_json);
-				
-				JSONObject jobj2 = new JSONObject();
-				jobj2.put("city", city_json);
-				jobj2.put("country", country_json);
-				jobj2.put("id_address", id_add_json);
-				
-				jobj.put("address", jobj2);
-				j.append("event",jobj);
 
 			}
 

@@ -30,7 +30,6 @@ import io.realm.RealmResults;
 public class MyEventListFragment extends Fragment {
     RecyclerView myEventsRecyclerView;
     ShowEventRecylerViewAdapter myEventRecylerViewAdapter;
-    public ImageView myevent_list;
     private View view;
 
     public MyEventListFragment() {
@@ -50,9 +49,6 @@ public class MyEventListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_my_event_list, container, false);
-
-        myevent_list = view.findViewById(R.id.myevent_list);
-
         Realm.init(container.getContext());
         Realm realm = Realm.getDefaultInstance();
 

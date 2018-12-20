@@ -3,23 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/secondaryColor"
     tools:context=".FragmentActivity.MyEventListFragment">
-
-    <RelativeLayout
-        android:id="@+id/my_event_list_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/myevent_list"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_marginBottom="2dp"
-            android:layout_marginEnd="15dp"
-            android:layout_marginTop="8dp"
-            android:src="@drawable/ic_filter" />
-    </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/myEvents"
