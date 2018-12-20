@@ -3,6 +3,7 @@ package com.gr03.amos.bikerapp.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +12,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +30,12 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
 public class UserAdapter extends ArrayAdapter<BasicUser> implements AdapterView.OnItemClickListener{
+    ShowFriendsListRecyclerViewAdapter showFriendsListRecyclerViewAdapter;
+
+    public UserAdapter(Context context, ArrayList<BasicUser> users, RecyclerView showFriendsRecyclerView, ShowFriendsListRecyclerViewAdapter showFriendsListRecyclerViewAdapter ) {
+        super(context, 0, users);
+        this.showFriendsListRecyclerViewAdapter = showFriendsListRecyclerViewAdapter;
+    }
 
     public UserAdapter(Context context, ArrayList<BasicUser> users) {
         super(context, 0, users);
@@ -84,36 +90,10 @@ public class UserAdapter extends ArrayAdapter<BasicUser> implements AdapterView.
 
             JSONObject friendRequest = new JSONObject();
 
-
             try {
                 JSONObject response;
 
-                //TODO remove and take userID from session instead
-                Requests.getResponse("getUserId/" + SaveSharedPreference.getUserEmail(getContext()), null,"GET");
-                FutureTask<String> taskID = new FutureTask(new Callable<String>() {
-                    public String call() {
-                        JSONObject threadResponse = Requests.getResponse("getUserID/" + SaveSharedPreference.getUserEmail(getContext()), null,"GET");
-                        return threadResponse.toString();
-                    }
-                });
-
-                new Thread(taskID).start();
-                Log.i("Response", taskID.get());
-
-                response = new JSONObject(taskID.get());
-
-                int userID;
-                if(response.has("getUserID") && response.getJSONObject("getUserID").has("user_id")){
-                    userID= response.getJSONObject("getUserID").getInt("user_id");
-                }else{
-                    Toast.makeText(UserAdapter.super.getContext(), "Internal Problem.", Toast.LENGTH_LONG).show();
-
-                    Log.i("GetUserByID", "No User found with session mail.");
-                    return;
-                }
-                //TODO end remove
-
-                friendRequest.put("idUser", userID);
+                friendRequest.put("idUser", SaveSharedPreference.getUserID(view.getContext()));
                 friendRequest.put("idFollower", Long.toString(user.getUser_id()));
 
                 FutureTask<String> task = new FutureTask(new Callable<String>() {
@@ -131,15 +111,15 @@ public class UserAdapter extends ArrayAdapter<BasicUser> implements AdapterView.
                     String friendshipStatus = response.getString("friendship");
                     if(friendshipStatus.equals("successful")){
                         String msg = String.format("You added %s as a friend!", user.getName());
-                        ImageButton btAddFriend = (ImageButton) view.findViewById(R.id.add_friend);
-                        btAddFriend.setImageResource(R.drawable.ic_check_box);
-                        btAddFriend.setEnabled(false);
-                        Toast.makeText(UserAdapter.super.getContext(), msg, Toast.LENGTH_LONG).show();
+                        //delete user from search results
+                        UserAdapter.this.remove(getItem(position));
+                        UserAdapter.this.notifyDataSetChanged();
+                        //add user to friendslist
+                        UserAdapter.this.showFriendsListRecyclerViewAdapter.addFriend(user);
                     }else if(friendshipStatus.equals("internalProblems")){
                         Toast.makeText(UserAdapter.super.getContext(), "Internal Problem", Toast.LENGTH_LONG).show();
                     }
                 }else{
-                    //TODO remove only for debugging
                     Toast.makeText(UserAdapter.super.getContext(), "Invalid response", Toast.LENGTH_LONG).show();
                 }
 

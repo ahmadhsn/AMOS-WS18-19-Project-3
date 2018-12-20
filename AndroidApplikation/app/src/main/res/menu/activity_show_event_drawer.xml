@@ -8,19 +8,26 @@
         android:id="@+id/show_events"
         android:icon="@drawable/ic_menu_gallery"
         android:title="@string/event_drawer_show_events_title" />
-        <item
-            android:id="@+id/search_user"
-            android:icon="@drawable/ic_menu_plus"
-            android:title="@string/event_drawer_search_user_title" />
 
         <item
             android:id="@+id/show_friends"
-            android:icon="@drawable/ic_menu_share"
+            android:icon="@drawable/ic_contacts"
             android:title="@string/show_friends" />
+
+        <item
+            android:id="@+id/create_route"
+            android:icon="@drawable/ic_menu_plus"
+            android:title="@string/create_route" />
+
     </group>
 
     <item android:title="@string/event_drawer_user_options">
         <menu>
+            <item
+                android:id="@+id/add_profile"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Add Profile" />
+
             <item
                 android:id="@+id/settings"
                 android:icon="@drawable/ic_menu_share"

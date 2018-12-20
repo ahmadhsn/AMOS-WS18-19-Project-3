@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.gr03.amos.bikerapp.FragmentActivity.ChangePasswordFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.CreateEventFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.ShowEventsFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.ShowFriendsFragment;
@@ -118,18 +119,23 @@ public class ShowEventActivity extends AppCompatActivity
                     .replace(R.id.create_event_fragment, new ShowEventsFragment())
                     .commit();
         } else if (id == R.id.settings) {
+            //TODO implement settings
         } else if (id == R.id.change_password) {
-            Intent intent = new Intent(this, ChangePasswordActivity.class);
-            startActivity(intent);
-
-        } else if (id == R.id.search_user) {
-            Intent intent = new Intent(this, SearchUserActivity.class);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.create_event_fragment, new ChangePasswordFragment())
+                    .addToBackStack("CHANGE_PASSWORD_FRAGMENT")
+                    .commit();
+        } else if (id == R.id.add_profile) {
+            Intent intent = new Intent(this, AddProfileBasicUserActivity.class);
             startActivity(intent);
         } else if (id == R.id.show_friends) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.create_event_fragment, new ShowFriendsFragment())
                     .addToBackStack("FRIEND_LIST_FRAGMENT")
                     .commit();
+        } else if (id == R.id.create_route) {
+            Intent intent = new Intent(this, AddRoute.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

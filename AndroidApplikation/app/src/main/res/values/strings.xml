@@ -1,9 +1,5 @@
 <resources>
     <string name="app_name">BikerApp</string>
-    <string name="insert_data_message">Please insert your login data.</string>
-    <string name="username_label">Username:</string>
-    <string name="password_label">Password:</string>
-    <string name="button_login">Login</string>
     <string name="starting_info">Discover great Tracks near you and make new friends along.</string>
     <string name="try_label">Try Without Registration</string>
     <string name="signup_label">Sign Up</string>
@@ -16,20 +12,18 @@
     <string name="signup_business_user">Business User</string>
     <string name="company_name">Enter Company Name</string>
     <string name="user_type">Select User Type</string>
-    <string name="eventType">Enter Event Name</string>
     <string name="title_activity_show_event">ShowEventActivity</string>
     <string name="title_activity_search_user">ShowFriendsActivity</string>
-    <string name = "title_fragment_friendlist">My Friends</string>
+    <string name="title_fragment_friendlist">My Friends</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
-    <string name="event_drawer_search_user_title">Search User</string>
-
+    <string name="header_friendslist">MY FRIENDS</string>
+    <string name="hint_search_user">Name or E-Mail of User</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="create_event_name">Event Name</string>
     <string name="create_event_description">Event Description</string>
     <string name="create_event_select_date">Select Date</string>
@@ -40,11 +34,10 @@
     <string name="settings">Settings</string>
     <string name="event_drawer_user_options">User Options</string>
     <string name="change_password">Change Password</string>
+    <string name="create_route">Create New Route</string>
 
-    <string name="address_add">Add Address</string>
     <string name="country">Country</string>
     <string name="city">City</string>
-    <string name="state">State</string>
     <string name="street">Street</string>
     <string name="postcode">Postcode</string>
     <string name="house_nr">House number</string>

@@ -5,10 +5,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.RandomStringUtils;
+
 import com.jwt.DataBaseConnection.DatabaseProvider;
 import com.jwt.model.Address;
 import com.jwt.model.BasicUser;
-import com.jwt.DataBaseConnection.DatabaseProvider;
 import com.jwt.model.User;
 
 public class UserDaoImplementation implements UserDao {
@@ -49,9 +50,8 @@ public class UserDaoImplementation implements UserDao {
 
     @Override
     public List<BasicUser> getFriends(int id) {
-        //TODO change to arguments syntax
-        ResultSet rsFriends = db.querySelectDB("SELECT b.id_user, b.first_name, b.last_name, b.dob, u.email FROM basic_user b, friendship f, user_reg u WHERE u.id_user = b.id_user AND b.id_user = f.id_user2 AND f.id_user1 = " + id);
-
+        ResultSet rsFriends = db.querySelectDB("SELECT b.id_user, b.first_name, b.last_name, b.dob, u.email FROM basic_user b, friendship f, user_reg u WHERE u.id_user = b.id_user AND b.id_user = f.id_user2 AND f.id_user1 = ?", id);
+        
         return getListByRS(rsFriends);
     }
 
@@ -90,7 +90,8 @@ public class UserDaoImplementation implements UserDao {
 
         //TODO add more advanced search methods to handle input
         ResultSet rs = db.querySelectDB("SELECT u.id_user, b.first_name, b.last_name, u.email FROM user_reg u, basic_user b WHERE b.id_user = u.id_user AND u.id_user != ? AND (email = ? OR first_name = ? OR last_name = ?)", userId, input, input, input);
-
+        //users without profile
+        ResultSet rs2 = db.querySelectDB("SELECT id_user, email FROM user_reg WHERE email = ? AND id_user != ?", input, userId);
         List<BasicUser> user = new ArrayList<>();
         try {
             while (rs.next()) {
@@ -100,6 +101,15 @@ public class UserDaoImplementation implements UserDao {
                 } else {
                     //add user without friendship status
                     user.add(new BasicUser(rs.getInt("id_user"), rs.getString("first_name"), rs.getString("last_name"), rs.getString("email")));
+                }
+            }
+            while (rs2.next()) {
+                if (getFriendById(userId, rs2.getInt("id_user"))) {
+                    //add user with friendship status "friends"
+                    user.add(new BasicUser(rs2.getInt("id_user"), "No", "Name", rs2.getString("email"), true));
+                } else {
+                    //add user without friendship status
+                    user.add(new BasicUser(rs2.getInt("id_user"), "No", "Name", rs2.getString("email")));
                 }
             }
         } catch (SQLException e) {
@@ -124,6 +134,26 @@ public class UserDaoImplementation implements UserDao {
             return null;
         }
     }
+    
+    public String changeUserPassword(String email) {
+        String newPassword = null;
+        String selectSQL = "SELECT * FROM user_reg WHERE email=\'" + email + "\'";;
+        try {
+            DatabaseProvider conn = DatabaseProvider.getInstance();
+            ResultSet result = conn.querySelectDB(selectSQL, false);
+        	while (result.next()) {
+            	newPassword = generateString();
+            	result.updateString("password", newPassword);
+            	result.updateRow();
+            	conn.getConnection().close();
+            	return newPassword;
+            }
+            return newPassword;
+        } catch (SQLException ex) {
+        	ex.printStackTrace();
+            return newPassword;
+        }
+    }
 
     private List<BasicUser> getListByRS(ResultSet rs) {
         List<BasicUser> user = new ArrayList<>();
@@ -132,10 +162,15 @@ public class UserDaoImplementation implements UserDao {
                 user.add(new BasicUser(rs.getInt("id_user"), rs.getString("first_name"), rs.getString("last_name"), rs.getString("email")));
             }
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
         return user;
     }
+    private String generateString() {
+    	int length = 8;
+        boolean useLetters = true;
+        boolean useNumbers = false;
+        return RandomStringUtils.random(length, useLetters, useNumbers);
     }
+}

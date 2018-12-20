@@ -1,13 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     tools:context=".FragmentActivity.ShowFriendsFragment">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/showFriends"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+    <RelativeLayout
+        android:id="@+id/relativeLayout_add_friend"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-</FrameLayout>
+        <SearchView
+            android:id="@+id/searchUser"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:queryHint="@string/hint_search_user"
+            android:inputType="text"
+            android:textColor="@color/white"
+            android:textColorHint="@color/black"
+            android:iconifiedByDefault="false"/>
+
+        <ListView
+            android:id="@+id/user_result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/searchUser"
+            android:layout_marginStart="10dp" />
+
+        <TextView
+            android:id="@+id/friends_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/user_result"
+            android:text="@string/header_friendslist"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:background="@color/colorPrimaryDark"
+            android:layout_marginTop="10dp"
+            android:padding="5dp"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/showFriends"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/friends_header"/>
+
+    </RelativeLayout>
+
+
+</android.support.constraint.ConstraintLayout>

@@ -1,4 +1,4 @@
-package com.gr03.amos.bikerapp;
+package com.gr03.amos.bikerapp.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.gr03.amos.bikerapp.EventDetailsActivity;
 import com.gr03.amos.bikerapp.Models.Event;
+import com.gr03.amos.bikerapp.R;
 
 import io.realm.RealmResults;
 

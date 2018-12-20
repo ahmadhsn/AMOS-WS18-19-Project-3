@@ -4,18 +4,24 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.app.AlertDialog;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.gr03.amos.bikerapp.Models.Address;
 import com.gr03.amos.bikerapp.Models.Event;
 import com.gr03.amos.bikerapp.R;
 import com.gr03.amos.bikerapp.Requests;
-import com.gr03.amos.bikerapp.ShowEventRecylerViewAdapter;
+import com.gr03.amos.bikerapp.Adapters.ShowEventRecylerViewAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -25,6 +31,11 @@ public class ShowEventsFragment extends Fragment {
     RecyclerView showEventsRecyclerView;
     ShowEventRecylerViewAdapter showEventRecylerViewAdapter;
     private ImageView eventFilterImage;
+    private Spinner countries;
+    private Spinner cities;
+    private View view;
+    List<String> country = new ArrayList<>();
+    List<String> city = new ArrayList<>();
 
     public ShowEventsFragment() {
     }
@@ -42,13 +53,11 @@ public class ShowEventsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_show_events, container, false);
+        view = inflater.inflate(R.layout.fragment_show_events, container, false);
 
         eventFilterImage = view.findViewById(R.id.event_filter);
-
-        eventFilterImage.setOnClickListener(v -> {
-
-        });
+        city.add("Choose a City");
+        country.add("Choose a Country");
 
         Realm.init(container.getContext());
         Realm realm = Realm.getDefaultInstance();
@@ -56,12 +65,90 @@ public class ShowEventsFragment extends Fragment {
         Requests.getJsonResponse("getEvents", container.getContext());
         RealmResults<Event> events = realm.where(Event.class).findAll();
 
-        showEventsRecyclerView = view.findViewById(R.id.showEvents);
-        showEventsRecyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
-        showEventRecylerViewAdapter = new ShowEventRecylerViewAdapter(container.getContext(), events);
-        showEventsRecyclerView.setAdapter(showEventRecylerViewAdapter);
+        RealmResults<Address> countries = realm.where(Address.class).distinct("country").findAll();
+        RealmResults<Address> cities = realm.where(Address.class).distinct("city").findAll();
+
+        for (Address address : countries) {
+            country.add(address.getCountry());
+        }
+
+        for (Address address : cities) {
+            city.add(address.getCity());
+        }
+
+        populateRecyclerView(events);
+        eventFilterImage.setOnClickListener(v -> showInputDialog());
 
         return view;
+    }
+
+    private void populateRecyclerView(RealmResults<Event> events) {
+        showEventsRecyclerView = view.findViewById(R.id.showEvents);
+        showEventsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        showEventRecylerViewAdapter = new ShowEventRecylerViewAdapter(getContext(), events);
+        showEventsRecyclerView.setAdapter(showEventRecylerViewAdapter);
+    }
+
+    protected void showInputDialog() {
+
+        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+        View promptView = layoutInflater.inflate(R.layout.event_filter_dialog, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext(), R.style.MyDialogTheme);
+        countries = promptView.findViewById(R.id.country_spinner);
+        cities = promptView.findViewById(R.id.city_spinner);
+
+        alertDialogBuilder.setView(promptView);
+        alertDialogBuilder.setCancelable(false).setTitle("Select Filter")
+                .setPositiveButton("OK", (dialog, id) -> {
+                    Realm.init(Objects.requireNonNull(getContext()));
+                    Realm realm = Realm.getDefaultInstance();
+                    RealmResults<Event> result = null;
+                    if (!countries.getSelectedItem().toString().equals("Choose a Country")
+                            && cities.getSelectedItem().toString().equals("Choose a City")) {
+                        result = realm.where(Event.class)
+                                .equalTo("address.country", countries.getSelectedItem().toString()).findAll();
+                        populateRecyclerView(result);
+                    } else if (!cities.getSelectedItem().toString().equals("Choose a City")
+                            && countries.getSelectedItem().toString().equals("Choose a Country")) {
+                        result = realm.where(Event.class)
+                                .equalTo("address.city", cities.getSelectedItem().toString()).findAll();
+                        populateRecyclerView(result);
+                    } else if (!cities.getSelectedItem().toString().equals("Choose a City")
+                            && !countries.getSelectedItem().toString().equals("Choose a Country")) {
+                        result = realm.where(Event.class)
+                                .equalTo("address.city", cities.getSelectedItem().toString())
+                                .and()
+                                .equalTo("address.country", countries.getSelectedItem().toString())
+                                .findAll();
+                        populateRecyclerView(result);
+                        if (result.size() == 0) {
+                            Toast.makeText(getContext(),
+                                    "No Result(s) Found",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+                    else{
+                        Toast.makeText(getContext(),
+                                "Nothing Selected",
+                                Toast.LENGTH_LONG).show();
+                    }
+
+                })
+                .setNegativeButton("Cancel",
+                        (dialog, id) -> dialog.cancel());
+
+
+        ArrayAdapter countryAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, country);
+        countryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        countries.setAdapter(countryAdapter);
+
+        ArrayAdapter cityAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, city);
+        cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        cities.setAdapter(cityAdapter);
+
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
+
     }
 
 

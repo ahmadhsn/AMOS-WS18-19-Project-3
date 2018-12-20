@@ -37,4 +37,14 @@ public class Friend extends RealmObject {
     public Long getId() {
         return id;
     }
+
+    public static Friend getUserAsFriend(BasicUser user){
+        Friend newFriend = new Friend();
+        newFriend.last_name = user.getLastName();
+        newFriend.first_name = user.getFirstName();
+        newFriend.email = user.getEmail();
+        newFriend.id = user.getUser_id();
+
+        return newFriend;
+    }
 }

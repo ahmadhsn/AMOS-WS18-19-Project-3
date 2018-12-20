@@ -3,17 +3,15 @@ package com.jwt.service;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.sql.Connection;
-import java.sql.Date;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
@@ -132,6 +130,8 @@ public class Services {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response userRegistration(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
 
 		JSONObject JSONreq = new JSONObject(urlReq);
 
@@ -240,6 +240,9 @@ public class Services {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createEvent(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
+
 		DatabaseProvider.getInstance(context);
 		JSONObject JSONreq = new JSONObject(urlReq);
 		System.out.println("...createEventRequest");
@@ -275,13 +278,18 @@ public class Services {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response addUserBasic(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
 
 		JSONObject JSONreq = new JSONObject(urlReq);
-		System.out.println("...addInfoBasicUserRequest");
+		
 		if (JSONreq.has("first_name") && JSONreq.has("last_name") && JSONreq.has("dob") && JSONreq.has("country")
 				&& JSONreq.has("state") && JSONreq.has("city") && JSONreq.has("street") && JSONreq.has("postcode")
-				&& JSONreq.has("housenumber") && JSONreq.has("gender")) {
+				&& JSONreq.has("housenumber") && JSONreq.has("gender") && JSONreq.has("user_id")) {
+		
 			try {
+				
+				int user_id = JSONreq.getInt("user_id");
 				String fname = JSONreq.getString("first_name");
 				String lname = JSONreq.getString("last_name");
 				String dob = JSONreq.getString("dob");
@@ -292,75 +300,63 @@ public class Services {
 				Integer postcode = JSONreq.getInt("postcode");
 				String housenumber = JSONreq.getString("housenumber");
 				String genderCol = JSONreq.getString("gender");
-
-				System.out.println("...newInfoBasicUserAdded:");
 				try {
+					
 					DatabaseProvider provider = DatabaseProvider.getInstance(context);
 					Connection conn = provider.getConnection();
-					PreparedStatement s1 = conn.prepareStatement("INSERT INTO GENDER (gender) VALUES (?)");
 
-					PreparedStatement s2 = conn.prepareStatement(
+					PreparedStatement s1 = conn.prepareStatement(
 							"INSERT INTO ADDRESS (country, state, city, street, postcode, housenumber) VALUES (?,?,?,?,?,?)");
 
-					PreparedStatement s3 = conn.prepareStatement(
+					PreparedStatement s2 = conn.prepareStatement(
 							"INSERT INTO BASIC_USER (id_user, first_name,last_name,dob, id_gender, id_address) VALUES (?,?,?,?::date,?,?)");
 
-					s1.setString(1, genderCol);
+					s1.setString(1, country);
+					s1.setString(2, state);
+					s1.setString(3, city);
+					s1.setString(4, street);
+					s1.setInt(5, postcode);
+					s1.setString(6, housenumber);
 					s1.executeUpdate();
 					s1.closeOnCompletion();
 
-					s2.setString(1, country);
-					s2.setString(2, state);
-					s2.setString(3, city);
-					s2.setString(4, street);
-					s2.setInt(5, postcode);
-					s2.setString(6, housenumber);
-					s2.executeUpdate();
-					s2.closeOnCompletion();
+					s2.setInt(1, user_id);
+					s2.setString(2, fname);
+					s2.setString(3, lname);
+					s2.setString(4, dob);
+					
+					String man = "M";
+					String female = "F";
+					
+					if (genderCol.equals(man)) {
+						s2.setInt(5, 1);
+					}else if (genderCol.equals(female)) {
+						s2.setInt(5, 2);
+					} 
 
-					String selectSQL = "SELECT ID_USER FROM USER_REG ORDER BY ID_USER DESC LIMIT 1";
-					PreparedStatement preparedStatement = conn.prepareStatement(selectSQL);
-					ResultSet rs = preparedStatement.executeQuery();
+					String selectSQL = "SELECT ID_ADDRESS FROM ADDRESS ORDER BY ID_ADDRESS DESC LIMIT 1";
+					PreparedStatement preparedStatement3 = conn.prepareStatement(selectSQL);
+					ResultSet rs = preparedStatement3.executeQuery();
 					int result;
 					while (rs.next()) {
-						String userId = rs.getString("ID_USER");
-						result = Integer.parseInt(userId);
-						s3.setInt(1, result);
+						String addressId = rs.getString("ID_ADDRESS");
+						result = Integer.parseInt(addressId);
+						s2.setInt(6, result);
 					}
 
-					s3.setString(2, fname);
-					s3.setString(3, lname);
-					s3.setString(4, dob);
-
-					String selectSQL2 = "SELECT ID_GENDER FROM GENDER ORDER BY ID_GENDER DESC LIMIT 1";
-					PreparedStatement preparedStatement2 = conn.prepareStatement(selectSQL2);
-					ResultSet rs2 = preparedStatement2.executeQuery();
-					int result2;
-					while (rs2.next()) {
-						String genderId = rs2.getString("ID_GENDER");
-						result2 = Integer.parseInt(genderId);
-						s3.setInt(5, result2);
-					}
-
-					String selectSQL3 = "SELECT ID_ADDRESS FROM ADDRESS ORDER BY ID_ADDRESS DESC LIMIT 1";
-					PreparedStatement preparedStatement3 = conn.prepareStatement(selectSQL3);
-					ResultSet rs3 = preparedStatement3.executeQuery();
-					int result3;
-					while (rs3.next()) {
-						String addressId = rs3.getString("ID_ADDRESS");
-						result3 = Integer.parseInt(addressId);
-						s3.setInt(6, result3);
-					}
-
-					s3.executeUpdate();
-					s3.closeOnCompletion();
+					s2.executeUpdate();
+					s2.closeOnCompletion();
+					
+					System.out.println("UserInfoGotInserted");
 
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
+				
 				JSONObject response = new JSONObject();
 				response.put("addUserBasic", "successfullCreation");
 				return Response.status(200).entity(response.toString()).build();
+				
 			} catch (Exception e) {
 				System.out.println("Wrong JSONFormat:" + e.toString());
 			}
@@ -379,20 +375,6 @@ public class Services {
 				.header("Access-Control-Allow-Origin", "*").build();
 	}
 
-	@GET
-	@Path("/testMail")
-	public Response sendTestMail() throws JSONException {
-
-		JSONObject output = new JSONObject("{Test: send Mail}");
-		System.out.println("...sendTestMail Request ");
-
-		Mailer mailer = new Mailer(context);
-		// send test registration mail
-
-		// mailer.sendRegistrationMail("anika.apel@gmx.de", "test");
-
-		return Response.status(200).entity(output.toString()).build();
-	}
 
 	@GET
 	@Path("/getEvents")
@@ -464,7 +446,6 @@ public class Services {
 	@Path("/getAddress")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getAddress() throws JSONException {
-
 		JSONObject jobj1 = new JSONObject();
 
 		System.out.println("...get All Addresses");
@@ -506,7 +487,9 @@ public class Services {
 	@GET
 	@Path("/getEventById/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response getEventById(@PathParam("id") int id) throws JSONException {
+	public Response getEventById(@PathParam("id") int id) throws JSONException, SQLException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
 
 		JSONObject jobj = new JSONObject();
 
@@ -553,6 +536,8 @@ public class Services {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateEvent(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
 
 		JSONObject JSONreq = new JSONObject(urlReq);
 		System.out.println("...updateEventRequest");
@@ -607,22 +592,23 @@ public class Services {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response changePassword(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
 
 		JSONObject JSONreq = new JSONObject(urlReq);
 
-		if (JSONreq.has("email") && JSONreq.has("oldPassword") && JSONreq.has("newPassword")
-				&& JSONreq.has("repeatNewPassword")
-//				&& (JSONreq.getString("newPassword").equals(JSONreq.getString("repeatNewPassword")))
+		if (JSONreq.has("user_id") && JSONreq.has("oldPassword") && JSONreq.has("newPassword")
+				&& JSONreq.has("repeatNewPassword") 
+//          && (JSONreq.getString("newPassword").equals(JSONreq.getString("repeatNewPassword")))
 		) {
 			try {
-
-				String email = JSONreq.getString("email");
+				int user_id = (int) JSONreq.get("user_id");
 				String oldPassword = JSONreq.getString("oldPassword");
 				String newPassword = JSONreq.getString("newPassword");
 				String repeatNewPassword = JSONreq.getString("repeatNewPassword");
 
-				System.out.println("...changePassword:" + email);
-
+				System.out.println("...changePassword:" + newPassword + "...checkUser Id:" + user_id);
+				
 				try {
 
 //					Statement statement = conn.createStatement();
@@ -630,8 +616,9 @@ public class Services {
 //					ResultSet result = statement.executeQuery("UPDATE USER_REG SET password =? WHERE email='"+ email +"'" + "AND password='" + oldPassword + "'", newPassword);
 
 					DatabaseProvider provider = DatabaseProvider.getInstance(context);
+					
 					PreparedStatement statement = provider.getConnection()
-							.prepareStatement("UPDATE USER_REG SET password =? WHERE email='" + email + "'"
+							.prepareStatement("UPDATE USER_REG SET password =? WHERE id_user='" + user_id + "'"
 									+ "AND password='" + oldPassword + "'");
 
 					statement.setString(1, newPassword);
@@ -672,6 +659,8 @@ public class Services {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response deleteEvent(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
 
 		JSONObject JSONreq = new JSONObject(urlReq);
 		System.out.println("...Delete Event Request");
@@ -725,6 +714,8 @@ public class Services {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createRoute(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
 
 		JSONObject JSONreq = new JSONObject(urlReq);
 		System.out.println("...createRoute");
@@ -750,6 +741,9 @@ public class Services {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response searchUserByMail(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
+
 		JSONObject JSONreq = new JSONObject(urlReq);
 		JSONObject allUser = new JSONObject();
 		String input;
@@ -788,13 +782,17 @@ public class Services {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response editUserInfo(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
 
 		JSONObject JSONreq = new JSONObject(urlReq);
 
 		if (JSONreq.has("last_name") && JSONreq.has("country") && JSONreq.has("state") && JSONreq.has("city")
-				&& JSONreq.has("street") && JSONreq.has("postcode") && JSONreq.has("housenumber")) {
+				&& JSONreq.has("street") && JSONreq.has("postcode") && JSONreq.has("housenumber")&& JSONreq.has("user_id")) {
+			
 			try {
 
+				int user_id = JSONreq.getInt("user_id");			
 				String lname = JSONreq.getString("last_name");
 				String country = JSONreq.getString("country");
 				String state = JSONreq.getString("state");
@@ -806,13 +804,21 @@ public class Services {
 				try {
 
 					DatabaseProvider provider = DatabaseProvider.getInstance(context);
+					
+					String selectSQL3 = "SELECT id_address FROM BASIC_USER WHERE id_user =" + user_id;
+					PreparedStatement preparedStatement3 = provider.getConnection().prepareStatement(selectSQL3);
+					ResultSet rs3 = preparedStatement3.executeQuery();
+					int addressId = 0;
+					while (rs3.next()) {
+						addressId = rs3.getInt("ID_ADDRESS");
+					}
 
 					PreparedStatement s1 = provider.getConnection().prepareStatement(
-							"UPDATE ADDRESS SET country =?, state =?, city =?, street =?, postcode =?, housenumber =? WHERE id_address = (SELECT max(id_address) FROM ADDRESS)");
+							"UPDATE ADDRESS SET country =?, state =?, city =?, street =?, postcode =?, housenumber =? WHERE id_address = " + addressId);
 
 					PreparedStatement s2 = provider.getConnection().prepareStatement(
-							"UPDATE BASIC_USER SET last_name =? WHERE id_user = (SELECT max(id_user) FROM BASIC_USER)");
-
+							"UPDATE BASIC_USER SET last_name =? WHERE id_user="+user_id);
+					
 					s1.setString(1, country);
 					s1.setString(2, state);
 					s1.setString(3, city);
@@ -825,7 +831,8 @@ public class Services {
 					s2.setString(1, lname);
 					s2.executeUpdate();
 					s2.closeOnCompletion();
-
+					
+					System.out.println("UserInfoGotUpdated");
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
@@ -834,7 +841,6 @@ public class Services {
 				System.out.println("Wrong JSONFormat:" + e.toString());
 			}
 		}
-		System.out.println("...EditedInfoGotInserted");
 		return Response.status(400).entity("InvalidRequestBody").build();
 	}
 
@@ -843,6 +849,8 @@ public class Services {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response addFriend(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
 
 		JSONObject JSONreq = new JSONObject(urlReq);
 		System.out.println("...addFriendRequest");
@@ -869,7 +877,10 @@ public class Services {
 	@GET
 	@Path("/get_event_type")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response getEventType() throws JSONException {
+	public Response getEventType() throws JSONException, SQLException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
+
 		JSONObject response = new JSONObject();
 		System.out.println("Get Event Type... ");
 		try {
@@ -896,11 +907,14 @@ public class Services {
 	 * @param mail
 	 * @return userID
 	 * @throws JSONException
+	 * @throws SQLException 
 	 */
 	@GET
 	@Path("/getUserID/{mail}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response getUserID(@PathParam("mail") String mail) throws JSONException {
+	public Response getUserID(@PathParam("mail") String mail) throws JSONException, SQLException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
 
 		JSONObject jobj = new JSONObject();
 
@@ -931,11 +945,14 @@ public class Services {
 	 * @param userId
 	 * @return
 	 * @throws JSONException
+	 * @throws SQLException 
 	 */
 	@GET
 	@Path("/getFriends/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response getFriends(@PathParam("id") int userId) throws JSONException {
+	public Response getFriends(@PathParam("id") int userId) throws JSONException, SQLException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
 
 		JSONObject response = new JSONObject();
 		System.out.println("Get Friends... ");
@@ -962,11 +979,14 @@ public class Services {
 	 * @param userId
 	 * @return
 	 * @throws JSONException
+	 * @throws SQLException 
 	 */
 	@GET
 	@Path("/getUserInfo/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response getUserInfo(@PathParam("id") int userId) throws JSONException {
+	public Response getUserInfo(@PathParam("id") int userId) throws JSONException, SQLException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
 
 		JSONObject response = new JSONObject();
 		System.out.println("Get Additional User Info... ");
@@ -986,5 +1006,40 @@ public class Services {
 			System.out.println("Response: " + response.toString());
 			return Response.status(500).entity(response.toString()).build();
 		}
+	}
+	
+	@PUT
+	@Path("/resetPassword")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response resetPassword(String urlReq)
+			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
+		
+		JSONObject response = new JSONObject();
+		
+		JSONObject JSONreq = new JSONObject(urlReq);
+	
+		try {
+			String currentEmail = JSONreq.getString("reset_email");
+			UserDao userDao = new UserDaoImplementation();
+			System.out.println("Reset User Password");
+			String newPassword = userDao.changeUserPassword(currentEmail);
+			if (newPassword == null) {
+				return Response.status(200).entity(response.toString()).build();
+			}
+			// send registration mail
+			Mailer mailer = new Mailer(context);
+			boolean messageSent = mailer.sendResetPasswordMail(currentEmail, newPassword);
+			if (!messageSent) {
+				System.out.println("Failed to send mail?!");
+			}
+			
+			return Response.status(200).entity(response.toString()).build();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		response.put("success", true);
+		return Response.status(200).entity(response.toString()).build();
 	}
 }
