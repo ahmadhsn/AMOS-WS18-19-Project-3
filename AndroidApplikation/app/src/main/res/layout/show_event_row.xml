@@ -77,5 +77,16 @@
             android:text="description"
             android:textColor="@color/colorPrimary"
             android:textSize="15sp" />
+
+        <Button
+            android:id="@+id/join_event"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/event_date"
+            android:layout_alignLeft="@+id/event_description"
+            android:layout_marginLeft="200dp"
+            android:text="Join"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
