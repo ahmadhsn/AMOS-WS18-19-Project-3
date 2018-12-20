@@ -213,14 +213,10 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
         int day = c.get(Calendar.DAY_OF_MONTH);
         int hour = c.get(Calendar.HOUR_OF_DAY);
         int minutes = c.get(Calendar.MINUTE);
-        Log.i("step 1", "IGI");
         String event_Date = eventDate.getText().toString();
         String system_Date = (year + "-" + (month + 1) + "-" + day);
 
-        Log.i("step Date", event_Date + " system" + system_Date);
-
         if (event_Date.equals(system_Date)) {
-            Log.i("step 2", "IGI");
             int hour_ev = Integer.parseInt(eventTime.getText().toString().split(":")[0]);
             int minutes_ev = Integer.parseInt(eventTime.getText().toString().split(":")[1]);
             if (hour_ev < hour || minutes_ev < minutes) {
@@ -232,7 +228,6 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
             }
         }
 
-        Log.i("step 3", "IGI");
         JSONObject event = new JSONObject();
         JSONObject address = new JSONObject();
         JSONObject requestJSON = new JSONObject();

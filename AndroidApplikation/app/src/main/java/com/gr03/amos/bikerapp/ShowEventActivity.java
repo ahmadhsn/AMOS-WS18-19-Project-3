@@ -41,6 +41,7 @@ public class ShowEventActivity extends AppCompatActivity
             startActivity(intent);
         }
 
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -58,6 +59,16 @@ public class ShowEventActivity extends AppCompatActivity
         menuItem = navigationView.getMenu().findItem(R.id.show_events);
         menuItem.setChecked(true);
         onNavigationItemSelected(menuItem);
+
+        //{findViewById(R.id.add_route).setOnClickListener(v -> {
+        // Intent intent = new Intent(this, AddRoute.class);
+        // startActivity(intent);
+        //});
+
+        //findViewById(R.id.add_event).setOnClickListener(v-> {
+        // Intent intent = new Intent(this, AddRoute.class);
+        // startActivity(intent);
+        //});//
     }
 
 
@@ -97,10 +108,15 @@ public class ShowEventActivity extends AppCompatActivity
             startActivity(intent);
         }
 
-        if (id == R.id.action_add_event) {
+        if (id == R.id.show_profile) {
+            Intent intent = new Intent(this, AddProfileBasicUserActivity.class);
+            startActivity(intent);
+        }
+
+        if (id== R.id.add_friend) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.create_event_fragment, new CreateEventFragment())
-                    .addToBackStack("CREATE_EVENT_FRAGMENT")
+                    .replace(R.id.create_event_fragment, new ShowFriendsFragment())
+                    .addToBackStack("FRIEND_LIST_FRAGMENT")
                     .commit();
             return true;
         }
@@ -117,19 +133,31 @@ public class ShowEventActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.create_event_fragment, new ShowEventsFragment())
                     .commit();
-        } else if (id == R.id.settings) {
+        } else if (id == R.id.action_settings) {
         } else if (id == R.id.change_password) {
             Intent intent = new Intent(this, ChangePasswordActivity.class);
             startActivity(intent);
         } else if (id == R.id.add_profile) {
             Intent intent = new Intent(this, AddProfileBasicUserActivity.class);
             startActivity(intent);
-
+        } else if (id == R.id.add_route) {
+            Intent intent = new Intent(this, AddRoute.class);
+            startActivity(intent);
+        } else if (id == R.id.action_add_event) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.create_event_fragment, new CreateEventFragment())
+                    .addToBackStack("CREATE_EVENT_FRAGMENT")
+                    .commit();
         } else if (id == R.id.show_friends) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.create_event_fragment, new ShowFriendsFragment())
                     .addToBackStack("FRIEND_LIST_FRAGMENT")
                     .commit();
+            return true;
+        } else if (id == R.id.sidebar_logout) {
+            SaveSharedPreference.clearSharedPrefrences(this);
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

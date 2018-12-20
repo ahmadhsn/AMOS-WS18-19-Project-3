@@ -50,6 +50,7 @@ public class ShowEventsFragment extends Fragment {
 
         });
 
+
         Realm.init(container.getContext());
         Realm realm = Realm.getDefaultInstance();
 

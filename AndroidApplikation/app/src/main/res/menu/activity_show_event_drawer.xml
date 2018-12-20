@@ -15,10 +15,31 @@
             android:title="@string/show_friends" />
     </group>
 
+    <item android:title="User Activities">
+        <menu>
+            <item
+                android:id="@+id/add_profile"
+                android:icon="@drawable/ic_portrait_black_24dp"
+                android:title="Add Profile" />
+
+
+            <item
+                android:id="@+id/add_route"
+                android:icon="@drawable/ic_map_black_24dp"
+                android:title="Create Route" />
+
+            <item
+                android:id="@+id/action_add_event"
+                android:icon="@drawable/ic_menu_plus_gray"
+                android:title="Add Event" />
+
+        </menu>
+    </item>
+
     <item android:title="@string/event_drawer_user_options">
         <menu>
             <item
-                android:id="@+id/settings"
+                android:id="@+id/action_settings"
                 android:icon="@drawable/ic_menu_share"
                 android:title="@string/settings" />
 
@@ -28,11 +49,9 @@
                 android:title="@string/change_password" />
 
             <item
-                android:id="@+id/add_profile"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Add Profile" />
-
-
+                android:id="@+id/sidebar_logout"
+                android:icon="@drawable/ic_arrow_back_black_24dp"
+                android:title="@string/action_logout" />
         </menu>
     </item>
 
