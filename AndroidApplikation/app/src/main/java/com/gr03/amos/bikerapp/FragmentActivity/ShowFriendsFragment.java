@@ -11,8 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -21,7 +19,7 @@ import com.gr03.amos.bikerapp.Adapters.UserAdapter;
 import com.gr03.amos.bikerapp.Models.BasicUser;
 import com.gr03.amos.bikerapp.Models.Friend;
 import com.gr03.amos.bikerapp.R;
-import com.gr03.amos.bikerapp.RecylerViewAdapter.ShowFriendsListRecyclerViewAdapter;
+import com.gr03.amos.bikerapp.Adapters.ShowFriendsListRecyclerViewAdapter;
 import com.gr03.amos.bikerapp.Requests;
 import com.gr03.amos.bikerapp.SaveSharedPreference;
 

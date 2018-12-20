@@ -133,6 +133,9 @@ public class ShowEventActivity extends AppCompatActivity
                     .replace(R.id.create_event_fragment, new ShowFriendsFragment())
                     .addToBackStack("FRIEND_LIST_FRAGMENT")
                     .commit();
+        } else if (id == R.id.create_route) {
+            Intent intent = new Intent(this, AddRoute.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
