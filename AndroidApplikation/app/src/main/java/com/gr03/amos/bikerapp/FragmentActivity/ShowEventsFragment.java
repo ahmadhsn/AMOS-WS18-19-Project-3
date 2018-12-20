@@ -1,5 +1,6 @@
 package com.gr03.amos.bikerapp.FragmentActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,13 +9,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.gr03.amos.bikerapp.AddRoute;
 import com.gr03.amos.bikerapp.Models.Address;
 import com.gr03.amos.bikerapp.Models.Event;
 import com.gr03.amos.bikerapp.R;
 import com.gr03.amos.bikerapp.Requests;
+import com.gr03.amos.bikerapp.ShowEventActivity;
 import com.gr03.amos.bikerapp.ShowEventRecylerViewAdapter;
 
 import io.realm.Realm;
@@ -37,6 +41,7 @@ public class ShowEventsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -61,6 +66,35 @@ public class ShowEventsFragment extends Fragment {
         showEventsRecyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
         showEventRecylerViewAdapter = new ShowEventRecylerViewAdapter(container.getContext(), events);
         showEventsRecyclerView.setAdapter(showEventRecylerViewAdapter);
+
+        Button btAddRoute = view.findViewById(R.id.add_route);
+        btAddRoute.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(container.getContext(),AddRoute.class );
+                startActivity(intent);
+
+            }
+        });
+
+        Button btAddEvent = view.findViewById(R.id.add_event);
+        btAddEvent.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                ShowEventsFragment.this.getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.create_event_fragment, new CreateEventFragment())
+                        .addToBackStack("FRIEND_LIST_FRAGMENT")
+                        .commit();
+            }
+        });
+
+
+        //findViewById(R.id.add_event).setOnClickListener(v-> {
+        // Intent intent = new Intent(this, AddRoute.class);
+        // startActivity(intent);
+        //});//
 
         return view;
     }

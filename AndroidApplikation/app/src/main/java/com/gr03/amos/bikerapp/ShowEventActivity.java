@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -60,15 +61,6 @@ public class ShowEventActivity extends AppCompatActivity
         menuItem.setChecked(true);
         onNavigationItemSelected(menuItem);
 
-        //{findViewById(R.id.add_route).setOnClickListener(v -> {
-        // Intent intent = new Intent(this, AddRoute.class);
-        // startActivity(intent);
-        //});
-
-        //findViewById(R.id.add_event).setOnClickListener(v-> {
-        // Intent intent = new Intent(this, AddRoute.class);
-        // startActivity(intent);
-        //});//
     }
 
 
