@@ -23,15 +23,22 @@
             android:padding="3dp">
 
             <TextView
+                android:id="@+id/admin_tag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Admin" />
+                android:layout_alignParentEnd="true"
+                android:layout_margin="2dp"
+                android:background="@drawable/admin_border"
+                android:padding="2dp"
+                android:text="Admin"
+                android:textColor="@color/textGreenColor"
+                android:textSize="20sp" />
 
             <ImageView
                 android:id="@+id/thumbnail"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:layout_marginTop="20dp"
+                android:layout_below="@id/admin_tag"
                 android:background="@drawable/background"
                 android:clickable="true"
                 android:focusable="true"
@@ -119,7 +126,8 @@
                 android:layout_height="1dp"
                 android:layout_below="@+id/event_time"
                 android:layout_margin="8dp"
-                android:background="@android:color/darker_gray" />
+                android:background="@android:color/darker_gray"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/event_description"
@@ -135,35 +143,48 @@
                 android:textSize="15sp"
                 android:visibility="gone" />
 
-            <ImageView
-                android:id="@+id/event_edit"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+            <LinearLayout
+                android:id="@+id/controls_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/event_description"
-                android:layout_margin="5dp"
-                android:background="@color/secondaryColor"
-                android:src="@drawable/ic_edit_white_24dp" />
+                android:gravity="end"
+                android:visibility="gone">
 
-            <ImageView
-                android:id="@+id/event_delete"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_below="@id/event_description"
-                android:layout_margin="5dp"
-                android:layout_toEndOf="@+id/event_edit"
-                android:background="@color/secondaryColor"
-                android:src="@drawable/ic_delete_white_24dp" />
+                <ImageButton
+                    android:id="@+id/event_edit"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="bottom|right"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/ripple_oval"
+                    android:elevation="8dp"
+                    android:src="@drawable/ic_edit_white_24dp" />
 
-            <ImageView
-                android:id="@+id/event_join"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_below="@id/event_description"
-                android:layout_margin="5dp"
-                android:layout_toEndOf="@id/event_delete"
-                android:background="@color/secondaryColor"
-                android:src="@drawable/ic_menu_plus" />
+                <ImageButton
+                    android:id="@+id/event_delete"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="bottom|right"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/ripple_oval"
+                    android:elevation="8dp"
+                    android:src="@drawable/ic_delete_white_24dp" />
 
+                <ImageButton
+                    android:id="@+id/event_join"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="bottom|right"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/ripple_oval"
+                    android:elevation="8dp"
+                    android:src="@drawable/ic_menu_plus" />
+
+            </LinearLayout>
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 

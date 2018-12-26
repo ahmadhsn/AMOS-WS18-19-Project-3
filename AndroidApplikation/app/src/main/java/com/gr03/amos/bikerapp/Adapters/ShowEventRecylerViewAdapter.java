@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gr03.amos.bikerapp.EventDetailsActivity;
@@ -47,12 +48,16 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
             holder.eventDescription.setVisibility(View.VISIBLE);
             holder.eventDropDownButton.setVisibility(View.GONE);
             holder.eventDropUpButton.setVisibility(View.VISIBLE);
+            holder.controlLinearLayout.setVisibility(View.VISIBLE);
+            holder.dividerView.setVisibility(View.VISIBLE);
         });
 
         holder.eventDropUpButton.setOnClickListener(v -> {
             holder.eventDescription.setVisibility(View.GONE);
             holder.eventDropDownButton.setVisibility(View.VISIBLE);
             holder.eventDropUpButton.setVisibility(View.GONE);
+            holder.controlLinearLayout.setVisibility(View.GONE);
+            holder.dividerView.setVisibility(View.GONE);
         });
 
     }
@@ -71,6 +76,8 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
         TextView eventTime;
         ImageView eventDropDownButton;
         ImageView eventDropUpButton;
+        LinearLayout controlLinearLayout;
+        View dividerView;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -80,6 +87,8 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
             eventTime = itemView.findViewById(R.id.event_time);
             eventDropDownButton = itemView.findViewById(R.id.arrow_down);
             eventDropUpButton = itemView.findViewById(R.id.arrow_up);
+            controlLinearLayout = itemView.findViewById(R.id.controls_button);
+            dividerView = itemView.findViewById(R.id.divider);
             itemView.setOnClickListener(this);
         }
 
