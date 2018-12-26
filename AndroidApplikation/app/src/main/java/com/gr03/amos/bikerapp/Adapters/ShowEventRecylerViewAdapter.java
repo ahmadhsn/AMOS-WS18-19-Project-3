@@ -2,11 +2,14 @@ package com.gr03.amos.bikerapp.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -14,7 +17,17 @@ import android.widget.TextView;
 import com.gr03.amos.bikerapp.EventDetailsActivity;
 import com.gr03.amos.bikerapp.Models.Event;
 import com.gr03.amos.bikerapp.R;
+import com.gr03.amos.bikerapp.Requests;
+import com.gr03.amos.bikerapp.SaveSharedPreference;
+import com.gr03.amos.bikerapp.ShowEventActivity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.concurrent.Callable;
+import java.util.concurrent.FutureTask;
+
+import io.realm.Realm;
 import io.realm.RealmResults;
 
 
@@ -48,7 +61,6 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
             holder.eventDescription.setVisibility(View.VISIBLE);
             holder.eventDropDownButton.setVisibility(View.GONE);
             holder.eventDropUpButton.setVisibility(View.VISIBLE);
-            holder.controlLinearLayout.setVisibility(View.VISIBLE);
             holder.dividerView.setVisibility(View.VISIBLE);
         });
 
@@ -56,10 +68,33 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
             holder.eventDescription.setVisibility(View.GONE);
             holder.eventDropDownButton.setVisibility(View.VISIBLE);
             holder.eventDropUpButton.setVisibility(View.GONE);
-            holder.controlLinearLayout.setVisibility(View.GONE);
             holder.dividerView.setVisibility(View.GONE);
         });
 
+        if (mData.get(position).getId_user() == SaveSharedPreference.getUserID(this.context)) {
+            holder.adminTag.setVisibility(View.VISIBLE);
+            holder.controlLinearLayout.setVisibility(View.VISIBLE);
+        }
+
+        holder.eventDelete.setOnClickListener(v -> {
+            try {
+                deleteEvent(mData.get(position).getId_event());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            Realm realmDelete = Realm.getDefaultInstance();
+            final Event event1 = realmDelete
+                    .where(Event.class)
+                    .equalTo("id_event", mData.get(position).getId_event())
+                    .findFirst();
+
+            realmDelete.beginTransaction();
+            event1.deleteFromRealm();
+            Log.i("After Transaction from Realm 1", "Deleted");
+            realmDelete.commitTransaction();
+            realmDelete.close();
+            notifyDataSetChanged();
+        });
     }
 
     @Override
@@ -67,6 +102,21 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
         return mData.size();
     }
 
+
+    public void deleteEvent(long eventId) throws JSONException {
+        JSONObject json = new JSONObject();
+        json.put("id_event", eventId);
+        try {
+            FutureTask<String> task = new FutureTask((Callable<String>) () -> {
+                JSONObject threadResponse = Requests.getResponse("deleteEvent", json);
+                return threadResponse.toString();
+            });
+            new Thread(task).start();
+            Log.i("Response", task.get());
+        } catch (Exception e) {
+            Log.i("Exception --- not requested", e.toString());
+        }
+    }
 
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -78,6 +128,9 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
         ImageView eventDropUpButton;
         LinearLayout controlLinearLayout;
         View dividerView;
+        TextView adminTag;
+        ImageButton eventDelete;
+        ImageButton eventEdit;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -87,8 +140,12 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
             eventTime = itemView.findViewById(R.id.event_time);
             eventDropDownButton = itemView.findViewById(R.id.arrow_down);
             eventDropUpButton = itemView.findViewById(R.id.arrow_up);
+            eventDelete = itemView.findViewById(R.id.event_delete);
+            eventEdit = itemView.findViewById(R.id.event_edit);
             controlLinearLayout = itemView.findViewById(R.id.controls_button);
             dividerView = itemView.findViewById(R.id.divider);
+            adminTag = itemView.findViewById(R.id.admin_tag);
+
             itemView.setOnClickListener(this);
         }
 

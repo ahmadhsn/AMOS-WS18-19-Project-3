@@ -7,6 +7,7 @@ import io.realm.annotations.PrimaryKey;
 public class Event extends RealmObject {
     @PrimaryKey
     private long id_event;
+    private long id_user;
     private Address address;
     private String name;
     private String description;
@@ -56,5 +57,13 @@ public class Event extends RealmObject {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    public long getId_user() {
+        return id_user;
+    }
+
+    public void setId_user(long id_user) {
+        this.id_user = id_user;
     }
 }

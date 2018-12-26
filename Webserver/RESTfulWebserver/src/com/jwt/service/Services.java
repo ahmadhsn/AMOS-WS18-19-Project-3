@@ -394,7 +394,7 @@ public class Services {
 			
 			ResultSet result = provider.querySelectDB("SELECT DISTINCT ON (e.id_event) * FROM EVENT e"
 					+ " LEFT JOIN ADDRESS a USING (id_address)"
-					+ " WHERE e.date >= now() "
+			//		+ " WHERE e.date >= now() "
 					+ " ORDER BY e.id_event, a.id_address" );
 			System.out.println(result);
 			
@@ -408,7 +408,8 @@ public class Services {
 				String desc_json = result.getString("description");
 				String date_json = result.getString("date");
 				String time_json = result.getString("time");
-			
+				String user_id_json = result.getString("id_user");
+				
 				String id_add_json = result.getString("id_address");
 				String city_json = result.getString("city");
 				String country_json = result.getString("country");
@@ -420,6 +421,7 @@ public class Services {
 				jobj.put("description", desc_json);
 				jobj.put("date", date_json);
 				jobj.put("time", time_json);
+				jobj.put("id_user", user_id_json);
 				
 				JSONObject jobj2 = new JSONObject();
 				jobj2.put("city", city_json);

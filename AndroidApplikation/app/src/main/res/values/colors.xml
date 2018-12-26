@@ -15,5 +15,8 @@
     <color name="darkGreen">#99ff99</color>
     <color name="textGreenColor">#00cc00</color>
 
+    <color name="red">#e60000</color>
+    <color name="yellow">#ffff33</color>
+
 
 </resources>
