@@ -102,22 +102,6 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
         return mData.size();
     }
 
-
-    public void deleteEvent(long eventId) throws JSONException {
-        JSONObject json = new JSONObject();
-        json.put("id_event", eventId);
-        try {
-            FutureTask<String> task = new FutureTask((Callable<String>) () -> {
-                JSONObject threadResponse = Requests.getResponse("deleteEvent", json);
-                return threadResponse.toString();
-            });
-            new Thread(task).start();
-            Log.i("Response", task.get());
-        } catch (Exception e) {
-            Log.i("Exception --- not requested", e.toString());
-        }
-    }
-
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView eventName;
@@ -157,4 +141,20 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
             context.startActivity(intent);
         }
     }
+
+    private void deleteEvent(long eventId) throws JSONException {
+        JSONObject json = new JSONObject();
+        json.put("id_event", eventId);
+        try {
+            FutureTask<String> task = new FutureTask((Callable<String>) () -> {
+                JSONObject threadResponse = Requests.getResponse("deleteEvent", json);
+                return threadResponse.toString();
+            });
+            new Thread(task).start();
+            Log.i("Response", task.get());
+        } catch (Exception e) {
+            Log.i("Exception --- not requested", e.toString());
+        }
+    }
+
 }
