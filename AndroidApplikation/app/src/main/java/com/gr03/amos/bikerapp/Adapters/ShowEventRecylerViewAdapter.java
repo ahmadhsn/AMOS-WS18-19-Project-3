@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gr03.amos.bikerapp.EventDetailsActivity;
@@ -41,6 +42,19 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
         holder.eventDescription.setText(mData.get(position).getDescription());
         holder.eventDate.setText(mData.get(position).getDate());
         holder.eventTime.setText(mData.get(position).getTime());
+
+        holder.eventDropDownButton.setOnClickListener(v -> {
+            holder.eventDescription.setVisibility(View.VISIBLE);
+            holder.eventDropDownButton.setVisibility(View.GONE);
+            holder.eventDropUpButton.setVisibility(View.VISIBLE);
+        });
+
+        holder.eventDropUpButton.setOnClickListener(v -> {
+            holder.eventDescription.setVisibility(View.GONE);
+            holder.eventDropDownButton.setVisibility(View.VISIBLE);
+            holder.eventDropUpButton.setVisibility(View.GONE);
+        });
+
     }
 
     @Override
@@ -55,6 +69,8 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
         TextView eventDescription;
         TextView eventDate;
         TextView eventTime;
+        ImageView eventDropDownButton;
+        ImageView eventDropUpButton;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -62,6 +78,8 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
             eventDescription = itemView.findViewById(R.id.event_description);
             eventDate = itemView.findViewById(R.id.event_date);
             eventTime = itemView.findViewById(R.id.event_time);
+            eventDropDownButton = itemView.findViewById(R.id.arrow_down);
+            eventDropUpButton = itemView.findViewById(R.id.arrow_up);
             itemView.setOnClickListener(this);
         }
 
