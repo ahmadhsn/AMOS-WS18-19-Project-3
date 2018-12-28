@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.gr03.amos.bikerapp.EditEventActivity;
 import com.gr03.amos.bikerapp.EventDetailsActivity;
 import com.gr03.amos.bikerapp.Models.Event;
 import com.gr03.amos.bikerapp.R;
@@ -95,6 +96,15 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
             realmDelete.close();
             notifyDataSetChanged();
         });
+
+        holder.eventEdit.setOnClickListener(v -> {
+            try {
+                editEvent(mData.get(position).getId_event());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
+
     }
 
     @Override
@@ -155,6 +165,12 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
         } catch (Exception e) {
             Log.i("Exception --- not requested", e.toString());
         }
+    }
+
+    private void editEvent(long eventId) throws JSONException {
+        Intent intent = new Intent(context, EditEventActivity.class);
+        intent.putExtra("id", eventId);
+        context.startActivity(intent);
     }
 
 }
