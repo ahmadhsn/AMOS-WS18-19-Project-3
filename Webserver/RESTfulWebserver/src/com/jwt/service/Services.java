@@ -3,8 +3,10 @@ package com.jwt.service;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.List;
 import java.sql.Connection;
+import java.sql.Date;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
@@ -25,6 +27,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.jwt.DataBaseConnection.DatabaseProvider;
+import com.jwt.dao.ChatDao;
+import com.jwt.dao.ChatDaoImplementation;
 import com.jwt.dao.EventDao;
 import com.jwt.dao.EventDaoImplementation;
 import com.jwt.dao.EventTypeDao;
@@ -37,6 +41,7 @@ import com.jwt.model.Address;
 import com.jwt.model.BasicUser;
 import com.jwt.model.Event;
 import com.jwt.model.EventType;
+import com.jwt.model.Message;
 import com.jwt.model.User;
 import com.jwt.service.mail.Mailer;
 
@@ -1040,6 +1045,51 @@ public class Services {
 			ex.printStackTrace();
 		}
 		response.put("success", true);
+		return Response.status(200).entity(response.toString()).build();
+	}
+	
+	/**
+	 * Saves a chat message in the database
+	 * 
+	 * @param urlReq with message, time, id_chat, id_user
+	 * @return Response with status 200 and message successful or status 400
+	 *         with InvalidRequestBody-message.
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 * @throws JSONException
+	 * @throws UnsupportedEncodingException
+	 */
+	@PUT
+	@Path("/saveMessage")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response saveMessage(String urlReq)
+			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
+		
+		JSONObject response = new JSONObject();
+		
+		JSONObject JSONreq = new JSONObject(urlReq);
+	
+		try {
+			
+			if(! (JSONreq.has("message") && JSONreq.has("time") && JSONreq.has("id_chat") && JSONreq.has("id_user"))) {
+				return Response.status(400).entity("InvalidRequestBody").build();
+			}
+			
+			String message = JSONreq.getString("message");
+			int idChat = JSONreq.getInt("id_chat");
+			int idUser = JSONreq.getInt("id_user");			
+			Timestamp time = Timestamp.valueOf(JSONreq.getString("time"));
+			
+			ChatDao chatD = new ChatDaoImplementation();
+			chatD.saveMessage(new Message(idChat, idUser, time, message));
+			response.put("saveMessage", "successful");
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		
 		return Response.status(200).entity(response.toString()).build();
 	}
 }
