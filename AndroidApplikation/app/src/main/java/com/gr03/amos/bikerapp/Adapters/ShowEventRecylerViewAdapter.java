@@ -14,13 +14,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.gr03.amos.bikerapp.ShowEventActivity;
 import com.gr03.amos.bikerapp.EditEventActivity;
-import com.gr03.amos.bikerapp.EventDetailsActivity;
 import com.gr03.amos.bikerapp.Models.Event;
 import com.gr03.amos.bikerapp.R;
 import com.gr03.amos.bikerapp.Requests;
 import com.gr03.amos.bikerapp.SaveSharedPreference;
-import com.gr03.amos.bikerapp.ShowEventActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -143,12 +142,9 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
             itemView.setOnClickListener(this);
         }
 
-        @Override
+
         public void onClick(View view) {
-            Long id = mData.get(getAdapterPosition()).getId_event();
-            Intent intent = new Intent(context, EventDetailsActivity.class);
-            intent.putExtra("id", id);
-            context.startActivity(intent);
+
         }
     }
 
