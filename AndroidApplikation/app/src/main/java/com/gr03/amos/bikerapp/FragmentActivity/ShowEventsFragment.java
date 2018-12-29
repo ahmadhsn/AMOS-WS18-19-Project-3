@@ -85,27 +85,22 @@ public class ShowEventsFragment extends Fragment {
         populateRecyclerView(events);
         eventFilterImage.setOnClickListener(v -> showInputDialog());
 
-        Button btAddRoute = view.findViewById(R.id.add_route);
-        btAddRoute.setOnClickListener(view -> {
-            Intent intent = new Intent(container.getContext(),AddRoute.class );
-            startActivity(intent);
 
-        });
-
-        Button btAddEvent = view.findViewById(R.id.add_event);
-        btAddEvent.setOnClickListener(new View.OnClickListener() {
+        Button btEventFeed = view.findViewById(R.id.event_feed);
+        btEventFeed.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
                 ShowEventsFragment.this.getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.create_event_fragment, new CreateEventFragment())
-                        .addToBackStack("FRIEND_LIST_FRAGMENT")
+                        .replace(R.id.create_event_fragment, new ShowEventsFragment())
                         .commit();
             }
         });
 
         return view;
     }
+
+
 
     private void populateRecyclerView(RealmResults<Event> events) {
         showEventsRecyclerView = view.findViewById(R.id.showEvents);

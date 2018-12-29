@@ -29,31 +29,33 @@
         android:layout_height="match_parent"
         android:layout_marginTop="35dp" />
 
-    <RelativeLayout
-        android:layout_weight=".5"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:layout_gravity="bottom">
+
         <Button
+            android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableTop="@drawable/ic_menu_plus_gray"
             android:drawableTint="@color/white"
-            android:id="@+id/add_event"
-            android:backgroundTint="@color/secondaryColor"
+            android:id="@+id/event_feed"
+            android:backgroundTint="@color/secondaryDarkColor"
+            android:layout_below="@id/add_route"
             android:textColor="@color/white"
-            android:text="Add Event"/>
+            android:text="Event Feed"/>
         <Button
-            android:layout_marginTop="5dp"
+            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:drawableTop="@drawable/ic_map_black_24dp"
             android:drawableTint="@color/white"
             android:layout_height="wrap_content"
-            android:id="@+id/add_route"
-            android:layout_below="@id/add_event"
+            android:id="@+id/route_feed"
+            android:layout_below="@id/add_route"
             android:backgroundTint="@color/secondaryDarkColor"
             android:textColor="@color/white"
-            android:text="Add Route"/>
-    </RelativeLayout>
+            android:text="Route Feed"/>
+
+    </LinearLayout>
 
 </FrameLayout>
