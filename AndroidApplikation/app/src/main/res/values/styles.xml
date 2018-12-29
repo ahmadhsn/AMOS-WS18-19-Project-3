@@ -8,6 +8,11 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="Theme.AppCompat.Dialog.Alert" parent="Theme.AppCompat.Dialog">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+    </style>
+
     <style name="DateTimePicker" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorAccent">@color/secondaryColor</item>
         <item name="colorControlActivated">@color/secondaryColor</item>
