@@ -1,0 +1,73 @@
+package com.gr03.amos.bikerapp.FragmentActivity;
+
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+
+import com.gr03.amos.bikerapp.Adapters.ShowRoutesRecyclerViewAdapter;
+import com.gr03.amos.bikerapp.Models.Route;
+import com.gr03.amos.bikerapp.R;
+import com.gr03.amos.bikerapp.Requests;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
+
+public class ShowRoutesFragment extends Fragment {
+
+    RecyclerView showRoutesRecyclerView;
+    ShowRoutesRecyclerViewAdapter showRoutesRecyclerViewAdapter;
+    private View view;
+
+    public ShowRoutesFragment() {
+    }
+
+    public static ShowRoutesFragment newInstance(String param1, String param2) {
+        ShowRoutesFragment fragment = new ShowRoutesFragment();
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        view = inflater.inflate(R.layout.fragment_show_routes, container, false);
+
+        Realm.init(container.getContext());
+        Realm realm = Realm.getDefaultInstance();
+
+//TODO SERVER SIDE GET ROUTES
+        Requests.getJsonResponse("????", container.getContext());
+        RealmResults<Route> routes = realm.where(Route.class).findAll();
+        populateRecyclerView(routes);
+
+        Button btRouteFeed = view.findViewById(R.id.route_feed);
+        btRouteFeed.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                //TODO
+            }
+        });
+
+        return view;
+    }
+
+    private void populateRecyclerView(RealmResults<Route> routes) {
+        showRoutesRecyclerView = view.findViewById(R.id.showRoutes);
+        showRoutesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        showRoutesRecyclerViewAdapter = new ShowRoutesRecyclerViewAdapter(getContext(), routes);
+        showRoutesRecyclerView.setAdapter(showRoutesRecyclerViewAdapter);
+    }
+
+}
