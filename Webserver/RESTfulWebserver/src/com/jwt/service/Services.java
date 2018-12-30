@@ -400,7 +400,7 @@ public class Services {
 				
 				
 					
-				String id_json = result.getString("id_event");
+				/*String id_json = result.getString("id_event");
 				String id_address_json = result.getString("id_address");
 				String name_json = result.getString("name");
 				String desc_json = result.getString("description");
@@ -410,7 +410,7 @@ public class Services {
 				String id_add_json = result.getString("id_address");
 				String city_json = result.getString("city");
 				String country_json = result.getString("country");
-				System.out.println(result);
+				System.out.println(result);*/
 
 			}
 
