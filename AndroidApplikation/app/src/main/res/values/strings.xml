@@ -52,6 +52,7 @@
     <string name="action_logout">Logout</string>
     <string name="action_add_event">Add event</string>
     <string name="show_friends">Show Friends</string>
+    <string name="title_activity_chat">ChatActivity</string>
     <!--
      Strings for Address creation
      -->
