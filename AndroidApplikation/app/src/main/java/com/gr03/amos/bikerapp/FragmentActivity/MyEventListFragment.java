@@ -53,10 +53,8 @@ public class MyEventListFragment extends Fragment {
         Realm realm = Realm.getDefaultInstance();
 
         Requests.getJsonResponse("myEvents", container.getContext());
-        RealmResults<Event> events = realm.where(Event.class).findAll();
-
-
-        populateRecyclerView(events);
+        //RealmResults<Event> events = realm.where(Event.class).findAll();
+        //populateRecyclerView(events);
 
         return view;
     }
