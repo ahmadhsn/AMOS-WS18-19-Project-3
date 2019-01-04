@@ -262,6 +262,15 @@ tools:context=".ProfileBasicUserActivity">
             android:onClick="saveEditedInfo"
             android:hint="Save"
             android:visibility="invisible"/>
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="40dp"
+            android:src="@android:drawable/ic_dialog_email"
+            android:onClick="writeMessage"
+            android:layout_below="@id/saveEditedInfo"/>
+
     </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>

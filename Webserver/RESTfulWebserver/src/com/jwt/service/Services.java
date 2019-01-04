@@ -1067,6 +1067,8 @@ public class Services {
 		// Setting the DB context in case its not set
 		DatabaseProvider.getInstance(context);
 		
+		System.out.println("New Message...");
+		
 		JSONObject response = new JSONObject();
 		
 		JSONObject JSONreq = new JSONObject(urlReq);

@@ -285,4 +285,9 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         }
     }
 
+    public void writeMessage(View view) {
+        Intent intent = new Intent(ProfileBasicUserActivity.this, ChatActivity.class);
+        startActivity(intent);
+    }
+
 }

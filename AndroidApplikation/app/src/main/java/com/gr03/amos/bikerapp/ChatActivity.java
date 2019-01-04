@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONObject;
@@ -29,6 +30,8 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        msg = (EditText) findViewById(R.id.user_message);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -61,7 +64,7 @@ public class ChatActivity extends AppCompatActivity {
 
             FutureTask<String> task = new FutureTask(new Callable<String>() {
                 public String call() {
-                    JSONObject threadResponse = Requests.getResponse("checkUser", json);
+                    JSONObject threadResponse = Requests.getResponse("saveMessage", json);
                     return threadResponse.toString();
                 }
             });
