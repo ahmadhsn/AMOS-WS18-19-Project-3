@@ -13,6 +13,8 @@ package com.gr03.amos.bikerapp;
         import com.gr03.amos.bikerapp.Models.Friend;
         import org.json.JSONException;
         import org.json.JSONObject;
+
+        import java.util.ArrayList;
         import java.util.concurrent.Callable;
         import java.util.concurrent.FutureTask;
         import io.realm.Realm;
@@ -286,7 +288,11 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
     }
 
     public void writeMessage(View view) {
+        ArrayList<Integer> chatUser = new ArrayList<>();
+        chatUser.add(SaveSharedPreference.getUserID(this));
+        chatUser.add(Math.toIntExact(userId));
         Intent intent = new Intent(ProfileBasicUserActivity.this, ChatActivity.class);
+        intent.putExtra("chatUser", chatUser);
         startActivity(intent);
     }
 

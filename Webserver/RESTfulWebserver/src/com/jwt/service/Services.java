@@ -1078,15 +1078,52 @@ public class Services {
 			if(! (JSONreq.has("message") && JSONreq.has("time") && JSONreq.has("id_chat") && JSONreq.has("id_user"))) {
 				return Response.status(400).entity("InvalidRequestBody").build();
 			}
-			
-			String message = JSONreq.getString("message");
-			int idChat = JSONreq.getInt("id_chat");
-			int idUser = JSONreq.getInt("id_user");			
-			Timestamp time = Timestamp.valueOf(JSONreq.getString("time"));
-			
+						
 			ChatDao chatD = new ChatDaoImplementation();
-			chatD.saveMessage(new Message(idChat, idUser, time, message));
+			chatD.saveMessage(new Message(JSONreq.getInt("id_chat"), JSONreq.getInt("id_user"), Timestamp.valueOf(JSONreq.getString("time")), JSONreq.getString("message")));
 			response.put("saveMessage", "successful");
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		
+		return Response.status(200).entity(response.toString()).build();
+	}
+	
+	/**
+	 * Saves a chat message in the database
+	 * 
+	 * @param urlReq with message, time, id_chat, id_user
+	 * @return Response with status 200 and message successful or status 400
+	 *         with InvalidRequestBody-message.
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 * @throws JSONException
+	 * @throws UnsupportedEncodingException
+	 */
+	@GET
+	@Path("/getChatId")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response getChatId(String urlReq)
+			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
+		
+		System.out.println("Load Chat...");
+		
+		JSONObject response = new JSONObject();
+		
+		JSONObject JSONreq = new JSONObject(urlReq);
+	
+		try {
+			
+			if(!JSONreq.has("id_users")) {
+				return Response.status(400).entity("InvalidRequestBody").build();
+			}
+						
+			ChatDao chatD = new ChatDaoImplementation();
+			int chatId = chatD.loadChat(JSONreq.getJSONArray("id_users"));
+			response.put("chatId", chatId);
 			
 		} catch (Exception ex) {
 			ex.printStackTrace();

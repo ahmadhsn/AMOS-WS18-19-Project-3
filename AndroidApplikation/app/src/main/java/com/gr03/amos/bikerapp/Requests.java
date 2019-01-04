@@ -17,7 +17,9 @@ import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 
 import io.realm.Realm;
 
@@ -97,5 +99,31 @@ public class Requests {
             e.printStackTrace();
         }
 
+    }
+
+    public static JSONObject getJSONResponse(String tail, JSONObject request, String method){
+        JSONObject response = null;
+
+        FutureTask<String> task = new FutureTask(new Callable<String>() {
+            public String call() {
+                JSONObject threadResponse = Requests.getResponse(tail, request, method);
+                return threadResponse.toString();
+            }
+        });
+        new Thread(task).start();
+        try {
+            Log.i("Response", task.get());
+            response = new JSONObject(task.get());
+            Log.i("this is response", String.valueOf(response));
+
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return response;
     }
 }

@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
+import java.sql.Timestamp;
 import java.sql.Date;
 
 import javax.servlet.ServletContext;
@@ -159,7 +160,10 @@ public class DatabaseProvider {
 				} else if (arguments[i] instanceof Time) {
 					Time time = (Time) arguments[i];
 					ps.setTime(i + 1, time);
-				} else {
+				}else if(arguments[i] instanceof Timestamp) { 
+					Timestamp timestamp = (Timestamp) arguments[i];
+					ps.setTimestamp(i+1, timestamp);
+				}else {
 					// TODO: improve this with additional instances of
 					ps.setString(i + 1, (String) arguments[i]);
 				}

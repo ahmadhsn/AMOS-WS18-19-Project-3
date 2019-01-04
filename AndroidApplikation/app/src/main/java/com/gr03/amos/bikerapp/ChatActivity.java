@@ -12,9 +12,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
@@ -23,6 +27,7 @@ public class ChatActivity extends AppCompatActivity {
 
     EditText msg;
     int chatId;
+    ArrayList<Integer> userIds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,59 +38,86 @@ public class ChatActivity extends AppCompatActivity {
 
         msg = (EditText) findViewById(R.id.user_message);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        //load ids of chat user
+        Intent intent = getIntent();
+        userIds = new ArrayList<>();
+        userIds = intent.getIntegerArrayListExtra("chatUser");
 
-        //TODO: init message button
-        //TODO replace with real chatId
-        chatId = -1;
+        //load chat
+        chatId = loadChat();
+    }
+
+    private int loadChat(){
+        JSONObject request = new JSONObject();
+
+        try {
+            JSONArray jsonUserIds = new JSONArray();
+            for(int userId: userIds){
+                jsonUserIds.put(userId);
+            }
+            request.put("id_users", jsonUserIds);
+
+
+            JSONObject response = Requests.getJSONResponse("getChatId", request, "GET");
+
+            if(response.has("id_chat")){
+                return response.getInt("id_chat");
+            }else{
+                Toast.makeText(this, "Error loading chat", Toast.LENGTH_LONG).show();
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return -1;
 
     }
 
-    public void sendMessage(){
+    public void sendMessage(View view){
         JSONObject json = new JSONObject();
+
+        String message = msg.getText().toString();
+
+        if(message == null || message.isEmpty()){
+            //no message to send
+            Toast.makeText(view.getContext(), "Type in a message!", Toast.LENGTH_LONG).show();
+            return;
+        }
 
         try {
             json.put("id_user", SaveSharedPreference.getUserID(this));
             json.put("id_chat", chatId);
             json.put("message", msg.getText().toString());
 
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy-hh-mm-ss");
-            String currTime = simpleDateFormat.format(new Date());
+            String currTime = getCurrentTimestampString();
             json.put("time", currTime);
 
-            JSONObject response;
+            JSONObject response = Requests.getJSONResponse("saveMessage", json, "PUT");
 
-            FutureTask<String> task = new FutureTask(new Callable<String>() {
-                public String call() {
-                    JSONObject threadResponse = Requests.getResponse("saveMessage", json);
-                    return threadResponse.toString();
-                }
-            });
-            new Thread(task).start();
-            Log.i("Response", task.get());
-            response = new JSONObject(task.get());
-            Log.i("this is response", String.valueOf(response));
             //handle response
             if (response.has("saveMessage") && response.getString("saveMessage").equals("success")) {
 
                 Log.i("IGI", String.valueOf(response));
                 Log.i("CHAT", "Message send from " + SaveSharedPreference.getUserID(this));
             }else{
-                Toast.makeText(getApplicationContext(), "Could not send message", Toast.LENGTH_LONG).show();
+                Toast.makeText(view.getContext(), "Could not send message", Toast.LENGTH_LONG).show();
 
             }
         } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "Error sending message", Toast.LENGTH_LONG).show();
+            Toast.makeText(view.getContext(), "Error sending message", Toast.LENGTH_LONG).show();
             Log.i("Exception --- not requested", e.toString());
             return;
         }
+    }
+
+    private String getCurrentTimestampString(){
+        Calendar calendar = Calendar.getInstance();
+
+        Date now = calendar.getTime();
+        Timestamp currentTimestamp = new java.sql.Timestamp(now.getTime());
+
+        return currentTimestamp.toString();
     }
 
 }
