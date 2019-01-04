@@ -44,10 +44,11 @@
     <!--
      Strings for Route creation
      -->
+    <string name="route_add_text">Lets add a new route</string>
     <string name="route_name">Route name</string>
     <string name="route_description">Route description</string>
-    <string name="route_start">Starting point for your route</string>
-    <string name="route_end">Ending point for your route</string>
+    <string name="route_start">Add a starting point for your route</string>
+    <string name="route_end">Add an ending point for your route</string>
     <string name="route_add">Add route</string>
     <string name="action_logout">Logout</string>
     <string name="action_add_event">Add event</string>
