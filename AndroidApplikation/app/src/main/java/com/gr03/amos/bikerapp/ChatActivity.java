@@ -1,6 +1,9 @@
 package com.gr03.amos.bikerapp;
 
+import android.app.ActionBar;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -20,6 +23,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 
@@ -33,35 +37,39 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Messages");
+        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
 
-        msg = (EditText) findViewById(R.id.user_message);
+        msg = findViewById(R.id.user_message);
 
         //load ids of chat user
         Intent intent = getIntent();
         userIds = new ArrayList<>();
         userIds = intent.getIntegerArrayListExtra("chatUser");
 
+        Log.i("ids", String.valueOf(userIds));
+
         //load chat
         chatId = loadChat();
     }
 
-    private int loadChat(){
+    private int loadChat() {
         JSONObject request = new JSONObject();
 
         try {
             JSONArray jsonUserIds = new JSONArray();
-            for(int userId: userIds){
+            for (int userId : userIds) {
                 jsonUserIds.put(userId);
             }
             request.put("id_users", jsonUserIds);
 
             JSONObject response = Requests.getJSONResponse("loadChat", request, "PUT");
 
-            if(response.has("id_chat")){
+            if (response.has("id_chat")) {
                 return response.getInt("id_chat");
-            }else{
+            } else {
                 Toast.makeText(this, "Error loading chat", Toast.LENGTH_LONG).show();
             }
 
@@ -73,12 +81,12 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
-    public void sendMessage(View view){
+    public void sendMessage(View view) {
         JSONObject json = new JSONObject();
 
         String message = msg.getText().toString();
 
-        if(message == null || message.isEmpty()){
+        if (message == null || message.isEmpty()) {
             //no message to send
             Toast.makeText(view.getContext(), "Type in a message!", Toast.LENGTH_LONG).show();
             return;
@@ -100,7 +108,7 @@ public class ChatActivity extends AppCompatActivity {
                 Log.i("IGI", String.valueOf(response));
                 Log.i("CHAT", "Message send from " + SaveSharedPreference.getUserID(this));
                 msg.setText("");
-            }else{
+            } else {
                 Toast.makeText(view.getContext(), "Could not send message", Toast.LENGTH_LONG).show();
 
             }
@@ -111,7 +119,7 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
-    private String getCurrentTimestampString(){
+    private String getCurrentTimestampString() {
         Calendar calendar = Calendar.getInstance();
 
         Date now = calendar.getTime();

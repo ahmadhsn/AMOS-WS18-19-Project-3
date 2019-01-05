@@ -1,23 +1,26 @@
 package com.gr03.amos.bikerapp;
 
-        import android.content.Context;
-        import android.content.Intent;
-        import android.support.v7.app.AppCompatActivity;
-        import android.os.Bundle;
-        import android.text.TextUtils;
-        import android.util.Log;
-        import android.view.View;
-        import android.widget.Button;
-        import android.widget.EditText;
-        import android.widget.TextView;
-        import com.gr03.amos.bikerapp.Models.Friend;
-        import org.json.JSONException;
-        import org.json.JSONObject;
+import android.content.Context;
+import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
-        import java.util.ArrayList;
-        import java.util.concurrent.Callable;
-        import java.util.concurrent.FutureTask;
-        import io.realm.Realm;
+import com.gr03.amos.bikerapp.Models.Friend;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.concurrent.Callable;
+import java.util.concurrent.FutureTask;
+
+import io.realm.Realm;
 
 public class ProfileBasicUserActivity extends AppCompatActivity {
 
@@ -45,16 +48,16 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         intent = getIntent();
         userId = intent.getLongExtra("id", 0);
 
-        if(userId == 0){
+        if (userId == 0) {
             //intent from add profile page
             //use Roxanas code now
             onCreateAfterAddProfile(savedInstanceState);
-        }else{
+        } else {
             onCreateAfterProfileId();
         }
     }
 
-    private void onCreateAfterAddProfile(Bundle savedInstanceState){
+    private void onCreateAfterAddProfile(Bundle savedInstanceState) {
         Intent intent2 = getIntent();
 
         Bundle bundle = intent2.getExtras();
@@ -74,14 +77,14 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         user_dob.setText(dob);
         user_gender.setText(gender);
         user_street.setText(street);
-        user_hnumber.setText(""+hnum);
-        user_pcode.setText(""+post);
-        user_city.setText(""+city);
-        user_state.setText(""+state);
+        user_hnumber.setText("" + hnum);
+        user_pcode.setText("" + post);
+        user_city.setText("" + city);
+        user_state.setText("" + state);
         user_country.setText(country);
     }
 
-    private JSONObject getAdditionalUserInfo(){
+    private JSONObject getAdditionalUserInfo() {
         JSONObject userInfo;
         try {
             FutureTask<String> task = new FutureTask((Callable<String>) () -> {
@@ -110,7 +113,7 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         return userInfo;
     }
 
-    private void onCreateAfterProfileId(){
+    private void onCreateAfterProfileId() {
         Realm.init(this);
         Realm realm = Realm.getDefaultInstance();
 
@@ -124,9 +127,9 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
 
         //show edit button if it is own users profile
         Button btEdit = findViewById(R.id.editProfilePage);
-        if(userId == SaveSharedPreference.getUserID(this)){
+        if (userId == SaveSharedPreference.getUserID(this)) {
             btEdit.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             btEdit.setVisibility(View.INVISIBLE);
         }
         Button btSave = findViewById(R.id.saveEditedInfo);
@@ -151,7 +154,7 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         json.put("first_name", user_fname.getText().toString());
         json.put("last_name", user_lname.getText().toString());
         json.put("dob", user_dob.getText().toString());
-        json.put("gender",user_gender.getText().toString());
+        json.put("gender", user_gender.getText().toString());
         json.put("street", user_street.getText().toString());
         json.put("housenumber", user_hnumber.getText().toString());
         json.put("postcode", user_pcode.getText().toString());
@@ -170,7 +173,7 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         }
     }
 
-    public void editInfo(View view){
+    public void editInfo(View view) {
         //makes all fields (except first_name, dob, gender) editable
         user_lname.setEnabled(true);
         user_lname.setFocusableInTouchMode(true);
@@ -244,12 +247,12 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         }
     }
 
-    boolean isTextEmpty(EditText text){
+    boolean isTextEmpty(EditText text) {
         CharSequence string = text.getText().toString();
         return TextUtils.isEmpty(string);
     }
 
-    private void validation(){
+    private void validation() {
         if (isTextEmpty(user_lname)) {
             Log.i("VALIDATIONUSER", "Last name is empty");
             user_lname.setError("Please enter last name");
@@ -286,14 +289,5 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
             return;
         }
     }
-
-    public void writeMessage(View view) {
-        ArrayList<Integer> chatUser = new ArrayList<>();
-        chatUser.add(SaveSharedPreference.getUserID(this));
-        chatUser.add(Math.toIntExact(userId));
-        Intent intent = new Intent(ProfileBasicUserActivity.this, ChatActivity.class);
-        intent.putExtra("chatUser", chatUser);
-        startActivity(intent);
-    }
-
+    
 }

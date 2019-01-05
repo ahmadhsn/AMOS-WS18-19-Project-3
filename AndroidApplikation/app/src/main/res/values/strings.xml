@@ -53,6 +53,8 @@
     <string name="action_add_event">Add event</string>
     <string name="show_friends">Show Friends</string>
     <string name="title_activity_chat">ChatActivity</string>
+    <string name="enter_message_hint">Enter message</string>
+    <string name="button_send">SEND</string>
     <!--
      Strings for Address creation
      -->
