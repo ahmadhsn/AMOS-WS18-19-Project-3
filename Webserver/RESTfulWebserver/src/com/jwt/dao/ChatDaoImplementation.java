@@ -80,11 +80,11 @@ public class ChatDaoImplementation implements ChatDao {
 			ResultSet rs = stmt.getGeneratedKeys();
 			
 			if(rs.next()) {
-				idChat = rs.getInt(0);
+				idChat = rs.getInt("id_chat");
 				
 				//insert participants of chat into db
 				for(int participant: participants) {
-					db.queryInsertDB("INSERT INTO participants VALUES (?, ?)", participant, idChat);
+					db.queryInsertDB("INSERT INTO participant VALUES (?, ?)", participant, idChat);
 				}
 			}
 		} catch (SQLException e) {
