@@ -57,8 +57,7 @@ public class ChatActivity extends AppCompatActivity {
             }
             request.put("id_users", jsonUserIds);
 
-
-            JSONObject response = Requests.getJSONResponse("getChatId", request, "GET");
+            JSONObject response = Requests.getJSONResponse("loadChat", request, "PUT");
 
             if(response.has("id_chat")){
                 return response.getInt("id_chat");
@@ -96,10 +95,11 @@ public class ChatActivity extends AppCompatActivity {
             JSONObject response = Requests.getJSONResponse("saveMessage", json, "PUT");
 
             //handle response
-            if (response.has("saveMessage") && response.getString("saveMessage").equals("success")) {
+            if (response.has("saveMessage") && response.getString("saveMessage").equals("successful")) {
 
                 Log.i("IGI", String.valueOf(response));
                 Log.i("CHAT", "Message send from " + SaveSharedPreference.getUserID(this));
+                msg.setText("");
             }else{
                 Toast.makeText(view.getContext(), "Could not send message", Toast.LENGTH_LONG).show();
 

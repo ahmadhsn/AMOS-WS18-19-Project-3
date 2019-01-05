@@ -1090,19 +1090,9 @@ public class Services {
 		return Response.status(200).entity(response.toString()).build();
 	}
 	
-	/**
-	 * Saves a chat message in the database
-	 * 
-	 * @param urlReq with message, time, id_chat, id_user
-	 * @return Response with status 200 and message successful or status 400
-	 *         with InvalidRequestBody-message.
-	 * @throws ClassNotFoundException
-	 * @throws SQLException
-	 * @throws JSONException
-	 * @throws UnsupportedEncodingException
-	 */
-	@GET
-	@Path("/getChatId")
+	
+	@PUT
+	@Path("/loadChat")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getChatId(String urlReq)
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
@@ -1123,7 +1113,7 @@ public class Services {
 						
 			ChatDao chatD = new ChatDaoImplementation();
 			int chatId = chatD.loadChat(JSONreq.getJSONArray("id_users"));
-			response.put("chatId", chatId);
+			response.put("id_chat", chatId);
 			
 		} catch (Exception ex) {
 			ex.printStackTrace();

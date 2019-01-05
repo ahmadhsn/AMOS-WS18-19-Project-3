@@ -25,7 +25,7 @@ public class ChatDaoImplementation implements ChatDao {
 			ResultSet rs = stmt.getGeneratedKeys();
 			
 			if(rs.next()) {
-				msg.setId(rs.getInt(0));
+				msg.setId(rs.getInt("id_chat"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -43,13 +43,13 @@ public class ChatDaoImplementation implements ChatDao {
 		
 		//check if chat exists		
 		StringBuilder sqlSelect = new StringBuilder();
-		sqlSelect.append("SELECT * FROM chat WHERE chatId IN ");
+		sqlSelect.append("SELECT * FROM chat WHERE id_chat IN ");
 		for(int i=0; i< idParticipants.size(); i++) {
 			int currId = idParticipants.get(i);
 			if(i > 0) {
-				sqlSelect.append(" AND chatId IN ");
+				sqlSelect.append(" AND id_chat IN ");
 			}
-			sqlSelect.append("(SELECT * FROM participants WHERE id_user = " + currId + ")");	
+			sqlSelect.append("(SELECT id_chat FROM participant WHERE id_user = " + currId + ")");
 		}
 		
 		ResultSet rsChat = db.querySelectDB(sqlSelect.toString());
@@ -57,21 +57,24 @@ public class ChatDaoImplementation implements ChatDao {
 		try {
 			//check if chat exists
 			if(rsChat.next()) {
-				return rsChat.getInt(0);
+				return rsChat.getInt("id_chat");
+			}else {
+				//create a new chat
+				return createChat(idParticipants);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//create a new chat
-		return createChat(idParticipants);
+		
+		return -1;
 				
 	}
 	
 	private int createChat(ArrayList<Integer> participants) {
 		
 		//insert chat into db 
-		PreparedStatement stmt = db.queryInsertDB("INSERT INTO chat VALUES NULL");
+		PreparedStatement stmt = db.queryInsertDB("INSERT INTO chat VALUES (default)");
 		int idChat = -1; 
 		try {
 			ResultSet rs = stmt.getGeneratedKeys();
