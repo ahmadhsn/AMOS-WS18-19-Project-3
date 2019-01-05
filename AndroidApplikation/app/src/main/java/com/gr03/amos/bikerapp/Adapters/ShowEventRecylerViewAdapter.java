@@ -27,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
 import io.realm.RealmResults;
@@ -60,35 +61,31 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
         holder.eventDate.setText(mData.get(position).getDate());
         holder.eventTime.setText(mData.get(position).getTime());
 
-        holder.join_event.setOnClickListener(v->{
+        holder.joinEvent.setOnClickListener(v -> {
             JSONObject json = new JSONObject();
-            json.put("event_name", mData.get(position).getName());
-            json.put("event_descr", eventDescription.getText().getDescription());
-            json.put("event_date", eventDate.getText().toString());
-            json.put("event_time", eventTime.getText().toString());
-
             try {
-                JSONObject response;
-                FutureTask<String> task = new FutureTask(new Callable<String>() {
-                    public String call() {
-                        JSONObject threadResponse = Requests.getResponse("addmyeventlist", json);
-                        return threadResponse.toString();
-                    }
+                json.put("event_name", mData.get(position).getName());
+                json.put("event_descr", mData.get(position).getDescription());
+                json.put("event_id", mData.get(position).getId_event());
+                json.put("user_id", SaveSharedPreference.getUserID(context));
+
+                FutureTask<String> task = new FutureTask((Callable<String>) () -> {
+                    JSONObject threadResponse = Requests.getResponse("addmyeventlist", json);
+                    return threadResponse.toString();
                 });
                 new Thread(task).start();
                 Log.i("Response", task.get());
-                response = new JSONObject(task.get());
-            } catch (Exception e) {
-                //TODO: Error-Handling
-                Log.i("Exception --- not requested", e.toString());
+            } catch (JSONException | InterruptedException | ExecutionException e) {
+                e.printStackTrace();
             }
+
         });
     }
+
     @Override
     public int getItemCount() {
         return mData.size();
     }
-
 
 
     // stores and recycles views as they are scrolled off screen
@@ -97,8 +94,7 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
         TextView eventDescription;
         TextView eventDate;
         TextView eventTime;
-        Button join_event;
-
+        Button joinEvent;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -106,6 +102,7 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
             eventDescription = itemView.findViewById(R.id.event_description);
             eventDate = itemView.findViewById(R.id.event_date);
             eventTime = itemView.findViewById(R.id.event_time);
+            joinEvent = itemView.findViewById(R.id.join_event);
             itemView.setOnClickListener(this);
         }
 
