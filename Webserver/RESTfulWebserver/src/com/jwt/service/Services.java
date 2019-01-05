@@ -376,6 +376,64 @@ public class Services {
 	}
 
 	
+	@POST
+	@Path("/addmyeventlist")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response addmyeventlist(String urlReq)
+			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
+
+		JSONObject JSONreq = new JSONObject(urlReq);
+		
+		if (JSONreq.has("event_name") && JSONreq.has("event_descr") && JSONreq.has("event_date") && JSONreq.has("event_time")) {
+		
+			try {
+				
+				//int user_id = JSONreq.getInt("event_id");
+				String eventName = JSONreq.getString("event_name");
+				String eventDescr = JSONreq.getString("event_descr");
+				String eventDate = JSONreq.getString("event_date");
+				String eventTime = JSONreq.getString("event_time");
+				
+				try {
+					
+					DatabaseProvider provider = DatabaseProvider.getInstance(context);
+					Connection conn = provider.getConnection();
+
+					PreparedStatement s2 = conn.prepareStatement(
+							"INSERT INTO event_participation (name,description,date,time) VALUES (?,?,?,?::date,?)");
+
+					//PreparedStatement s2 = conn.prepareStatement(
+						//	"INSERT INTO event_participation (id_event,id_user,name,description,date,time) VALUES (?,?,?,?::date,?)");
+					//s2.setInt(1, user_id);
+					//s2.setInt(1, user_id);
+					s2.setString(1, eventName);
+					s2.setString(2, eventDescr);
+					s2.setString(3, eventDate);
+					s2.setString(4, eventTime);
+
+					s2.executeUpdate();
+					s2.closeOnCompletion();
+					
+					System.out.println("MyeventGotInserted");
+
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+				
+				JSONObject response = new JSONObject();
+				response.put("addmyeventlist", "successfullCreation");
+				return Response.status(200).entity(response.toString()).build();
+				
+			} catch (Exception e) {
+				System.out.println("Wrong JSONFormat:" + e.toString());
+			}
+		}
+		System.out.println("InvalidRequestbody");
+		return Response.status(400).entity("InvalidRequestBody").build();
+	}
+	
 	@GET
 	@Path("/myEvents")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -386,9 +444,6 @@ public class Services {
 		System.out.println("...myallEvents");
 		try {
 			DatabaseProvider provider = DatabaseProvider.getInstance(context);
-
-			// PreparedStatement st = conn.prepareStatement("SELECT
-			// name,description,date,time FROM EVENT");
 			
 			ResultSet result = provider.querySelectDB("SELECT DISTINCT ON (e.id_event) * FROM EVENT e"
 					+ " LEFT JOIN ADDRESS a USING (id_address)"
@@ -396,26 +451,6 @@ public class Services {
 					+ " ORDER BY e.id_event, a.id_address" );
 			System.out.println(result);
 			
-			while (result.next()) {	
-				
-				
-					
-				/*String id_json = result.getString("id_event");
-				String id_address_json = result.getString("id_address");
-				String name_json = result.getString("name");
-				String desc_json = result.getString("description");
-				String date_json = result.getString("date");
-				String time_json = result.getString("time");
-			
-				String id_add_json = result.getString("id_address");
-				String city_json = result.getString("city");
-				String country_json = result.getString("country");
-				System.out.println(result);*/
-
-			}
-
-			
-
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
