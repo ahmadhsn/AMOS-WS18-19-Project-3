@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gr03.amos.bikerapp.Models.Route;
+import com.gr03.amos.bikerapp.Models.Start;
 import com.gr03.amos.bikerapp.R;
 import com.gr03.amos.bikerapp.Requests;
 import com.gr03.amos.bikerapp.SaveSharedPreference;
@@ -49,9 +50,11 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
     public void onBindViewHolder(@NonNull ShowRoutesRecyclerViewAdapter.ViewHolder holder, int position) {
         holder.routeName.setText(mData.get(position).getName());
         holder.routeDescription.setText(mData.get(position).getDescription());
+        holder.startAddress.setText(mData.get(position).getStart().getAddress().getCity());
 
         holder.routeDropDownButton.setOnClickListener(v -> {
             holder.routeDescription.setVisibility(View.VISIBLE);
+            holder.startAddress.setVisibility(View.VISIBLE);
             holder.routeDropDownButton.setVisibility(View.GONE);
             holder.routeDropUpButton.setVisibility(View.VISIBLE);
             holder.dividerView.setVisibility(View.VISIBLE);
@@ -59,6 +62,7 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
 
         holder.routeDropUpButton.setOnClickListener(v -> {
             holder.routeDescription.setVisibility(View.GONE);
+            holder.startAddress.setVisibility(View.GONE);
             holder.routeDropDownButton.setVisibility(View.VISIBLE);
             holder.routeDropUpButton.setVisibility(View.GONE);
             holder.dividerView.setVisibility(View.GONE);
@@ -80,6 +84,7 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView routeName;
         TextView routeDescription;
+        TextView startAddress;
         ImageView routeDropDownButton;
         ImageView routeDropUpButton;
         LinearLayout controlLinearLayout;
@@ -92,6 +97,7 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
             super(itemView);
             routeName = itemView.findViewById(R.id.route_name);
             routeDescription = itemView.findViewById(R.id.route_description);
+            startAddress = itemView.findViewById(R.id.route_start_address);
             routeDropDownButton = itemView.findViewById(R.id.arrow_down);
             routeDropUpButton = itemView.findViewById(R.id.arrow_up);
             routeDelete = itemView.findViewById(R.id.route_delete);
@@ -102,8 +108,7 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
 
             itemView.setOnClickListener(this);
         }
-
-
+        
         public void onClick(View view) {
 
         }

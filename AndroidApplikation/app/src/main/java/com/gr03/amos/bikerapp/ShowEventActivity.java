@@ -193,13 +193,13 @@ public class ShowEventActivity extends AppCompatActivity
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.create_event_fragment, new ShowEventsFragment())
                             .commit();
-//                    getSupportActionBar().setTitle("Event Feed");
+                    getSupportActionBar().setTitle("Event Feed");
                     return true;
                 case R.id.navigation_route:
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.create_event_fragment, new ShowRoutesFragment())
                             .commit();
-//                    getSupportActionBar().setTitle("Route Feed");
+                    getSupportActionBar().setTitle("Route Feed");
 //                    toolbar.setTitle("Route Feed");
                     return true;
             }

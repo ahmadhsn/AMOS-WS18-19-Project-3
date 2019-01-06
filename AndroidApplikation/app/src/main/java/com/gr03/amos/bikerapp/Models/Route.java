@@ -9,7 +9,7 @@ public class Route extends RealmObject {
     private long id_user;
     private String name;
     private String description;
-    private Address start_address;
+    private Start start;
     private Address end_address;
 
     public String getName() {
@@ -28,12 +28,12 @@ public class Route extends RealmObject {
         this.description = description;
     }
 
-    public Address getStartAddress() {
-        return start_address;
+    public Start getStart() {
+        return start;
     }
 
-    public void setStartAddress(Address start_address) {
-        this.start_address = start_address;
+    public void setStart(Start start) {
+        this.start = start;
     }
 
     public Address getEndAddress() {
