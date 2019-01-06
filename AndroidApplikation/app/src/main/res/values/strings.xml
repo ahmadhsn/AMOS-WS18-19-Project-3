@@ -53,6 +53,10 @@
     <string name="action_add_event">Add event</string>
     <string name="show_friends">Show Friends</string>
     <string name="admin_tag">Admin</string>
+    <string name="title_event_feed">Event Feed</string>
+    <string name="title_route_feed">Route Feed</string>
+    <!--<string name="title_cart">Cart</string>-->
+    <!--<string name="title_profile">Profile</string>-->
     <!--
      Strings for Address creation
      -->

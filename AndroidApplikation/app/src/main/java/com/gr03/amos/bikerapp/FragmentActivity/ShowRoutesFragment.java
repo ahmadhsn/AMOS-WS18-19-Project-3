@@ -54,21 +54,9 @@ public class ShowRoutesFragment extends Fragment {
 
         Realm.init(container.getContext());
         Realm realm = Realm.getDefaultInstance();
-        Requests.getJsonResponse("getRoutes", container.getContext());
+        Requests.getJsonResponseForRoutes("getRoutes", container.getContext());
         RealmResults<Route> routes = realm.where(Route.class).findAll();
         populateRecyclerView(routes);
-
-        Button btRouteFeed = view.findViewById(R.id.route_feed);
-        btRouteFeed.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                ShowRoutesFragment.this.getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.create_event_fragment, new ShowRoutesFragment())
-                        .commit();
-            }
-        });
-
         return view;
     }
 

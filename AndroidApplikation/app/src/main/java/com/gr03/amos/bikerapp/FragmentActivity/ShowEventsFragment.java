@@ -2,10 +2,13 @@ package com.gr03.amos.bikerapp.FragmentActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -85,19 +88,8 @@ public class ShowEventsFragment extends Fragment {
         populateRecyclerView(events);
         eventFilterImage.setOnClickListener(v -> showInputDialog());
 
-
-        Button btEventFeed = view.findViewById(R.id.event_feed);
-        btEventFeed.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                ShowEventsFragment.this.getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.create_event_fragment, new ShowEventsFragment())
-                        .commit();
-            }
-        });
-
         return view;
+
     }
 
 

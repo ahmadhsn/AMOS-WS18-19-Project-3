@@ -8,6 +8,7 @@ import com.google.gson.JsonObject;
 import com.gr03.amos.bikerapp.Models.Address;
 import com.gr03.amos.bikerapp.Models.Event;
 import com.gr03.amos.bikerapp.Models.Friend;
+import com.gr03.amos.bikerapp.Models.Route;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -68,6 +69,27 @@ public class Requests {
             Realm realm = Realm.getDefaultInstance();
             realm.beginTransaction();
             realm.createOrUpdateAllFromJson(Event.class, eventString);
+            realm.commitTransaction();
+            realm.close();
+
+
+        } catch (ExecutionException | InterruptedException | JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void getJsonResponseForRoutes(String urlTail, Context context) {
+        try {
+            JsonObject jsonObject = new GetJson().AsJSONObject("http://" + HOST + ":" + PORT + "/RESTfulWebserver/services/" + urlTail);
+            JSONObject obj = new JSONObject(String.valueOf(jsonObject));
+
+            JSONArray routeString = obj.getJSONArray("route");
+
+            Realm.init(context);
+            Realm realm = Realm.getDefaultInstance();
+            realm.beginTransaction();
+            realm.createOrUpdateAllFromJson(Route.class, routeString);
             realm.commitTransaction();
             realm.close();
 
