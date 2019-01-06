@@ -29,31 +29,5 @@
         android:layout_height="match_parent"
         android:layout_marginTop="35dp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="bottom">
-
-        <Button
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawableTint="@color/white"
-            android:id="@+id/event_feed"
-            android:backgroundTint="@color/secondaryDarkColor"
-            android:textColor="@color/white"
-            android:text="Event Feed"/>
-        <Button
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:drawableTint="@color/white"
-            android:layout_height="wrap_content"
-            android:id="@+id/route_feed"
-            android:backgroundTint="@color/secondaryDarkColor"
-            android:textColor="@color/white"
-            android:text="Route Feed"/>
-
-    </LinearLayout>
 
 </FrameLayout>

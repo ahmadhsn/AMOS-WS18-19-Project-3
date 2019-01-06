@@ -8,10 +8,27 @@
     tools:context=".ShowEventActivity"
     tools:showIn="@layout/app_bar_show_event">
 
-
     <FrameLayout
         android:id="@+id/create_event_fragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginBottom="55dp"
+        />
+
+
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/bgBottomNavigation"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:itemIconTint="@android:color/white"
+        app:itemTextColor="@android:color/white"
+        app:menu="@menu/navigation" />
 
 </android.support.constraint.ConstraintLayout>
+
+
+    <!--android:layout_gravity="bottom"--><!--android:background="?android:attr/windowBackground"--><!--android:foreground="?attr/selectableItemBackground"--><!--app:itemBackground="@color/bgBottomNavigation"--><!--app:itemIconTint="@android:color/white"--><!--app:itemTextColor="@android:color/white"-->

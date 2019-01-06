@@ -17,6 +17,7 @@
 
     <color name="red">#e60000</color>
     <color name="yellow">#ffff33</color>
+    <color name="bgBottomNavigation">#ff7d00</color>
 
 
 </resources>

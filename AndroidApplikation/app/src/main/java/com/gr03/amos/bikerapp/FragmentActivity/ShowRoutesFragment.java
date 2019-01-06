@@ -51,14 +51,6 @@ public class ShowRoutesFragment extends Fragment {
         RealmResults<Route> routes = realm.where(Route.class).findAll();
         populateRecyclerView(routes);
 
-        Button btRouteFeed = view.findViewById(R.id.route_feed);
-        btRouteFeed.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                //TODO
-            }
-        });
 
         return view;
     }
