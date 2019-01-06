@@ -23,6 +23,7 @@ import com.gr03.amos.bikerapp.FragmentActivity.ChangePasswordFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.CreateEventFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.ShowEventsFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.ShowFriendsFragment;
+import com.gr03.amos.bikerapp.FragmentActivity.ShowRoutesFragment;
 import com.gr03.amos.bikerapp.Models.Address;
 import com.gr03.amos.bikerapp.Models.Event;
 
@@ -122,7 +123,12 @@ public class ShowEventActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.create_event_fragment, new ShowEventsFragment())
                     .commit();
-        } else if (id == R.id.settings) {
+        }
+        else if (id == R.id.show_routes) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.create_event_fragment, new ShowRoutesFragment())
+                    .commit();
+        }else if (id == R.id.settings) {
             //TODO implement settings
         } else if (id == R.id.change_password) {
             getSupportFragmentManager().beginTransaction()

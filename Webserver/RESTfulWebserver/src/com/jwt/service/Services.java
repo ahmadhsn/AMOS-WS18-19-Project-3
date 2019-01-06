@@ -433,7 +433,6 @@ public class Services {
 
 			}
 
-			
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -441,6 +440,89 @@ public class Services {
 
 		return Response.status(200).entity(j.toString()).build();
 
+	}
+	
+	
+	@GET
+	@Path("/getRoutes")
+	@Consumes (MediaType.APPLICATION_JSON)
+	public Response getAllRoutes() throws JSONException{
+		
+		JSONObject jobj1 = new JSONObject();
+		JSONArray jArray = new JSONArray();
+		JSONObject j = new JSONObject();
+		
+		System.out.println("...getAllRoutes");
+		try {
+			DatabaseProvider provider = DatabaseProvider.getInstance(context);
+			
+			ResultSet result = provider.querySelectDB("Select * from ROUTE"
+					//"SELECT a.*, r.* FROM ADDRESS AS a INNER JOIN ROUTE AS r ON "
+					//+ "(a.id_address = r.startpoint OR a.id_address = r.endpoint)"
+				//	+ ""
+					//+ "SELECT DISTINCT ON (r.id_route) * FROM ROUTE r"
+					//+ " JOIN ADDRESS a USING (id_address)"
+					//+ " WHERE e.startpoint =a.id_address "
+					//+ " ORDER BY r.id_route, a.id_address" 
+					);
+			System.out.println(result);
+			
+			while (result.next()) {	
+				String starting_id = result.getString("startpoint");
+				String ending_id = result.getString("endpoint");
+				
+				ResultSet start = provider.querySelectDB("Select * from ADDRESS AS a Where a.id_address =" + starting_id);
+				ResultSet end = provider.querySelectDB("Select * from ADDRESS AS a Where a.id_address =" + ending_id);
+								
+				String id_json = result.getString("id_route");
+				String name_json = result.getString("name");
+				String desc_json = result.getString("description");
+				String user_id_json = result.getString("id_user");
+				
+
+				JSONObject jobj = new JSONObject();
+				jobj.put("id_route", id_json);
+				jobj.put("name", name_json);
+				jobj.put("description", desc_json);
+				jobj.put("start_Id", starting_id);
+				jobj.put("end_Id", ending_id);
+				jobj.put("id_user", user_id_json);
+				
+				if(start.next()) { 
+					JSONObject jobj4 = new JSONObject();
+					JSONObject jobj3 = new JSONObject();
+					jobj4.put("country", start.getString("country"));
+					jobj4.put("city", start.getString("city"));
+					jobj4.put("street", start.getString("street"));
+					jobj4.put("postcode", start.getString("postcode"));
+					jobj4.put("house_number", start.getString("housenumber"));
+					jobj3.append("address",jobj4);
+					jobj.append("start", jobj3);
+					System.out.println(jobj4);
+
+				}
+				if(end.next()) { 
+					JSONObject jobj5 = new JSONObject();
+					JSONObject jobj3 = new JSONObject();
+					jobj5.put("country", start.getString("country"));
+					jobj5.put("city", start.getString("city"));
+					jobj5.put("street", start.getString("street"));
+					jobj5.put("postcode", start.getString("postcode"));
+					jobj5.put("house_number", start.getString("housenumber"));
+					jobj3.append("address",jobj5);
+					jobj.append("end", jobj3);
+				}
+				
+				j.append("route",jobj);
+
+			}
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		return Response.status(200).entity(j.toString()).build();
+		
 	}
 	
 

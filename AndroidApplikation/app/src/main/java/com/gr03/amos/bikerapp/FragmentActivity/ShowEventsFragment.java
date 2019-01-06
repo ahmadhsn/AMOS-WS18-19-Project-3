@@ -101,7 +101,6 @@ public class ShowEventsFragment extends Fragment {
     }
 
 
-
     private void populateRecyclerView(RealmResults<Event> events) {
         showEventsRecyclerView = view.findViewById(R.id.showEvents);
         showEventsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

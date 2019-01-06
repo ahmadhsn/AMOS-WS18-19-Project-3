@@ -7,13 +7,22 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.app.AlertDialog;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.gr03.amos.bikerapp.Adapters.ShowRoutesRecyclerViewAdapter;
 import com.gr03.amos.bikerapp.Models.Route;
+import com.gr03.amos.bikerapp.Models.Address;
 import com.gr03.amos.bikerapp.R;
 import com.gr03.amos.bikerapp.Requests;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -45,9 +54,7 @@ public class ShowRoutesFragment extends Fragment {
 
         Realm.init(container.getContext());
         Realm realm = Realm.getDefaultInstance();
-
-//TODO SERVER SIDE GET ROUTES
-        Requests.getJsonResponse("????", container.getContext());
+        Requests.getJsonResponse("getRoutes", container.getContext());
         RealmResults<Route> routes = realm.where(Route.class).findAll();
         populateRecyclerView(routes);
 
@@ -56,7 +63,9 @@ public class ShowRoutesFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-                //TODO
+                ShowRoutesFragment.this.getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.create_event_fragment, new ShowRoutesFragment())
+                        .commit();
             }
         });
 
