@@ -1,19 +1,20 @@
 package com.gr03.amos.bikerapp;
 
-import android.app.ActionBar;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import com.gr03.amos.bikerapp.Adapters.MessageListRecyclerViewAdapter;
+import com.gr03.amos.bikerapp.Models.Message;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,14 +25,20 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
-import java.util.concurrent.Callable;
-import java.util.concurrent.FutureTask;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class ChatActivity extends AppCompatActivity {
 
     EditText msg;
     int chatId;
     ArrayList<Integer> userIds;
+    RecyclerView showMessagesRecyclerView;
+    MessageListRecyclerViewAdapter messageListRecyclerViewAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,11 +55,21 @@ public class ChatActivity extends AppCompatActivity {
         Intent intent = getIntent();
         userIds = new ArrayList<>();
         userIds = intent.getIntegerArrayListExtra("chatUser");
-
+        showMessagesRecyclerView = findViewById(R.id.reyclerview_message_list);
         Log.i("ids", String.valueOf(userIds));
 
         //load chat
         chatId = loadChat();
+
+//        new Timer().scheduleAtFixedRate(new TimerTask() {
+//            @Override
+//            public void run() {
+//
+//                Requests.getJsonResponseForChat("getChat", chatId, getApplicationContext());
+//            }
+//        }, 0, 1000);
+
+        getAllChat();
     }
 
     private int loadChat() {
@@ -127,5 +144,18 @@ public class ChatActivity extends AppCompatActivity {
 
         return currentTimestamp.toString();
     }
+
+    private void getAllChat() {
+        Requests.getJsonResponseForChat("getChat", chatId, getApplicationContext());
+
+        Realm.init(this);
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<Message> messages = realm.where(Message.class).equalTo("id_chat", chatId).findAll();
+
+        showMessagesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        messageListRecyclerViewAdapter = new MessageListRecyclerViewAdapter(this, messages);
+        showMessagesRecyclerView.setAdapter(messageListRecyclerViewAdapter);
+    }
+
 
 }

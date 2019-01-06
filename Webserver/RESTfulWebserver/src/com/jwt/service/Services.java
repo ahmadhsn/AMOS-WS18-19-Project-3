@@ -446,6 +446,45 @@ public class Services {
 
 	}
 	
+	@GET
+	@Path("getChat/{chat_id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response getAllChat(@PathParam("chat_id") int id_chat) throws JSONException {
+		
+		JSONObject jobj1 = new JSONObject();		
+		JSONArray jArray = new JSONArray();
+		
+		System.out.println("...getAllChat");
+	
+		try {
+			DatabaseProvider provider = DatabaseProvider.getInstance(context);
+			
+			ResultSet result = provider
+					.querySelectDB("SELECT * from message "
+							+ "where id_chat="+id_chat);
+			
+			while(result.next()) {
+				System.out.println("this friend chat" + result.getString("message"));
+				
+				JSONObject jobj = new JSONObject();
+				jobj.put("id_chat", result.getString("id_chat"));
+				jobj.put("id_user", result.getString("id_user"));
+				jobj.put("id_message", result.getString("id_message"));
+				jobj.put("time_created", result.getString("time_created"));
+				jobj.put("message", result.getString("message"));
+
+				jArray.put(jobj);			
+			}
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		
+		JSONObject response = new JSONObject();
+		response.put("Chat", jArray);
+		return Response.status(200).entity(response.toString()).build();
+
+	}
 
 	@GET
 	@Path("/getAddress")

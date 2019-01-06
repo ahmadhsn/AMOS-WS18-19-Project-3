@@ -8,6 +8,7 @@ import com.google.gson.JsonObject;
 import com.gr03.amos.bikerapp.Models.Address;
 import com.gr03.amos.bikerapp.Models.Event;
 import com.gr03.amos.bikerapp.Models.Friend;
+import com.gr03.amos.bikerapp.Models.Message;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -101,7 +102,31 @@ public class Requests {
 
     }
 
-    public static JSONObject getJSONResponse(String tail, JSONObject request, String method){
+
+    public static void getJsonResponseForChat(String urlTail, int chatId, Context context) {
+        try {
+            JsonObject jsonObject = new GetJson()
+                    .AsJSONObject("http://" + HOST + ":" + PORT + "/RESTfulWebserver/services/" + urlTail + "/" + chatId);
+            JSONObject obj = new JSONObject(String.valueOf(jsonObject));
+            String messageString = obj.getString("Chat");
+
+            JSONArray object = new JSONArray(messageString); // parse the array
+
+            Realm.init(context);
+            Realm realm = Realm.getDefaultInstance();
+            realm.beginTransaction();
+            realm.createOrUpdateAllFromJson(Message.class, object);
+            realm.commitTransaction();
+            realm.close();
+
+        } catch (ExecutionException | InterruptedException | JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    public static JSONObject getJSONResponse(String tail, JSONObject request, String method) {
         JSONObject response = null;
 
         FutureTask<String> task = new FutureTask(new Callable<String>() {
