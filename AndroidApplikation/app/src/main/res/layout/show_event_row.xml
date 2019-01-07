@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="15dp"
@@ -11,7 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp">
+        android:paddingRight="10dp"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="0dp">
 
         <TextView
             android:id="@+id/event_name"
@@ -79,11 +82,13 @@
 
         <Button
             android:id="@+id/join_event"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/event_date"
             android:layout_alignLeft="@+id/event_description"
-            android:layout_marginLeft="200dp"
+            android:layout_marginLeft="257dp"
+            android:layout_marginTop="-52dp"
+            android:onClick="joinEvent"
             android:text="Join"
             android:textColor="@color/black"
             android:textSize="15sp" />

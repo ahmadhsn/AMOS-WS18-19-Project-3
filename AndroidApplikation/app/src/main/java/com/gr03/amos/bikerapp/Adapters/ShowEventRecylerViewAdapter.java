@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,7 +14,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gr03.amos.bikerapp.AddRoute;
 import com.gr03.amos.bikerapp.EventDetailsActivity;
+import com.gr03.amos.bikerapp.FragmentActivity.MyEventListFragment;
+import com.gr03.amos.bikerapp.FragmentActivity.ShowEventsFragment;
 import com.gr03.amos.bikerapp.Models.Event;
 import com.gr03.amos.bikerapp.R;
 import com.gr03.amos.bikerapp.Requests;
@@ -106,6 +110,32 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
             eventTime = itemView.findViewById(R.id.event_time);
             joinEvent = itemView.findViewById(R.id.join_event);
             itemView.setOnClickListener(this);
+
+            Button joinEvent = itemView.findViewById(R.id.join_event);
+            joinEvent.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+
+                    JSONObject json = new JSONObject();
+                    try {
+
+                        json.put("event_id", mData.get(getAdapterPosition()).getId_event());
+                        json.put("user_id", SaveSharedPreference.getUserID(context));
+
+                        FutureTask<String> task = new FutureTask((Callable<String>) () -> {
+                            JSONObject threadResponse = Requests.getResponse("addmyeventlist", json);
+                            return threadResponse.toString();
+                        });
+                        new Thread(task).start();
+                        Log.i("Response", task.get());
+                    } catch (JSONException | InterruptedException | ExecutionException e) {
+                        e.printStackTrace();
+                    }
+                    /*((ShowEventActivity) v.getContext()).getFragmentManager().beginTransaction()
+                    .replace(R.id.create_event_fragment, new MyEventListFragment())
+                            .commit();*/
+                }
+            });
         }
 
         @Override
