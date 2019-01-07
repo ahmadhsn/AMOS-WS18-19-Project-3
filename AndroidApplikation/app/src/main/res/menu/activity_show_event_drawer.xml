@@ -5,16 +5,6 @@
 
     <group android:checkableBehavior="single">
         <item
-        android:id="@+id/show_events"
-        android:icon="@drawable/ic_menu_gallery"
-        android:title="@string/event_drawer_show_events_title" />
-
-        <item
-            android:id="@+id/show_routes"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Show Routes" />
-
-        <item
             android:id="@+id/show_friends"
             android:icon="@drawable/ic_contacts"
             android:title="@string/show_friends" />

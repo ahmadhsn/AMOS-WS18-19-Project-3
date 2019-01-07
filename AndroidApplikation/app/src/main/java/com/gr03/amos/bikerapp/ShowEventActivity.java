@@ -35,6 +35,7 @@ import io.realm.Realm;
 public class ShowEventActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     MenuItem menuItem;
+    BottomNavigationView navigation;
 
 
     @Override
@@ -62,11 +63,7 @@ public class ShowEventActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        menuItem = navigationView.getMenu().findItem(R.id.show_events);
-        menuItem.setChecked(true);
-        onNavigationItemSelected(menuItem);
-
-        BottomNavigationView navigation = findViewById(R.id.navigation);
+        navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navigation.setSelectedItemId(R.id.navigation_event);
 //        toolbar.setTitle("Shop");
@@ -82,8 +79,11 @@ public class ShowEventActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else if (fragmentManager.getBackStackEntryCount() > 0) {
-            fragmentManager.popBackStackImmediate();
+            fragmentManager.popBackStack();
             getSupportActionBar().setTitle("Events");
+            if (navigation.getVisibility() == View.GONE) {
+                navigation.setVisibility(View.VISIBLE);
+            }
         } else {
             super.onBackPressed();
         }
@@ -127,22 +127,17 @@ public class ShowEventActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.show_events) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.create_event_fragment, new ShowEventsFragment())
-                    .commit();
-        }
-        else if (id == R.id.show_routes) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.create_event_fragment, new ShowRoutesFragment())
-                    .commit();
-        }else if (id == R.id.settings) {
+        if (id == R.id.settings) {
             //TODO implement settings
         } else if (id == R.id.change_password) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.create_event_fragment, new ChangePasswordFragment())
                     .addToBackStack("CHANGE_PASSWORD_FRAGMENT")
                     .commit();
+            if (navigation.getVisibility() == View.VISIBLE) {
+                navigation.setVisibility(View.GONE);
+            }
+
         } else if (id == R.id.add_profile) {
             Intent intent = new Intent(this, AddProfileBasicUserActivity.class);
             startActivity(intent);
@@ -154,11 +149,18 @@ public class ShowEventActivity extends AppCompatActivity
                     .replace(R.id.create_event_fragment, new CreateEventFragment())
                     .addToBackStack("CREATE_EVENT_FRAGMENT")
                     .commit();
+            if (navigation.getVisibility() == View.VISIBLE) {
+                navigation.setVisibility(View.GONE);
+            }
+
         } else if (id == R.id.show_friends) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.create_event_fragment, new ShowFriendsFragment())
                     .addToBackStack("FRIEND_LIST_FRAGMENT")
                     .commit();
+            if (navigation.getVisibility() == View.VISIBLE) {
+                navigation.setVisibility(View.GONE);
+            }
         } else if (id == R.id.sidebar_logout) {
             SaveSharedPreference.clearSharedPrefrences(this);
             Intent intent = new Intent(this, HomeActivity.class);
