@@ -394,7 +394,7 @@ public class Services {
 			
 			ResultSet result = provider.querySelectDB("SELECT DISTINCT ON (e.id_event) * FROM EVENT e"
 					+ " LEFT JOIN ADDRESS a USING (id_address)"
-			//		+ " WHERE e.date >= now() "
+					+ " WHERE e.date >= now() "
 					+ " ORDER BY e.id_event, a.id_address" );
 			System.out.println(result);
 			

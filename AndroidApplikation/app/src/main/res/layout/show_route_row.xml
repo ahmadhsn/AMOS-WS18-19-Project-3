@@ -72,7 +72,7 @@
                 android:layout_below="@id/controls_button"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:background="@drawable/background"
+                android:background="@drawable/background1"
                 android:clickable="true"
                 android:focusable="true"
                 android:scaleType="fitXY" />
