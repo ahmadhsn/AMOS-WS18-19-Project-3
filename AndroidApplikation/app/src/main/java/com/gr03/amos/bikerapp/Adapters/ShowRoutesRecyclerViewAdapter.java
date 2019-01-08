@@ -21,8 +21,6 @@ import com.gr03.amos.bikerapp.SaveSharedPreference;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-
 import com.gr03.amos.bikerapp.Models.Route;
 
 import io.realm.Realm;
@@ -52,16 +50,15 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
         holder.routeName.setText(mData.get(position).getName());
         holder.routeDescription.setText(mData.get(position).getDescription());
         holder.startPoint
-                .setText("Start Point: " + mData.get(position).getStart().getAddress().getCity()
+                .setText("Start Point: "
+                        + mData.get(position).getStart().getAddress().getHouse_number()
+                        + ", " + mData.get(position).getStart().getAddress().getStreet()
+                        + ", " + mData.get(position).getStart().getAddress().getPostcode()
+                        + ", " + mData.get(position).getStart().getAddress().getCity()
                         + ", " + mData.get(position).getStart().getAddress().getCountry());
-        //holder.startAddress.setText(mData.get(position).getStart().getAddress().getCity());
-        //holder.startAddressCountry.setText(mData.get(position).getStart().getAddress().getCountry());
-
 
         holder.routeDropDownButton.setOnClickListener(v -> {
             holder.routeDescription.setVisibility(View.VISIBLE);
-            //  holder.startAddressCountry.setVisibility(View.VISIBLE);
-            //holder.startAddress.setVisibility(View.VISIBLE);
             holder.startPoint.setVisibility(View.VISIBLE);
             holder.routeDropDownButton.setVisibility(View.GONE);
             holder.routeDropUpButton.setVisibility(View.VISIBLE);
@@ -70,8 +67,6 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
 
         holder.routeDropUpButton.setOnClickListener(v -> {
             holder.routeDescription.setVisibility(View.GONE);
-            // holder.startAddressCountry.setVisibility(View.GONE);
-            //holder.startAddress.setVisibility(View.GONE);
             holder.startPoint.setVisibility(View.GONE);
             holder.routeDropDownButton.setVisibility(View.VISIBLE);
             holder.routeDropUpButton.setVisibility(View.GONE);
@@ -82,7 +77,6 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
             holder.adminTag.setVisibility(View.VISIBLE);
             holder.controlLinearLayout.setVisibility(View.VISIBLE);
         }
-
     }
 
     @Override
@@ -95,8 +89,6 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
         TextView routeName;
         TextView routeDescription;
         TextView startPoint;
-        //TextView startAddressCountry;
-        //TextView startAddress;
         ImageView routeDropDownButton;
         ImageView routeDropUpButton;
         LinearLayout controlLinearLayout;
@@ -109,8 +101,6 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
             super(itemView);
             routeName = itemView.findViewById(R.id.route_name);
             routeDescription = itemView.findViewById(R.id.route_description);
-            //startAddressCountry =itemView.findViewById(R.id.route_start_country);
-            //startAddress = itemView.findViewById(R.id.route_start_city);
             startPoint = itemView.findViewById(R.id.route_start_point);
             routeDropDownButton = itemView.findViewById(R.id.arrow_down);
             routeDropUpButton = itemView.findViewById(R.id.arrow_up);
