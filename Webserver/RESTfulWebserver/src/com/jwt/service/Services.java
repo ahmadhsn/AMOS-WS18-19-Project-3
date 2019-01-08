@@ -428,20 +428,24 @@ public class Services {
 	}
 	
 	@GET
-	@Path("/myEvents")
+	@Path("/myEvents/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response myEvents() throws JSONException {
+	public Response myEvents(@PathParam("id") int id) throws JSONException {
 
+		
 		JSONObject j = new JSONObject();
 		
-		System.out.println("...myallEvents");
+		System.out.println("...myallEvents");	
+		
 		try {
 			DatabaseProvider provider = DatabaseProvider.getInstance(context);
 			
-			ResultSet result = provider.querySelectDB("SELECT DISTINCT ON (e.id_event) * FROM EVENT e"
-					+ " LEFT JOIN ADDRESS a USING (id_address)"
-					+ " WHERE e.date >= now() "
-					+ " ORDER BY e.id_event, a.id_address" );
+			ResultSet result = provider.querySelectDB("SELECT E.id_event,E.name,"
+					+"E.description,E.date,E.time,"
+					+"FROM event AS E INNER JOIN"
+					+"event_participation AS P ON"
+					+"E.id_event = P.id_event AND E.date >= now()"
+					+"AND P.id_user="+id);
 			System.out.println(result);
 			
 		} catch (Exception ex) {

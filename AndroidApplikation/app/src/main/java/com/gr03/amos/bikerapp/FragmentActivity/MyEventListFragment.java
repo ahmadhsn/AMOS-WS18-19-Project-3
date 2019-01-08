@@ -18,6 +18,7 @@ import com.gr03.amos.bikerapp.Models.Event;
 import com.gr03.amos.bikerapp.R;
 import com.gr03.amos.bikerapp.Requests;
 import com.gr03.amos.bikerapp.Adapters.ShowEventRecylerViewAdapter;
+import com.gr03.amos.bikerapp.SaveSharedPreference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,7 @@ import io.realm.RealmResults;
 
 public class MyEventListFragment extends Fragment {
     RecyclerView myEventsRecyclerView;
-    ShowEventRecylerViewAdapter myEventRecylerViewAdapter;
+    ShowEventRecylerViewAdapter myEventRecyclerViewAdapter;
     private View view;
 
     public MyEventListFragment() {
@@ -52,9 +53,9 @@ public class MyEventListFragment extends Fragment {
         Realm.init(container.getContext());
         Realm realm = Realm.getDefaultInstance();
 
-        Requests.getJsonResponse("myEvents", container.getContext());
-        //RealmResults<Event> events = realm.where(Event.class).findAll();
-        //populateRecyclerView(events);
+        Requests.getJsonResponse("myEvents/" + SaveSharedPreference.getUserID(container.getContext()), container.getContext());
+        RealmResults<Event> events = realm.where(Event.class).findAll();
+        populateRecyclerView(events);
 
         return view;
     }
@@ -62,8 +63,8 @@ public class MyEventListFragment extends Fragment {
     private void populateRecyclerView(RealmResults<Event> events) {
         myEventsRecyclerView = view.findViewById(R.id.myEvents);
         myEventsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        myEventRecylerViewAdapter = new ShowEventRecylerViewAdapter(getContext(), events);
-        myEventsRecyclerView.setAdapter(myEventRecylerViewAdapter);
+        myEventRecyclerViewAdapter = new ShowEventRecylerViewAdapter(getContext(), events);
+        myEventsRecyclerView.setAdapter(myEventRecyclerViewAdapter);
     }
 
 }
