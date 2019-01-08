@@ -24,6 +24,7 @@ import org.json.JSONObject;
 
 
 import com.gr03.amos.bikerapp.Models.Route;
+
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -50,11 +51,18 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
     public void onBindViewHolder(@NonNull ShowRoutesRecyclerViewAdapter.ViewHolder holder, int position) {
         holder.routeName.setText(mData.get(position).getName());
         holder.routeDescription.setText(mData.get(position).getDescription());
-        holder.startAddress.setText(mData.get(position).getStart().getAddress().getCity());
+        holder.startPoint
+                .setText("Start Point: " + mData.get(position).getStart().getAddress().getCity()
+                        + ", " + mData.get(position).getStart().getAddress().getCountry());
+        //holder.startAddress.setText(mData.get(position).getStart().getAddress().getCity());
+        //holder.startAddressCountry.setText(mData.get(position).getStart().getAddress().getCountry());
+
 
         holder.routeDropDownButton.setOnClickListener(v -> {
             holder.routeDescription.setVisibility(View.VISIBLE);
-            holder.startAddress.setVisibility(View.VISIBLE);
+            //  holder.startAddressCountry.setVisibility(View.VISIBLE);
+            //holder.startAddress.setVisibility(View.VISIBLE);
+            holder.startPoint.setVisibility(View.VISIBLE);
             holder.routeDropDownButton.setVisibility(View.GONE);
             holder.routeDropUpButton.setVisibility(View.VISIBLE);
             holder.dividerView.setVisibility(View.VISIBLE);
@@ -62,7 +70,9 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
 
         holder.routeDropUpButton.setOnClickListener(v -> {
             holder.routeDescription.setVisibility(View.GONE);
-            holder.startAddress.setVisibility(View.GONE);
+            // holder.startAddressCountry.setVisibility(View.GONE);
+            //holder.startAddress.setVisibility(View.GONE);
+            holder.startPoint.setVisibility(View.GONE);
             holder.routeDropDownButton.setVisibility(View.VISIBLE);
             holder.routeDropUpButton.setVisibility(View.GONE);
             holder.dividerView.setVisibility(View.GONE);
@@ -84,7 +94,9 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView routeName;
         TextView routeDescription;
-        TextView startAddress;
+        TextView startPoint;
+        //TextView startAddressCountry;
+        //TextView startAddress;
         ImageView routeDropDownButton;
         ImageView routeDropUpButton;
         LinearLayout controlLinearLayout;
@@ -97,7 +109,9 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
             super(itemView);
             routeName = itemView.findViewById(R.id.route_name);
             routeDescription = itemView.findViewById(R.id.route_description);
-            startAddress = itemView.findViewById(R.id.route_start_address);
+            //startAddressCountry =itemView.findViewById(R.id.route_start_country);
+            //startAddress = itemView.findViewById(R.id.route_start_city);
+            startPoint = itemView.findViewById(R.id.route_start_point);
             routeDropDownButton = itemView.findViewById(R.id.arrow_down);
             routeDropUpButton = itemView.findViewById(R.id.arrow_up);
             routeDelete = itemView.findViewById(R.id.route_delete);
@@ -108,17 +122,18 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
 
             itemView.setOnClickListener(this);
         }
-        
+
         public void onClick(View view) {
 
         }
     }
-//TO DO: IMPLEMENT DELETE ROUTE FEATURE
+
+    //TO DO: IMPLEMENT DELETE ROUTE FEATURE
     private void deleteRoute(long routeId) throws JSONException {
 
     }
 
-//TO DO: IMPLEMENT EDIT ROUTE FEATURE
+    //TO DO: IMPLEMENT EDIT ROUTE FEATURE
     private void editRoute(long routeId) throws JSONException {
 
     }
