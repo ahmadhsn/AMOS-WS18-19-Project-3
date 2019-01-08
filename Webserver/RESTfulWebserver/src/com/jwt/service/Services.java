@@ -386,16 +386,12 @@ public class Services {
 
 		JSONObject JSONreq = new JSONObject(urlReq);
 		
-		if (JSONreq.has("user_id") && JSONreq.has("event_id")&& JSONreq.has("event_name") && JSONreq.has("event_descr") && JSONreq.has("event_date") && JSONreq.has("event_time")) {
+		if (JSONreq.has("event_id") && JSONreq.has("user_id")) {
 		
 			try {
 				
-				int user_id = JSONreq.getInt("user_id");
 				int event_id = JSONreq.getInt("event_id");
-				String eventName = JSONreq.getString("event_name");
-				String eventDescr = JSONreq.getString("event_descr");
-				String eventDate = JSONreq.getString("event_date");
-				String eventTime = JSONreq.getString("event_time");
+				int user_id = JSONreq.getInt("user_id");
 				
 				try {
 					
@@ -403,16 +399,12 @@ public class Services {
 					Connection conn = provider.getConnection();
 
 					PreparedStatement s2 = conn.prepareStatement(
-							"INSERT INTO event_participation (id_event,id_user,name,description,date,time) VALUES (?,?,?,?::date,?)");
+							"INSERT INTO event_participation (id_event,id_user) VALUES (?,?)");
 
 					//PreparedStatement s2 = conn.prepareStatement(
 						//	"INSERT INTO event_participation (id_event,id_user,name,description,date,time) VALUES (?,?,?,?::date,?)");
-					s2.setInt(1, user_id);
-					s2.setInt(2, event_id);
-					s2.setString(3, eventName);
-					s2.setString(4, eventDescr);
-					s2.setString(5, eventDate);
-					s2.setString(6, eventTime);
+					s2.setInt(1, event_id);
+					s2.setInt(2, user_id);
 
 					s2.executeUpdate();
 					s2.closeOnCompletion();
@@ -424,7 +416,7 @@ public class Services {
 				}
 				
 				JSONObject response = new JSONObject();
-				response.put("addmyeventlist", "successfullCreation");
+				response.put("addmyeventlist", "successfullAdded");
 				return Response.status(200).entity(response.toString()).build();
 				
 			} catch (Exception e) {
