@@ -74,6 +74,9 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
         if (mData.get(position).getId_user() == SaveSharedPreference.getUserID(this.context)) {
             holder.adminTag.setVisibility(View.VISIBLE);
             holder.controlLinearLayout.setVisibility(View.VISIBLE);
+        } else {
+            holder.adminTag.setVisibility(View.INVISIBLE);
+            holder.controlLinearLayout.setVisibility(View.INVISIBLE);
         }
 
         holder.eventDelete.setOnClickListener(v -> {
