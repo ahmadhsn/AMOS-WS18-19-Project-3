@@ -6,10 +6,10 @@ import io.realm.annotations.LinkingObjects;
 import io.realm.annotations.PrimaryKey;
 
 public class Address extends RealmObject {
-    private String country;
     @PrimaryKey
     private long id_address;
     private String city;
+    private String country;
     private String house_number;
     private String street;
     private long postcode;
