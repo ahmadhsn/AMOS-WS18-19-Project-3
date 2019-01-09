@@ -134,6 +134,9 @@ public class ShowEventActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.create_event_fragment, new MyEventListFragment())
                     .commit();
+            if (navigation.getVisibility() == View.VISIBLE) {
+                navigation.setVisibility(View.GONE);
+            }
         } else if (id == R.id.change_password) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.create_event_fragment, new ChangePasswordFragment())
