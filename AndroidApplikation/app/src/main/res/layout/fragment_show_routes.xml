@@ -8,12 +8,12 @@
     tools:context=".FragmentActivity.ShowEventsFragment">
 
     <RelativeLayout
-        android:id="@+id/event_filter_layout"
+        android:id="@+id/route_filter_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/event_filter"
+            android:id="@+id/route_filter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -24,11 +24,10 @@
     </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/showEvents"
+        android:id="@+id/showRoutes"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="35dp" />
 
-        />
 
 </FrameLayout>

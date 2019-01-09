@@ -27,11 +27,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".EditEventActivity" />
+        <activity
+            android:name=".EditEventActivity"
+            android:theme="@style/Theme.AppCompat.Dialog.Alert"/>
         <activity android:name=".OldActivities.ChangePasswordActivity" />
         <activity android:name=".ProfileBasicUserActivity" />
         <activity android:name=".AddProfileBasicUserActivity" />
-        <activity android:name=".EventDetailsActivity" />
         <activity
             android:name=".ChatActivity"
             android:label="@string/title_activity_chat"

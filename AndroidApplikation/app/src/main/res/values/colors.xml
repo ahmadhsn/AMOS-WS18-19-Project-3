@@ -10,5 +10,16 @@
     <color name="orange">#F77913</color>
     <color name="smokeyWhite">#F5F5F5</color>
     <color name="lightGrey">#C0C0C0</color>
+    <color name="grey">#7f040000</color>
+    <color name="transparent">#00000000</color>
+
+    <color name="green">#ccffcc</color>
+    <color name="darkGreen">#99ff99</color>
+    <color name="textGreenColor">#00cc00</color>
+
+    <color name="red">#e60000</color>
+    <color name="yellow">#ffff33</color>
+    <color name="bgBottomNavigation">#ff7d00</color>
+
 
 </resources>

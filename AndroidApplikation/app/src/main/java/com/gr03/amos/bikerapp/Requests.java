@@ -8,6 +8,8 @@ import com.google.gson.JsonObject;
 import com.gr03.amos.bikerapp.Models.Address;
 import com.gr03.amos.bikerapp.Models.Event;
 import com.gr03.amos.bikerapp.Models.Friend;
+import com.gr03.amos.bikerapp.Models.Route;
+import com.gr03.amos.bikerapp.Models.User;
 import com.gr03.amos.bikerapp.Models.Message;
 
 import org.json.JSONArray;
@@ -81,6 +83,27 @@ public class Requests {
 
     }
 
+    public static void getJsonResponseForRoutes(String urlTail, Context context) {
+        try {
+            JsonObject jsonObject = new GetJson().AsJSONObject("http://" + HOST + ":" + PORT + "/RESTfulWebserver/services/" + urlTail);
+            JSONObject obj = new JSONObject(String.valueOf(jsonObject));
+
+            JSONArray routeString = obj.getJSONArray("route");
+
+            Realm.init(context);
+            Realm realm = Realm.getDefaultInstance();
+            realm.beginTransaction();
+            realm.createOrUpdateAllFromJson(Route.class, routeString);
+            realm.commitTransaction();
+            realm.close();
+
+
+        } catch (ExecutionException | InterruptedException | JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public static void getJsonResponseForFriends(String urlTail, Context context) {
         try {
             JsonObject jsonObject = new GetJson().AsJSONObject("http://" + HOST + ":" + PORT + "/RESTfulWebserver/services/" + urlTail);
@@ -100,6 +123,26 @@ public class Requests {
             e.printStackTrace();
         }
 
+    }
+
+    public static void getJsonResponseForUser(String urlTail, Context context) {
+        try {
+            JsonObject jsonObject = new GetJson().AsJSONObject("http://" + HOST + ":" + PORT + "/RESTfulWebserver/services/" + urlTail);
+            JSONObject obj = new JSONObject(String.valueOf(jsonObject));
+
+            JSONArray userString = obj.getJSONArray("user");
+
+            Realm.init(context);
+            Realm realm = Realm.getDefaultInstance();
+            realm.beginTransaction();
+            realm.createOrUpdateAllFromJson(User.class, userString);
+            realm.commitTransaction();
+            realm.close();
+
+
+        } catch (ExecutionException | InterruptedException | JSONException e) {
+            e.printStackTrace();
+        }
     }
 
 

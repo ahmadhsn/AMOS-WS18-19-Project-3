@@ -1,18 +1,16 @@
 package com.gr03.amos.bikerapp.Models;
 
-
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-public class Event extends RealmObject {
+public class Route extends RealmObject {
     @PrimaryKey
-    private long id_event;
+    private long id_route;
     private long id_user;
-    private Address address;
     private String name;
     private String description;
-    private String date;
-    private String time;
+    private Start start;
+    private Address end_address;
 
     public String getName() {
         return name;
@@ -30,33 +28,28 @@ public class Event extends RealmObject {
         this.description = description;
     }
 
-
-    public long getId_event() {
-        return id_event;
+    public Start getStart() {
+        return start;
     }
 
-    public String getTime() {
-        return time;
+    public void setStart(Start start) {
+        this.start = start;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public Address getEndAddress() {
+        return end_address;
     }
 
-    public String getDate() {
-        return date;
+    public void setEndAddress(Address end_address) {
+        this.end_address = end_address;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public long getId_route() {
+        return id_route;
     }
 
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
+    public void setId_route(long id_route) {
+        this.id_route = id_route;
     }
 
     public long getId_user() {
@@ -67,3 +60,5 @@ public class Event extends RealmObject {
         this.id_user = id_user;
     }
 }
+
+

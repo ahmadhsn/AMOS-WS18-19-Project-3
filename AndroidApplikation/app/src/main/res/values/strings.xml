@@ -56,6 +56,11 @@
     <string name="title_activity_chat">ChatActivity</string>
     <string name="enter_message_hint">Enter message</string>
     <string name="button_send">SEND</string>
+    <string name="admin_tag">Admin</string>
+    <string name="title_event_feed">Event Feed</string>
+    <string name="title_route_feed">Route Feed</string>
+    <!--<string name="title_cart">Cart</string>-->
+    <!--<string name="title_profile">Profile</string>-->
     <!--
      Strings for Address creation
      -->
