@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +14,10 @@ import android.app.AlertDialog;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.gr03.amos.bikerapp.Adapters.ShowMyEventRecyclerViewAdapter;
 import com.gr03.amos.bikerapp.Models.Address;
 import com.gr03.amos.bikerapp.Models.Event;
+import com.gr03.amos.bikerapp.Models.EventParticipation;
 import com.gr03.amos.bikerapp.R;
 import com.gr03.amos.bikerapp.Requests;
 import com.gr03.amos.bikerapp.Adapters.ShowEventRecylerViewAdapter;
@@ -25,13 +28,16 @@ import java.util.List;
 import java.util.Objects;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmResults;
 
 
 public class MyEventListFragment extends Fragment {
     RecyclerView myEventsRecyclerView;
-    ShowEventRecylerViewAdapter myEventRecyclerViewAdapter;
+    ShowMyEventRecyclerViewAdapter showMyEventRecyclerViewAdapter;
     private View view;
+    Event event;
+
 
     public MyEventListFragment() {
     }
@@ -53,18 +59,27 @@ public class MyEventListFragment extends Fragment {
         Realm.init(container.getContext());
         Realm realm = Realm.getDefaultInstance();
 
-        Requests.getJsonResponse("myEvents/" + SaveSharedPreference.getUserID(container.getContext()), container.getContext());
-        RealmResults<Event> events = realm.where(Event.class).findAll();
+        RealmResults<EventParticipation> eventParticipations = realm.where(EventParticipation.class).findAll();
+
+        RealmList<Event> events = new RealmList<>();
+        for (EventParticipation eventParticipation : eventParticipations) {
+            event = realm.where(Event.class)
+                    .equalTo("id_event", eventParticipation.getId_event())
+                    .findFirst();
+            Log.i("EventDesc", event.toString());
+            events.add(event);
+        }
+
         populateRecyclerView(events);
 
         return view;
     }
 
-    private void populateRecyclerView(RealmResults<Event> events) {
+    private void populateRecyclerView(RealmList<Event> events) {
         myEventsRecyclerView = view.findViewById(R.id.myEvents);
         myEventsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        myEventRecyclerViewAdapter = new ShowEventRecylerViewAdapter(getContext(), events);
-        myEventsRecyclerView.setAdapter(myEventRecyclerViewAdapter);
+        showMyEventRecyclerViewAdapter = new ShowMyEventRecyclerViewAdapter(getContext(), events);
+        myEventsRecyclerView.setAdapter(showMyEventRecyclerViewAdapter);
     }
 
 }

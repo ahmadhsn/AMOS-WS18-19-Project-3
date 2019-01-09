@@ -119,17 +119,16 @@ public class ShowEventActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.create_event_fragment, new ShowEventsFragment())
                     .commit();
+        } else if (id == R.id.my_event_list) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.create_event_fragment, new MyEventListFragment())
+                    .commit();
         } else if (id == R.id.settings) {
             //TODO implement settings
         } else if (id == R.id.change_password) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.create_event_fragment, new ChangePasswordFragment())
                     .addToBackStack("CHANGE_PASSWORD_FRAGMENT")
-                    .commit();
-        } else if (id == R.id.myevent_list) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.create_event_fragment, new MyEventListFragment())
-                    .addToBackStack("MY_EVENT_LIST_FRAGMENT")
                     .commit();
         } else if (id == R.id.add_profile) {
             Intent intent = new Intent(this, AddProfileBasicUserActivity.class);

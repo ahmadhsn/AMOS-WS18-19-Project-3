@@ -19,6 +19,7 @@ import com.gr03.amos.bikerapp.EventDetailsActivity;
 import com.gr03.amos.bikerapp.FragmentActivity.MyEventListFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.ShowEventsFragment;
 import com.gr03.amos.bikerapp.Models.Event;
+import com.gr03.amos.bikerapp.Models.EventParticipation;
 import com.gr03.amos.bikerapp.R;
 import com.gr03.amos.bikerapp.Requests;
 import com.gr03.amos.bikerapp.SaveSharedPreference;
@@ -34,6 +35,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
+import io.realm.Realm;
 import io.realm.RealmResults;
 
 
@@ -65,13 +67,11 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
         holder.eventDate.setText(mData.get(position).getDate());
         holder.eventTime.setText(mData.get(position).getTime());
 
-       /* holder.joinEvent.setOnClickListener(v -> {
+        holder.joinEvent.setOnClickListener(v -> {
+
             JSONObject json = new JSONObject();
             try {
-                json.put("event_name", mData.get(position).getName());
-                json.put("event_descr", mData.get(position).getDescription());
-                json.put("event_date", mData.get(position).getDate());
-                json.put("evenr_time", mData.get(position).getTime());
+
                 json.put("event_id", mData.get(position).getId_event());
                 json.put("user_id", SaveSharedPreference.getUserID(context));
 
@@ -79,13 +79,25 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
                     JSONObject threadResponse = Requests.getResponse("addmyeventlist", json);
                     return threadResponse.toString();
                 });
+
+                Realm.init(context);
+                Realm realm = Realm.getDefaultInstance();
+                realm.beginTransaction();
+                EventParticipation eventParticipation = realm.createObject(EventParticipation.class);
+                eventParticipation.setId_event(mData.get(position).getId_event());
+                eventParticipation.setId_user(SaveSharedPreference.getUserID(context));
+                realm.commitTransaction();
+                realm.close();
+
+
                 new Thread(task).start();
                 Log.i("Response", task.get());
             } catch (JSONException | InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
 
-        });*/
+
+        });
     }
 
     @Override
@@ -111,31 +123,6 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
             joinEvent = itemView.findViewById(R.id.join_event);
             itemView.setOnClickListener(this);
 
-            Button joinEvent = itemView.findViewById(R.id.join_event);
-            joinEvent.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v) {
-
-                    JSONObject json = new JSONObject();
-                    try {
-
-                        json.put("event_id", mData.get(getAdapterPosition()).getId_event());
-                        json.put("user_id", SaveSharedPreference.getUserID(context));
-
-                        FutureTask<String> task = new FutureTask((Callable<String>) () -> {
-                            JSONObject threadResponse = Requests.getResponse("addmyeventlist", json);
-                            return threadResponse.toString();
-                        });
-                        new Thread(task).start();
-                        Log.i("Response", task.get());
-                    } catch (JSONException | InterruptedException | ExecutionException e) {
-                        e.printStackTrace();
-                    }
-                    /*((ShowEventActivity) v.getContext()).getFragmentManager().beginTransaction()
-                    .replace(R.id.create_event_fragment, new MyEventListFragment())
-                            .commit();*/
-                }
-            });
         }
 
         @Override

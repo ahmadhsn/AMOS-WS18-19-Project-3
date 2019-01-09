@@ -13,17 +13,20 @@ import com.gr03.amos.bikerapp.EventDetailsActivity;
 import com.gr03.amos.bikerapp.Models.Event;
 import com.gr03.amos.bikerapp.R;
 
+import java.util.ArrayList;
+
+import io.realm.RealmList;
 import io.realm.RealmResults;
 
 
-public class myEventRecyclerViewAdapter extends RecyclerView.Adapter<myEventRecyclerViewAdapter.ViewHolder> {
+public class ShowMyEventRecyclerViewAdapter extends RecyclerView.Adapter<ShowMyEventRecyclerViewAdapter.ViewHolder> {
 
-    private RealmResults<Event> mData;
+    private RealmList<Event> mData;
     private LayoutInflater mInflater;
     private Context context;
 
     // data is passed into the constructor
-    public myEventRecyclerViewAdapter(Context context, RealmResults<Event> data) {
+    public ShowMyEventRecyclerViewAdapter(Context context, RealmList<Event> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
         this.context = context;
@@ -31,7 +34,7 @@ public class myEventRecyclerViewAdapter extends RecyclerView.Adapter<myEventRecy
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.show_myevent_row, parent, false);
+        View view = mInflater.inflate(R.layout.show_my_event_row, parent, false);
         return new ViewHolder(view);
 
 
