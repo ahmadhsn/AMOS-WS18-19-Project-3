@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -43,6 +44,7 @@ public class ShowEventActivity extends AppCompatActivity
             startActivity(intent);
         }
 
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -60,6 +62,7 @@ public class ShowEventActivity extends AppCompatActivity
         menuItem = navigationView.getMenu().findItem(R.id.show_events);
         menuItem.setChecked(true);
         onNavigationItemSelected(menuItem);
+
     }
 
 
@@ -89,20 +92,21 @@ public class ShowEventActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
         if (id == R.id.action_logout) {
             SaveSharedPreference.clearSharedPrefrences(this);
             Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
         }
 
-        if (id == R.id.action_add_event) {
+        if (id == R.id.show_profile) {
+            Intent intent = new Intent(this, AddProfileBasicUserActivity.class);
+            startActivity(intent);
+        }
+
+        if (id== R.id.add_friend) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.create_event_fragment, new CreateEventFragment())
-                    .addToBackStack("CREATE_EVENT_FRAGMENT")
+                    .replace(R.id.create_event_fragment, new ShowFriendsFragment())
+                    .addToBackStack("FRIEND_LIST_FRAGMENT")
                     .commit();
             return true;
         }
@@ -133,13 +137,22 @@ public class ShowEventActivity extends AppCompatActivity
         } else if (id == R.id.add_profile) {
             Intent intent = new Intent(this, AddProfileBasicUserActivity.class);
             startActivity(intent);
+        } else if (id == R.id.add_route) {
+            Intent intent = new Intent(this, AddRoute.class);
+            startActivity(intent);
+        } else if (id == R.id.action_add_event) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.create_event_fragment, new CreateEventFragment())
+                    .addToBackStack("CREATE_EVENT_FRAGMENT")
+                    .commit();
         } else if (id == R.id.show_friends) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.create_event_fragment, new ShowFriendsFragment())
                     .addToBackStack("FRIEND_LIST_FRAGMENT")
                     .commit();
-        } else if (id == R.id.create_route) {
-            Intent intent = new Intent(this, AddRoute.class);
+        } else if (id == R.id.sidebar_logout) {
+            SaveSharedPreference.clearSharedPrefrences(this);
+            Intent intent = new Intent( this, HomeActivity.class);
             startActivity(intent);
         }
 
