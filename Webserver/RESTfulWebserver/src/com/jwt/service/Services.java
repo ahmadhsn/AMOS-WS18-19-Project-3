@@ -3,8 +3,10 @@ package com.jwt.service;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.List;
 import java.sql.Connection;
+import java.sql.Date;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
@@ -25,6 +27,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.jwt.DataBaseConnection.DatabaseProvider;
+import com.jwt.dao.ChatDao;
+import com.jwt.dao.ChatDaoImplementation;
 import com.jwt.dao.EventDao;
 import com.jwt.dao.EventDaoImplementation;
 import com.jwt.dao.EventTypeDao;
@@ -37,6 +41,7 @@ import com.jwt.model.Address;
 import com.jwt.model.BasicUser;
 import com.jwt.model.Event;
 import com.jwt.model.EventType;
+import com.jwt.model.Message;
 import com.jwt.model.User;
 import com.jwt.service.mail.Mailer;
 
@@ -375,7 +380,7 @@ public class Services {
 				.header("Access-Control-Allow-Origin", "*").build();
 	}
 
-	
+
 	@POST
 	@Path("/addmyeventlist")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -385,16 +390,16 @@ public class Services {
 		DatabaseProvider.getInstance(context);
 
 		JSONObject JSONreq = new JSONObject(urlReq);
-		
+
 		if (JSONreq.has("event_id") && JSONreq.has("user_id")) {
-		
+
 			try {
-				
+
 				int event_id = JSONreq.getInt("event_id");
 				int user_id = JSONreq.getInt("user_id");
-				
+
 				try {
-					
+
 					DatabaseProvider provider = DatabaseProvider.getInstance(context);
 					Connection conn = provider.getConnection();
 
@@ -408,17 +413,17 @@ public class Services {
 
 					s2.executeUpdate();
 					s2.closeOnCompletion();
-					
+
 					System.out.println("MyeventGotInserted");
 
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
-				
+
 				JSONObject response = new JSONObject();
 				response.put("addmyeventlist", "successfullAdded");
 				return Response.status(200).entity(response.toString()).build();
-				
+
 			} catch (Exception e) {
 				System.out.println("Wrong JSONFormat:" + e.toString());
 			}
@@ -426,20 +431,20 @@ public class Services {
 		System.out.println("InvalidRequestbody");
 		return Response.status(400).entity("InvalidRequestBody").build();
 	}
-	
+
 	@GET
 	@Path("/myEvents/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response myEvents(@PathParam("id") int id) throws JSONException {
 
-		
+
 		JSONObject j = new JSONObject();
-		
-		System.out.println("...myallEvents");	
-		
+
+		System.out.println("...myallEvents");
+
 		try {
 			DatabaseProvider provider = DatabaseProvider.getInstance(context);
-			
+
 			ResultSet result = provider.querySelectDB("SELECT E.id_event,E.name,"
 					+"E.description,E.date,E.time,"
 					+"FROM event AS E INNER JOIN"
@@ -447,7 +452,7 @@ public class Services {
 					+"E.id_event = P.id_event AND E.date >= now()"
 					+"AND P.id_user="+id);
 			System.out.println(result);
-			
+
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -455,7 +460,7 @@ public class Services {
 		return Response.status(200).entity(j.toString()).build();
 
 	}
-	
+
 
 	@GET
 	@Path("/getEvents")
@@ -522,7 +527,45 @@ public class Services {
 
 	}
 	
-	
+	@GET
+	@Path("getChat/{chat_id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response getAllChat(@PathParam("chat_id") int id_chat) throws JSONException {
+
+		JSONObject jobj1 = new JSONObject();
+		JSONArray jArray = new JSONArray();
+
+		System.out.println("...getAllChat");
+
+		try {
+			DatabaseProvider provider = DatabaseProvider.getInstance(context);
+
+			ResultSet result = provider
+					.querySelectDB("SELECT * from message "
+							+ "where id_chat="+id_chat);
+
+			while(result.next()) {
+				System.out.println("this friend chat" + result.getString("message"));
+
+				JSONObject jobj = new JSONObject();
+				jobj.put("id_chat", result.getString("id_chat"));
+				jobj.put("id_user", result.getString("id_user"));
+				jobj.put("id_message", result.getString("id_message"));
+				jobj.put("time_created", result.getString("time_created"));
+				jobj.put("message", result.getString("message"));
+
+				jArray.put(jobj);
+			}
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		JSONObject response = new JSONObject();
+		response.put("Chat", jArray);
+		return Response.status(200).entity(response.toString()).build();
+
+	}
 
 	@GET
 	@Path("/getAddress")
@@ -1122,6 +1165,80 @@ public class Services {
 			ex.printStackTrace();
 		}
 		response.put("success", true);
+		return Response.status(200).entity(response.toString()).build();
+	}
+
+	/**
+	 * Saves a chat message in the database
+	 *
+	 * @param urlReq with message, time, id_chat, id_user
+	 * @return Response with status 200 and message successful or status 400
+	 *         with InvalidRequestBody-message.
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 * @throws JSONException
+	 * @throws UnsupportedEncodingException
+	 */
+	@PUT
+	@Path("/saveMessage")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response saveMessage(String urlReq)
+			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
+
+		System.out.println("New Message...");
+
+		JSONObject response = new JSONObject();
+
+		JSONObject JSONreq = new JSONObject(urlReq);
+
+		try {
+
+			if(! (JSONreq.has("message") && JSONreq.has("time") && JSONreq.has("id_chat") && JSONreq.has("id_user"))) {
+				return Response.status(400).entity("InvalidRequestBody").build();
+			}
+
+			ChatDao chatD = new ChatDaoImplementation();
+			chatD.saveMessage(new Message(JSONreq.getInt("id_chat"), JSONreq.getInt("id_user"), Timestamp.valueOf(JSONreq.getString("time")), JSONreq.getString("message")));
+			response.put("saveMessage", "successful");
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		return Response.status(200).entity(response.toString()).build();
+	}
+
+
+	@PUT
+	@Path("/loadChat")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response getChatId(String urlReq)
+			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
+
+		System.out.println("Load Chat...");
+
+		JSONObject response = new JSONObject();
+
+		JSONObject JSONreq = new JSONObject(urlReq);
+
+		try {
+
+			if(!JSONreq.has("id_users")) {
+				return Response.status(400).entity("InvalidRequestBody").build();
+			}
+
+			ChatDao chatD = new ChatDaoImplementation();
+			int chatId = chatD.loadChat(JSONreq.getJSONArray("id_users"));
+			response.put("id_chat", chatId);
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
 		return Response.status(200).entity(response.toString()).build();
 	}
 }

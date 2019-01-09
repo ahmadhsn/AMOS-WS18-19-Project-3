@@ -8,6 +8,7 @@ import com.google.gson.JsonObject;
 import com.gr03.amos.bikerapp.Models.Address;
 import com.gr03.amos.bikerapp.Models.Event;
 import com.gr03.amos.bikerapp.Models.Friend;
+import com.gr03.amos.bikerapp.Models.Message;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,14 +18,16 @@ import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 
 import io.realm.Realm;
 
 public class Requests {
 
     public static final String HOST = "10.0.2.2";
-    public static final String PORT = "8080";
+    public static final String PORT = "8086";
 
     public static JSONObject getResponse(String urlTail, JSONObject json) {
         return Requests.getResponse(urlTail, json, "POST");
@@ -97,5 +100,55 @@ public class Requests {
             e.printStackTrace();
         }
 
+    }
+
+
+    public static void getJsonResponseForChat(String urlTail, int chatId, Context context) {
+        try {
+            JsonObject jsonObject = new GetJson()
+                    .AsJSONObject("http://" + HOST + ":" + PORT + "/RESTfulWebserver/services/" + urlTail + "/" + chatId);
+            JSONObject obj = new JSONObject(String.valueOf(jsonObject));
+            String messageString = obj.getString("Chat");
+
+            JSONArray object = new JSONArray(messageString); // parse the array
+
+            Realm.init(context);
+            Realm realm = Realm.getDefaultInstance();
+            realm.beginTransaction();
+            realm.createOrUpdateAllFromJson(Message.class, object);
+            realm.commitTransaction();
+            realm.close();
+
+        } catch (ExecutionException | InterruptedException | JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    public static JSONObject getJSONResponse(String tail, JSONObject request, String method) {
+        JSONObject response = null;
+
+        FutureTask<String> task = new FutureTask(new Callable<String>() {
+            public String call() {
+                JSONObject threadResponse = Requests.getResponse(tail, request, method);
+                return threadResponse.toString();
+            }
+        });
+        new Thread(task).start();
+        try {
+            Log.i("Response", task.get());
+            response = new JSONObject(task.get());
+            Log.i("this is response", String.valueOf(response));
+
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return response;
     }
 }

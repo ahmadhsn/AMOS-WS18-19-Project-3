@@ -262,6 +262,7 @@ tools:context=".ProfileBasicUserActivity">
             android:onClick="saveEditedInfo"
             android:hint="Save"
             android:visibility="invisible"/>
+
     </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>

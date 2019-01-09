@@ -22,8 +22,8 @@
             android:id="@+id/friend_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
             android:layout_toEndOf="@+id/friend_image_profile"
             android:text="name"
             android:textAllCaps="true"
@@ -35,13 +35,21 @@
             android:id="@+id/friend_mail"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
-            android:layout_below="@+id/friend_name"
             android:layout_alignStart="@+id/friend_name"
+            android:layout_below="@+id/friend_name"
             android:layout_margin="5dp"
             android:layout_marginStart="-37dp"
             android:text="time"
             android:textColor="@color/colorPrimary"
             android:textSize="15sp" />
+
+        <ImageButton
+            android:id="@+id/friend_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_message_black_24dp" />
 
 
     </RelativeLayout>
