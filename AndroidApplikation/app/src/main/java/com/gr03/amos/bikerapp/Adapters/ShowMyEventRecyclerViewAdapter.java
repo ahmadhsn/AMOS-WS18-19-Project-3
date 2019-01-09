@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.gr03.amos.bikerapp.EventDetailsActivity;
 import com.gr03.amos.bikerapp.Models.Event;
 import com.gr03.amos.bikerapp.R;
 
@@ -74,10 +73,6 @@ public class ShowMyEventRecyclerViewAdapter extends RecyclerView.Adapter<ShowMyE
 
         @Override
         public void onClick(View view) {
-            Long id = mData.get(getAdapterPosition()).getId_event();
-            Intent intent = new Intent(context, EventDetailsActivity.class);
-            intent.putExtra("id", id);
-            context.startActivity(intent);
         }
 
     }

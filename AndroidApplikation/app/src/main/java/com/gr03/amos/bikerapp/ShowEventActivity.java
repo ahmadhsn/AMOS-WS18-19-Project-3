@@ -24,6 +24,7 @@ import android.widget.RelativeLayout;
 
 import com.gr03.amos.bikerapp.FragmentActivity.ChangePasswordFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.CreateEventFragment;
+import com.gr03.amos.bikerapp.FragmentActivity.MyEventListFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.ShowEventsFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.ShowFriendsFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.ShowRoutesFragment;
@@ -129,6 +130,10 @@ public class ShowEventActivity extends AppCompatActivity
 
         if (id == R.id.settings) {
             //TODO implement settings
+        } else if (id == R.id.my_event_list) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.create_event_fragment, new MyEventListFragment())
+                    .commit();
         } else if (id == R.id.change_password) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.create_event_fragment, new ChangePasswordFragment())

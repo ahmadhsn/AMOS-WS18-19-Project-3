@@ -29,7 +29,7 @@ import io.realm.Realm;
 public class Requests {
 
     public static final String HOST = "10.0.2.2";
-    public static final String PORT = "8086";
+    public static final String PORT = "8080";
 
     public static JSONObject getResponse(String urlTail, JSONObject json) {
         return Requests.getResponse(urlTail, json, "POST");

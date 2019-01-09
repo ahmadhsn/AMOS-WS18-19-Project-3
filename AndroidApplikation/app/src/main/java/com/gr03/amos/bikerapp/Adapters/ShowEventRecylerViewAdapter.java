@@ -2,10 +2,7 @@ package com.gr03.amos.bikerapp.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,46 +13,18 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.gr03.amos.bikerapp.AddRoute;
-import com.gr03.amos.bikerapp.EventDetailsActivity;
-import com.gr03.amos.bikerapp.FragmentActivity.MyEventListFragment;
-import com.gr03.amos.bikerapp.FragmentActivity.ShowEventsFragment;
-import com.gr03.amos.bikerapp.ShowEventActivity;
 import com.gr03.amos.bikerapp.EditEventActivity;
 import com.gr03.amos.bikerapp.Models.Event;
 import com.gr03.amos.bikerapp.Models.EventParticipation;
 import com.gr03.amos.bikerapp.R;
 import com.gr03.amos.bikerapp.Requests;
 import com.gr03.amos.bikerapp.SaveSharedPreference;
-import com.gr03.amos.bikerapp.ShowEventActivity;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.gr03.amos.bikerapp.Requests;
-import com.gr03.amos.bikerapp.SaveSharedPreference;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
-
 import io.realm.Realm;
-import java.util.concurrent.Callable;
-import java.util.concurrent.FutureTask;
-
-import io.realm.Realm;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.concurrent.FutureTask;
-
 import io.realm.RealmResults;
 
 
