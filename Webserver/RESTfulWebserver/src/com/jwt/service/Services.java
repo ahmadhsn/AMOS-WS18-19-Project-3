@@ -1392,12 +1392,8 @@ public class Services {
 
 					DatabaseProvider provider = DatabaseProvider.getInstance(context);
 					
-					//deletes the according stop that is in relationship to the route that needs to be deleted
-					PreparedStatement statementStop = provider.getConnection()
-							.prepareStatement("DELETE FROM STOP WHERE id_route=" + routeid);
-
-					statementStop.executeUpdate();
-					statementStop.closeOnCompletion();
+					//this is a step by step deletion with multiple statements, it's for checking reasons: rows of 4 different tables get deleted
+					//with the step by step deletion and the information of the console it's more understandable what exactly got deleted
 					
 					//selects the startpoint of the route that needs to be deleted
 					PreparedStatement statementStartpointSelect = provider.getConnection()
@@ -1434,6 +1430,15 @@ public class Services {
 					statementEndpointDelete.closeOnCompletion();
 					
 					System.out.println("Endpoint with the ID " + addressIdEndpoint + " got deleted");
+					
+					//deletes the according stop that is in relationship to the route that needs to be deleted
+					PreparedStatement statementStop = provider.getConnection()
+							.prepareStatement("DELETE FROM STOP WHERE id_route=" + routeid);
+
+					statementStop.executeUpdate();
+					statementStop.closeOnCompletion();
+					//no need for printing out information on the console, id_route in stop table is a primary key
+					//therefore one automatically receives console information if the correct stop didn't get deleted
 					
 					//deletes the correct row of the route table					
 					PreparedStatement statementRoute = provider.getConnection()

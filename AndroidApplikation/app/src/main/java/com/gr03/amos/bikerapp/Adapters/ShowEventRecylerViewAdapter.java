@@ -1,7 +1,10 @@
 package com.gr03.amos.bikerapp.Adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,17 +16,21 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.gr03.amos.bikerapp.EditEventActivity;
 import com.gr03.amos.bikerapp.Models.Event;
 import com.gr03.amos.bikerapp.Models.EventParticipation;
 import com.gr03.amos.bikerapp.R;
 import com.gr03.amos.bikerapp.Requests;
 import com.gr03.amos.bikerapp.SaveSharedPreference;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
+
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -79,23 +86,39 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
         }
 
         holder.eventDelete.setOnClickListener(v -> {
-            try {
-                deleteEvent(mData.get(position).getId_event());
-            } catch (JSONException e) {
-                e.printStackTrace();
+            AlertDialog.Builder builder;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                builder = new AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert);
+            } else {
+                builder = new AlertDialog.Builder(context);
             }
-            Realm realmDelete = Realm.getDefaultInstance();
-            final Event event1 = realmDelete
-                    .where(Event.class)
-                    .equalTo("id_event", mData.get(position).getId_event())
-                    .findFirst();
+            builder.setTitle("Delete Event")
+                    .setMessage("Are you sure you want to delete this Event?")
+                    .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                        try {
+                            deleteEvent(mData.get(position).getId_event());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        Realm realmDelete = Realm.getDefaultInstance();
+                        final Event event1 = realmDelete
+                                .where(Event.class)
+                                .equalTo("id_event", mData.get(position).getId_event())
+                                .findFirst();
 
-            realmDelete.beginTransaction();
-            event1.deleteFromRealm();
-            Log.i("After Transaction from Realm 1", "Deleted");
-            realmDelete.commitTransaction();
-            realmDelete.close();
-            notifyDataSetChanged();
+                        realmDelete.beginTransaction();
+                        event1.deleteFromRealm();
+                        Log.i("After Transaction from Realm 1", "Deleted");
+                        realmDelete.commitTransaction();
+                        realmDelete.close();
+                        notifyDataSetChanged();
+                    })
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .show();
         });
 
         holder.eventEdit.setOnClickListener(v -> {

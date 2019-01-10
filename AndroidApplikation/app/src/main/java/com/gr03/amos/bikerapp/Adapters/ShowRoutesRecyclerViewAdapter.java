@@ -88,28 +88,26 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
             } else {
                 builder = new AlertDialog.Builder(context);
             }
-            builder.setTitle("Delete entry")
-                    .setMessage("Are you sure you want to delete this entry?")
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            try {
-                                deleteRoute(mData.get(position).getId_route());
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            Realm realmDelete = Realm.getDefaultInstance();
-                            final Route route1 = realmDelete
-                                    .where(Route.class)
-                                    .equalTo("id_route", mData.get(position).getId_route())
-                                    .findFirst();
-
-                            realmDelete.beginTransaction();
-                            route1.deleteFromRealm();
-                            Log.i("After Transaction from Realm 1", "Deleted");
-                            realmDelete.commitTransaction();
-                            realmDelete.close();
-                            notifyDataSetChanged();
+            builder.setTitle("Delete Route")
+                    .setMessage("Are you sure you want to delete this Route?")
+                    .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                        try {
+                            deleteRoute(mData.get(position).getId_route());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
+                        Realm realmDelete = Realm.getDefaultInstance();
+                        final Route route1 = realmDelete
+                                .where(Route.class)
+                                .equalTo("id_route", mData.get(position).getId_route())
+                                .findFirst();
+
+                        realmDelete.beginTransaction();
+                        route1.deleteFromRealm();
+                        Log.i("After Transaction from Realm 1", "Deleted");
+                        realmDelete.commitTransaction();
+                        realmDelete.close();
+                        notifyDataSetChanged();
                     })
                     .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
