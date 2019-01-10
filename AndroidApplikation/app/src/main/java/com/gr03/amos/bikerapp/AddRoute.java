@@ -53,9 +53,9 @@ public class AddRoute extends AppCompatActivity {
         if (checkEnteredData()) {
             return;
         }
-        Requests.sendRequest("createRoute", generateRequestJSON(), "POST");
+        Requests.getJSONResponse("createRoute", generateRequestJSON(), "POST");
 
-        //finish();
+        finish();
     }
 
     boolean isTextEmpty(EditText text) {

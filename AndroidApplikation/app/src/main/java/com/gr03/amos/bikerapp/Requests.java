@@ -168,18 +168,6 @@ public class Requests {
 
     }
 
-
-    public static void sendRequest(String tail, JSONObject request, String method) {
-
-        FutureTask<String> task = new FutureTask(new Callable<String>() {
-            public String call() {
-                Requests.getResponse(tail, request, method);
-                return "Done";
-            }
-        });
-        new Thread(task).start();
-    }
-
     public static JSONObject getJSONResponse(String tail, JSONObject request, String method) {
         JSONObject response = null;
 
