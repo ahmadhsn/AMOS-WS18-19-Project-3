@@ -53,10 +53,9 @@ public class AddRoute extends AppCompatActivity {
         if (checkEnteredData()) {
             return;
         }
+        Requests.sendRequest("createRoute", generateRequestJSON(), "POST");
 
-        Requests.getJSONResponse("createRoute", generateRequestJSON(), "POST");
-
-        finish();
+        //finish();
     }
 
     boolean isTextEmpty(EditText text) {
@@ -104,14 +103,14 @@ public class AddRoute extends AppCompatActivity {
             route.put("description", routeDescription.getText().toString());
 
             startAddress.put("street", startStreet.getText().toString());
-            startAddress.put("house_number", startHouseNr.getText().toString());
+            startAddress.put("housenumber", startHouseNr.getText().toString());
             startAddress.put("country", startCountry.getText().toString());
             startAddress.put("state", "");
             startAddress.put("city", startCity.getText().toString());
             startAddress.put("postcode",  startPostcode.getText().toString());
 
             endAddress.put("street", endStreet.getText().toString());
-            endAddress.put("house_number", endHouseNr.getText().toString());
+            endAddress.put("housenumber", endHouseNr.getText().toString());
             endAddress.put("country", endCountry.getText().toString());
             endAddress.put("state", "");
             endAddress.put("city", endCity.getText().toString());
@@ -121,7 +120,6 @@ public class AddRoute extends AppCompatActivity {
             requestJSON.put("start_address", startAddress);
             requestJSON.put("route", route);
         } catch (JSONException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return requestJSON;

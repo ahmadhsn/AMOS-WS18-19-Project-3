@@ -44,6 +44,7 @@ public class Address {
 		this.housenumber = addressJSON.optString("housenumber");
 		this.latitude = addressJSON.optDouble("latitude");
 		this.longitude = addressJSON.optDouble("longitude");
+		this.street = addressJSON.optString("street");
 	}
 
 	public int getId() {
