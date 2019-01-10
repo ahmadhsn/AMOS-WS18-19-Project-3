@@ -54,21 +54,9 @@ public class AddRoute extends AppCompatActivity {
             return;
         }
 
-        try {
-            FutureTask<String> task = new FutureTask(new Callable<String>() {
-                public String call() {
-                    JSONObject threadResponse = Requests.getResponse("createRoute", generateRequestJSON());
-                    return threadResponse.toString();
-                }
-            });
+        Requests.getJSONResponse("createRoute", generateRequestJSON(), "POST");
 
-            new Thread(task).start();
-            Log.i("Response", task.get());
-            finish();
-        } catch (Exception e) {
-            //TODO: ErrorHandling
-            Log.i("Exception --- not requested", e.toString());
-        }
+        finish();
     }
 
     boolean isTextEmpty(EditText text) {
