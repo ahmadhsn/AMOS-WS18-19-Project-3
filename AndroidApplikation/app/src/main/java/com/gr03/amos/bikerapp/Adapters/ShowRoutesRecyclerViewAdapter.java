@@ -1,7 +1,9 @@
 package com.gr03.amos.bikerapp.Adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
+import android.content.DialogInterface;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,14 +16,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gr03.amos.bikerapp.Models.Route;
-import com.gr03.amos.bikerapp.Models.Start;
 import com.gr03.amos.bikerapp.R;
 import com.gr03.amos.bikerapp.Requests;
 import com.gr03.amos.bikerapp.SaveSharedPreference;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.gr03.amos.bikerapp.Models.Route;
+
+import java.util.concurrent.Callable;
+import java.util.concurrent.FutureTask;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -77,6 +80,46 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
             holder.adminTag.setVisibility(View.VISIBLE);
             holder.controlLinearLayout.setVisibility(View.VISIBLE);
         }
+
+        holder.route_delete.setOnClickListener(v -> {
+            AlertDialog.Builder builder;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                builder = new AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert);
+            } else {
+                builder = new AlertDialog.Builder(context);
+            }
+            builder.setTitle("Delete entry")
+                    .setMessage("Are you sure you want to delete this entry?")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            try {
+                                deleteRoute(mData.get(position).getId_route());
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            Realm realmDelete = Realm.getDefaultInstance();
+                            final Route route1 = realmDelete
+                                    .where(Route.class)
+                                    .equalTo("id_route", mData.get(position).getId_route())
+                                    .findFirst();
+
+                            realmDelete.beginTransaction();
+                            route1.deleteFromRealm();
+                            Log.i("After Transaction from Realm 1", "Deleted");
+                            realmDelete.commitTransaction();
+                            realmDelete.close();
+                            notifyDataSetChanged();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .show();
+
+        });
+
     }
 
     @Override
@@ -94,7 +137,7 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
         LinearLayout controlLinearLayout;
         View dividerView;
         TextView adminTag;
-        ImageButton routeDelete;
+        ImageButton route_delete;
         ImageButton routeEdit;
 
         ViewHolder(View itemView) {
@@ -104,7 +147,7 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
             startPoint = itemView.findViewById(R.id.route_start_point);
             routeDropDownButton = itemView.findViewById(R.id.arrow_down);
             routeDropUpButton = itemView.findViewById(R.id.arrow_up);
-            routeDelete = itemView.findViewById(R.id.route_delete);
+            route_delete = itemView.findViewById(R.id.route_delete);
             routeEdit = itemView.findViewById(R.id.route_edit);
             controlLinearLayout = itemView.findViewById(R.id.controls_button);
             dividerView = itemView.findViewById(R.id.divider);
@@ -121,6 +164,18 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
     //TO DO: IMPLEMENT DELETE ROUTE FEATURE
     private void deleteRoute(long routeId) throws JSONException {
 
+        JSONObject json = new JSONObject();
+        json.put("id_route", routeId);
+        try {
+            FutureTask<String> task = new FutureTask((Callable<String>) () -> {
+                JSONObject threadResponse = Requests.getResponse("deleteRoute", json);
+                return threadResponse.toString();
+            });
+            new Thread(task).start();
+            Log.i("Response", task.get());
+        } catch (Exception e) {
+            Log.i("Exception --- not requested", e.toString());
+        }
     }
 
     //TO DO: IMPLEMENT EDIT ROUTE FEATURE

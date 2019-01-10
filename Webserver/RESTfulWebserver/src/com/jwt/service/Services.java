@@ -1372,4 +1372,93 @@ public class Services {
 
 		return Response.status(200).entity(response.toString()).build();
 	}
+	
+	@POST
+	@Path("/deleteRoute")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response deleteRoute(String urlReq)
+			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
+
+		JSONObject JSONreq = new JSONObject(urlReq);
+		System.out.println("...Delete Route Request");
+
+		if (JSONreq.has("id_route")) {
+			try {
+
+				int routeid = (int) JSONreq.get("id_route");
+				try {
+
+					DatabaseProvider provider = DatabaseProvider.getInstance(context);
+					
+					//deletes the according stop that is in relationship to the route that needs to be deleted
+					PreparedStatement statementStop = provider.getConnection()
+							.prepareStatement("DELETE FROM STOP WHERE id_route=" + routeid);
+
+					statementStop.executeUpdate();
+					statementStop.closeOnCompletion();
+					
+					//selects the startpoint of the route that needs to be deleted
+					PreparedStatement statementStartpointSelect = provider.getConnection()
+							.prepareStatement("SELECT STARTPOINT FROM ROUTE WHERE id_route="+ routeid);
+					ResultSet rsStartpoint = statementStartpointSelect.executeQuery();
+					int addressIdStartpoint = 0;
+					while (rsStartpoint.next()) {
+						addressIdStartpoint = rsStartpoint.getInt("startpoint");
+					}
+					
+					//deletes startpoint in address table
+					PreparedStatement statementStartpointDelete = provider.getConnection()
+							.prepareStatement("DELETE FROM ADDRESS WHERE id_address=" + addressIdStartpoint);
+
+					statementStartpointDelete.executeUpdate();
+					statementStartpointDelete.closeOnCompletion();
+					
+					System.out.println("Startpoint with the ID " + addressIdStartpoint + " got deleted");
+					
+					//selects endpoint of route that needs to be deleted
+					PreparedStatement statementEndpointSelect = provider.getConnection()
+							.prepareStatement("SELECT ENDPOINT FROM ROUTE WHERE id_route="+ routeid);
+					ResultSet rsEndpoint = statementEndpointSelect.executeQuery();
+					int addressIdEndpoint = 0;
+					while (rsEndpoint.next()) {
+						addressIdEndpoint = rsEndpoint.getInt("endpoint");
+					}
+					
+					//deletes endpoint in the address table
+					PreparedStatement statementEndpointDelete = provider.getConnection()
+							.prepareStatement("DELETE FROM ADDRESS WHERE id_address=" + addressIdEndpoint);
+
+					statementEndpointDelete.executeUpdate();
+					statementEndpointDelete.closeOnCompletion();
+					
+					System.out.println("Endpoint with the ID " + addressIdEndpoint + " got deleted");
+					
+					//deletes the correct row of the route table					
+					PreparedStatement statementRoute = provider.getConnection()
+							.prepareStatement("DELETE FROM ROUTE WHERE id_route=" + routeid);
+
+					statementRoute.executeUpdate();
+					statementRoute.closeOnCompletion();
+					
+					System.out.println("Route with the ID " + routeid + " got deleted");
+
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+
+				JSONObject response = new JSONObject();
+
+				response.put("Route Deletion", "successfullDeletion");
+
+				return Response.status(200).entity(response.toString()).build();
+
+			} catch (Exception e) {
+				System.out.println("Wrong JSONFormat:" + e.toString());
+			}
+		}
+		System.out.println("InvalidRequestbody");
+		return Response.status(400).entity("InvalidRequestBody").build();
+	}
 }
