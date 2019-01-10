@@ -3,6 +3,7 @@ package com.gr03.amos.bikerapp.Adapters;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.gr03.amos.bikerapp.EditRouteActivity;
 import com.gr03.amos.bikerapp.Models.Route;
 import com.gr03.amos.bikerapp.R;
 import com.gr03.amos.bikerapp.Requests;
@@ -80,6 +82,14 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
             holder.adminTag.setVisibility(View.VISIBLE);
             holder.controlLinearLayout.setVisibility(View.VISIBLE);
         }
+
+        holder.routeEdit.setOnClickListener(v -> {
+            try {
+                editRoute(mData.get(position).getId_route());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
 
         holder.route_delete.setOnClickListener(v -> {
             AlertDialog.Builder builder;
@@ -178,7 +188,9 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
 
     //TO DO: IMPLEMENT EDIT ROUTE FEATURE
     private void editRoute(long routeId) throws JSONException {
-
+        Intent intent = new Intent(context, EditRouteActivity.class);
+        intent.putExtra("id", routeId);
+        context.startActivity(intent);
     }
 
 }

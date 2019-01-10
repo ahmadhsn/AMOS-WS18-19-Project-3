@@ -742,6 +742,7 @@ public class Services {
 
 	@GET
 	@Path("/getEventById/{id}")
+	
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getEventById(@PathParam("id") int id) throws JSONException, SQLException {
 		// Setting the DB context in case its not set
@@ -1466,4 +1467,55 @@ public class Services {
 		System.out.println("InvalidRequestbody");
 		return Response.status(400).entity("InvalidRequestBody").build();
 	}
+	
+	@POST
+	@Path("/updateRoute")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response updateRoute(String urlReq)
+			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
+
+		JSONObject JSONreq = new JSONObject(urlReq);
+		System.out.println("...updateRouteRequest");
+
+		if (JSONreq.has("id_route") && JSONreq.has("name") && JSONreq.has("description")) {
+			try {
+
+				int routeid = (int) JSONreq.get("id_route");
+				String routename = JSONreq.getString("name");
+				String routedescription = JSONreq.getString("description");
+
+				System.out.println("...updateRoute:" + routename + "...updateRoute Id:" + routeid);
+
+				try {
+
+					DatabaseProvider provider = DatabaseProvider.getInstance(context);
+					PreparedStatement statement = provider.getConnection().prepareStatement(
+							"UPDATE Route SET name =?, description =? WHERE id_route="
+									+ routeid);
+
+					statement.setString(1, routename);
+					statement.setString(2, routedescription);
+					statement.executeUpdate();
+					statement.closeOnCompletion();
+
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+
+				JSONObject response = new JSONObject();
+
+				response.put("eventUpdate", "successfullUpdation");
+
+				return Response.status(200).entity(response.toString()).build();
+
+			} catch (Exception e) {
+				System.out.println("Wrong JSONFormat:" + e.toString());
+			}
+		}
+		System.out.println("InvalidRequestbody");
+		return Response.status(400).entity("InvalidRequestBody").build();
+	}
+
 }

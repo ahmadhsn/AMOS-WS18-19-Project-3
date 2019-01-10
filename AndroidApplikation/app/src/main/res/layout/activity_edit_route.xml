@@ -1,0 +1,155 @@
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinatorLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/pop_up">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <TextView
+            android:id="@+id/update"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="10dp"
+            android:inputType="text"
+            android:text="Update your Route"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textSize="20dp"
+            android:textColor="@color/orange" />
+
+        <EditText
+            android:id="@+id/route_name"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/update"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="10dp"
+            android:inputType="text"
+            android:text="name"
+            android:textColor="@color/white" />
+
+        <EditText
+            android:id="@+id/route_description"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/route_name"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="10dp"
+            android:inputType="textMultiLine"
+            android:text="description"
+            android:textColor="@color/white" />
+
+        <EditText
+            android:id="@+id/route_start_street"
+            android:layout_width="350dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/route_description"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="10dp"
+            android:inputType="text"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:hint="Street" />
+
+        <EditText
+            android:id="@+id/route_start_hnumber"
+            android:layout_width="160dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/route_description"
+            android:layout_alignRight="@id/route_start_street"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginTop="10dp"
+            android:inputType="text"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:hint="Number" />
+
+        <EditText
+            android:id="@+id/route_start_postcode"
+            android:layout_width="328dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/route_start_street"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:hint="Postcode"
+            android:inputType="number"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white" />
+
+        <EditText
+            android:id="@+id/route_start_city"
+            android:layout_width="155dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/route_start_street"
+            android:layout_alignRight="@id/route_start_postcode"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginTop="10dp"
+            android:inputType="text"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:hint="City"/>
+        <EditText
+            android:id="@+id/route_start_bstate"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/route_start_postcode"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="10dp"
+            android:inputType="text"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:hint="State" />
+
+        <EditText
+            android:id="@+id/route_start_country"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/route_start_bstate"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="10dp"
+            android:inputType="text"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:hint="Country" />
+
+
+        <Button
+            android:id="@+id/updateRoute"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/route_start_country"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/orange"
+            android:onClick="updateRoute"
+            android:text=" Update Route"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+
+
+
+</android.support.design.widget.CoordinatorLayout>
