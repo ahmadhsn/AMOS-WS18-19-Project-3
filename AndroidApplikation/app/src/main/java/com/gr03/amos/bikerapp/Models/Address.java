@@ -1,8 +1,6 @@
 package com.gr03.amos.bikerapp.Models;
 
 import io.realm.RealmObject;
-import io.realm.RealmResults;
-import io.realm.annotations.LinkingObjects;
 import io.realm.annotations.PrimaryKey;
 
 public class Address extends RealmObject {
@@ -12,6 +10,7 @@ public class Address extends RealmObject {
     private String country;
     private String house_number;
     private String street;
+    private String state;
     private long postcode;
 
     public long getId_address() {
@@ -32,6 +31,14 @@ public class Address extends RealmObject {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 
     public String getHouse_number() {
