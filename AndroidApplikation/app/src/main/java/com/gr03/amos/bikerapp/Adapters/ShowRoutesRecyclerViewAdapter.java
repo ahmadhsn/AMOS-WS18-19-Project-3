@@ -81,8 +81,10 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
         if (mData.get(position).getId_user() == SaveSharedPreference.getUserID(this.context)) {
             holder.adminTag.setVisibility(View.VISIBLE);
             holder.controlLinearLayout.setVisibility(View.VISIBLE);
+        } else {
+            holder.adminTag.setVisibility(View.INVISIBLE);
+            holder.controlLinearLayout.setVisibility(View.INVISIBLE);
         }
-
         holder.routeEdit.setOnClickListener(v -> {
             try {
                 editRoute(mData.get(position).getId_route());
