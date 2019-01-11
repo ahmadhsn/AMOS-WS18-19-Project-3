@@ -29,10 +29,21 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
     TextView user_fname, user_dob, user_gender;
     EditText user_lname, user_street, user_hnumber, user_pcode, user_city, user_state, user_country;
 
+    Button edit_profile_page;
+    Button save_edited_info;
+    Button add_to_database;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_basic_user);
+
+        edit_profile_page = findViewById(R.id.editProfilePage);
+        save_edited_info = findViewById(R.id.saveEditedInfo);
+        add_to_database = findViewById(R.id.addtodatabase);
+        edit_profile_page.setVisibility(View.VISIBLE);
+        save_edited_info.setVisibility(View.GONE);
+        add_to_database.setVisibility(View.GONE);
 
         user_fname = findViewById(R.id.first_name);
         user_lname = findViewById(R.id.last_name);
@@ -96,6 +107,8 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
             Log.i("Response", task.get());
             userInfo = new JSONObject(task.get());
             userInfo = userInfo.getJSONObject("UserInfo");
+            user_fname.setText(userInfo.getString("first_name"));
+            user_lname.setText(userInfo.getString("last_name"));
             user_dob.setText(userInfo.getString("dob"));
             user_gender.setText(userInfo.getString("gender"));
 
@@ -114,38 +127,24 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
     }
 
     private void onCreateAfterProfileId() {
-        Realm.init(this);
-        Realm realm = Realm.getDefaultInstance();
-
-        final Friend friend = realm.where(Friend.class).equalTo("id", userId).findFirst();
-
-        user_fname.setText(friend.getFirst_name());
-        user_lname.setText(friend.getLast_name());
-
-        Button btDatabase = findViewById(R.id.addtodatabase);
-        btDatabase.setVisibility(View.INVISIBLE);
+        add_to_database.setVisibility(View.GONE);
 
         //show edit button if it is own users profile
-        Button btEdit = findViewById(R.id.editProfilePage);
         if (userId == SaveSharedPreference.getUserID(this)) {
-            btEdit.setVisibility(View.VISIBLE);
+            edit_profile_page.setVisibility(View.VISIBLE);
         } else {
-            btEdit.setVisibility(View.INVISIBLE);
+            edit_profile_page.setVisibility(View.GONE);
         }
-        Button btSave = findViewById(R.id.saveEditedInfo);
-        btSave.setVisibility(View.INVISIBLE);
+        save_edited_info.setVisibility(View.GONE);
 
         getAdditionalUserInfo();
     }
 
     public void newInfo(View view) throws JSONException {
         //button visibility
-        Button edit_profile_page = findViewById(R.id.editProfilePage);
-        Button save_edited_info = findViewById(R.id.saveEditedInfo);
-        Button add_to_database = findViewById(R.id.addtodatabase);
         edit_profile_page.setVisibility(View.VISIBLE);
-        save_edited_info.setVisibility(View.VISIBLE);
-        add_to_database.setVisibility(View.INVISIBLE);
+        save_edited_info.setVisibility(View.GONE);
+        add_to_database.setVisibility(View.GONE);
 
         //JSON request (first time insertion of user information to database)
         JSONObject json = new JSONObject();
@@ -173,7 +172,12 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         }
     }
 
+
     public void editInfo(View view) {
+        makeFieldsEditable(view);
+        edit_profile_page.setVisibility(View.GONE);
+        save_edited_info.setVisibility(View.VISIBLE);
+
         //makes all fields (except first_name, dob, gender) editable
         user_lname.setEnabled(true);
         user_lname.setFocusableInTouchMode(true);
@@ -245,6 +249,10 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.i("Exception --- not requested", e.toString());
         }
+
+        makeFieldsUneditable(view);
+        edit_profile_page.setVisibility(View.VISIBLE);
+        save_edited_info.setVisibility(View.GONE);
     }
 
     boolean isTextEmpty(EditText text) {
@@ -289,5 +297,27 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
             return;
         }
     }
-    
+
+
+    private void makeFieldsEditable(View view){
+        user_lname.setBackgroundResource(android.R.drawable.edit_text);
+        user_street.setBackgroundResource(android.R.drawable.edit_text);
+        user_hnumber.setBackgroundResource(android.R.drawable.edit_text);
+        user_pcode.setBackgroundResource(android.R.drawable.edit_text);
+        user_city.setBackgroundResource(android.R.drawable.edit_text);
+        user_country.setBackgroundResource(android.R.drawable.edit_text);
+        user_state.setBackgroundResource(android.R.drawable.edit_text);
+        user_country.setBackgroundResource(android.R.drawable.edit_text);
+    }
+
+    private void makeFieldsUneditable(View view){
+        user_lname.setBackgroundResource(0);
+        user_street.setBackgroundResource(0);
+        user_hnumber.setBackgroundResource(0);
+        user_pcode.setBackgroundResource(0);
+        user_city.setBackgroundResource(0);
+        user_country.setBackgroundResource(0);
+        user_state.setBackgroundResource(0);
+        user_country.setBackgroundResource(0);
+    }
 }
