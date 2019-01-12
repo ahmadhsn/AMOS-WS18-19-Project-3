@@ -139,7 +139,7 @@
                 android:onClick="cancel"
                 android:text="Cancel"
                 android:textColor="@color/blue"
-                android:textSize="15.5dp" />
+                android:textSize="15dp" />
 
             <Button
                 android:id="@+id/updateEvent"
@@ -155,7 +155,7 @@
                 android:onClick="updateEvent"
                 android:text="Update"
                 android:textColor="@color/blue"
-                android:textSize="15.5dp" />
+                android:textSize="15dp" />
 
             <LinearLayout
                 android:id="@+id/rightSpacer"
