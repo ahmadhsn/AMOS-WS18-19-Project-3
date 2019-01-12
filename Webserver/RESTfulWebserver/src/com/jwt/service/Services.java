@@ -932,11 +932,36 @@ public class Services {
 				try {
 
 					DatabaseProvider provider = DatabaseProvider.getInstance(context);
+					
+					//step by step deletion from multiple tables
+					//with the step by step information on the console it's more understandable what exactly got deleted
+					
+					//selects the address of the event that needs to be deleted
+					PreparedStatement statementAddressSelect = provider.getConnection()
+							.prepareStatement("SELECT ID_ADDRESS FROM EVENT WHERE id_event="+ eventid);
+					ResultSet rsAddress = statementAddressSelect.executeQuery();
+					int addressId = 0;
+					while (rsAddress.next()) {
+						addressId = rsAddress.getInt("id_address");
+					}
+					
+					//correct row in event table gets deleted
 					PreparedStatement statement = provider.getConnection()
 							.prepareStatement("DELETE FROM EVENT WHERE id_event=" + eventid);
 
 					statement.executeUpdate();
 					statement.closeOnCompletion();
+					
+					System.out.println("Event with the ID " + eventid + " got deleted");
+					
+					//deletes the correct row in address table
+					PreparedStatement statementAddressDelete = provider.getConnection()
+							.prepareStatement("DELETE FROM ADDRESS WHERE id_address=" + addressId);
+
+					statementAddressDelete.executeUpdate();
+					statementAddressDelete.closeOnCompletion();
+					
+					System.out.println("Address with the ID " + addressId + " got deleted");
 
 				} catch (Exception ex) {
 					ex.printStackTrace();
