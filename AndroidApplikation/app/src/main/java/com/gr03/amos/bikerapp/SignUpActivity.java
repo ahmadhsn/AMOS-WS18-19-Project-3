@@ -53,6 +53,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         EditText password = findViewById(R.id.password);
         EditText confirm_pw = findViewById(R.id.confirm_password);
+        EditText businessName = findViewById(R.id.business_name);
 
         String pw = password.getText().toString();
 
@@ -85,7 +86,8 @@ public class SignUpActivity extends AppCompatActivity {
         json.put("email", email.getText().toString());
         json.put("password", pw);
         json.put("isBusinessUser", businessUser);
-        if (businessUser) json.put("business_name", businessName.getText().toString());
+        if (businessUser)
+            json.put("business_name", businessName.getText().toString());
 
         try {
             JSONObject response = Requests.getJSONResponse("userRegistration", json, "POST");

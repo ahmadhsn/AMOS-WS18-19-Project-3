@@ -140,13 +140,14 @@ public class Services {
 
 		JSONObject JSONreq = new JSONObject(urlReq);
 
-		if (JSONreq.has("password") && JSONreq.has("email") && JSONreq.has("isBusinessUser")) {
+		if (JSONreq.has("password") && JSONreq.has("email") && JSONreq.has("isBusinessUser") && JSONreq.has("business_name") )  {
 			try {
 				JSONObject response = new JSONObject();
 
 				// get data
 				String password = JSONreq.getString("password");
 				String email = JSONreq.getString("email"); 
+				String business_name = JSONreq.getString("business_name");
 				int idUserType = JSONreq.getBoolean("isBusinessUser") ? 2 : 1;
 				// TODO: more data... city, birth?
 
@@ -161,7 +162,7 @@ public class Services {
 				}
 
 				// insert into DB
-				db.queryInsertDB("INSERT INTO user_reg (password,email, id_user_type) VALUES (?,?,?)", password, email, idUserType);
+				db.queryInsertDB("INSERT INTO user_reg (password,email, id_user_type, company_name) VALUES (?,?,?,?)", password, email, idUserType, business_name);
 
 				// send registration mail
 				Mailer mailer = new Mailer(context);
