@@ -186,7 +186,7 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
             if (response.has("eventUpdate")) {
                 String statusEv = (String) response.get("eventUpdate");
                 if (statusEv.equals("successfullUpdation")) {
-                    Toast.makeText(getApplicationContext(), "Successful updated Event.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Successfully updated Event.", Toast.LENGTH_LONG).show();
                 }
                 if (statusEv.equals("InvalidRequestBody")){
                     Toast.makeText(getApplicationContext(),"Invalid Request Body",Toast.LENGTH_LONG).show();

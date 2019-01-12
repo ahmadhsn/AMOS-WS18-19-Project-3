@@ -1531,7 +1531,7 @@ public class Services {
 
 				JSONObject response = new JSONObject();
 
-				response.put("eventUpdate", "successfullUpdation");
+				response.put("routeUpdate", "successfullUpdation");
 
 				return Response.status(200).entity(response.toString()).build();
 
