@@ -83,6 +83,9 @@ public class EditRouteActivity extends AppCompatActivity {
             Log.i("Exception --- not requested", e.toString());
         }
     }
+    public void cancel(View view){
+        finish();
+    }
 
 
 
