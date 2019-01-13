@@ -42,6 +42,7 @@ import com.jwt.model.BasicUser;
 import com.jwt.model.Event;
 import com.jwt.model.EventType;
 import com.jwt.model.Message;
+import com.jwt.model.Route;
 import com.jwt.model.User;
 import com.jwt.service.mail.Mailer;
 
@@ -380,7 +381,58 @@ public class Services {
 				.header("Access-Control-Allow-Origin", "*").build();
 	}
 
+	@POST
+	@Path("/addUserRoute")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response addUserRoute(String urlReq)
+			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
 
+		JSONObject JSONreq = new JSONObject(urlReq);
+
+		if (JSONreq.has("route_id") && JSONreq.has("user_id")) {
+
+			try {
+
+				int route_id = JSONreq.getInt("route_id");
+				int user_id = JSONreq.getInt("user_id");
+
+				try {
+
+					DatabaseProvider provider = DatabaseProvider.getInstance(context);
+					Connection conn = provider.getConnection();
+
+					PreparedStatement s2 = conn.prepareStatement(
+							"INSERT INTO liked_route (id_user, id_route) VALUES (?,?)"
+							);
+
+					//PreparedStatement s2 = conn.prepareStatement(
+						//	"INSERT INTO event_participation (id_event,id_user,name,description,date,time) VALUES (?,?,?,?::date,?)");
+					s2.setInt(1, user_id);
+					s2.setInt(2, route_id);
+
+					s2.executeUpdate();
+					s2.closeOnCompletion();
+
+					System.out.println("MyRouteIsInserted");
+
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+
+				JSONObject response = new JSONObject();
+				response.put("success", "true");
+				return Response.status(200).entity(response.toString()).build();
+
+			} catch (Exception e) {
+				System.out.println("Wrong JSONFormat:" + e.toString());
+			}
+		}
+		System.out.println("InvalidRequestbody");
+		return Response.status(400).entity("InvalidRequestBody").build();
+	}
+	
 	@POST
 	@Path("/addmyeventlist")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -1006,11 +1058,12 @@ public class Services {
 
 			NewRouteRequest newRoute = new NewRouteRequest(JSONreq);
 			RouteDao dao = new RouteDaoImplementation();
-			dao.createRoute(newRoute.getStartAddress(), newRoute.getEndAddress(), newRoute.getRoute());
+			Route route = dao.createRoute(newRoute.getStartAddress(), newRoute.getEndAddress(), newRoute.getRoute());
 
 			JSONObject response = new JSONObject();
-
-			response.put("routeCreation", "successfullCreation");
+			
+			response.put("success", true);
+			response.put("route_id", route.getId());
 			return Response.status(200).entity(response.toString()).build();
 		} catch (Exception ex) {
 			System.out.println("InvalidRequestbody");

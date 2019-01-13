@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,6 +27,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.concurrent.Callable;
+import com.gr03.amos.bikerapp.Models.RouteParticipation;
+
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
 import io.realm.Realm;
@@ -80,6 +84,7 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
 
         if (mData.get(position).getId_user() == SaveSharedPreference.getUserID(this.context)) {
             holder.adminTag.setVisibility(View.VISIBLE);
+            holder.likeRoute.setVisibility(View.INVISIBLE);
             holder.controlLinearLayout.setVisibility(View.VISIBLE);
         } else {
             holder.adminTag.setVisibility(View.INVISIBLE);
@@ -130,6 +135,35 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
 
         });
 
+
+        holder.likeRoute.setOnClickListener(v -> {
+
+            JSONObject json = new JSONObject();
+            try {
+
+                json.put("route_id", mData.get(position).getId_route());
+                json.put("user_id", SaveSharedPreference.getUserID(context));
+
+                FutureTask<String> task = new FutureTask((Callable<String>) () -> {
+                    JSONObject threadResponse = Requests.getResponse("addUserRoute", json);
+                    return threadResponse.toString();
+                });
+
+                Realm.init(context);
+                Realm realm = Realm.getDefaultInstance();
+                realm.beginTransaction();
+                RouteParticipation routeParticipation = realm.createObject(RouteParticipation.class);
+                routeParticipation.setIdRoute(mData.get(position).getId_route());
+                routeParticipation.setIdUser(SaveSharedPreference.getUserID(context));
+                realm.commitTransaction();
+                realm.close();
+
+                new Thread(task).start();
+                Log.i("Response", task.get());
+            } catch (JSONException | InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @Override
@@ -149,6 +183,7 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
         TextView adminTag;
         ImageButton route_delete;
         ImageButton routeEdit;
+        Button likeRoute;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -162,6 +197,7 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
             controlLinearLayout = itemView.findViewById(R.id.controls_button);
             dividerView = itemView.findViewById(R.id.divider);
             adminTag = itemView.findViewById(R.id.admin_tag);
+            likeRoute = itemView.findViewById(R.id.like_route);
 
             itemView.setOnClickListener(this);
         }
