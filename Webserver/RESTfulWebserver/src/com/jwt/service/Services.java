@@ -1483,14 +1483,6 @@ public class Services {
 						addressIdStartpoint = rsStartpoint.getInt("startpoint");
 					}
 					
-					//deletes startpoint in address table
-					PreparedStatement statementStartpointDelete = provider.getConnection()
-							.prepareStatement("DELETE FROM ADDRESS WHERE id_address=" + addressIdStartpoint);
-
-					statementStartpointDelete.executeUpdate();
-					statementStartpointDelete.closeOnCompletion();
-					
-					System.out.println("Startpoint with the ID " + addressIdStartpoint + " got deleted");
 					
 					//selects endpoint of route that needs to be deleted
 					PreparedStatement statementEndpointSelect = provider.getConnection()
@@ -1501,14 +1493,6 @@ public class Services {
 						addressIdEndpoint = rsEndpoint.getInt("endpoint");
 					}
 					
-					//deletes endpoint in the address table
-					PreparedStatement statementEndpointDelete = provider.getConnection()
-							.prepareStatement("DELETE FROM ADDRESS WHERE id_address=" + addressIdEndpoint);
-
-					statementEndpointDelete.executeUpdate();
-					statementEndpointDelete.closeOnCompletion();
-					
-					System.out.println("Endpoint with the ID " + addressIdEndpoint + " got deleted");
 					
 					//deletes the according stop that is in relationship to the route that needs to be deleted
 					PreparedStatement statementStop = provider.getConnection()
@@ -1519,6 +1503,15 @@ public class Services {
 					//no need for printing out information on the console, id_route in stop table is a primary key
 					//therefore one automatically receives console information if the correct stop didn't get deleted
 					
+					//deletes the according liked_route 
+					PreparedStatement statementLiked = provider.getConnection()
+							.prepareStatement("DELETE FROM LIKED_ROUTE WHERE id_route=" + routeid);
+
+					statementLiked.executeUpdate();
+					statementLiked.closeOnCompletion();
+					//no need for printing out information on the console, id_route in liked_route table is a primary key
+					//therefore one automatically receives console information if the correct liked_route didn't get deleted
+					
 					//deletes the correct row of the route table					
 					PreparedStatement statementRoute = provider.getConnection()
 							.prepareStatement("DELETE FROM ROUTE WHERE id_route=" + routeid);
@@ -1527,6 +1520,24 @@ public class Services {
 					statementRoute.closeOnCompletion();
 					
 					System.out.println("Route with the ID " + routeid + " got deleted");
+					
+					//deletes startpoint in address table
+					PreparedStatement statementStartpointDelete = provider.getConnection()
+							.prepareStatement("DELETE FROM ADDRESS WHERE id_address=" + addressIdStartpoint);
+
+					statementStartpointDelete.executeUpdate();
+					statementStartpointDelete.closeOnCompletion();
+					
+					System.out.println("Startpoint with the ID " + addressIdStartpoint + " got deleted");
+					
+					//deletes endpoint in the address table
+					PreparedStatement statementEndpointDelete = provider.getConnection()
+							.prepareStatement("DELETE FROM ADDRESS WHERE id_address=" + addressIdEndpoint);
+
+					statementEndpointDelete.executeUpdate();
+					statementEndpointDelete.closeOnCompletion();
+					
+					System.out.println("Endpoint with the ID " + addressIdEndpoint + " got deleted");
 
 				} catch (Exception ex) {
 					ex.printStackTrace();
