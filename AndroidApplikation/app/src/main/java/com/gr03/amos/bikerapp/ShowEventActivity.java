@@ -24,6 +24,7 @@ import android.widget.RelativeLayout;
 
 import com.gr03.amos.bikerapp.FragmentActivity.ChangePasswordFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.CreateEventFragment;
+import com.gr03.amos.bikerapp.FragmentActivity.MyChatListFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.MyEventListFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.ShowEventsFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.ShowFriendsFragment;
@@ -133,6 +134,13 @@ public class ShowEventActivity extends AppCompatActivity
         } else if (id == R.id.my_event_list) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.create_event_fragment, new MyEventListFragment())
+                    .commit();
+            if (navigation.getVisibility() == View.VISIBLE) {
+                navigation.setVisibility(View.GONE);
+            }
+        } else if (id == R.id.my_chat_list) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.create_event_fragment, new MyChatListFragment())
                     .commit();
             if (navigation.getVisibility() == View.VISIBLE) {
                 navigation.setVisibility(View.GONE);
