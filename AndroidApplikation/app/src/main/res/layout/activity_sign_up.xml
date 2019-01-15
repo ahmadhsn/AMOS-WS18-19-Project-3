@@ -96,8 +96,8 @@
 
         </RadioGroup>
 
-        <EditText
-            android:id="@+id/business_name"
+
+          //  android:id="@+id/business_name"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_below="@id/radio"
@@ -114,7 +114,7 @@
             android:id="@+id/signup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/business_name"
+            android:layout_below="@id/radio"
             android:layout_marginLeft="50dp"
             android:layout_marginRight="50dp"
             android:layout_marginTop="10dp"

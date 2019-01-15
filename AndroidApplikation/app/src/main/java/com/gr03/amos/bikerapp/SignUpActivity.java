@@ -26,13 +26,13 @@ import static android.view.View.VISIBLE;
 
 public class SignUpActivity extends AppCompatActivity {
 
-    EditText businessName;
+    //EditText businessName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-        businessName = findViewById(R.id.business_name);
+        //businessName = findViewById(R.id.business_name);
     }
 
     public void onRadioButtonClicked(View view) {
@@ -40,11 +40,11 @@ public class SignUpActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.rider:
                 if (checked)
-                    businessName.setVisibility(View.GONE);
+                   // businessName.setVisibility(View.GONE);
                 break;
             case R.id.business_user:
                 if (checked)
-                    businessName.setVisibility(VISIBLE);
+                    //businessName.setVisibility(VISIBLE);
                 break;
         }
     }
@@ -53,7 +53,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         EditText password = findViewById(R.id.password);
         EditText confirm_pw = findViewById(R.id.confirm_password);
-        EditText businessName = findViewById(R.id.business_name);
+        //EditText businessName = findViewById(R.id.business_name);
 
         String pw = password.getText().toString();
 
@@ -86,8 +86,8 @@ public class SignUpActivity extends AppCompatActivity {
         json.put("email", email.getText().toString());
         json.put("password", pw);
         json.put("isBusinessUser", businessUser);
-        if (businessUser)
-            json.put("business_name", businessName.getText().toString());
+        //if (businessUser)
+          //  json.put("business_name", businessName.getText().toString());
 
         try {
             JSONObject response = Requests.getJSONResponse("userRegistration", json, "POST");
