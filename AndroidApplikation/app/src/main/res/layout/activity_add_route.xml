@@ -32,29 +32,19 @@
             <EditText
                 android:id="@+id/routeName"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginLeft="40dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="40dp"
+                android:layout_height="wrap_content"
                 android:hint="@string/route_name"
                 android:inputType="text"
-                android:textColor="@color/colorPrimaryDark"
-                android:textColorHint="@color/lightGrey"
-                android:backgroundTint="@color/lightGrey"/>
+                style="@style/editTextView"/>
 
             <EditText
                 android:id="@+id/routeDescription"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_below="@id/routeName"
-                android:layout_marginLeft="40dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="40dp"
                 android:hint="@string/route_description"
                 android:inputType="textMultiLine"
-                android:textColor="@color/colorPrimaryDark"
-                android:textColorHint="@color/lightGrey"
-                android:backgroundTint="@color/lightGrey"/>
+                style="@style/editTextView"/>
 
             <TextView
                 android:id="@+id/addStartPoint"
@@ -79,14 +69,9 @@
                         android:layout_width="0dp"
                         android:layout_weight=".40"
                         android:layout_below="@id/addStartPoint"
-                        android:layout_marginLeft="40dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="20dp"
                         android:hint="@string/country"
                         android:inputType="text"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:textColorHint="@color/lightGrey"
-                        android:backgroundTint="@color/lightGrey"/>
+                        style="@style/editTextViewHalfLeft"/>
 
                     <EditText
                         android:id="@+id/startCity"
@@ -94,14 +79,9 @@
                         android:layout_height="40dp"
                         android:layout_width="0dp"
                         android:layout_weight=".40"
-                        android:layout_marginLeft="0dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="40dp"
                         android:hint="@string/city"
                         android:inputType="text"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:textColorHint="@color/lightGrey"
-                        android:backgroundTint="@color/lightGrey"/>
+                        style="@style/editTextViewHalfRight"/>
 
 
                 </LinearLayout>
@@ -111,14 +91,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_below="@id/startCity"
-                    android:layout_marginLeft="40dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="40dp"
                     android:hint="@string/street"
                     android:inputType="text"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textColorHint="@color/lightGrey"
-                    android:backgroundTint="@color/lightGrey"/>
+                    style="@style/editTextView"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -131,14 +106,9 @@
                         android:layout_height="40dp"
                         android:layout_width="0dp"
                         android:layout_weight=".40"
-                        android:layout_marginLeft="40dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="20dp"
                         android:hint="@string/postcode"
                         android:inputType="text"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:textColorHint="@color/lightGrey"
-                        android:backgroundTint="@color/lightGrey"/>
+                        style="@style/editTextViewHalfLeft"/>
 
                     <EditText
                         android:id="@+id/startHouseNr"
@@ -146,14 +116,9 @@
                         android:layout_width="0dp"
                         android:layout_weight=".40"
                         android:layout_below="@id/startPostcode"
-                        android:layout_marginLeft="0dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="40dp"
                         android:hint="@string/house_nr"
                         android:inputType="text"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:textColorHint="@color/lightGrey"
-                        android:backgroundTint="@color/lightGrey"/>
+                        style="@style/editTextViewHalfRight"/>
 
                 </LinearLayout>
 
@@ -179,14 +144,9 @@
                         android:layout_height="40dp"
                         android:layout_width="0dp"
                         android:layout_weight=".40"
-                        android:layout_marginLeft="40dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="20dp"
                         android:hint="@string/country"
                         android:inputType="text"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:textColorHint="@color/lightGrey"
-                        android:backgroundTint="@color/lightGrey"/>
+                        style="@style/editTextViewHalfLeft"/>
 
                     <EditText
                         android:id="@+id/endCity"
@@ -194,14 +154,9 @@
                         android:layout_height="40dp"
                         android:layout_width="0dp"
                         android:layout_weight=".40"
-                        android:layout_marginLeft="0dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="40dp"
                         android:hint="@string/city"
                         android:inputType="text"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:textColorHint="@color/lightGrey"
-                        android:backgroundTint="@color/lightGrey"/>
+                        style="@style/editTextViewHalfRight"/>
                 </LinearLayout>
 
                 <EditText
@@ -209,14 +164,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_below="@id/endCity"
-                    android:layout_marginLeft="40dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="40dp"
                     android:hint="@string/street"
                     android:inputType="text"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textColorHint="@color/lightGrey"
-                    android:backgroundTint="@color/lightGrey"/>
+                    style="@style/editTextView"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -229,14 +179,9 @@
                         android:layout_height="40dp"
                         android:layout_width="0dp"
                         android:layout_weight=".40"
-                        android:layout_marginLeft="40dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="20dp"
                         android:hint="@string/postcode"
                         android:inputType="text"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:textColorHint="@color/lightGrey"
-                        android:backgroundTint="@color/lightGrey"/>
+                        style="@style/editTextViewHalfLeft"/>
 
                     <EditText
                         android:id="@+id/endHouseNr"
@@ -244,14 +189,9 @@
                         android:layout_height="40dp"
                         android:layout_width="0dp"
                         android:layout_weight=".40"
-                        android:layout_marginLeft="0dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="40dp"
                         android:hint="@string/house_nr"
                         android:inputType="text"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:textColorHint="@color/lightGrey"
-                        android:backgroundTint="@color/lightGrey"/>
+                        style="@style/editTextViewHalfRight"/>
                 </LinearLayout>
 
             <Button
@@ -259,15 +199,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/endHouseNr"
-                android:layout_marginLeft="0dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginRight="0dp"
-                android:layout_marginBottom="0dp"
-                android:background="@color/orange"
                 android:onClick="addRoute"
                 android:text="@string/route_add"
-                android:textColor="@color/white"
-                android:textSize="16sp"/>
+                style="@style/buttonCreate"/>
 
         </LinearLayout>
 

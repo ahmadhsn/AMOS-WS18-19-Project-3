@@ -26,13 +26,13 @@ import static android.view.View.VISIBLE;
 
 public class SignUpActivity extends AppCompatActivity {
 
-    EditText businessName;
+    //EditText businessName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-        businessName = findViewById(R.id.business_name);
+        //businessName = findViewById(R.id.business_name);
     }
 
     public void onRadioButtonClicked(View view) {
@@ -40,20 +40,20 @@ public class SignUpActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.rider:
                 if (checked)
-                    businessName.setVisibility(View.GONE);
+                   // businessName.setVisibility(View.GONE);
                 break;
             case R.id.business_user:
                 if (checked)
-                    businessName.setVisibility(VISIBLE);
+                    //businessName.setVisibility(VISIBLE);
                 break;
         }
     }
 
     public void userSignUp(View view) throws JSONException{
-        this.setMessageOnScreen("");
 
         EditText password = findViewById(R.id.password);
         EditText confirm_pw = findViewById(R.id.confirm_password);
+        //EditText businessName = findViewById(R.id.business_name);
 
         String pw = password.getText().toString();
 
@@ -68,7 +68,6 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
 
-        EditText name = findViewById(R.id.name);
         EditText email = findViewById(R.id.email);
         String mail = email.getText().toString();
 
@@ -80,33 +79,22 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
 
-        Boolean businessUser = false;
-        if (businessName.VISIBLE == 0) businessUser = true;
+        RadioButton btBusinessUser = findViewById(R.id.business_user);
+        Boolean businessUser = btBusinessUser.isChecked();
 
         JSONObject json = new JSONObject();
-        json.put("name", name.getText().toString());
         json.put("email", email.getText().toString());
         json.put("password", pw);
-        json.put("isBusinessUser", businessUser.booleanValue());
-        if (businessUser) json.put("business_name", businessName.getText().toString());
+        json.put("isBusinessUser", businessUser);
+        //if (businessUser)
+          //  json.put("business_name", businessName.getText().toString());
 
         try {
-            JSONObject response;
-
-            FutureTask<String> task = new FutureTask(new Callable<String>() {
-                public String call() {
-                    JSONObject threadResponse = Requests.getResponse("userRegistration", json);
-                    return threadResponse.toString();
-                }
-            });
-            new Thread(task).start();
-            Log.i("Response", task.get());
-            response = new JSONObject(task.get());
+            JSONObject response = Requests.getJSONResponse("userRegistration", json, "POST");
 
             //handle response
             if(response.has("userRegistration")){
                 String statusReg = (String) response.get("userRegistration");
-                this.setMessageOnScreen(statusReg);
                 if(statusReg.equals("invalidMail")){
                     Log.i("VALIDATIONMAILSERVER", "invalid email address " + email.getText().toString());
                     Toast.makeText(getApplicationContext(), "Invalid email address. Please check again.", Toast.LENGTH_LONG).show();
@@ -116,10 +104,7 @@ public class SignUpActivity extends AppCompatActivity {
                 if(statusReg.equals("successfullRegistration")){
                     Log.i("Registration","successfullRegistration");
                     Toast.makeText(getApplicationContext(), "You have successfully registered! You can login now.", Toast.LENGTH_LONG).show();
-                    password.setText("");
-                    confirm_pw.setText("");
-                    name.setText("");
-                    email.setText("");
+                    finish();
 
                 }
 
@@ -131,30 +116,6 @@ public class SignUpActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.i("Exception --- not requested", e.toString());
         }
-    }
-
-    /**
-     * Sets a message on the screen in the text field "message"
-     *
-     * @param message Message to show the user
-     */
-    public void setMessageOnScreen(String message){
-        TextView textError = (TextView) findViewById(R.id.message);
-
-        textError.setText(message);
-    }
-
-    /**
-     * Sets a message on the screen in a specific color in the text field "message"
-     *
-     * @param message Message to show the user
-     * @param color Color of the text
-     */
-    public void setMessageOnScreen(String message, int color){
-        setMessageOnScreen(message);
-        TextView textError = (TextView) findViewById(R.id.message);
-        textError.setTextColor(color);
-
     }
 
     public static boolean isValidEmail(CharSequence target) {

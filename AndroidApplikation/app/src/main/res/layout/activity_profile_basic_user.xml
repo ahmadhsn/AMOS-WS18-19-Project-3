@@ -10,259 +10,248 @@ tools:context=".ProfileBasicUserActivity">
         android:id="@+id/relativeLayout2"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_marginTop="40dp"
+        android:paddingTop="40dp"
+        android:background="@color/smokeyWhite"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
-        <TextView
-            android:id="@+id/first_name_text"
-            android:layout_width="328dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:text="First Name: "
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="18.5sp"
-            android:textStyle="bold" />
-        <TextView
-            android:id="@+id/first_name"
-            android:layout_width="155dp"
-            android:layout_height="40dp"
-            android:layout_alignRight="@id/first_name_text"
-            android:layout_marginLeft="0dp"
-            android:layout_marginRight="0dp"
-            android:layout_marginTop="10dp"
-            android:text="First Name"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="18.5sp"
-            android:textStyle="bold" />
-        <TextView
-            android:id="@+id/last_name_text"
-            android:layout_width="328dp"
-            android:layout_height="40dp"
-            android:layout_below="@id/first_name_text"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:text="Last Name: "
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="18.5sp"
-            android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/last_name"
-            android:layout_width="155dp"
-            android:layout_height="40dp"
-            android:layout_below="@id/first_name"
-            android:layout_alignRight="@id/first_name_text"
-            android:layout_marginLeft="0dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="0dp"
-            android:text="Last Name"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="18.5sp"
-            android:textStyle="bold"
-            android:focusable="false" />
-        <TextView
-            android:id="@+id/dob_text"
-            android:layout_width="328dp"
-            android:layout_height="40dp"
-            android:layout_below="@id/last_name_text"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:text="DOB: "
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="18.5sp"
-            android:textStyle="bold" />
-        <TextView
-            android:id="@+id/dob"
-            android:layout_width="155dp"
-            android:layout_height="40dp"
-            android:layout_below="@id/last_name"
-            android:layout_alignRight="@id/dob_text"
-            android:layout_marginLeft="0dp"
-            android:layout_marginRight="0dp"
-            android:layout_marginTop="10dp"
-            android:text="Date of Birth"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="18.5sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/gender_text"
-            android:layout_width="328dp"
-            android:layout_height="40dp"
-            android:layout_below="@id/dob_text"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:text="Gender: "
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="18.5sp"
-            android:textStyle="bold" />
-        <TextView
-            android:id="@+id/user_gender"
-            android:layout_width="155dp"
-            android:layout_height="40dp"
-            android:layout_alignRight="@id/gender_text"
-            android:layout_below="@+id/dob"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="10dp"
-            android:text="Gender"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="18.5sp"
-            android:textStyle="bold" />
-        <TextView
-            android:id="@+id/address_text"
-            android:layout_width="328dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_below="@+id/gender_text"
-            android:text="Address: "
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="18.5sp"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/user_street"
-            android:layout_width="328dp"
-            android:layout_height="40dp"
-            android:layout_below="@id/address_text"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:text="Street"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="18.5sp"
-            android:textStyle="bold"
-            android:focusable="false" />
-        <EditText
-            android:id="@+id/hnumber"
-            android:layout_width="155dp"
-            android:layout_height="40dp"
-            android:layout_below="@id/address_text"
-            android:layout_alignRight="@id/user_street"
-            android:layout_marginLeft="0dp"
-            android:layout_marginRight="0dp"
-            android:layout_marginTop="10dp"
-            android:text="House No."
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="18.5sp"
-            android:textStyle="bold"
-            android:focusable="false" />
-        <EditText
-            android:id="@+id/user_postcode"
-            android:layout_width="328dp"
-            android:layout_height="40dp"
-            android:layout_below="@id/user_street"
-            android:layout_marginLeft="40dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:inputType="number"
-            android:text="Postcode"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="18.5sp"
-            android:textStyle="bold"
-            android:focusable="false" />
-        <EditText
-            android:id="@+id/user_city"
-            android:layout_width="155dp"
-            android:layout_height="40dp"
-            android:layout_below="@id/hnumber"
-            android:layout_alignRight="@id/user_postcode"
-            android:layout_marginLeft="0dp"
-            android:layout_marginRight="0dp"
-            android:layout_marginTop="10dp"
-            android:text="City"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="18.5sp"
-            android:textStyle="bold"
-            android:focusable="false" />
-        <EditText
-            android:id="@+id/user_state"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_below="@id/user_city"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:layout_marginTop="10dp"
-            android:text="State"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="18.5sp"
-            android:textStyle="bold"
-            android:focusable="false" />
-        <TextView
-            android:id="@+id/country_text"
-            android:layout_width="328dp"
-            android:layout_height="40dp"
-            android:layout_below="@id/user_state"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:text="Country: "
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="18.5sp"
-            android:textStyle="bold" />
-        <EditText
-            android:id="@+id/user_country"
-            android:layout_width="155dp"
-            android:layout_height="40dp"
-            android:layout_below="@id/user_state"
-            android:layout_alignRight="@id/country_text"
-            android:layout_marginLeft="0dp"
-            android:layout_marginRight="0dp"
-            android:layout_marginTop="10dp"
-            android:text="Country"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="18.5sp"
-            android:textStyle="bold"
-            android:focusable="false" />
-        <Button
-            android:id="@+id/addtodatabase"
-            android:layout_width="155dp"
-            android:layout_height="25dp"
-            android:layout_below="@id/user_country"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="50dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/shape"
-            android:text="Save Profile Page"
-            android:textColor="@color/secondaryColor"
-            android:textStyle="bold"
-            android:onClick="newInfo"
-            android:hint="Add"/>
-        <Button
-            android:id="@+id/editProfilePage"
-            android:layout_width="155dp"
-            android:layout_height="25dp"
-            android:layout_below="@id/addtodatabase"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="0dp"
-            android:background="@drawable/shape"
-            android:text="Edit Fields"
-            android:textColor="@color/secondaryColor"
-            android:textStyle="bold"
-            android:onClick="editInfo"
-            android:hint="Edit"
-            android:visibility="invisible"/>
-        <Button
-            android:id="@+id/saveEditedInfo"
-            android:layout_width="155dp"
-            android:layout_height="25dp"
-            android:layout_below="@id/editProfilePage"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="0dp"
-            android:background="@drawable/shape"
-            android:text="Save edited Info"
-            android:textColor="@color/secondaryColor"
-            android:textStyle="bold"
-            android:onClick="saveEditedInfo"
-            android:hint="Save"
-            android:visibility="invisible"/>
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="20dp">
+
+                <EditText
+                    android:id="@+id/first_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="70dp"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="First Name"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="32sp"
+                    android:textStyle="bold"
+                    android:background="@null"/>
+
+                <EditText
+                    android:id="@+id/last_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="70dp"
+                    android:layout_alignRight="@id/first_name"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="0dp"
+                    android:text="Last Name"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="32sp"
+                    android:textStyle="bold"
+                    android:focusable="false"
+                    android:background="@null"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/gender_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Gender: "
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="18.5sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/user_gender"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_alignRight="@id/gender_text"
+                    android:text="Gender"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="18.5sp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/dob_image"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:contentDescription="date of birth"
+                    android:src="@drawable/ic_cake" />
+
+                <EditText
+                    android:id="@+id/dob"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_alignRight="@id/dob_image"
+                    android:hint="Date of Birth"
+                    android:inputType="date"
+                    android:focusableInTouchMode="false"
+                    style="@style/editTextView"
+                    android:background="@null"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <ImageView
+                    android:id="@+id/address_image"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:contentDescription="address"
+                    android:src="@drawable/ic_home" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_alignRight="@id/address_image">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" >
+
+                        <EditText
+                            android:id="@+id/user_street"
+                            android:layout_height="40dp"
+                            android:layout_width="0dp"
+                            android:layout_weight=".40"
+                            android:layout_alignRight="@id/address_image"
+                            android:hint="Street"
+                            android:inputType="text"
+                            style="@style/editTextViewHalfLeft"
+                            android:background="@null"/>
+
+                        <EditText
+                            android:id="@+id/hnumber"
+                            android:layout_height="40dp"
+                            android:layout_width="0dp"
+                            android:layout_weight=".40"
+                            android:hint="Number"
+                            android:inputType="text"
+                            android:focusable="false"
+                            style="@style/editTextViewHalfRight"
+                            android:background="@null"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" >
+
+                        <EditText
+                            android:id="@+id/user_postcode"
+                            android:layout_below="@id/user_street"
+                            android:layout_height="40dp"
+                            android:layout_width="0dp"
+                            android:layout_weight=".40"
+                            android:text="Postcode"
+                            android:inputType="text"
+                            style="@style/editTextViewHalfLeft"
+                            android:focusable="false"
+                            android:background="@null"/>
+
+                        <EditText
+                            android:id="@+id/user_city"
+                            android:layout_height="40dp"
+                            android:layout_width="0dp"
+                            android:layout_weight=".40"
+                            android:layout_below="@id/hnumber"
+                            android:text="City"
+                            android:inputType="text"
+                            style="@style/editTextViewHalfRight"
+                            android:focusable="false"
+                            android:background="@null"/>
+                        />
+
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/user_state"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_below="@id/user_postcode"
+                        android:inputType="text"
+                        android:text="State"
+                        style="@style/editTextView"
+                        android:focusable="false"
+                        android:background="@null"/>
+
+                    <EditText
+                        android:id="@+id/user_country"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_below="@id/user_state"
+                        android:text="Country"
+                        style="@style/editTextView"
+                        android:focusable="false"
+                        android:background="@null"/>
+
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+
+
+
+
+            <Button
+                android:id="@+id/addtodatabase"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/user_country"
+                android:text="Save Profile Page"
+                android:onClick="newInfo"
+                android:hint="Add"
+                style="@style/buttonCreate"/>
+            <Button
+                android:id="@+id/editProfilePage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/addtodatabase"
+                android:text="Edit Fields"
+                android:onClick="editInfo"
+                android:hint="Edit"
+                android:visibility="gone"
+                style="@style/buttonCreate"/>
+            <Button
+                android:id="@+id/saveEditedInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/editProfilePage"
+                android:text="Save edited Info"
+                android:onClick="saveEditedInfo"
+                android:hint="Save"
+                android:visibility="gone"
+                style="@style/buttonCreate"/>
+
+
+        </LinearLayout>
     </RelativeLayout>
-
 </android.support.constraint.ConstraintLayout>
+

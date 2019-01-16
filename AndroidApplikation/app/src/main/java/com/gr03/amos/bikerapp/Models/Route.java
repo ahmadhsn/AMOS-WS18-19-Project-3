@@ -13,6 +13,7 @@ public class Route extends RealmObject {
     private String description;
     private Start start;
     private Address end_address;
+    private Address start_address;
 
     @LinkingObjects("route")
     private final RealmResults<Friend> friend = null;
@@ -49,6 +50,14 @@ public class Route extends RealmObject {
         this.end_address = end_address;
     }
 
+    public Address getStartAddress() {
+        return start_address;
+    }
+
+    public void setStartAddress(Address start_address) {
+        this.start_address = start_address;
+    }
+
     public long getId_route() {
         return id_route;
     }
@@ -68,6 +77,7 @@ public class Route extends RealmObject {
     public RealmResults<Friend> getFriend() {
         return friend;
     }
+
 }
 
 
