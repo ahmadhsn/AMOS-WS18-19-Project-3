@@ -17,6 +17,10 @@
                 android:id="@+id/my_event_list"
                 android:icon="@drawable/ic_menu_share"
                 android:title="My Event List" />
+            <item
+                android:id="@+id/my_route_list"
+                android:icon="@drawable/ic_menu_share"
+                android:title="My Route List" />
 
             <item
                 android:id="@+id/add_profile"
