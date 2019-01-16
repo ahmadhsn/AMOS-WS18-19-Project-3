@@ -22,7 +22,6 @@
         <activity android:name=".AddRoute" />
         <activity
             android:name=".ShowEventActivity"
-            android:label="@string/title_activity_show_event"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,7 +37,6 @@
         <activity android:name=".AddProfileBasicUserActivity" />
         <activity
             android:name=".ChatActivity"
-            android:label="@string/title_activity_chat"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".EditRouteActivity"
