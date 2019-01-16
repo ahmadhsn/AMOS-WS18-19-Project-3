@@ -11,19 +11,20 @@ import com.jwt.model.Route;
 
 public class RouteDaoImplementation implements RouteDao {
 
- public void createRoute(Address startAddress, Address endAddress, Route route) {
+ public Route createRoute(Address startAddress, Address endAddress, Route route) {
   try {
    AddressDao startAddressDao = new AddressDaoImplementation();
    AddressDao endAddressDao = new AddressDaoImplementation();
    startAddressDao.createAddress(startAddress);
    endAddressDao.createAddress(endAddress);
-   createRoute(route, startAddress.getId(), endAddress.getId());
+   return createRoute(route, startAddress.getId(), endAddress.getId());
   } catch (Exception ex) {
    ex.printStackTrace();
+   return null;
   }
  };
 
- void createRoute(Route route, int startAddressId, int endAddressId) throws SQLException {
+ Route createRoute(Route route, int startAddressId, int endAddressId) throws SQLException {
   String sqlQuerry = "INSERT INTO route(id_user, name, description, startpoint, endpoint)VALUES (?, ?, ?, ?, ?);";
   DatabaseProvider provider = DatabaseProvider.getInstance();
   PreparedStatement st = provider.getConnection().prepareStatement(sqlQuerry, Statement.RETURN_GENERATED_KEYS);
@@ -47,6 +48,7 @@ public class RouteDaoImplementation implements RouteDao {
    }
   }
   st.closeOnCompletion();
+  return route;
  }
 
  public void updateRoute(Route route) {

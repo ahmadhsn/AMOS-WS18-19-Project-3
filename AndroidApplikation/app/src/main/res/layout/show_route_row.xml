@@ -76,8 +76,6 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:scaleType="fitXY" />
-
-
             <TextView
 
                 android:id="@+id/route_name"
@@ -91,6 +89,18 @@
                 android:textColor="@color/colorPrimary"
                 android:textSize="20sp"
                 android:textStyle="bold" />
+            <Button
+                android:id="@+id/like_route"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/route_name"
+                android:layout_alignRight="@+id/arrow_down"
+                android:layout_marginLeft="257dp"
+                android:layout_marginTop="-52dp"
+                android:onClick="likeRoute"
+                android:text="Like"
+                android:textColor="@color/black"
+                android:textSize="15sp" />
 
             <ImageView
                 android:id="@+id/arrow_down"

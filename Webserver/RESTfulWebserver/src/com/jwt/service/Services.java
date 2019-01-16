@@ -42,6 +42,7 @@ import com.jwt.model.BasicUser;
 import com.jwt.model.Event;
 import com.jwt.model.EventType;
 import com.jwt.model.Message;
+import com.jwt.model.Route;
 import com.jwt.model.User;
 import com.jwt.service.mail.Mailer;
 
@@ -140,20 +141,19 @@ public class Services {
 
 		JSONObject JSONreq = new JSONObject(urlReq);
 
-		if (JSONreq.has("name") && JSONreq.has("password") && JSONreq.has("email")) {
+		if (JSONreq.has("password") && JSONreq.has("email") && JSONreq.has("isBusinessUser"))  {
 			try {
 				JSONObject response = new JSONObject();
 
 				// get data
-				String username = JSONreq.getString("name");
 				String password = JSONreq.getString("password");
-				String email = JSONreq.getString("email");
+				String email = JSONreq.getString("email"); 
+				int idUserType = JSONreq.getBoolean("isBusinessUser") ? 2 : 1;
 				// TODO: more data... city, birth?
 
-				System.out.println("...userRegistrationRequest from " + username);
+				System.out.println("...userRegistrationRequest from " + email);
 
 				// check if user already exists
-
 				DatabaseProvider db = DatabaseProvider.getInstance(context);
 				ResultSet result = db.querySelectDB("SELECT * FROM user_reg WHERE email = '" + email + "'");
 				while (result.next()) {
@@ -162,11 +162,11 @@ public class Services {
 				}
 
 				// insert into DB
-				db.queryInsertDB("INSERT INTO user_reg (password,email) VALUES (?,?)", password, email);
-
+				db.queryInsertDB("INSERT INTO user_reg (password,email, id_user_type) VALUES (?,?,?)", password, email, idUserType);
+						
 				// send registration mail
 				Mailer mailer = new Mailer(context);
-				boolean messageSent = mailer.sendRegistrationMail(email, username);
+				boolean messageSent = mailer.sendRegistrationMail(email);
 
 				if (!messageSent) {
 					response.put("userRegistraion", "invalidMail");
@@ -380,7 +380,58 @@ public class Services {
 				.header("Access-Control-Allow-Origin", "*").build();
 	}
 
+	@POST
+	@Path("/addUserRoute")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response addUserRoute(String urlReq)
+			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
 
+		JSONObject JSONreq = new JSONObject(urlReq);
+
+		if (JSONreq.has("route_id") && JSONreq.has("user_id")) {
+
+			try {
+
+				int route_id = JSONreq.getInt("route_id");
+				int user_id = JSONreq.getInt("user_id");
+
+				try {
+
+					DatabaseProvider provider = DatabaseProvider.getInstance(context);
+					Connection conn = provider.getConnection();
+
+					PreparedStatement s2 = conn.prepareStatement(
+							"INSERT INTO liked_route (id_user, id_route) VALUES (?,?)"
+							);
+
+					//PreparedStatement s2 = conn.prepareStatement(
+						//	"INSERT INTO event_participation (id_event,id_user,name,description,date,time) VALUES (?,?,?,?::date,?)");
+					s2.setInt(1, user_id);
+					s2.setInt(2, route_id);
+
+					s2.executeUpdate();
+					s2.closeOnCompletion();
+
+					System.out.println("MyRouteIsInserted");
+
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+
+				JSONObject response = new JSONObject();
+				response.put("success", "true");
+				return Response.status(200).entity(response.toString()).build();
+
+			} catch (Exception e) {
+				System.out.println("Wrong JSONFormat:" + e.toString());
+			}
+		}
+		System.out.println("InvalidRequestbody");
+		return Response.status(400).entity("InvalidRequestBody").build();
+	}
+	
 	@POST
 	@Path("/addmyeventlist")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -742,6 +793,7 @@ public class Services {
 
 	@GET
 	@Path("/getEventById/{id}")
+	
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getEventById(@PathParam("id") int id) throws JSONException, SQLException {
 		// Setting the DB context in case its not set
@@ -931,11 +983,36 @@ public class Services {
 				try {
 
 					DatabaseProvider provider = DatabaseProvider.getInstance(context);
+					
+					//step by step deletion from multiple tables
+					//with the step by step information on the console it's more understandable what exactly got deleted
+					
+					//selects the address of the event that needs to be deleted
+					PreparedStatement statementAddressSelect = provider.getConnection()
+							.prepareStatement("SELECT ID_ADDRESS FROM EVENT WHERE id_event="+ eventid);
+					ResultSet rsAddress = statementAddressSelect.executeQuery();
+					int addressId = 0;
+					while (rsAddress.next()) {
+						addressId = rsAddress.getInt("id_address");
+					}
+					
+					//correct row in event table gets deleted
 					PreparedStatement statement = provider.getConnection()
 							.prepareStatement("DELETE FROM EVENT WHERE id_event=" + eventid);
 
 					statement.executeUpdate();
 					statement.closeOnCompletion();
+					
+					System.out.println("Event with the ID " + eventid + " got deleted");
+					
+					//deletes the correct row in address table
+					PreparedStatement statementAddressDelete = provider.getConnection()
+							.prepareStatement("DELETE FROM ADDRESS WHERE id_address=" + addressId);
+
+					statementAddressDelete.executeUpdate();
+					statementAddressDelete.closeOnCompletion();
+					
+					System.out.println("Address with the ID " + addressId + " got deleted");
 
 				} catch (Exception ex) {
 					ex.printStackTrace();
@@ -980,11 +1057,12 @@ public class Services {
 
 			NewRouteRequest newRoute = new NewRouteRequest(JSONreq);
 			RouteDao dao = new RouteDaoImplementation();
-			dao.createRoute(newRoute.getStartAddress(), newRoute.getEndAddress(), newRoute.getRoute());
+			Route route = dao.createRoute(newRoute.getStartAddress(), newRoute.getEndAddress(), newRoute.getRoute());
 
 			JSONObject response = new JSONObject();
-
-			response.put("routeCreation", "successfullCreation");
+			
+			response.put("success", true);
+			response.put("route_id", route.getId());
 			return Response.status(200).entity(response.toString()).build();
 		} catch (Exception ex) {
 			System.out.println("InvalidRequestbody");
@@ -1089,6 +1167,12 @@ public class Services {
 					s2.closeOnCompletion();
 					
 					System.out.println("UserInfoGotUpdated");
+					
+					JSONObject response = new JSONObject();
+					response.put("userInfoUpdate", "successful");
+					System.out.println("Response: " + response.toString());
+					return Response.status(200).entity(response.toString()).build();
+
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
@@ -1372,4 +1456,160 @@ public class Services {
 
 		return Response.status(200).entity(response.toString()).build();
 	}
+	
+	@POST
+	@Path("/deleteRoute")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response deleteRoute(String urlReq)
+			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
+
+		JSONObject JSONreq = new JSONObject(urlReq);
+		System.out.println("...Delete Route Request");
+
+		if (JSONreq.has("id_route")) {
+			try {
+
+				int routeid = (int) JSONreq.get("id_route");
+				try {
+
+					DatabaseProvider provider = DatabaseProvider.getInstance(context);
+					
+					//this is a step by step deletion with multiple statements, it's for checking reasons: rows of 4 different tables get deleted
+					//with the step by step deletion and the information of the console it's more understandable what exactly got deleted
+					
+					//selects the startpoint of the route that needs to be deleted
+					PreparedStatement statementStartpointSelect = provider.getConnection()
+							.prepareStatement("SELECT STARTPOINT FROM ROUTE WHERE id_route="+ routeid);
+					ResultSet rsStartpoint = statementStartpointSelect.executeQuery();
+					int addressIdStartpoint = 0;
+					while (rsStartpoint.next()) {
+						addressIdStartpoint = rsStartpoint.getInt("startpoint");
+					}
+					
+					
+					//selects endpoint of route that needs to be deleted
+					PreparedStatement statementEndpointSelect = provider.getConnection()
+							.prepareStatement("SELECT ENDPOINT FROM ROUTE WHERE id_route="+ routeid);
+					ResultSet rsEndpoint = statementEndpointSelect.executeQuery();
+					int addressIdEndpoint = 0;
+					while (rsEndpoint.next()) {
+						addressIdEndpoint = rsEndpoint.getInt("endpoint");
+					}
+					
+					
+					//deletes the according stop that is in relationship to the route that needs to be deleted
+					PreparedStatement statementStop = provider.getConnection()
+							.prepareStatement("DELETE FROM STOP WHERE id_route=" + routeid);
+
+					statementStop.executeUpdate();
+					statementStop.closeOnCompletion();
+					//no need for printing out information on the console, id_route in stop table is a primary key
+					//therefore one automatically receives console information if the correct stop didn't get deleted
+					
+					//deletes the according liked_route 
+					PreparedStatement statementLiked = provider.getConnection()
+							.prepareStatement("DELETE FROM LIKED_ROUTE WHERE id_route=" + routeid);
+
+					statementLiked.executeUpdate();
+					statementLiked.closeOnCompletion();
+					//no need for printing out information on the console, id_route in liked_route table is a primary key
+					//therefore one automatically receives console information if the correct liked_route didn't get deleted
+					
+					//deletes the correct row of the route table					
+					PreparedStatement statementRoute = provider.getConnection()
+							.prepareStatement("DELETE FROM ROUTE WHERE id_route=" + routeid);
+
+					statementRoute.executeUpdate();
+					statementRoute.closeOnCompletion();
+					
+					System.out.println("Route with the ID " + routeid + " got deleted");
+					
+					//deletes startpoint in address table
+					PreparedStatement statementStartpointDelete = provider.getConnection()
+							.prepareStatement("DELETE FROM ADDRESS WHERE id_address=" + addressIdStartpoint);
+
+					statementStartpointDelete.executeUpdate();
+					statementStartpointDelete.closeOnCompletion();
+					
+					System.out.println("Startpoint with the ID " + addressIdStartpoint + " got deleted");
+					
+					//deletes endpoint in the address table
+					PreparedStatement statementEndpointDelete = provider.getConnection()
+							.prepareStatement("DELETE FROM ADDRESS WHERE id_address=" + addressIdEndpoint);
+
+					statementEndpointDelete.executeUpdate();
+					statementEndpointDelete.closeOnCompletion();
+					
+					System.out.println("Endpoint with the ID " + addressIdEndpoint + " got deleted");
+
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+
+				JSONObject response = new JSONObject();
+
+				response.put("Route Deletion", "successfullDeletion");
+
+				return Response.status(200).entity(response.toString()).build();
+
+			} catch (Exception e) {
+				System.out.println("Wrong JSONFormat:" + e.toString());
+			}
+		}
+		System.out.println("InvalidRequestbody");
+		return Response.status(400).entity("InvalidRequestBody").build();
+	}
+	
+	@POST
+	@Path("/updateRoute")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response updateRoute(String urlReq)
+			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
+
+		JSONObject JSONreq = new JSONObject(urlReq);
+		System.out.println("...updateRouteRequest");
+
+		if (JSONreq.has("id_route") && JSONreq.has("name") && JSONreq.has("description")) {
+			try {
+
+				int routeid = (int) JSONreq.get("id_route");
+				String routename = JSONreq.getString("name");
+				String routedescription = JSONreq.getString("description");
+
+				System.out.println("...updateRoute:" + routename + "...updateRoute Id:" + routeid);
+
+				try {
+
+					DatabaseProvider provider = DatabaseProvider.getInstance(context);
+					PreparedStatement statement = provider.getConnection().prepareStatement(
+							"UPDATE Route SET name =?, description =? WHERE id_route="
+									+ routeid);
+
+					statement.setString(1, routename);
+					statement.setString(2, routedescription);
+					statement.executeUpdate();
+					statement.closeOnCompletion();
+
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+
+				JSONObject response = new JSONObject();
+
+				response.put("routeUpdate", "successfullUpdation");
+
+				return Response.status(200).entity(response.toString()).build();
+
+			} catch (Exception e) {
+				System.out.println("Wrong JSONFormat:" + e.toString());
+			}
+		}
+		System.out.println("InvalidRequestbody");
+		return Response.status(400).entity("InvalidRequestBody").build();
+	}
+
 }

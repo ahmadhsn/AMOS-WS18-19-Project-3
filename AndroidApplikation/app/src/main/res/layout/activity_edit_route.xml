@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
-    android:layout_height="300dp"
+    android:layout_height="210dp"
     android:background="@drawable/pop_up"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
@@ -21,13 +21,13 @@
             android:layout_marginTop="4dp"
             android:layout_marginRight="7dp"
             android:inputType="text"
-            android:text="Update Event"
+            android:text="Update Route"
             android:textColor="@color/white"
             android:textSize="20dp"
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/event_name"
+            android:id="@+id/route_name"
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:layout_below="@id/update"
@@ -41,52 +41,24 @@
             android:textSize="15dp" />
 
         <EditText
-            android:id="@+id/event_description"
+            android:id="@+id/route_description"
             android:layout_width="match_parent"
             android:layout_height="35dp"
-            android:layout_below="@id/event_name"
+            android:layout_below="@id/route_name"
             android:layout_marginLeft="7dp"
             android:layout_marginTop="5dp"
             android:layout_marginRight="7dp"
+            android:layout_marginBottom="25dp"
             android:singleLine="true"
             android:text="description"
             android:textColor="@color/white"
             android:textSize="15dp" />
 
-        <EditText
-            android:id="@+id/event_date"
-            android:layout_width="match_parent"
-            android:layout_height="38dp"
-            android:layout_below="@id/event_description"
-            android:layout_marginLeft="7dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="7dp"
-            android:inputType="date"
-            android:singleLine="true"
-            android:textColor="@color/white"
-            android:textSize="15dp" />
-
-        <EditText
-            android:id="@+id/event_time"
-            android:layout_width="match_parent"
-            android:layout_height="38dp"
-            android:layout_below="@id/event_date"
-            android:layout_marginLeft="7dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="7dp"
-            android:layout_marginBottom="25dp"
-            android:focusableInTouchMode="false"
-            android:inputType="time"
-            android:singleLine="true"
-            android:textColor="@color/white"
-            android:textSize="15dp" />
-
-
         <LinearLayout
             android:id="@+id/buttonPanel"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_below="@id/event_time"
+            android:layout_below="@id/route_description"
             android:layout_marginBottom="2dp"
             android:minHeight="30dip"
             android:orientation="vertical" />
@@ -95,7 +67,7 @@
             style="?android:attr/buttonBarStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/event_time"
+            android:layout_below="@id/route_description"
             android:layout_alignEnd="@+id/buttonPanel"
             android:layout_alignParentStart="true"
             android:layout_marginTop="-2dp"
@@ -142,7 +114,7 @@
                 android:textSize="15dp" />
 
             <Button
-                android:id="@+id/updateEvent"
+                android:id="@+id/updateRoute"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
@@ -152,7 +124,7 @@
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:maxLines="2"
-                android:onClick="updateEvent"
+                android:onClick="updateRoute"
                 android:text="Update"
                 android:textColor="@color/blue"
                 android:textSize="15dp" />

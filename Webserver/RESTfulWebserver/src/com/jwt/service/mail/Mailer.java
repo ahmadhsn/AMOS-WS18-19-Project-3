@@ -74,9 +74,8 @@ public class Mailer {
 		return success;
 	}
 
-	// TODO
-	public boolean sendRegistrationMail(String to, String userName) {
-		String text = String.format("<h1>You have registered for adrenaline - the motorbike community app!</h1><p>You successfully registered for our app. Your username is %s.</p>", userName);
+	public boolean sendRegistrationMail(String to) {
+		String text = String.format("<h1>You have registered for adrenaline - the motorbike community app!</h1><p>You successfully registered for our app. </p>");
 		
 		return sendMail("registration@adrenaline.com", to, "Your registration for adrenaline", text);
 	}
