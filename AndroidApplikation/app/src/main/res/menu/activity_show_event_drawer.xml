@@ -30,6 +30,11 @@
                 android:title="My Route List" />
 
             <item
+                android:id="@+id/my_chat_list"
+                android:icon="@drawable/ic_menu_share"
+                android:title="My Messages" />
+
+            <item
                 android:id="@+id/add_profile"
                 android:icon="@drawable/ic_portrait_black_24dp"
                 android:title="Add Profile" />
