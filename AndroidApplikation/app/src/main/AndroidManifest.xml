@@ -13,8 +13,11 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity android:name=".HomeActivity" />
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".ForgotPasswordActivity" />
+        <activity
+            android:name=".LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ForgotPasswordActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".SignUpActivity" />
         <activity android:name=".AddRoute" />
         <activity
@@ -29,8 +32,8 @@
         </activity>
         <activity
             android:name=".EditEventActivity"
-            android:theme="@style/Theme.AppCompat.Dialog.Alert" />
-        <activity android:name=".OldActivities.ChangePasswordActivity" />
+            android:theme="@style/Theme.AppCompat.Dialog.Alert"/>
+
         <activity android:name=".ProfileBasicUserActivity" />
         <activity android:name=".AddProfileBasicUserActivity" />
         <activity

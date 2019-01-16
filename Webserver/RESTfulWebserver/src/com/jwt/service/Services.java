@@ -141,20 +141,19 @@ public class Services {
 
 		JSONObject JSONreq = new JSONObject(urlReq);
 
-		if (JSONreq.has("name") && JSONreq.has("password") && JSONreq.has("email")) {
+		if (JSONreq.has("password") && JSONreq.has("email") && JSONreq.has("isBusinessUser"))  {
 			try {
 				JSONObject response = new JSONObject();
 
 				// get data
-				String username = JSONreq.getString("name");
 				String password = JSONreq.getString("password");
-				String email = JSONreq.getString("email");
+				String email = JSONreq.getString("email"); 
+				int idUserType = JSONreq.getBoolean("isBusinessUser") ? 2 : 1;
 				// TODO: more data... city, birth?
 
-				System.out.println("...userRegistrationRequest from " + username);
+				System.out.println("...userRegistrationRequest from " + email);
 
 				// check if user already exists
-
 				DatabaseProvider db = DatabaseProvider.getInstance(context);
 				ResultSet result = db.querySelectDB("SELECT * FROM user_reg WHERE email = '" + email + "'");
 				while (result.next()) {
@@ -163,11 +162,11 @@ public class Services {
 				}
 
 				// insert into DB
-				db.queryInsertDB("INSERT INTO user_reg (password,email) VALUES (?,?)", password, email);
-
+				db.queryInsertDB("INSERT INTO user_reg (password,email, id_user_type) VALUES (?,?,?)", password, email, idUserType);
+						
 				// send registration mail
 				Mailer mailer = new Mailer(context);
-				boolean messageSent = mailer.sendRegistrationMail(email, username);
+				boolean messageSent = mailer.sendRegistrationMail(email);
 
 				if (!messageSent) {
 					response.put("userRegistraion", "invalidMail");
@@ -1168,6 +1167,12 @@ public class Services {
 					s2.closeOnCompletion();
 					
 					System.out.println("UserInfoGotUpdated");
+					
+					JSONObject response = new JSONObject();
+					response.put("userInfoUpdate", "successful");
+					System.out.println("Response: " + response.toString());
+					return Response.status(200).entity(response.toString()).build();
+
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}

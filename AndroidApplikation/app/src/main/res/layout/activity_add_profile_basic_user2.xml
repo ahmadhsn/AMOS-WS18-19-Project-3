@@ -5,190 +5,170 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
 xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-android:background="@color/colorPrimary"
 tools:context=".AddProfileBasicUserActivity">
 
 <RelativeLayout
     android:id="@+id/relativeLayout2"
     android:layout_width="0dp"
     android:layout_height="match_parent"
-    android:layout_marginTop="40dp"
+    android:paddingTop="40dp"
+    android:background="@color/smokeyWhite"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent">
-    <EditText
-        android:id="@+id/fname"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:layout_marginTop="10dp"
-        android:hint="First Name"
-        android:inputType="text"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white" />
-    <EditText
-        android:id="@+id/lname"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_below="@id/fname"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:layout_marginTop="10dp"
-        android:hint="Last Name"
-        android:inputType="text"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white" />
-    <EditText
-        android:id="@+id/dob"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_below="@id/lname"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:layout_marginTop="10dp"
-        android:hint="Date of Birth"
-        android:inputType="date"
-        android:textColor="@color/white"
-        android:focusableInTouchMode="false"
-        android:textColorHint="@color/white" />
 
-    <TextView
-        android:id="@+id/choose_gender"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/dob"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="10dp"
-        android:text="Select Gender"
-        android:textColor="@color/white" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <RadioGroup
-        android:id="@+id/radio"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/choose_gender"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
+        <EditText
+            android:id="@+id/fname"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:hint="First Name"
+            android:inputType="text"
+            style="@style/editTextView"/>
+        <EditText
+            android:id="@+id/lname"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/fname"
+            android:hint="Last Name"
+            android:inputType="text"
+            style="@style/editTextView"/>
+        <EditText
+            android:id="@+id/dob"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/lname"
+            android:hint="Date of Birth"
+            android:inputType="date"
+            android:focusableInTouchMode="false"
+            style="@style/editTextView"/>
 
-        <RadioButton
-            android:id="@+id/male"
+        <TextView
+            android:id="@+id/choose_gender"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:buttonTint="@color/secondaryColor"
-            android:checked="true"
-            android:text="Male"
-            android:textColor="@color/white" />
+            android:layout_below="@+id/dob"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="10dp"
+            android:text="Select Gender"
+            android:textColor="@color/colorPrimaryDark" />
 
-        <RadioButton
-            android:id="@+id/female"
-            android:layout_width="wrap_content"
+        <RadioGroup
+            android:id="@+id/radio"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="90dp"
-            android:buttonTint="@color/secondaryColor"
-            android:text="Female"
-            android:textColor="@color/white" />
+            android:layout_below="@id/choose_gender"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
 
-    </RadioGroup>
+            <RadioButton
+                android:id="@+id/male"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:buttonTint="@color/secondaryColor"
+                android:checked="true"
+                android:text="Male"
+                android:textColor="@color/colorPrimaryDark" />
 
-    <EditText
-        android:id="@+id/street"
-        android:layout_width="350dp"
-        android:layout_height="40dp"
-        android:layout_below="@id/radio"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:layout_marginTop="10dp"
-        android:inputType="text"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white"
-        android:hint="Street" />
+            <RadioButton
+                android:id="@+id/female"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="90dp"
+                android:buttonTint="@color/secondaryColor"
+                android:text="Female"
+                android:textColor="@color/colorPrimaryDark" />
 
-    <EditText
-        android:id="@+id/hnumber"
-        android:layout_width="160dp"
-        android:layout_height="40dp"
-        android:layout_below="@id/radio"
-        android:layout_alignRight="@id/street"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="0dp"
-        android:layout_marginTop="10dp"
-        android:inputType="text"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white"
-        android:hint="Number" />
+        </RadioGroup>
 
-    <EditText
-        android:id="@+id/postcode"
-        android:layout_width="328dp"
-        android:layout_height="40dp"
-        android:layout_below="@id/hnumber"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
-        android:hint="Postcode"
-        android:inputType="number"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
 
-    <EditText
-        android:id="@+id/city"
-        android:layout_width="155dp"
-        android:layout_height="40dp"
-        android:layout_below="@id/street"
-        android:layout_alignRight="@id/postcode"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="0dp"
-        android:layout_marginTop="10dp"
-        android:inputType="text"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white"
-        android:hint="City"/>
-    <EditText
-        android:id="@+id/bstate"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_below="@id/city"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:layout_marginTop="10dp"
-        android:inputType="text"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white"
-        android:hint="State" />
-    <EditText
-        android:id="@+id/country"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_below="@id/bstate"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:layout_marginTop="10dp"
-        android:inputType="text"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white"
-        android:hint="Country" />
-    <Button
-        android:id="@+id/add"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/country"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginTop="10dp"
-        android:textColor="@color/secondaryColor"
-        android:textStyle="bold"
-        android:hint="Show To My Profile"/>
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/add"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginTop="10dp"
-        android:textColor="@color/white"/>
+            <EditText
+                android:id="@+id/street"
+                android:layout_height="40dp"
+                android:layout_width="0dp"
+                android:layout_weight=".40"
+                android:layout_below="@id/radio"
+                android:hint="Street"
+                android:inputType="text"
+                style="@style/editTextViewHalfLeft"/>
+
+            <EditText
+                android:id="@+id/hnumber"
+                android:layout_below="@id/radio"
+                android:layout_height="40dp"
+                android:layout_width="0dp"
+                android:layout_weight=".40"
+                android:hint="Number"
+                android:inputType="text"
+                style="@style/editTextViewHalfRight"/>
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <EditText
+                android:id="@+id/postcode"
+                android:layout_below="@id/hnumber"
+                android:layout_height="40dp"
+                android:layout_width="0dp"
+                android:layout_weight=".40"
+                android:hint="@string/postcode"
+                android:inputType="text"
+                style="@style/editTextViewHalfLeft"/>
+
+            <EditText
+                android:id="@+id/city"
+                android:layout_height="40dp"
+                android:layout_width="0dp"
+                android:layout_weight=".40"
+                android:layout_below="@id/street"
+                android:hint="@string/city"
+                android:inputType="text"
+                style="@style/editTextViewHalfRight"/>
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/bstate"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/city"
+            android:inputType="text"
+            android:hint="State"
+            style="@style/editTextView"/>
+
+        <EditText
+            android:id="@+id/country"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/bstate"
+            android:inputType="text"
+            android:hint="Country"
+            style="@style/editTextView"/>
+
+        <Button
+            android:id="@+id/add"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/country"
+            android:text="Show My Profile"
+            style="@style/buttonCreate"/>
+
+    </LinearLayout>
 </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

@@ -14,6 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Layout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -63,6 +64,11 @@ public class ShowEventActivity extends AppCompatActivity
         navigation.setSelectedItemId(R.id.navigation_event);
 //        toolbar.setTitle("Shop");
 
+        //set email and username in navigation drawer
+        NavigationView navView = findViewById(R.id.nav_view);
+        View navHeader = navView.getHeaderView(0);
+        TextView txt_email = (TextView) navHeader.findViewById(R.id.txt_email);
+        txt_email.setText(SaveSharedPreference.getUserEmail(this));
     }
 
 
@@ -102,7 +108,8 @@ public class ShowEventActivity extends AppCompatActivity
         }
 
         if (id == R.id.show_profile) {
-            Intent intent = new Intent(this, AddProfileBasicUserActivity.class);
+            Intent intent = new Intent(this, ProfileBasicUserActivity.class);
+            intent.putExtra("id", (long) SaveSharedPreference.getUserID(this));
             startActivity(intent);
         }
 
@@ -174,6 +181,11 @@ public class ShowEventActivity extends AppCompatActivity
             SaveSharedPreference.clearSharedPrefrences(this);
             Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
+        } else if (id == R.id.home){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.create_event_fragment, new ShowEventsFragment())
+                    .addToBackStack("HOME_FRAGMENT")
+                    .commit();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

@@ -5,18 +5,25 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/home"
+            android:icon="@drawable/ic_home"
+            android:title="Home" />
+
+        <item
+            android:id="@+id/my_event_list"
+            android:icon="@drawable/ic_menu_share"
+            android:title="My Event List" />
+
+        <item
             android:id="@+id/show_friends"
             android:icon="@drawable/ic_contacts"
-            android:title="@string/show_friends" />
-
+            android:title="My Friends" />
     </group>
 
     <item android:title="User Activities">
         <menu>
-            <item
-                android:id="@+id/my_event_list"
-                android:icon="@drawable/ic_menu_share"
-                android:title="My Event List" />
+
+
             <item
                 android:id="@+id/my_route_list"
                 android:icon="@drawable/ic_menu_share"

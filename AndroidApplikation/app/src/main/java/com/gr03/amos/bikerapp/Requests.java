@@ -168,7 +168,6 @@ public class Requests {
 
     }
 
-
     public static JSONObject getJSONResponse(String tail, JSONObject request, String method) {
         JSONObject response = null;
 
