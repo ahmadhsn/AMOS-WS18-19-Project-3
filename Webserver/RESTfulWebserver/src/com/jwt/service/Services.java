@@ -536,9 +536,7 @@ public class Services {
 			System.out.println(result);
 			
 			while (result.next()) {	
-				
-				
-					
+	
 				String id_json = result.getString("id_event");
 				String id_address_json = result.getString("id_address");
 				String name_json = result.getString("name");
@@ -591,7 +589,7 @@ public class Services {
 		try {
 			DatabaseProvider provider = DatabaseProvider.getInstance(context);
 			
-			ResultSet result = provider.querySelectDB("Select * from ROUTE"
+			ResultSet result = provider.querySelectDB("Select * from ROUTE");
 					//"SELECT a.*, r.* FROM ADDRESS AS a INNER JOIN ROUTE AS r ON "
 					//+ "(a.id_address = r.startpoint OR a.id_address = r.endpoint)"
 				//	+ ""
@@ -599,7 +597,7 @@ public class Services {
 					//+ " JOIN ADDRESS a USING (id_address)"
 					//+ " WHERE e.startpoint =a.id_address "
 					//+ " ORDER BY r.id_route, a.id_address" 
-					);
+					
 			System.out.println(result);
 			
 			while (result.next()) {	
@@ -708,6 +706,7 @@ public class Services {
 		return Response.status(200).entity(j.toString()).build();
 
 	}
+	
 	
 	@GET
 	@Path("getChat/{chat_id}")
@@ -1312,6 +1311,61 @@ public class Services {
 			return Response.status(500).entity(response.toString()).build();
 		}
 	}
+	
+	
+	@GET
+	@Path("/getFriendsRoutes/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response getFriendsRoutes(@PathParam("id") int id) throws JSONException, SQLException {
+
+		JSONObject j = new JSONObject();
+
+		System.out.println("...Get Firends By ID ");
+		
+		try {
+			DatabaseProvider provider = DatabaseProvider.getInstance(context);
+
+			ResultSet result = provider.querySelectDB("SELECT * From FRIENDSHIP WHERE id_user1 =" + id);
+			System.out.println(result);
+						
+			while (result.next()) {	
+				String id_user2 = result.getString("id_user2");				
+				ResultSet basicUser = provider.querySelectDB("Select * from BASIC_USER AS b Where b.id_user =" + id_user2 );
+				
+				JSONObject jobj = new JSONObject();
+				JSONObject jobj1 = new JSONObject();
+				JSONObject jobj2 = new JSONObject();
+
+				jobj.put("id_user1", result.getString("id_user2"));
+				
+				if(basicUser.next()) { 
+					jobj1.put("id", basicUser.getString("id_user"));
+					jobj1.put("first_name", basicUser.getString("first_name"));
+					jobj1.put("last_name", basicUser.getString("last_name"));
+					
+					ResultSet routes = provider.querySelectDB("Select * from ROUTE AS r Where r.id_user =" + basicUser.getString("id_user") );
+					while(routes.next()) {
+						jobj2.put("id_route", routes.getString("id_route"));
+						jobj2.put("name", routes.getString("name"));
+						jobj2.put("description", routes.getString("description"));
+						jobj2.put("id_user", routes.getString("id_user"));
+						jobj1.put("route", jobj2);
+						
+					}
+					jobj.put("route", jobj1);
+				}
+				
+				j.append("friend",jobj1);
+			}
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		return Response.status(200).entity(j.toString()).build();
+
+	}
+	
 
 	/**
 	 * Returns user information.

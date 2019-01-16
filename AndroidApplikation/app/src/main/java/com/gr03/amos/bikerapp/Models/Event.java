@@ -30,7 +30,6 @@ public class Event extends RealmObject {
         this.description = description;
     }
 
-
     public long getId_event() {
         return id_event;
     }

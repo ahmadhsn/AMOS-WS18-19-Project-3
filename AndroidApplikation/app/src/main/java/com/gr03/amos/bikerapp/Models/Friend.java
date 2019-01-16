@@ -9,6 +9,7 @@ public class Friend extends RealmObject {
     private Long id;
     private String first_name;
     private String email;
+    private Route route;
 
     public String getLast_name() {
         return last_name;
@@ -46,5 +47,9 @@ public class Friend extends RealmObject {
         newFriend.id = user.getUser_id();
 
         return newFriend;
+    }
+
+    public Route getRoute() {
+        return route;
     }
 }

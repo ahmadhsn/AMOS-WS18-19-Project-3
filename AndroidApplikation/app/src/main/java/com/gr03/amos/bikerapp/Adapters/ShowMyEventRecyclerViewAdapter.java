@@ -68,7 +68,6 @@ public class ShowMyEventRecyclerViewAdapter extends RecyclerView.Adapter<ShowMyE
             eventDate = itemView.findViewById(R.id.event_date);
             eventTime = itemView.findViewById(R.id.event_time);
             itemView.setOnClickListener(this);
-
         }
 
         @Override

@@ -1,6 +1,8 @@
 package com.gr03.amos.bikerapp.Models;
 
 import io.realm.RealmObject;
+import io.realm.RealmResults;
+import io.realm.annotations.LinkingObjects;
 import io.realm.annotations.PrimaryKey;
 
 public class Route extends RealmObject {
@@ -12,6 +14,9 @@ public class Route extends RealmObject {
     private Start start;
     private Address end_address;
     private Address start_address;
+
+    @LinkingObjects("route")
+    private final RealmResults<Friend> friend = null;
 
     public String getName() {
         return name;
@@ -69,6 +74,9 @@ public class Route extends RealmObject {
         this.id_user = id_user;
     }
 
+    public RealmResults<Friend> getFriend() {
+        return friend;
+    }
 
 }
 
