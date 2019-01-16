@@ -658,55 +658,6 @@ public class Services {
 	
 	
 	@GET
-	@Path("/getFriendsRoutes/{id}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response getFriendsRoutes(@PathParam("id") int id) throws JSONException, SQLException {
-
-		JSONObject j = new JSONObject();
-		
-		System.out.println("...Get Friend's Routes By ID ");
-		
-		try {
-			DatabaseProvider provider = DatabaseProvider.getInstance(context);
-
-			ResultSet result = provider.querySelectDB("SELECT DISTINCT ON (u.id_user) * FROM BASIC_USER u"
-					+ " LEFT JOIN ADDRESS a USING (id_address) "
-					+ "WHERE u.id_user =" + id					
-					+ " ORDER BY u.id_user, a.id_address" );
-			System.out.println(result);
-		
-			
-			
-			System.out.println("this" + result.getClass().getName());
-			
-			while (result.next()) {	
-				
-				JSONObject jobj = new JSONObject();
-				jobj.put("id_user", result.getString("id_user"));
-				jobj.put("first_name", result.getString("first_name"));
-				jobj.put("last_name", result.getString("last_name"));
-				jobj.put("dob", result.getString("dob"));
-				
-				JSONObject jobj2 = new JSONObject();
-				jobj2.put("city", result.getString("city"));
-				jobj2.put("country", result.getString("country"));
-				jobj2.put("id_address", result.getString("id_address"));
-				
-				jobj.put("address", jobj2);
-				j.append("user",jobj);
-
-			}
-
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-
-		return Response.status(200).entity(j.toString()).build();
-
-	}
-	
-	@GET
 	@Path("getChat/{chat_id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getAllChat(@PathParam("chat_id") int id_chat) throws JSONException {
@@ -1279,9 +1230,9 @@ public class Services {
 	
 	
 	@GET
-	@Path("/getFrieends/{id}")
+	@Path("/getFriendsRoutes/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response getFriendsById(@PathParam("id") int id) throws JSONException, SQLException {
+	public Response getFriendsRoutes(@PathParam("id") int id) throws JSONException, SQLException {
 
 		JSONObject j = new JSONObject();
 

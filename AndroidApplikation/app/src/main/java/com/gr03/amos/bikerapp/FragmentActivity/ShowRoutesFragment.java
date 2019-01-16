@@ -86,15 +86,15 @@ public class ShowRoutesFragment extends Fragment {
 
         Realm.init(context);
         Realm realm = Realm.getDefaultInstance();
-        Requests.getJsonResponseForFrieends("getFrieends/" +
+        Requests.getJsonResponseForFriendsRoutes("getFriendsRoutes/" +
                 SaveSharedPreference.getUserID(context), context);
-    //    RealmResults<Friend> friends = realm.where(Friend.class).findAll();
-    //    RealmResults<Route> routes = null;
+        //RealmResults<Friend> friends = realm.where(Friend.class).findAll();
         RealmResults<Route> routes = realm.where(Route.class).findAll();
-  /*      for (Friend friend : friends) {
+
+/*        RealmResults<Route> routes = null;
+        for (Friend friend : friends) {
             routes.add(friend.getRoute());
-        }
-*/
+        }*/
         populateRecyclerView(routes);
     }
 }
