@@ -4,26 +4,23 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.gr03.amos.bikerapp.Adapters.MessageListRecyclerViewAdapter;
-import com.gr03.amos.bikerapp.Adapters.ShowMyEventRecyclerViewAdapter;
-import com.gr03.amos.bikerapp.Models.Event;
-import com.gr03.amos.bikerapp.Models.EventParticipation;
+import com.gr03.amos.bikerapp.Adapters.ShowConversationWithFriendsListRecyclerViewAdapter;
+import com.gr03.amos.bikerapp.Models.Friend;
 import com.gr03.amos.bikerapp.Models.Message;
 import com.gr03.amos.bikerapp.R;
 
 import io.realm.Realm;
-import io.realm.RealmList;
 import io.realm.RealmResults;
 
 public class MyChatListFragment extends Fragment {
 
     RecyclerView messageListRecyclerViewAdapter;
-    MessageListRecyclerViewAdapter showMessageListRecyclerViewAdapter;
+    ShowConversationWithFriendsListRecyclerViewAdapter showConversationWithFriendsListRecyclerViewAdapter;
     private View view;
     Message message;
 
@@ -47,12 +44,11 @@ public class MyChatListFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_my_chat_list, container, false);
         Realm.init(container.getContext());
         Realm realm = Realm.getDefaultInstance();
+        RealmResults<Friend> friends = realm.where(Friend.class).findAll();
 
-        /* TODO
+      /*  TODO
 
-        RealmResults<EventParticipation> eventParticipations = realm.where(EventParticipation.class).findAll();
-
-        RealmList<Event> events = new RealmList<>();
+               RealmList<Event> events = new RealmList<>();
         for (EventParticipation eventParticipation : eventParticipations) {
             message = realm.where(Event.class)
                     .equalTo("id_event", eventParticipation.getId_event())
@@ -63,15 +59,15 @@ public class MyChatListFragment extends Fragment {
 
         populateRecyclerView(events);
         */
-
+        populateRecyclerView(friends);
         return view;
     }
 
-    private void populateRecyclerView(RealmResults<Message> messages) {
+    private void populateRecyclerView(RealmResults<Friend> friendConversation) {
         messageListRecyclerViewAdapter = view.findViewById(R.id.myChats);
         messageListRecyclerViewAdapter.setLayoutManager(new LinearLayoutManager(getContext()));
-        showMessageListRecyclerViewAdapter = new MessageListRecyclerViewAdapter(getContext(), messages);
-        messageListRecyclerViewAdapter.setAdapter(showMessageListRecyclerViewAdapter);
+        showConversationWithFriendsListRecyclerViewAdapter = new ShowConversationWithFriendsListRecyclerViewAdapter(getContext(), friendConversation);
+        messageListRecyclerViewAdapter.setAdapter(showConversationWithFriendsListRecyclerViewAdapter);
     }
 
 }
