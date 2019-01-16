@@ -19,21 +19,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.gr03.amos.bikerapp.FragmentActivity.ChangePasswordFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.CreateEventFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.MyEventListFragment;
+import com.gr03.amos.bikerapp.FragmentActivity.MyRouteListFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.ShowEventsFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.ShowFriendsFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.ShowRoutesFragment;
-import com.gr03.amos.bikerapp.Models.Address;
-import com.gr03.amos.bikerapp.Models.Event;
-
-import io.realm.Realm;
 
 public class ShowEventActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -141,6 +134,13 @@ public class ShowEventActivity extends AppCompatActivity
         } else if (id == R.id.my_event_list) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.create_event_fragment, new MyEventListFragment())
+                    .commit();
+            if (navigation.getVisibility() == View.VISIBLE) {
+                navigation.setVisibility(View.GONE);
+            }
+        } else if (id == R.id.my_route_list) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.create_event_fragment, new MyRouteListFragment())
                     .commit();
             if (navigation.getVisibility() == View.VISIBLE) {
                 navigation.setVisibility(View.GONE);

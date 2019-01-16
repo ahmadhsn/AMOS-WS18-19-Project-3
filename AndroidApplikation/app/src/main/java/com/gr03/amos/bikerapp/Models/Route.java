@@ -11,6 +11,7 @@ public class Route extends RealmObject {
     private String description;
     private Start start;
     private Address end_address;
+    private Address start_address;
 
     public String getName() {
         return name;
@@ -44,6 +45,14 @@ public class Route extends RealmObject {
         this.end_address = end_address;
     }
 
+    public Address getStartAddress() {
+        return start_address;
+    }
+
+    public void setStartAddress(Address start_address) {
+        this.start_address = start_address;
+    }
+
     public long getId_route() {
         return id_route;
     }
@@ -59,6 +68,8 @@ public class Route extends RealmObject {
     public void setId_user(long id_user) {
         this.id_user = id_user;
     }
+
+
 }
 
 
