@@ -46,7 +46,6 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
         View view = mInflater.inflate(R.layout.show_event_row, parent, false);
         return new ViewHolder(view);
 
-
     }
 
     @Override

@@ -125,6 +125,27 @@ public class Requests {
 
     }
 
+    public static void getJsonResponseForFrieends(String urlTail, Context context) {
+        try {
+            JsonObject jsonObject = new GetJson().AsJSONObject("http://" + HOST + ":" + PORT + "/RESTfulWebserver/services/" + urlTail);
+            JSONObject obj = new JSONObject(String.valueOf(jsonObject));
+
+            JSONArray friendString = obj.getJSONArray("friend");
+
+            Realm.init(context);
+            Realm realm = Realm.getDefaultInstance();
+            realm.beginTransaction();
+            realm.createOrUpdateAllFromJson(Friend.class, friendString);
+            realm.commitTransaction();
+            realm.close();
+
+
+        } catch (ExecutionException | InterruptedException | JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public static void getJsonResponseForUser(String urlTail, Context context) {
         try {
             JsonObject jsonObject = new GetJson().AsJSONObject("http://" + HOST + ":" + PORT + "/RESTfulWebserver/services/" + urlTail);
