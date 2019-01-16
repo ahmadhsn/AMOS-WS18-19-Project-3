@@ -51,7 +51,7 @@
             android:layout_alignParentEnd="true"
             android:layout_margin="5dp"
             android:layout_toEndOf="@id/friend_name"
-            android:text="dada"
+            android:text="Time"
             android:textColor="@color/colorPrimary"
             android:textSize="15sp" />
     </RelativeLayout>

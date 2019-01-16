@@ -57,18 +57,23 @@ public class ShowConversationWithFriendsListRecyclerViewAdapter extends RealmRec
         Log.i("before chat", String.valueOf(chatId));
         Realm.init(context);
         Realm realm = Realm.getDefaultInstance();
-        Message message = realm.where(Message.class).equalTo("id_chat", chatId).sort("time_created", Sort.DESCENDING).findFirst();
+        Message message = realm.where(Message.class).equalTo("id_chat", chatId).sort("time_created", Sort.ASCENDING).findFirst();
 
-        holder.friendName.setText(mData.get(position).getFirst_name());
-        holder.timeStamp.setText(message.getTime_created());
-        holder.lastMessage.setText(message.getMessage());
+        try {
+            holder.friendName.setText(mData.get(position).getFirst_name());
+            holder.timeStamp.setText(message.getTime_created());
+            holder.lastMessage.setText(message.getMessage());
 
-        holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, ChatActivity.class);
-            intent.putExtra("chatUser", chatUser);
-            Log.i("this chat", String.valueOf(chatUser));
-            context.startActivity(intent);
-        });
+            holder.itemView.setOnClickListener(v -> {
+                Intent intent = new Intent(context, ChatActivity.class);
+                intent.putExtra("chatUser", chatUser);
+                Log.i("this chat", String.valueOf(chatUser));
+                context.startActivity(intent);
+            });
+        } catch (Exception e) {
+            Log.w("ShowConversationAdapter", e.toString());
+            holder.friendName.setText("NA");
+        }
     }
 
     @Override
