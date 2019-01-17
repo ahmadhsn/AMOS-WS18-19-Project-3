@@ -15,6 +15,7 @@ import com.gr03.amos.bikerapp.Models.Message;
 import com.gr03.amos.bikerapp.R;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmResults;
 
 public class MyChatListFragment extends Fragment {
@@ -66,6 +67,10 @@ public class MyChatListFragment extends Fragment {
     private void populateRecyclerView(RealmResults<Friend> friendConversation) {
         messageListRecyclerViewAdapter = view.findViewById(R.id.myChats);
         messageListRecyclerViewAdapter.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        //TODO
+        friendConversation = friendConversation.sort("last_message_time");
+
         showConversationWithFriendsListRecyclerViewAdapter = new ShowConversationWithFriendsListRecyclerViewAdapter(getContext(), friendConversation);
         messageListRecyclerViewAdapter.setAdapter(showConversationWithFriendsListRecyclerViewAdapter);
     }
