@@ -1,9 +1,6 @@
 package com.gr03.amos.bikerapp;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -15,7 +12,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,9 +28,9 @@ import com.gr03.amos.bikerapp.FragmentActivity.ShowFriendsFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.ShowRoutesFragment;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketAddress;
 
 public class ShowEventActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -47,40 +43,41 @@ public class ShowEventActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_event);
 
-        if(!isURLReachable(getApplicationContext())){
-            Toast.makeText(getBaseContext(), "No Server Connection", Toast.LENGTH_LONG);
-        }
-
-        if (SaveSharedPreference.getUserEmail(this).length() == 0) {
-            Intent intent = new Intent(this, HomeActivity.class);
-            startActivity(intent);
-        }
+        if(isReachableByTcp("http://localhost:8080/RESTfulWebserver/", 5432, 400)){
+            if (SaveSharedPreference.getUserEmail(this).length() == 0) {
+                Intent intent = new Intent(this, HomeActivity.class);
+                startActivity(intent);
+            }
 
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+            Toolbar toolbar = findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
 
-        getSupportActionBar().setTitle("Event Feed");
+            getSupportActionBar().setTitle("Event Feed");
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
+            DrawerLayout drawer = findViewById(R.id.drawer_layout);
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawer.addDrawerListener(toggle);
+            toggle.syncState();
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+            NavigationView navigationView = findViewById(R.id.nav_view);
+            navigationView.setNavigationItemSelectedListener(this);
 
-        navigation = findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        navigation.setSelectedItemId(R.id.navigation_event);
+            navigation = findViewById(R.id.navigation);
+            navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+            navigation.setSelectedItemId(R.id.navigation_event);
 //        toolbar.setTitle("Shop");
 
-        //set email and username in navigation drawer
-        NavigationView navView = findViewById(R.id.nav_view);
-        View navHeader = navView.getHeaderView(0);
-        TextView txt_email = (TextView) navHeader.findViewById(R.id.txt_email);
-        txt_email.setText(SaveSharedPreference.getUserEmail(this));
+            //set email and username in navigation drawer
+            NavigationView navView = findViewById(R.id.nav_view);
+            View navHeader = navView.getHeaderView(0);
+            TextView txt_email = (TextView) navHeader.findViewById(R.id.txt_email);
+            txt_email.setText(SaveSharedPreference.getUserEmail(this));
+
+        }else{
+            Toast.makeText(getBaseContext(), "No Server Connection", Toast.LENGTH_LONG);
+        }
     }
 
 
@@ -252,28 +249,16 @@ public class ShowEventActivity extends AppCompatActivity
         }
     };
 
-    static public boolean isURLReachable(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        if (netInfo != null && netInfo.isConnected()) {
-            try {
-                URL url = new URL("http://localhost:8080/RESTfulWebserver/");
-                HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
-                urlc.setConnectTimeout(10 * 1000);          // 10 s.
-                urlc.connect();
-                if (urlc.getResponseCode() == 200) {        // 200 = "OK" code (http connection is fine).
-                    Log.wtf("Connection", "Success !");
-                    return true;
-                } else {
-                    return false;
-                }
-            } catch (MalformedURLException e1) {
-                return false;
-            } catch (IOException e) {
-                return false;
-            }
+    public static boolean isReachableByTcp(String host, int port, int timeout) {
+        try {
+            Socket socket = new Socket();
+            SocketAddress socketAddress = new InetSocketAddress(host, port);
+            socket.connect(socketAddress, timeout);
+            socket.close();
+            return true;
+        } catch (IOException e) {
+            return false;
         }
-        return false;
     }
 
 }
