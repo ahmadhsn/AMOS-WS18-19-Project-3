@@ -28,9 +28,6 @@ import com.gr03.amos.bikerapp.FragmentActivity.ShowFriendsFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.ShowRoutesFragment;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.SocketAddress;
 
 public class ShowEventActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -41,43 +38,45 @@ public class ShowEventActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (!executeCommand()) {
+            Toast toast = Toast.makeText(getApplicationContext(), "No Connection", Toast.LENGTH_LONG);
+            toast.show();
+        }
+
+
+        if (SaveSharedPreference.getUserEmail(this).length() == 0) {
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
+        }
         setContentView(R.layout.activity_show_event);
 
-        if(isReachableByTcp("http://localhost:8080/RESTfulWebserver/", 5432, 400)){
-            if (SaveSharedPreference.getUserEmail(this).length() == 0) {
-                Intent intent = new Intent(this, HomeActivity.class);
-                startActivity(intent);
-            }
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-            Toolbar toolbar = findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Event Feed");
 
-            getSupportActionBar().setTitle("Event Feed");
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
 
-            DrawerLayout drawer = findViewById(R.id.drawer_layout);
-            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-            drawer.addDrawerListener(toggle);
-            toggle.syncState();
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
-            NavigationView navigationView = findViewById(R.id.nav_view);
-            navigationView.setNavigationItemSelectedListener(this);
-
-            navigation = findViewById(R.id.navigation);
-            navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-            navigation.setSelectedItemId(R.id.navigation_event);
+        navigation = findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        navigation.setSelectedItemId(R.id.navigation_event);
 //        toolbar.setTitle("Shop");
 
-            //set email and username in navigation drawer
-            NavigationView navView = findViewById(R.id.nav_view);
-            View navHeader = navView.getHeaderView(0);
-            TextView txt_email = (TextView) navHeader.findViewById(R.id.txt_email);
-            txt_email.setText(SaveSharedPreference.getUserEmail(this));
+        //set email and username in navigation drawer
+        NavigationView navView = findViewById(R.id.nav_view);
+        View navHeader = navView.getHeaderView(0);
+        TextView txt_email = (TextView) navHeader.findViewById(R.id.txt_email);
+        txt_email.setText(SaveSharedPreference.getUserEmail(this));
 
-        }else{
-            Toast.makeText(getBaseContext(), "No Server Connection", Toast.LENGTH_LONG);
-        }
     }
 
 
@@ -249,16 +248,35 @@ public class ShowEventActivity extends AppCompatActivity
         }
     };
 
-    public static boolean isReachableByTcp(String host, int port, int timeout) {
-        try {
-            Socket socket = new Socket();
-            SocketAddress socketAddress = new InetSocketAddress(host, port);
-            socket.connect(socketAddress, timeout);
-            socket.close();
-            return true;
-        } catch (IOException e) {
-            return false;
+
+
+    private boolean executeCommand(){
+        System.out.println("executeCommand");
+        Runtime runtime = Runtime.getRuntime();
+        try
+        {
+            Process  mIpAddrProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            int mExitValue = mIpAddrProcess.waitFor();
+            System.out.println(" mExitValue "+mExitValue);
+            if(mExitValue==0){
+                return true;
+            }else{
+                return false;
+            }
         }
+        catch (InterruptedException ignore)
+        {
+            ignore.printStackTrace();
+            System.out.println(" Exception:"+ignore);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            System.out.println(" Exception:"+e);
+        }
+        return false;
     }
+
+
 
 }
