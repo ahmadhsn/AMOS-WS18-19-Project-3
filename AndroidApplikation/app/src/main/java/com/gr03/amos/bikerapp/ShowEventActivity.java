@@ -1,6 +1,8 @@
 package com.gr03.amos.bikerapp;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -10,13 +12,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.gr03.amos.bikerapp.FragmentActivity.ChangePasswordFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.CreateEventFragment;
@@ -27,7 +29,8 @@ import com.gr03.amos.bikerapp.FragmentActivity.ShowEventsFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.ShowFriendsFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.ShowRoutesFragment;
 
-import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
 
 public class ShowEventActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -38,18 +41,47 @@ public class ShowEventActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_show_event);
 
-        if (!executeCommand()) {
-            Toast toast = Toast.makeText(getApplicationContext(), "No Connection", Toast.LENGTH_LONG);
-            toast.show();
+        if (isConnectedToServer("http://localhost:8080/RESTfulWebserver/", 4000) == false) {
+
+            try {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage("No Server Connection");
+                final AlertDialog dialog = builder.show();
+
+
+                AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+
+                    @SuppressLint("WrongThread")
+                    protected Void doInBackground(Void... params) {
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        return null;
+                    }
+
+                    protected void onPostExecute(Void result) {
+                        dialog.dismiss();
+                    }
+
+                };
+
+                task.execute();
+                System.out.println("No server connection, we are in the show dialog branch");
+            }
+            catch(Exception e)
+            {
+               System.out.println("No server connection, but doesnt show dialog");
+            }
         }
-
 
         if (SaveSharedPreference.getUserEmail(this).length() == 0) {
             Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
         }
-        setContentView(R.layout.activity_show_event);
 
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -250,31 +282,17 @@ public class ShowEventActivity extends AppCompatActivity
 
 
 
-    private boolean executeCommand(){
-        System.out.println("executeCommand");
-        Runtime runtime = Runtime.getRuntime();
-        try
-        {
-            Process  mIpAddrProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
-            int mExitValue = mIpAddrProcess.waitFor();
-            System.out.println(" mExitValue "+mExitValue);
-            if(mExitValue==0){
-                return true;
-            }else{
-                return false;
-            }
+    public boolean isConnectedToServer(String url, int timeout) {
+        try{
+            URL myUrl = new URL(url);
+            URLConnection connection = myUrl.openConnection();
+            connection.setConnectTimeout(timeout);
+            connection.connect();
+            return true;
+        } catch (Exception e) {
+            // Handle your exceptions
+            return false;
         }
-        catch (InterruptedException ignore)
-        {
-            ignore.printStackTrace();
-            System.out.println(" Exception:"+ignore);
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-            System.out.println(" Exception:"+e);
-        }
-        return false;
     }
 
 
