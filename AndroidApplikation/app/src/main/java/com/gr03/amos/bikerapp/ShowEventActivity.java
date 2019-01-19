@@ -43,14 +43,12 @@ public class ShowEventActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_event);
 
+        //checks server connecetion
         if (isConnectedToServer("http://localhost:8080/RESTfulWebserver/", 4000) == false) {
-
             try {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage("No Server Connection");
                 final AlertDialog dialog = builder.show();
-
-
                 AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
 
                     @SuppressLint("WrongThread")
@@ -68,12 +66,10 @@ public class ShowEventActivity extends AppCompatActivity
                     }
 
                 };
-
                 task.execute();
                 System.out.println("No server connection, we are in the show dialog branch");
             }
-            catch(Exception e)
-            {
+            catch(Exception e){
                System.out.println("No server connection, but doesnt show dialog");
             }
         }
