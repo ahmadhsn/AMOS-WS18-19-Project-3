@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -35,7 +35,7 @@
         <item name="android:paddingStart">0dp</item>
         <item name="android:paddingEnd">0dp</item>
         <item name="android:textColor">@color/white</item>
-        <item name="android:backgroundTint">@color/black</item>
+        <item name="android:backgroundTint">@color/colorPrimaryDark</item>
         <item name="android:textSize">16sp</item>
     </style>
 
@@ -43,4 +43,42 @@
         <item name="colorPrimary">@color/secondaryColor</item>
     </style>
 
+    <style name="buttonCreate" parent="@android:style/Widget.Button">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@color/orange</item>
+        <item name="android:layout_marginLeft">0dp</item>
+        <item name="android:layout_marginRight">0dp</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginBottom">0dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+
+    <style name="editTextView" parent="@android:style/Widget.EditText">
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="android:textColorHint">@color/lightGrey</item>
+        <item name="android:backgroundTint">@color/lightGrey</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginLeft">40dp</item>
+        <item name="android:layout_marginRight">40dp</item>
+    </style>
+
+    <style name="editTextViewHalfLeft" parent="@android:style/Widget.EditText">
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="android:textColorHint">@color/lightGrey</item>
+        <item name="android:backgroundTint">@color/lightGrey</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginLeft">40dp</item>
+        <item name="android:layout_marginRight">20dp</item>
+    </style>
+
+    <style name="editTextViewHalfRight" parent="@android:style/Widget.EditText">
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="android:textColorHint">@color/lightGrey</item>
+        <item name="android:backgroundTint">@color/lightGrey</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginLeft">0dp</item>
+        <item name="android:layout_marginRight">40dp</item>
+    </style>
 </resources>
