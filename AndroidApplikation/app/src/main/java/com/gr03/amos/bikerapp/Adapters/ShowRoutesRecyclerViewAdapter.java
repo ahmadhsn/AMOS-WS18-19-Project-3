@@ -21,13 +21,16 @@ import com.gr03.amos.bikerapp.SaveSharedPreference;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import com.gr03.amos.bikerapp.Models.Route;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmResults;
 
 public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRoutesRecyclerViewAdapter.ViewHolder> {
 
+    private RealmList<Route> routes;
     private RealmResults<Route> mData;
     private LayoutInflater mInflater;
     private Context context;
@@ -39,6 +42,11 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
         this.context = context;
     }
 
+    public ShowRoutesRecyclerViewAdapter(Context context, RealmList<Route> routes) {
+        this.routes = routes;
+        this.context = context;
+    }
+
     @Override
     public ShowRoutesRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.show_route_row, parent, false);
@@ -47,6 +55,7 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
 
     @Override
     public void onBindViewHolder(@NonNull ShowRoutesRecyclerViewAdapter.ViewHolder holder, int position) {
+
         holder.routeName.setText(mData.get(position).getName());
         holder.routeDescription.setText(mData.get(position).getDescription());
         holder.startPoint
