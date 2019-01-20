@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.gr03.amos.bikerapp.Adapters.MessageListRecyclerViewAdapter;
+import com.gr03.amos.bikerapp.Models.Friend;
 import com.gr03.amos.bikerapp.Models.Message;
 
 import org.json.JSONArray;
@@ -151,6 +152,15 @@ public class ChatActivity extends AppCompatActivity {
         Realm.init(this);
         Realm realm = Realm.getDefaultInstance();
         RealmResults<Message> messages = realm.where(Message.class).equalTo("id_chat", chatId).findAll();
+
+        //set last messages timestamp as last_messages_time from friend in model
+        String lastMessagesTime = messages.last().getTime_created();
+        for (Integer friendsID : this.userIds) {
+            if (!friendsID.equals(SaveSharedPreference.getUserID(this))) {
+                Friend friend = realm.where(Friend.class).equalTo("id", friendsID).findFirst();
+                friend.setLast_message_time(lastMessagesTime);
+            }
+        }
 
         showMessagesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         messageListRecyclerViewAdapter = new MessageListRecyclerViewAdapter(this, messages);
