@@ -158,7 +158,9 @@ public class ChatActivity extends AppCompatActivity {
         for (Integer friendsID : this.userIds) {
             if (!friendsID.equals(SaveSharedPreference.getUserID(this))) {
                 Friend friend = realm.where(Friend.class).equalTo("id", friendsID).findFirst();
+                realm.beginTransaction();
                 friend.setLast_message_time(lastMessagesTime);
+                realm.commitTransaction();
             }
         }
 
