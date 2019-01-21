@@ -6,6 +6,7 @@ import io.realm.annotations.PrimaryKey;
 public class User extends RealmObject {
     @PrimaryKey
     private long id_user;
+    private long id_user_type;
     private String first_name;
     private String last_name;
     private String dob;
@@ -49,5 +50,13 @@ public class User extends RealmObject {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    public long getId_user_type() {
+        return id_user_type;
+    }
+
+    public void setId_user_type(long id_user_type) {
+        this.id_user_type = id_user_type;
     }
 }

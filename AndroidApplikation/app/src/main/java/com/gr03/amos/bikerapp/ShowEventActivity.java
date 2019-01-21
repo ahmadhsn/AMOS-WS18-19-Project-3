@@ -45,6 +45,10 @@ public class ShowEventActivity extends AppCompatActivity
             Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
         }
+        if (SaveSharedPreference.getUserType(this) == 2) {
+            Intent intent = new Intent(this, BusinessUserMainActivity.class);
+            startActivity(intent);
+        }
 
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -140,7 +144,7 @@ public class ShowEventActivity extends AppCompatActivity
             if (navigation.getVisibility() == View.VISIBLE) {
                 navigation.setVisibility(View.GONE);
             }
-            
+
         } else if (id == R.id.my_chat_list) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.create_event_fragment, new MyChatListFragment())
@@ -156,7 +160,7 @@ public class ShowEventActivity extends AppCompatActivity
             if (navigation.getVisibility() == View.VISIBLE) {
                 navigation.setVisibility(View.GONE);
             }
-            
+
         } else if (id == R.id.change_password) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.create_event_fragment, new ChangePasswordFragment())
@@ -193,7 +197,7 @@ public class ShowEventActivity extends AppCompatActivity
             SaveSharedPreference.clearSharedPrefrences(this);
             Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
-        } else if (id == R.id.home){
+        } else if (id == R.id.home) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.create_event_fragment, new ShowEventsFragment())
                     .addToBackStack("HOME_FRAGMENT")

@@ -9,11 +9,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gr03.amos.bikerapp.Models.User;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class LoginActivity extends AppCompatActivity {
     TextView forgotPassword;
@@ -50,19 +55,32 @@ public class LoginActivity extends AppCompatActivity {
             new Thread(task).start();
             Log.i("Response", task.get());
             response = new JSONObject(task.get());
-            Log.i("this is response", String.valueOf(response));
             //handle response
             if (response.has("success")) {
 
-                Log.i("IGI", String.valueOf(response));
                 String eml = response.getString("email");
-                int userId = response.getInt("user_id");
-                SaveSharedPreference.saveUserInforamtion(this, eml, userId);
+                int userId = response.getInt("id_user");
+                int userType = response.getInt("id_user_type");
+                SaveSharedPreference.saveUserInforamtion(this, eml, userId, userType);
                 Toast.makeText(getApplicationContext(), "You are logged in now!", Toast.LENGTH_LONG).show();
 
-                Intent intent = new Intent(this, ShowEventActivity.class);
-                startActivity(intent);
 
+                Realm.init(this);
+                Realm realm = Realm.getDefaultInstance();
+                realm.beginTransaction();
+                realm.createOrUpdateObjectFromJson(User.class, response);
+                realm.commitTransaction();
+                realm.close();
+
+                User user = realm.where(User.class).findFirst();
+
+                if (user.getId_user_type() == 2) {
+                    Intent intent = new Intent(this, BusinessUserMainActivity.class);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(this, ShowEventActivity.class);
+                    startActivity(intent);
+                }
             }
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), "Wrong email or password", Toast.LENGTH_LONG).show();

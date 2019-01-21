@@ -99,7 +99,7 @@ public class Services {
 
 			String email = JSONreq.getString("email");
 			String password = JSONreq.getString("password");
-
+			
 			System.out.println("...userLoginRequest from " + email);
 			UserDao userDao = new UserDaoImplementation();
 			User user = userDao.getUser(email, password);
@@ -109,9 +109,9 @@ public class Services {
 			}
 
 			JSONObject response = new JSONObject();
-			response.put("user_id", user.getUser_id());
+			response.put("id_user", user.getUser_id());
 			response.put("email", user.getEmail());
-
+			response.put("id_user_type",user.getUser_type());
 			response.put("success", true);
 			
 			return Response.status(200).entity(response.toString()).build();

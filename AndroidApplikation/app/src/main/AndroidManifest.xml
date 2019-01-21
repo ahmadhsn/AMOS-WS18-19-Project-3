@@ -15,9 +15,10 @@
         <activity android:name=".HomeActivity" />
         <activity
             android:name=".LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".ForgotPasswordActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ForgotPasswordActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".SignUpActivity" />
         <activity android:name=".AddRoute" />
         <activity
@@ -31,8 +32,7 @@
         </activity>
         <activity
             android:name=".EditEventActivity"
-            android:theme="@style/Theme.AppCompat.Dialog.Alert"/>
-
+            android:theme="@style/Theme.AppCompat.Dialog.Alert" />
         <activity android:name=".ProfileBasicUserActivity" />
         <activity android:name=".AddProfileBasicUserActivity" />
         <activity
@@ -41,6 +41,10 @@
         <activity
             android:name=".EditRouteActivity"
             android:theme="@style/Theme.AppCompat.Dialog.Alert" />
+        <activity
+            android:name=".BusinessUserMainActivity"
+            android:label="@string/title_activity_business_user_main"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
