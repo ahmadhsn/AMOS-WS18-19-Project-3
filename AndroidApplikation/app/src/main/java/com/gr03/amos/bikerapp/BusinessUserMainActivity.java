@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,6 +14,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.gr03.amos.bikerapp.FragmentActivity.BusinessProfileFragment;
+import com.gr03.amos.bikerapp.FragmentActivity.ShowFriendsFragment;
 
 public class BusinessUserMainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -85,6 +89,15 @@ public class BusinessUserMainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_send) {
 
+        } else if (id == R.id.nav_profile) {
+            Fragment fragment = new BusinessProfileFragment();
+            Bundle bundle = new Bundle();
+            bundle.putLong("id", (long) SaveSharedPreference.getUserID(this));
+            fragment.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.business_user_fragment, fragment)
+                    .addToBackStack("BUSINESS_PROFILE_FRAGMENT")
+                    .commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

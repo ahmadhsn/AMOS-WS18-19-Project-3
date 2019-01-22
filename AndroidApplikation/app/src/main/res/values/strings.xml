@@ -61,6 +61,11 @@
     <string name="title_route_feed">Route Feed</string>
     <string name="title_activity_business_user_main">BusinessUserMain</string>
     <string name="nav_header_desc">Navigation header</string>
+
+    <string name="business_description">Please describe your business</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
     <!--<string name="title_cart">Cart</string>-->
     <!--<string name="title_profile">Profile</string>-->
     <!--

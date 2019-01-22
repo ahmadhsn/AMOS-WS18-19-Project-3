@@ -27,6 +27,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.jwt.DataBaseConnection.DatabaseProvider;
+import com.jwt.dao.BusinessUserDao;
+import com.jwt.dao.BusinessUserDaoImplementation;
 import com.jwt.dao.ChatDao;
 import com.jwt.dao.ChatDaoImplementation;
 import com.jwt.dao.EventDao;
@@ -39,6 +41,7 @@ import com.jwt.dao.UserDao;
 import com.jwt.dao.UserDaoImplementation;
 import com.jwt.model.Address;
 import com.jwt.model.BasicUser;
+import com.jwt.model.BusinessUser;
 import com.jwt.model.Event;
 import com.jwt.model.EventType;
 import com.jwt.model.Message;
@@ -1665,5 +1668,60 @@ public class Services {
 		System.out.println("InvalidRequestbody");
 		return Response.status(400).entity("InvalidRequestBody").build();
 	}
+	
+	
+	@GET
+	@Path("/getBusinessProfile/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response getBusinessProfile(@PathParam("id") int userId) throws JSONException, SQLException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
+
+		JSONObject response = new JSONObject();
+		System.out.println("Get Business Profile for " + userId + "... ");
+		try {
+			BusinessUserDao businessD = new BusinessUserDaoImplementation();
+			
+			BusinessUser bUser = businessD.getBusinessProfile(userId);
+			
+			if(bUser == null) {
+				response.put("business_profile", "no_profile");
+			}else {
+				response.put("business_profile", BusinessUser.serializeBusinessUser(bUser));
+
+			}
+			System.out.println("Response: " + response.toString());
+			return Response.status(200).entity(response.toString()).build();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			response.put("error_code", "failed_to_get_business_profile");
+			response.put("description", "Business Profile does not exist");
+			System.out.println("Response: " + response.toString());
+			return Response.status(500).entity(response.toString()).build();
+		}
+	}
+	
+	@POST
+	@Path("/editBusinessProfile")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response editBusinessProfile(String urlReq)
+			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
+
+		JSONObject JSONreq = new JSONObject(urlReq);
+		
+		BusinessUserDao businessD = new BusinessUserDaoImplementation();
+		BusinessUser user = new BusinessUser(JSONreq);
+		
+		businessD.addBusinessProfile(user);
+		
+		JSONObject response = new JSONObject(); 
+		response.put("business_profile", "edited");
+		
+		return Response.status(200).entity(response.toString()).build();
+		
+	}
+
 
 }

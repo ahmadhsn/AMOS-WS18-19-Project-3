@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FragmentActivity.BusinessProfileFragment">
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout2"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:paddingTop="40dp"
+        android:background="@color/smokeyWhite"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/business_name"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:hint="Business Name"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                android:background="@null"
+                android:paddingBottom="20dp"/>
+
+
+            <EditText
+                android:id="@+id/business_descr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/business_name"
+                android:hint="@string/business_description"
+                android:inputType="textCapSentences|textMultiLine"
+                android:maxLength="2000"
+                android:maxLines="4"
+                style="@style/editTextView"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <ImageView
+                    android:id="@+id/address_image"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:contentDescription="address"
+                    android:src="@drawable/ic_home" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_alignRight="@id/address_image">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" >
+
+                        <EditText
+                            android:id="@+id/business_street"
+                            android:layout_height="40dp"
+                            android:layout_width="0dp"
+                            android:layout_weight=".40"
+                            android:layout_alignRight="@id/address_image"
+                            android:hint="Street"
+                            android:inputType="text"
+                            style="@style/editTextViewHalfLeft"
+                            android:background="@null"/>
+
+                        <EditText
+                            android:id="@+id/business_hnumber"
+                            android:layout_height="40dp"
+                            android:layout_width="0dp"
+                            android:layout_weight=".40"
+                            android:hint="Number"
+                            android:inputType="text"
+                            android:focusable="false"
+                            style="@style/editTextViewHalfRight"
+                            android:background="@null"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" >
+
+                        <EditText
+                            android:id="@+id/business_postcode"
+                            android:layout_below="@id/business_street"
+                            android:layout_height="40dp"
+                            android:layout_width="0dp"
+                            android:layout_weight=".40"
+                            android:hint="Postcode"
+                            android:inputType="text"
+                            style="@style/editTextViewHalfLeft"
+                            android:focusable="false"
+                            android:background="@null"/>
+
+                        <EditText
+                            android:id="@+id/business_city"
+                            android:layout_height="40dp"
+                            android:layout_width="0dp"
+                            android:layout_weight=".40"
+                            android:layout_below="@id/hnumber"
+                            android:hint="City"
+                            android:inputType="text"
+                            style="@style/editTextViewHalfRight"
+                            android:focusable="false"
+                            android:background="@null"/>
+                        />
+
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/business_state"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_below="@id/business_postcode"
+                        android:inputType="text"
+                        android:hint="State"
+                        style="@style/editTextView"
+                        android:focusable="false"
+                        android:background="@null"/>
+
+                    <EditText
+                        android:id="@+id/business_country"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_below="@id/business_state"
+                        android:hint="Country"
+                        style="@style/editTextView"
+                        android:focusable="false"
+                        android:background="@null"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/editBusinessProfile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/business_country"
+                android:text="Edit Fields"
+                android:hint="Edit"
+                android:visibility="gone"
+                style="@style/buttonCreate"/>
+            <Button
+                android:id="@+id/saveBusinessProfile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/editBusinessProfile"
+                android:text="Save edited Info"
+                android:hint="Save"
+                android:visibility="gone"
+                style="@style/buttonCreate"/>
+
+
+        </LinearLayout>
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>
+

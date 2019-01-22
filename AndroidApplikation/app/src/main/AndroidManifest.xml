@@ -44,7 +44,8 @@
         <activity
             android:name=".BusinessUserMainActivity"
             android:label="@string/title_activity_business_user_main"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize"></activity>
     </application>
 
 </manifest>
