@@ -77,6 +77,36 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
         postcode = view.findViewById(R.id.postcode);
         houseNr = view.findViewById(R.id.houseNr);
 
+        if (SaveSharedPreference.getUserType(container.getContext()) == 2) {
+            JSONObject response = Requests
+                    .getJSONResponse("getBusinessProfile/" + SaveSharedPreference.getUserID(container.getContext())
+                            , null, "GET");
+
+            try {
+                if (response.get("business_profile").equals("no_profile")) {
+                    Toast.makeText(getContext(), "Please add address first", Toast.LENGTH_LONG).show();
+                } else {
+                    JSONObject responseProfile = response.getJSONObject("business_profile");
+                    JSONObject address = responseProfile.getJSONObject("business_address");
+                    street.setText(address.optString("street"));
+                    houseNr.setText(address.optString("housenumber"));
+                    postcode.setText(address.optString("postcode"));
+                    city.setText(address.optString("city"));
+                    country.setText(address.optString("country"));
+
+
+                    houseNr.setEnabled(false);
+                    street.setEnabled(false);
+                    postcode.setEnabled(false);
+                    city.setEnabled(false);
+                    country.setEnabled(false);
+                    createEvent.setEnabled(false);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
         eventDate.setOnClickListener(v -> {
             showDatePicker();
         });
