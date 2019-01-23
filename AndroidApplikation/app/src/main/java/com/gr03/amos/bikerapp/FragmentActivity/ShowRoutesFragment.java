@@ -16,6 +16,7 @@ import android.app.AlertDialog;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.gr03.amos.bikerapp.Adapters.ShowFriendsRoutesRecyclerViewAdapter;
 import com.gr03.amos.bikerapp.Adapters.ShowRoutesRecyclerViewAdapter;
 import com.gr03.amos.bikerapp.Models.Event;
 import com.gr03.amos.bikerapp.Models.Friend;
@@ -38,6 +39,7 @@ public class ShowRoutesFragment extends Fragment {
 
     RecyclerView showRoutesRecyclerView;
     ShowRoutesRecyclerViewAdapter showRoutesRecyclerViewAdapter;
+    ShowFriendsRoutesRecyclerViewAdapter showFriendsRoutesRecyclerViewAdapter;
     private ImageView friendRoutesImage;
     private View view;
 
@@ -88,13 +90,16 @@ public class ShowRoutesFragment extends Fragment {
         Realm realm = Realm.getDefaultInstance();
         Requests.getJsonResponseForFriendsRoutes("getFriendsRoutes/" +
                 SaveSharedPreference.getUserID(context), context);
-        //RealmResults<Friend> friends = realm.where(Friend.class).findAll();
-        RealmResults<Route> routes = realm.where(Route.class).findAll();
+        RealmResults<Friend> friends = realm.where(Friend.class).findAll();
 
-/*        RealmResults<Route> routes = null;
+        RealmList<Route> routes = new RealmList<>();;
         for (Friend friend : friends) {
             routes.add(friend.getRoute());
-        }*/
-        populateRecyclerView(routes);
+        }
+
+        showRoutesRecyclerView = view.findViewById(R.id.showRoutes);
+        showRoutesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        showFriendsRoutesRecyclerViewAdapter = new ShowFriendsRoutesRecyclerViewAdapter(getContext(), routes);
+        showRoutesRecyclerView.setAdapter(showFriendsRoutesRecyclerViewAdapter);
     }
 }
