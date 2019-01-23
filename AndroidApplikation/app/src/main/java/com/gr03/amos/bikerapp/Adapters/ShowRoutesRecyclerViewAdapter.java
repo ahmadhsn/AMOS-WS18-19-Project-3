@@ -52,11 +52,6 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
         this.context = context;
     }
 
-    public ShowRoutesRecyclerViewAdapter(Context context, RealmList<Route> routes) {
-        this.routes = routes;
-        this.context = context;
-    }
-
     @Override
     public ShowRoutesRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.show_route_row, parent, false);
