@@ -38,8 +38,7 @@ public class BusinessUserMainActivity extends AppCompatActivity
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        navigationView.setCheckedItem(R.id.nav_my_event);
-
+        navigationView.getMenu().performIdentifierAction(R.id.nav_my_event, 0);
     }
 
     @Override
