@@ -47,7 +47,7 @@ public class BusinessUserDaoImplementation implements BusinessUserDao {
 		//profile exists, update profile
 		if(businessProfileExists(user)) {
 			addressD.updateAddress(user.getBusinessAddress());
-			db.querySelectDB("UPDATE participants SET name = ?, id_address = ?, description = ? WHERE id_user = ?", user.getBusinessName(), user.getBusinessAddress().getId(), user.getBusinessDescription(), user.getUserId());
+			db.queryInsertDB("UPDATE business_customer SET name = ?, id_address = ?, description = ? WHERE id_user = ?", user.getBusinessName(), user.getBusinessAddress().getId(), user.getBusinessDescription(), user.getUserId());
 			
 		}else {
 			//insert new profile
