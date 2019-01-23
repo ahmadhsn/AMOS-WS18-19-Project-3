@@ -84,6 +84,7 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
 
             try {
                 if (response.get("business_profile").equals("no_profile")) {
+                    createEvent.setEnabled(false);
                     Toast.makeText(getContext(), "Please add address first", Toast.LENGTH_LONG).show();
                 } else {
                     JSONObject responseProfile = response.getJSONObject("business_profile");
@@ -100,7 +101,6 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
                     postcode.setEnabled(false);
                     city.setEnabled(false);
                     country.setEnabled(false);
-                    createEvent.setEnabled(false);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
