@@ -21,9 +21,9 @@ public class BusinessUser {
 	}
 	
 	public BusinessUser(JSONObject jsonUser) {
-		this.userId = jsonUser.getInt("id_user");
+		this.userId = jsonUser.getInt("user_id");
 		this.businessName = jsonUser.getString("business_name");
-		this.businessDescription = jsonUser.getString("business_descr");
+		this.businessDescription = jsonUser.getString("business_description");
 		this.businessAddress = new Address(jsonUser.getJSONObject("business_address"));
 	}
 		

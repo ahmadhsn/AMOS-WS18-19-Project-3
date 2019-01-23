@@ -42,8 +42,8 @@ public class Address {
 		this.state = addressJSON.optString("state");
 		this.postcode = addressJSON.optInt("postcode");
 		this.housenumber = addressJSON.optString("housenumber");
-		this.latitude = addressJSON.optDouble("latitude");
-		this.longitude = addressJSON.optDouble("longitude");
+		this.latitude = addressJSON.optDouble("latitude", 0);
+		this.longitude = addressJSON.optDouble("longitude", 0);
 		this.street = addressJSON.optString("street");
 	}
 

@@ -42,14 +42,14 @@ public class BusinessUserDaoImplementation implements BusinessUserDao {
 	@Override
 	public void addBusinessProfile(BusinessUser user) {
 		AddressDao addressD = new AddressDaoImplementation();
-		addressD.createAddress(user.getBusinessAddress());
 		
 		//profile exists, update profile
 		if(businessProfileExists(user)) {
-			addressD.updateAddress(user.getBusinessAddress());
-			db.querySelectDB("UPDATE participants SET name = ?, id_address = ?, description = ? WHERE id_user = ?", user.getBusinessName(), user.getBusinessAddress().getId(), user.getBusinessDescription(), user.getUserId());
+			addressD.createAddress(user.getBusinessAddress());
+			db.queryInsertDB("UPDATE business_customer SET name = ?, id_address = ?, description = ? WHERE id_user = ?", user.getBusinessName(), user.getBusinessAddress().getId(), user.getBusinessDescription(), user.getUserId());
 			
 		}else {
+			addressD.createAddress(user.getBusinessAddress());
 			//insert new profile
 			db.queryInsertDB("INSERT INTO business_customer VALUES (?,?,?,?)", 
 					user.getUserId(), user.getBusinessName(), user.getBusinessAddress().getId(), 
