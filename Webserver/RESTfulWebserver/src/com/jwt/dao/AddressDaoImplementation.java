@@ -13,20 +13,8 @@ public class AddressDaoImplementation implements AddressDao {
 		try {
 			DatabaseProvider provider = DatabaseProvider.getInstance();
 			String sqlQuerry = "INSERT INTO public.address(country, state, city, street, postcode, housenumber, longitude, latitude) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
-			PreparedStatement st = provider.getConnection().prepareStatement(sqlQuerry, Statement.RETURN_GENERATED_KEYS);
-			st.setString(1, address.getCountry());
-			st.setString(2, address.getState());
-			st.setString(3, address.getCity());
-			st.setString(4, address.getStreet());
-			st.setInt(5, address.getPostcode());
-			st.setString(6, address.getHousenumber());
-			st.setDouble(7, address.getLongitude());
-			st.setDouble(8, address.getLatitude());
-			int affectedRows = st.executeUpdate();
-
-	        if (affectedRows == 0) {
-	            throw new SQLException("Creating address failed, no rows affected.");
-	        }
+			PreparedStatement st = provider.queryInsertDB(sqlQuerry, address.getCountry(), address.getState(), address.getCity(),
+					address.getStreet(), address.getPostcode(), address.getHousenumber(), address.getLongitude(), address.getLatitude());
 
 	        try (ResultSet generatedKeys = st.getGeneratedKeys()) {
 	            if (generatedKeys.next()) {

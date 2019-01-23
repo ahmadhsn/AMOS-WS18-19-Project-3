@@ -73,14 +73,6 @@ public class DatabaseProvider {
 			return preparedStatement;
 		} catch (Exception ex) {
 			ex.printStackTrace();
-		} finally {
-			if (this.connection != null) {
-				try {
-					this.connection.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
 		}
 		System.out.println("...... Insert into database done");
 		return null;
@@ -154,6 +146,9 @@ public class DatabaseProvider {
 				} else if (arguments[i] instanceof Integer) {
 					int integer = (Integer) arguments[i];
 					ps.setInt(i + 1, integer);
+				} else if (arguments[i] instanceof Double) {
+					Double doubleValue = (Double) arguments[i];
+					ps.setDouble(i + 1, doubleValue);
 				} else if (arguments[i] instanceof Date) {
 					Date date = (Date) arguments[i];
 					ps.setDate(i + 1, date);

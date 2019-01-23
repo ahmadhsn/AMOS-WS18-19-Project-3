@@ -120,7 +120,7 @@ public class BusinessProfileFragment extends Fragment {
                 editBusinessDescr.setText(responseProfile.getString("business_descr"));
                 JSONObject address = responseProfile.getJSONObject("business_address");
                 editBusinessStreet.setText(address.optString("street"));
-                editBusinessHnumber.setText(address.optString("house_number"));
+                editBusinessHnumber.setText(address.optString("housenumber"));
                 editBusinessPostcode.setText(address.optString("postcode"));
                 editBusinessCity.setText(address.optString("city"));
                 editBusinessCountry.setText(address.optString("country"));
@@ -265,6 +265,14 @@ public class BusinessProfileFragment extends Fragment {
         editBusinessCity.setBackgroundResource(android.R.drawable.edit_text);
         editBusinessCountry.setBackgroundResource(android.R.drawable.edit_text);
         editBusinessState.setBackgroundResource(android.R.drawable.edit_text);
+        editBusinessName.setHint("Business Name");
+        editBusinessDescr.setHint("Describe your business");
+        editBusinessStreet.setHint("street");
+        editBusinessHnumber.setHint("Housenumber");
+        editBusinessPostcode.setHint("Postcode");
+        editBusinessCity.setHint("City");
+        editBusinessCountry.setHint("Country");
+        editBusinessState.setHint("State");
     }
 
     private void makeFieldsUneditable(){
