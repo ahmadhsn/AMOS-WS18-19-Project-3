@@ -16,6 +16,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.gr03.amos.bikerapp.FragmentActivity.BusinessProfileFragment;
+import com.gr03.amos.bikerapp.FragmentActivity.CreateEventFragment;
+import com.gr03.amos.bikerapp.FragmentActivity.ShowEventsFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.ShowFriendsFragment;
 
 public class BusinessUserMainActivity extends AppCompatActivity
@@ -36,6 +38,8 @@ public class BusinessUserMainActivity extends AppCompatActivity
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(R.id.nav_my_event);
+
     }
 
     @Override
@@ -50,16 +54,12 @@ public class BusinessUserMainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.business_user_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         if (id == R.id.action_logout) {
@@ -74,21 +74,26 @@ public class BusinessUserMainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (id == R.id.nav_create_event) {
+            Fragment fragment = new CreateEventFragment();
+            Bundle bundle = new Bundle();
+            bundle.putLong("id", (long) SaveSharedPreference.getUserID(this));
+            fragment.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.business_user_fragment, fragment)
+                    .addToBackStack("BUSINESS_PROFILE_FRAGMENT")
+                    .commit();
+        } else if (id == R.id.nav_my_event) {
+            Fragment fragment = new ShowEventsFragment();
+            Bundle bundle = new Bundle();
+            bundle.putLong("id", (long) SaveSharedPreference.getUserID(this));
+            fragment.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.business_user_fragment, fragment)
+                    .addToBackStack("BUSINESS_PROFILE_FRAGMENT")
+                    .commit();
         } else if (id == R.id.nav_profile) {
             Fragment fragment = new BusinessProfileFragment();
             Bundle bundle = new Bundle();
@@ -100,7 +105,7 @@ public class BusinessUserMainActivity extends AppCompatActivity
                     .commit();
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

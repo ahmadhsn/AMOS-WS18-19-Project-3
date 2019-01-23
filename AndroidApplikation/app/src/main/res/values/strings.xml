@@ -66,17 +66,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <!--<string name="title_cart">Cart</string>-->
-    <!--<string name="title_profile">Profile</string>-->
-    <!--
-     Strings for Address creation
-     -->
-    <!--
-        <string name="eventName">Enter Event Name</string>
-        <string name="event_location">Enter Event Location</string>
-        <string name="event_descr">Enter Event Description</string>
-        <string name="event_date">Select Date</string>
-        <string name="event_time">Select Time</string>
-        <string name="event_create">Create Event</string>-->
+    <string name="business_user_profile">My Business Profile</string>
+    <string name="business_user_create_event">Create Event</string>
+    <string name="business_user_events">My Events</string>
+
 
 </resources>

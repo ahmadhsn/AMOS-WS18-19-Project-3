@@ -7,6 +7,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +29,8 @@ import com.gr03.amos.bikerapp.Adapters.ShowEventRecylerViewAdapter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import com.gr03.amos.bikerapp.SaveSharedPreference;
 import com.gr03.amos.bikerapp.ShowEventActivity;
 
 import io.realm.Realm;
@@ -63,7 +66,6 @@ public class ShowEventsFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_show_events, container, false);
 
-        eventFilterImage = view.findViewById(R.id.event_filter);
         city.add("Choose a City");
         country.add("Choose a Country");
 
@@ -85,8 +87,20 @@ public class ShowEventsFragment extends Fragment {
             city.add(address.getCity());
         }
 
-        populateRecyclerView(events);
-        eventFilterImage.setOnClickListener(v -> showInputDialog());
+        if (SaveSharedPreference.getUserType(container.getContext()) == 2) {
+            RealmResults<Event> businessUserEvents = realm
+                    .where(Event.class)
+                    .equalTo("id_user", SaveSharedPreference.getUserID(container.getContext()))
+                    .findAll();
+
+            populateRecyclerView(businessUserEvents);
+        } else {
+            populateRecyclerView(events);
+            eventFilterImage = view.findViewById(R.id.event_filter);
+            eventFilterImage.setOnClickListener(v -> showInputDialog());
+
+        }
+
 
         return view;
 
@@ -137,8 +151,7 @@ public class ShowEventsFragment extends Fragment {
                                     "No Result(s) Found",
                                     Toast.LENGTH_LONG).show();
                         }
-                    }
-                    else{
+                    } else {
                         Toast.makeText(getContext(),
                                 "Nothing Selected",
                                 Toast.LENGTH_LONG).show();

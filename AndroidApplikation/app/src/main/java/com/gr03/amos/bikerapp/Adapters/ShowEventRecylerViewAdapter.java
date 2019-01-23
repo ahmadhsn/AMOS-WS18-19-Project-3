@@ -128,38 +128,41 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
             }
         });
 
+        if (SaveSharedPreference.getUserType(context) == 2) {
+            holder.joinEvent.setVisibility(View.GONE);
+        } else {
+            holder.joinEvent.setOnClickListener(v -> {
 
-        holder.joinEvent.setOnClickListener(v -> {
+                JSONObject json = new JSONObject();
+                try {
 
-            JSONObject json = new JSONObject();
-            try {
+                    json.put("event_id", mData.get(position).getId_event());
+                    json.put("user_id", SaveSharedPreference.getUserID(context));
 
-                json.put("event_id", mData.get(position).getId_event());
-                json.put("user_id", SaveSharedPreference.getUserID(context));
+                    FutureTask<String> task = new FutureTask((Callable<String>) () -> {
+                        JSONObject threadResponse = Requests.getResponse("addmyeventlist", json);
+                        return threadResponse.toString();
+                    });
 
-                FutureTask<String> task = new FutureTask((Callable<String>) () -> {
-                    JSONObject threadResponse = Requests.getResponse("addmyeventlist", json);
-                    return threadResponse.toString();
-                });
-
-                Realm.init(context);
-                Realm realm = Realm.getDefaultInstance();
-                realm.beginTransaction();
-                EventParticipation eventParticipation = realm.createObject(EventParticipation.class);
-                eventParticipation.setId_event(mData.get(position).getId_event());
-                eventParticipation.setId_user(SaveSharedPreference.getUserID(context));
-                realm.commitTransaction();
-                realm.close();
-
-
-                new Thread(task).start();
-                Log.i("Response", task.get());
-            } catch (JSONException | InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-            }
+                    Realm.init(context);
+                    Realm realm = Realm.getDefaultInstance();
+                    realm.beginTransaction();
+                    EventParticipation eventParticipation = realm.createObject(EventParticipation.class);
+                    eventParticipation.setId_event(mData.get(position).getId_event());
+                    eventParticipation.setId_user(SaveSharedPreference.getUserID(context));
+                    realm.commitTransaction();
+                    realm.close();
 
 
-        });
+                    new Thread(task).start();
+                    Log.i("Response", task.get());
+                } catch (JSONException | InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+
+
+            });
+        }
     }
 
     @Override
