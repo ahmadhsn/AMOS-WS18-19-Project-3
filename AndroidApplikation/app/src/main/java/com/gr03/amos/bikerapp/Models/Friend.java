@@ -10,6 +10,7 @@ public class Friend extends RealmObject {
     private String first_name;
     private String email;
     private Route route;
+    private String last_message_time;
 
     public String getLast_name() {
         return last_name;
@@ -33,6 +34,14 @@ public class Friend extends RealmObject {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getLast_message_time() {
+        return last_message_time;
+    }
+
+    public void setLast_message_time(String last_message_time) {
+        this.last_message_time = last_message_time;
     }
 
     public Long getId() {

@@ -57,7 +57,7 @@ public class ShowConversationWithFriendsListRecyclerViewAdapter extends RealmRec
         Log.i("before chat", String.valueOf(chatId));
         Realm.init(context);
         Realm realm = Realm.getDefaultInstance();
-        Message message = realm.where(Message.class).equalTo("id_chat", chatId).sort("time_created", Sort.ASCENDING).findFirst();
+        Message message = realm.where(Message.class).equalTo("id_chat", chatId).sort("time_created", Sort.DESCENDING).findFirst();
 
         try {
             holder.friendName.setText(mData.get(position).getFirst_name());
