@@ -1,8 +1,8 @@
 package com.gr03.amos.bikerapp;
 
-import android.app.ActionBar;
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -12,10 +12,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Layout;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +29,9 @@ import com.gr03.amos.bikerapp.FragmentActivity.ShowEventsFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.ShowFriendsFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.ShowRoutesFragment;
 
+import java.net.URL;
+import java.net.URLConnection;
+
 public class ShowEventActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     MenuItem menuItem;
@@ -40,6 +42,37 @@ public class ShowEventActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_event);
+
+        //checks server connecetion
+        if (isConnectedToServer("http://localhost:8080/RESTfulWebserver/", 4000) == false) {
+            try {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage("No Server Connection");
+                final AlertDialog dialog = builder.show();
+                AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+
+                    @SuppressLint("WrongThread")
+                    protected Void doInBackground(Void... params) {
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        return null;
+                    }
+
+                    protected void onPostExecute(Void result) {
+                        dialog.dismiss();
+                    }
+
+                };
+                task.execute();
+                System.out.println("No server connection, we are in the show dialog branch");
+            }
+            catch(Exception e){
+               System.out.println("No server connection, but doesnt show dialog");
+            }
+        }
 
         if (SaveSharedPreference.getUserEmail(this).length() == 0) {
             Intent intent = new Intent(this, HomeActivity.class);
@@ -75,6 +108,7 @@ public class ShowEventActivity extends AppCompatActivity
         View navHeader = navView.getHeaderView(0);
         TextView txt_email = (TextView) navHeader.findViewById(R.id.txt_email);
         txt_email.setText(SaveSharedPreference.getUserEmail(this));
+
     }
 
 
@@ -245,5 +279,22 @@ public class ShowEventActivity extends AppCompatActivity
             return false;
         }
     };
+
+
+
+    public boolean isConnectedToServer(String url, int timeout) {
+        try{
+            URL myUrl = new URL(url);
+            URLConnection connection = myUrl.openConnection();
+            connection.setConnectTimeout(timeout);
+            connection.connect();
+            return true;
+        } catch (Exception e) {
+            // Handle your exceptions
+            return false;
+        }
+    }
+
+
 
 }
