@@ -6,10 +6,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -211,20 +213,29 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         json.put("city", user_city.getText().toString());
         json.put("state", user_state.getText().toString());
         json.put("country", user_country.getText().toString());
+
         try {
-            FutureTask<String> task = new FutureTask((Callable<String>) () -> {
-                JSONObject threadResponse = Requests.getResponse("editUserInfo", json);
-                return threadResponse.toString();
-            });
-            new Thread(task).start();
-            Log.i("Response", task.get());
+            JSONObject response = Requests.getJSONResponse("editUserInfo", json, "POST");
+
+            if(response.has("editUserInfo")){
+                String statusReg = (String) response.get("editUserInfo");
+
+                if(statusReg.equals("successfulUpdation")){
+                    Log.i("EditUserInfoBasic","successfulUpdation");
+                    Toast toast = Toast.makeText(this, "You have successfully updated your Profile!", Toast.LENGTH_SHORT);
+                    TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+                    if( v != null) v.setGravity(Gravity.CENTER);
+                    toast.show();
+                    finish();
+                }
+            }
         } catch (Exception e) {
             Log.i("Exception --- not requested", e.toString());
         }
 
         makeFieldsUneditable(view);
-        edit_profile_page.setVisibility(View.VISIBLE);
-        save_edited_info.setVisibility(View.GONE);
+       // edit_profile_page.setVisibility(View.VISIBLE);
+        //save_edited_info.setVisibility(View.GONE);
     }
 
     boolean isTextEmpty(EditText text) {

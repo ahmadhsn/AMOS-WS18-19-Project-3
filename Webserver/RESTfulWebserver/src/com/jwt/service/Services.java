@@ -1171,7 +1171,7 @@ public class Services {
 					System.out.println("UserInfoGotUpdated");
 					
 					JSONObject response = new JSONObject();
-					response.put("userInfoUpdate", "successful");
+					response.put("editUserInfo", "successfulUpdation");
 					System.out.println("Response: " + response.toString());
 					return Response.status(200).entity(response.toString()).build();
 

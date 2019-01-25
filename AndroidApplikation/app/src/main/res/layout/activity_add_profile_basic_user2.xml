@@ -166,7 +166,7 @@ tools:context=".AddProfileBasicUserActivity">
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/country"
-            android:text="Add Profile Information and go to my Profile"
+            android:text="Add Information and go to your Profile"
             style="@style/buttonCreate"/>
 
     </LinearLayout>
