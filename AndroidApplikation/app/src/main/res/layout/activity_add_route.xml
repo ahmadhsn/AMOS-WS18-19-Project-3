@@ -64,49 +64,12 @@
                     android:orientation="horizontal" >
 
                     <EditText
-                        android:id="@+id/startCountry"
+                        android:id="@+id/startStreet"
                         android:layout_height="40dp"
                         android:layout_width="0dp"
                         android:layout_weight=".40"
                         android:layout_below="@id/addStartPoint"
-                        android:hint="@string/country"
-                        android:inputType="text"
-                        style="@style/editTextViewHalfLeft"/>
-
-                    <EditText
-                        android:id="@+id/startCity"
-                        android:layout_below="@id/startCountry"
-                        android:layout_height="40dp"
-                        android:layout_width="0dp"
-                        android:layout_weight=".40"
-                        android:hint="@string/city"
-                        android:inputType="text"
-                        style="@style/editTextViewHalfRight"/>
-
-
-                </LinearLayout>
-
-                <EditText
-                    android:id="@+id/startStreet"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_below="@id/startCity"
-                    android:hint="@string/street"
-                    android:inputType="text"
-                    style="@style/editTextView"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal" >
-
-                    <EditText
-                        android:id="@+id/startPostcode"
-                        android:layout_below="@id/startStreet"
-                        android:layout_height="40dp"
-                        android:layout_width="0dp"
-                        android:layout_weight=".40"
-                        android:hint="@string/postcode"
+                        android:hint="@string/street"
                         android:inputType="text"
                         style="@style/editTextViewHalfLeft"/>
 
@@ -115,12 +78,67 @@
                         android:layout_height="40dp"
                         android:layout_width="0dp"
                         android:layout_weight=".40"
-                        android:layout_below="@id/startPostcode"
+                        android:layout_below="@id/startStreet"
                         android:hint="@string/house_nr"
                         android:inputType="text"
                         style="@style/editTextViewHalfRight"/>
 
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <EditText
+                        android:id="@+id/startPostcode"
+                        style="@style/editTextViewHalfLeft"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_below="@id/startStreet"
+                        android:layout_weight=".40"
+                        android:hint="@string/postcode"
+                        android:inputType="number" />
+
+                    <EditText
+                        android:id="@+id/startCity"
+                        android:layout_below="@id/startHouseNr"
+                        android:layout_height="40dp"
+                        android:layout_width="0dp"
+                        android:layout_weight=".40"
+                        android:hint="@string/city"
+                        android:inputType="text"
+                        style="@style/editTextViewHalfRight"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <EditText
+                        android:id="@+id/startState"
+                        style="@style/editTextViewHalfLeft"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_below="@id/startPostcode"
+                        android:layout_weight=".40"
+                        android:hint="@string/state"
+                        android:inputType="text" />
+
+                    <EditText
+                        android:id="@+id/startCountry"
+                        android:layout_height="40dp"
+                        android:layout_width="0dp"
+                        android:layout_weight=".40"
+                        android:layout_below="@id/startCity"
+                        android:hint="@string/country"
+                        android:inputType="text"
+                        style="@style/editTextViewHalfRight"/>
+
+                </LinearLayout>
+
 
             <TextView
                 android:id="@+id/addEndPoint"
@@ -138,35 +156,28 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal" >
+
                     <EditText
-                        android:id="@+id/endCountry"
-                        android:layout_below="@id/addEndPoint"
+                        android:id="@+id/endStreet"
                         android:layout_height="40dp"
                         android:layout_width="0dp"
                         android:layout_weight=".40"
-                        android:hint="@string/country"
+                        android:layout_below="@id/addEndPoint"
+                        android:hint="@string/street"
                         android:inputType="text"
                         style="@style/editTextViewHalfLeft"/>
 
                     <EditText
-                        android:id="@+id/endCity"
-                        android:layout_below="@id/endCountry"
+                        android:id="@+id/endHouseNr"
+                        android:layout_below="@id/endStreet"
                         android:layout_height="40dp"
                         android:layout_width="0dp"
                         android:layout_weight=".40"
-                        android:hint="@string/city"
+                        android:hint="@string/house_nr"
                         android:inputType="text"
                         style="@style/editTextViewHalfRight"/>
-                </LinearLayout>
 
-                <EditText
-                    android:id="@+id/endStreet"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_below="@id/endCity"
-                    android:hint="@string/street"
-                    android:inputType="text"
-                    style="@style/editTextView"/>
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -183,16 +194,44 @@
                         android:inputType="text"
                         style="@style/editTextViewHalfLeft"/>
 
+
                     <EditText
-                        android:id="@+id/endHouseNr"
-                        android:layout_below="@id/endPostcode"
+                        android:id="@+id/endCity"
+                        android:layout_below="@id/endHouseNr"
                         android:layout_height="40dp"
                         android:layout_width="0dp"
                         android:layout_weight=".40"
-                        android:hint="@string/house_nr"
+                        android:hint="@string/city"
                         android:inputType="text"
                         style="@style/editTextViewHalfRight"/>
+
                 </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <EditText
+                    android:id="@+id/endState"
+                    android:layout_below="@id/endPostcode"
+                    android:layout_height="40dp"
+                    android:layout_width="0dp"
+                    android:layout_weight=".40"
+                    android:hint="@string/state"
+                    android:inputType="text"
+                    style="@style/editTextViewHalfLeft"/>
+
+                <EditText
+                    android:id="@+id/endCountry"
+                    android:layout_below="@id/endCity"
+                    android:layout_height="40dp"
+                    android:layout_width="0dp"
+                    android:layout_weight=".40"
+                    android:hint="@string/country"
+                    android:inputType="text"
+                    style="@style/editTextViewHalfRight"/>
+            </LinearLayout>
 
             <Button
                 android:id="@+id/addRoute"
