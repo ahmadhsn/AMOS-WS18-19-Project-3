@@ -148,9 +148,15 @@ public class ShowEventActivity extends AppCompatActivity
         }
 
         if (id == R.id.show_profile) {
-            Intent intent = new Intent(this, ProfileBasicUserActivity.class);
-            intent.putExtra("id", (long) SaveSharedPreference.getUserID(this));
-            startActivity(intent);
+            if(SaveSharedPreference.getUserAdd(this) == 1){
+                Intent intent = new Intent(this, ProfileBasicUserActivity.class);
+                intent.putExtra("id", (long) SaveSharedPreference.getUserID(this));
+                startActivity(intent);
+            }else{
+                Intent intent = new Intent(this, AddProfileBasicUserActivity.class);
+                startActivity(intent);
+            }
+
         }
 
         if (id == R.id.add_friend) {
@@ -204,9 +210,6 @@ public class ShowEventActivity extends AppCompatActivity
                 navigation.setVisibility(View.GONE);
             }
 
-        } else if (id == R.id.add_profile) {
-            Intent intent = new Intent(this, AddProfileBasicUserActivity.class);
-            startActivity(intent);
         } else if (id == R.id.add_route) {
             Intent intent = new Intent(this, AddRoute.class);
             startActivity(intent);

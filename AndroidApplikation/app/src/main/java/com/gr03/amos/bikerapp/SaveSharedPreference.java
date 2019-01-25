@@ -10,6 +10,7 @@ public class SaveSharedPreference {
     private static final String PREF_USER_EMAIL = "email";
     private static final String PREF_USER_ID = "user_id";
     private static final String PREF_USER_TYPE = "user_type_id";
+    private static final String PREF_USER_ADD = "user_add_id";
 
     private static SharedPreferences getSharedPreferences(Context ctx) {
         return PreferenceManager.getDefaultSharedPreferences(ctx);
@@ -23,6 +24,13 @@ public class SaveSharedPreference {
         editor.apply();
     }
 
+    public static void saveaddId(Context ctx, int user_add_id) {
+        SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
+        editor.putInt(PREF_USER_ADD, user_add_id);
+        editor.apply();
+    }
+
+
     public static String getUserEmail(Context ctx) {
         return getSharedPreferences(ctx).getString(PREF_USER_EMAIL, "");
     }
@@ -33,6 +41,10 @@ public class SaveSharedPreference {
 
     public static int getUserType(Context ctx) {
         return getSharedPreferences(ctx).getInt(PREF_USER_TYPE, -999);
+    }
+
+    public static int getUserAdd(Context ctx) {
+        return getSharedPreferences(ctx).getInt(PREF_USER_ADD, -999);
     }
 
 

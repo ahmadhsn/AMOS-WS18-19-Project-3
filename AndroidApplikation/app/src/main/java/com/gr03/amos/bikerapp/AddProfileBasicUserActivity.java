@@ -6,7 +6,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Button;
+        import android.view.Gravity;
+        import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -20,8 +21,6 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
-import java.util.concurrent.Callable;
-import java.util.concurrent.FutureTask;
 
 ;
 
@@ -173,13 +172,23 @@ public class AddProfileBasicUserActivity extends AppCompatActivity implements Da
         json.put("city", City.getText().toString());
         json.put("state", State.getText().toString());
         json.put("country", Country.getText().toString());
+
         try {
-            FutureTask<String> task = new FutureTask((Callable<String>) () -> {
-                JSONObject threadResponse = Requests.getResponse("addUserBasic", json);
-                return threadResponse.toString();
-            });
-            new Thread(task).start();
-            Log.i("Response", task.get());
+            JSONObject response = Requests.getJSONResponse("addUserBasic", json, "POST");
+
+            if(response.has("addUserBasic")){
+                String statusReg = (String) response.get("addUserBasic");
+
+                if(statusReg.equals("successfullCreation")){
+                    Log.i("AddProfileBasicUser","successfullCreation");
+                    SaveSharedPreference.saveaddId(this, 1);
+                    Toast toast = Toast.makeText(this, "You have successfully added a Profile!", Toast.LENGTH_SHORT);
+                    TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+                    if( v != null) v.setGravity(Gravity.CENTER);
+                    toast.show();
+                    finish();
+                }
+            }
         } catch (Exception e) {
             Log.i("Exception --- not requested", e.toString());
         }
