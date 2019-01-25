@@ -23,11 +23,13 @@ public class AddRoute extends AppCompatActivity {
 
     EditText routeName;
     EditText routeDescription;
+    EditText startState;
     EditText startCountry;
     EditText startCity;
     EditText startStreet;
     EditText startPostcode;
     EditText startHouseNr;
+    EditText endState;
     EditText endCountry;
     EditText endCity;
     EditText endStreet;
@@ -43,12 +45,14 @@ public class AddRoute extends AppCompatActivity {
         routeName = findViewById(R.id.routeName);
         routeDescription = findViewById(R.id.routeDescription);
 
+        startState = findViewById(R.id.startState);
         startCountry = findViewById(R.id.startCountry);
         startCity = findViewById(R.id.startCity);
         startStreet = findViewById(R.id.startStreet);
         startPostcode = findViewById(R.id.startPostcode);
         startHouseNr = findViewById(R.id.startHouseNr);
 
+        endState = findViewById(R.id.endState);
         endCountry = findViewById(R.id.endCountry);
         endCity = findViewById(R.id.endCity);
         endStreet = findViewById(R.id.endStreet);
@@ -92,12 +96,20 @@ public class AddRoute extends AppCompatActivity {
             routeDescription.setError("Please add a short description of the route!");
             isDataNotSet = true;
         }
+        if (isTextEmpty(startState)) {
+            startState.setError("State is a required field!");
+            isDataNotSet = true;
+        }
         if (isTextEmpty(startCountry)) {
             startCountry.setError("Country is a required field!");
             isDataNotSet = true;
         }
         if (isTextEmpty(startCity)) {
             startCity.setError("City is a required field!");
+            isDataNotSet = true;
+        }
+        if (isTextEmpty(endState)) {
+            endState.setError("State is a required field!");
             isDataNotSet = true;
         }
         if (isTextEmpty(endCountry)) {
@@ -122,17 +134,19 @@ public class AddRoute extends AppCompatActivity {
             route.put("name", routeName.getText().toString());
             route.put("description", routeDescription.getText().toString());
 
+
             startAddress.put("street", startStreet.getText().toString());
             startAddress.put("housenumber", startHouseNr.getText().toString());
             startAddress.put("country", startCountry.getText().toString());
-            startAddress.put("state", "");
+            startAddress.put("state", startState.getText().toString());
             startAddress.put("city", startCity.getText().toString());
             startAddress.put("postcode", startPostcode.getText().toString());
+
 
             endAddress.put("street", endStreet.getText().toString());
             endAddress.put("housenumber", endHouseNr.getText().toString());
             endAddress.put("country", endCountry.getText().toString());
-            endAddress.put("state", "");
+            endAddress.put("state", endState.getText().toString());
             endAddress.put("city", endCity.getText().toString());
             endAddress.put("postcode", endPostcode.getText().toString());
 

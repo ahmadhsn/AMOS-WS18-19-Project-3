@@ -191,7 +191,7 @@
                         android:layout_width="0dp"
                         android:layout_weight=".40"
                         android:hint="@string/postcode"
-                        android:inputType="text"
+                        android:inputType="number"
                         style="@style/editTextViewHalfLeft"/>
 
 
@@ -245,7 +245,5 @@
         </LinearLayout>
 
     </ScrollView>
-
-
 
 </android.support.constraint.ConstraintLayout>
