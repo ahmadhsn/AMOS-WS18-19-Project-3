@@ -64,7 +64,6 @@ public class ShowFriendsFragment extends Fragment implements SearchView.OnQueryT
 
         //userName = view.findViewById(R.id.userName);
         listView = view.findViewById(R.id.user_result);
-        Activity currActivity = getActivity();
         //Set Title to My Friends
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle("");
