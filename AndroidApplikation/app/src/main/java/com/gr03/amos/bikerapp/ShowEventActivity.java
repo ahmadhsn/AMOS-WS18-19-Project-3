@@ -1,6 +1,7 @@
 package com.gr03.amos.bikerapp;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,8 +31,13 @@ import com.gr03.amos.bikerapp.FragmentActivity.ShowEventsFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.ShowFriendsFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.ShowRoutesFragment;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.concurrent.Callable;
+import java.util.concurrent.FutureTask;
 
 public class ShowEventActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -148,13 +155,17 @@ public class ShowEventActivity extends AppCompatActivity
         }
 
         if (id == R.id.show_profile) {
-            if(SaveSharedPreference.getUserAdd(this) == 1){
-                Intent intent = new Intent(this, ProfileBasicUserActivity.class);
-                intent.putExtra("id", (long) SaveSharedPreference.getUserID(this));
-                startActivity(intent);
-            }else{
-                Intent intent = new Intent(this, AddProfileBasicUserActivity.class);
-                startActivity(intent);
+            try {
+                if(SaveSharedPreference.getUserAdd(this) == 1 || checkUserAdded() == true){
+                    Intent intent = new Intent(this, ProfileBasicUserActivity.class);
+                    intent.putExtra("id", (long) SaveSharedPreference.getUserID(this));
+                    startActivity(intent);
+                }else{
+                    Intent intent = new Intent(this, AddProfileBasicUserActivity.class);
+                    startActivity(intent);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
 
         }
@@ -296,6 +307,37 @@ public class ShowEventActivity extends AppCompatActivity
             // Handle your exceptions
             return false;
         }
+    }
+
+    public boolean checkUserAdded() throws JSONException {
+
+        JSONObject json = new JSONObject();
+        Context context = ShowEventActivity.this;
+        json.put("id_user", SaveSharedPreference.getUserID(context));
+
+        try {
+            JSONObject response;
+
+            FutureTask<String> task = new FutureTask(new Callable<String>() {
+                public String call() {
+                    JSONObject threadResponse = Requests.getResponse("checkUserAdded", json);
+                    return threadResponse.toString();
+                }
+            });
+            new Thread(task).start();
+            Log.i("Response", task.get());
+            response = new JSONObject(task.get());
+            //handle response
+            if (response.has("success")) {
+
+                return true;
+
+            }
+        } catch (Exception e) {
+            return false;
+        }
+
+        return false;
     }
 
 
