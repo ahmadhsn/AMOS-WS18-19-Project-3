@@ -61,13 +61,13 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         if (userId == 0) {
             //intent from add profile page
             //use Roxanas code now
-            onCreateAfterAddProfile(savedInstanceState);
+            onCreateAfterAddProfile();
         } else {
             onCreateAfterProfileId();
         }
     }
 
-    private void onCreateAfterAddProfile(Bundle savedInstanceState) {
+    private void onCreateAfterAddProfile() {
         Intent intent2 = getIntent();
 
         Bundle bundle = intent2.getExtras();
@@ -148,7 +148,7 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
     }
 
     public void editInfo(View view) {
-        makeFieldsEditable(view);
+        makeFieldsEditable();
         edit_profile_page.setVisibility(View.GONE);
         save_edited_info.setVisibility(View.VISIBLE);
 
@@ -222,8 +222,8 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
 
                 if(statusReg.equals("successfulUpdation")){
                     Log.i("EditUserInfoBasic","successfulUpdation");
-                    Toast toast = Toast.makeText(this, "You have successfully updated your Profile!", Toast.LENGTH_SHORT);
-                    TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+                    Toast toast = Toast.makeText(this, "You have successfully saved your Profile after editing!", Toast.LENGTH_SHORT);
+                    TextView v = toast.getView().findViewById(android.R.id.message);
                     if( v != null) v.setGravity(Gravity.CENTER);
                     toast.show();
                     finish();
@@ -233,9 +233,7 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
             Log.i("Exception --- not requested", e.toString());
         }
 
-        makeFieldsUneditable(view);
-       // edit_profile_page.setVisibility(View.VISIBLE);
-        //save_edited_info.setVisibility(View.GONE);
+        makeFieldsUneditable();
     }
 
     boolean isTextEmpty(EditText text) {
@@ -281,8 +279,7 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         }
     }
 
-
-    private void makeFieldsEditable(View view){
+    private void makeFieldsEditable(){
         user_lname.setBackgroundResource(android.R.drawable.edit_text);
         user_street.setBackgroundResource(android.R.drawable.edit_text);
         user_hnumber.setBackgroundResource(android.R.drawable.edit_text);
@@ -293,7 +290,7 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         user_country.setBackgroundResource(android.R.drawable.edit_text);
     }
 
-    private void makeFieldsUneditable(View view){
+    private void makeFieldsUneditable(){
         user_lname.setBackgroundResource(0);
         user_street.setBackgroundResource(0);
         user_hnumber.setBackgroundResource(0);

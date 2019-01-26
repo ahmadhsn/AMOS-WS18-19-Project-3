@@ -130,6 +130,7 @@ public class Services {
 			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
 		DatabaseProvider.getInstance(context);
 		JSONObject JSONreq = new JSONObject(urlReq);
+		
 		if (JSONreq.has("id_user") ) {
 
 			int userid = JSONreq.getInt("id_user");
@@ -152,7 +153,7 @@ public class Services {
 				response.put("success", true);
 			}
 			
-			return Response.status(200).entity(response.toString()).build();
+			return Response.status(200).entity(response.toString()).build();		
 		} else {
 			return Response.status(400).entity("InvalidRequestBody").build();
 		}

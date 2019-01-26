@@ -183,7 +183,7 @@ public class AddProfileBasicUserActivity extends AppCompatActivity implements Da
                     Log.i("AddProfileBasicUser","successfullCreation");
                     SaveSharedPreference.saveaddId(this, 1);
                     Toast toast = Toast.makeText(this, "You have successfully added a Profile!", Toast.LENGTH_SHORT);
-                    TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+                    TextView v = toast.getView().findViewById(android.R.id.message);
                     if( v != null) v.setGravity(Gravity.CENTER);
                     toast.show();
                     finish();

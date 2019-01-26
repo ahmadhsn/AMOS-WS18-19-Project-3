@@ -156,14 +156,19 @@ public class ShowEventActivity extends AppCompatActivity
 
         if (id == R.id.show_profile) {
             try {
+
+                //if the user already added information, a click on show_profile directs him to editProfile
+                //otherwise user gets directed to addProfile
                 if(SaveSharedPreference.getUserAdd(this) == 1 || checkUserAdded() == true){
                     Intent intent = new Intent(this, ProfileBasicUserActivity.class);
                     intent.putExtra("id", (long) SaveSharedPreference.getUserID(this));
                     startActivity(intent);
+
                 }else{
                     Intent intent = new Intent(this, AddProfileBasicUserActivity.class);
                     startActivity(intent);
                 }
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -315,24 +320,23 @@ public class ShowEventActivity extends AppCompatActivity
         Context context = ShowEventActivity.this;
         json.put("id_user", SaveSharedPreference.getUserID(context));
 
+        //checks if the user already added profile information
         try {
             JSONObject response;
 
-            FutureTask<String> task = new FutureTask(new Callable<String>() {
-                public String call() {
-                    JSONObject threadResponse = Requests.getResponse("checkUserAdded", json);
-                    return threadResponse.toString();
-                }
+            FutureTask<String> task = new FutureTask((Callable<String>) () -> {
+                JSONObject threadResponse = Requests.getResponse("checkUserAdded", json);
+                return threadResponse.toString();
             });
             new Thread(task).start();
             Log.i("Response", task.get());
             response = new JSONObject(task.get());
+
             //handle response
             if (response.has("success")) {
-
                 return true;
-
             }
+
         } catch (Exception e) {
             return false;
         }
