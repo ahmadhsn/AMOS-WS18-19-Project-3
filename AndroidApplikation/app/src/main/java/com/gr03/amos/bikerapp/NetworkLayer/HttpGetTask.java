@@ -1,6 +1,7 @@
 package com.gr03.amos.bikerapp.NetworkLayer;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.gr03.amos.bikerapp.Requests;
 
@@ -53,6 +54,7 @@ public class HttpGetTask extends AsyncTask<String, Void, JSONObject> {
 
         try {
             Response response = call.execute();
+            Log.i("Response", response.toString());
             String jsonData = response.body().string();
             return new JSONObject(jsonData);
         } catch (IOException e) {

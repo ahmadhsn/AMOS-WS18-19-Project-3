@@ -25,27 +25,35 @@ public class Requests {
     public static final String HOST = "10.0.2.2";
     public static final String PORT = "8080";
 
-    public static JSONObject getResponse(String urlTail, JSONObject json){
-        return getResponse(urlTail, json, "POST");
+    public static JSONObject getResponse(String urlTail, JSONObject json, Context ctx){
+        return getResponse(urlTail, json, "POST", ctx);
     }
 
-    public static JSONObject getResponse(String urlTail, JSONObject json, String method) {
+    public static JSONObject getResponse(String urlTail, JSONObject json, String method, Context ctx) {
+        JSONObject response = null;
         try {
             switch (method) {
                 case "POST":
-                    return new HttpPostTask(urlTail).execute(json.toString()).get();
+                    response =  new HttpPostTask(urlTail).execute(json.toString()).get();
+                    break;
                 case "GET":
-                    return new HttpGetTask().execute(urlTail).get();
+                    response = new HttpGetTask().execute(urlTail).get();
+                    break;
                 case "PUT":
-                    return new HttpPutTask(urlTail).execute(json.toString()).get();
+                    response = new HttpPutTask(urlTail).execute(json.toString()).get();
+                    break;
                 default:
-                    return null;
+                    response = null;
+            }
+
+            if(response == null){
+                Toast.makeText(ctx, R.string.offline_msg, Toast.LENGTH_LONG);
             }
         }catch (InterruptedException | ExecutionException ex){
             ex.printStackTrace();
 
         }
-        return null;
+        return response;
     }
 
     private static void executeRealmResponse(String urlTail, String jsonName, Class type,Context context){
@@ -104,10 +112,6 @@ public class Requests {
 
     public static void getJsonResponseForChat(String urlTail, int chatId, Context context) {
         executeRealmResponse(urlTail + "/" + chatId, "Chat", Message.class, context);
-    }
-
-    public static JSONObject getJSONResponse(String tail, JSONObject request, String method) {
-        return getResponse(tail, request, method);
     }
 
     public static String getUrl(String urlTail){

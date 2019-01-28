@@ -15,6 +15,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.gr03.amos.bikerapp.Models.Event;
+import com.gr03.amos.bikerapp.NetworkLayer.HttpPostTask;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,10 +47,10 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
 
         final Event event = realm.where(Event.class).equalTo("id_event", eventId).findFirst();
 
-        event_name = (EditText)findViewById(R.id.event_name);
-        event_description = (EditText)findViewById(R.id.event_description);
-        event_date = (EditText)findViewById(R.id.event_date);
-        event_time = (EditText)findViewById(R.id.event_time);
+        event_name = (EditText) findViewById(R.id.event_name);
+        event_description = (EditText) findViewById(R.id.event_description);
+        event_date = (EditText) findViewById(R.id.event_date);
+        event_time = (EditText) findViewById(R.id.event_time);
 
         event_name.setText(event.getName());
         event_description.setText(event.getDescription());
@@ -90,7 +91,7 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
 
     public void showDatePicker(int year, int month, int day) {
         DatePickerDialog newDatePickerDialog = new DatePickerDialog(this, R.style.DateTimePicker, this, year, month, day);
-        newDatePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis()-1000);
+        newDatePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
         newDatePickerDialog.show();
     }
 
@@ -98,7 +99,7 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
         new TimePickerDialog(this, R.style.DateTimePicker, this, hour, minute, true).show();
     }
 
-    boolean isTextEmpty(EditText text){
+    boolean isTextEmpty(EditText text) {
         CharSequence string = text.getText().toString();
         return TextUtils.isEmpty(string);
     }
@@ -134,21 +135,21 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
         int minutes = c.get(Calendar.MINUTE);
 
         String event_Date = event_date.getText().toString();
-        String system_Date = (year + "/" + (month+1) + "/" + day).toString();
+        String system_Date = (year + "/" + (month + 1) + "/" + day).toString();
 
-        if (event_Date.split("/")[0].equals(year)){
-            if (Integer.parseInt(event_Date.split("/")[1]) < month+1 || (Integer.parseInt(event_Date.split("/")[2]) < day && event_Date.split("/")[1].equals(month+1))){
+        if (event_Date.split("/")[0].equals(year)) {
+            if (Integer.parseInt(event_Date.split("/")[1]) < month + 1 || (Integer.parseInt(event_Date.split("/")[2]) < day && event_Date.split("/")[1].equals(month + 1))) {
                 event_date.setText(system_Date);
                 event_date.setError("Please enter a future date.");
                 Log.i("VALIDATION", "event date is not in the future");
-                Toast.makeText(getApplicationContext(),"Please enter a future date.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Please enter a future date.", Toast.LENGTH_LONG).show();
             }
         }
 
-        if (event_Date.equals(system_Date)){
+        if (event_Date.equals(system_Date)) {
             int hour_ev = Integer.parseInt(event_time.getText().toString().split(":")[0]);
             int minutes_ev = Integer.parseInt(event_time.getText().toString().split(":")[1]);
-            if (hour_ev < hour || minutes_ev < minutes ){
+            if (hour_ev < hour || minutes_ev < minutes) {
                 event_time.setText(hour + ":" + minutes);
                 event_time.setError("Please enter a future time.");
                 Log.i("VALIDATIONEVENT", "event time is not in the future");
@@ -157,7 +158,6 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
             }
 
         }
-
 
 
         JSONObject json = new JSONObject();
@@ -170,26 +170,23 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
         Log.i("EditEventActivity", event_name + " " + eventId);
 
         try {
-            JSONObject response;
+            JSONObject response = Requests.getResponse("updateEvent", json, "POST", getApplicationContext());
 
-            FutureTask<String> task = new FutureTask((Callable<String>) () -> {
-                JSONObject threadResponse = Requests.getResponse("updateEvent", json);
-                return threadResponse.toString();
-            });
-
-            new Thread(task).start();
-            Log.i("Response", task.get());
+            if (response == null) {
+                Intent intent = new Intent(this, ShowEventActivity.class);
+                startActivity(intent);
+                return;
+            }
             Intent intent = new Intent(this, ShowEventActivity.class);
             startActivity(intent);
-            response = new JSONObject(task.get());
 
             if (response.has("eventUpdate")) {
                 String statusEv = (String) response.get("eventUpdate");
                 if (statusEv.equals("successfullUpdation")) {
                     Toast.makeText(getApplicationContext(), "Successfully updated Event.", Toast.LENGTH_LONG).show();
                 }
-                if (statusEv.equals("InvalidRequestBody")){
-                    Toast.makeText(getApplicationContext(),"Invalid Request Body",Toast.LENGTH_LONG).show();
+                if (statusEv.equals("InvalidRequestBody")) {
+                    Toast.makeText(getApplicationContext(), "Invalid Request Body", Toast.LENGTH_LONG).show();
                 }
             }
         } catch (Exception e) {
@@ -197,10 +194,9 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
         }
     }
 
-    public void cancel(View view){
+    public void cancel(View view) {
         finish();
     }
-
 
 
 }

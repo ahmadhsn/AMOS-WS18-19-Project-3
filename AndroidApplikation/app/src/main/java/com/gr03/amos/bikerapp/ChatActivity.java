@@ -2,8 +2,6 @@ package com.gr03.amos.bikerapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -83,7 +81,7 @@ public class ChatActivity extends AppCompatActivity {
             }
             request.put("id_users", jsonUserIds);
 
-            JSONObject response = Requests.getJSONResponse("loadChat", request, "PUT");
+            JSONObject response = Requests.getResponse("loadChat", request, "PUT", getApplicationContext());
 
             if (response.has("id_chat")) {
                 return response.getInt("id_chat");
@@ -118,7 +116,7 @@ public class ChatActivity extends AppCompatActivity {
             String currTime = getCurrentTimestampString();
             json.put("time", currTime);
 
-            JSONObject response = Requests.getJSONResponse("saveMessage", json, "PUT");
+            JSONObject response = Requests.getResponse("saveMessage", json, "PUT", getApplicationContext());
 
             //handle response
             if (response.has("saveMessage") && response.getString("saveMessage").equals("successful")) {

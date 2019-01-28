@@ -44,19 +44,9 @@ public class LoginActivity extends AppCompatActivity {
         json.put("password", password.getText().toString());
 
         try {
-            JSONObject response;
-
-            FutureTask<String> task = new FutureTask(new Callable<String>() {
-                public String call() {
-                    JSONObject threadResponse = Requests.getResponse("checkUser", json);
-                    return threadResponse.toString();
-                }
-            });
-            new Thread(task).start();
-            Log.i("Response", task.get());
-            response = new JSONObject(task.get());
+            JSONObject response = Requests.getResponse("checkUser", json, "POST", getApplicationContext());
             //handle response
-            if (response.has("success")) {
+            if (response != null && response.has("success")) {
 
                 String eml = response.getString("email");
                 int userId = response.getInt("id_user");

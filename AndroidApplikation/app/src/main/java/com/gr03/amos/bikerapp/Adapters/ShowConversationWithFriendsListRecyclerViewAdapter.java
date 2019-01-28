@@ -92,7 +92,7 @@ public class ShowConversationWithFriendsListRecyclerViewAdapter extends RealmRec
             }
             request.put("id_users", jsonUserIds);
 
-            JSONObject response = Requests.getJSONResponse("loadChat", request, "PUT");
+            JSONObject response = Requests.getResponse("loadChat", request, "PUT", context);
 
             if (response.has("id_chat")) {
                 return response.getInt("id_chat");

@@ -1,6 +1,7 @@
 package com.gr03.amos.bikerapp.NetworkLayer;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.gr03.amos.bikerapp.Requests;
 
@@ -56,6 +57,7 @@ public class HttpPostTask extends AsyncTask<String, Void, JSONObject> {
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
+            Log.i("Response", response.toString());
             return new JSONObject(response.body().string());
         } catch (IOException e) {
             e.printStackTrace();

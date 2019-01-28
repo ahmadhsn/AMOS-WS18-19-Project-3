@@ -139,10 +139,8 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
                     json.put("event_id", mData.get(position).getId_event());
                     json.put("user_id", SaveSharedPreference.getUserID(context));
 
-                    FutureTask<String> task = new FutureTask((Callable<String>) () -> {
-                        JSONObject threadResponse = Requests.getResponse("addmyeventlist", json);
-                        return threadResponse.toString();
-                    });
+
+                    Requests.getResponse("addmyeventlist", json, context);
 
                     Realm.init(context);
                     Realm realm = Realm.getDefaultInstance();
@@ -153,10 +151,7 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
                     realm.commitTransaction();
                     realm.close();
 
-
-                    new Thread(task).start();
-                    Log.i("Response", task.get());
-                } catch (JSONException | InterruptedException | ExecutionException e) {
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
@@ -213,16 +208,7 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
     private void deleteEvent(long eventId) throws JSONException {
         JSONObject json = new JSONObject();
         json.put("id_event", eventId);
-        try {
-            FutureTask<String> task = new FutureTask((Callable<String>) () -> {
-                JSONObject threadResponse = Requests.getResponse("deleteEvent", json);
-                return threadResponse.toString();
-            });
-            new Thread(task).start();
-            Log.i("Response", task.get());
-        } catch (Exception e) {
-            Log.i("Exception --- not requested", e.toString());
-        }
+        Requests.getResponse("deleteEvent", json, context);
     }
 
     private void editEvent(long eventId) throws JSONException {

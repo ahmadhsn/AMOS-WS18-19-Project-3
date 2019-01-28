@@ -90,7 +90,7 @@ public class SignUpActivity extends AppCompatActivity {
           //  json.put("business_name", businessName.getText().toString());
 
         try {
-            JSONObject response = Requests.getJSONResponse("userRegistration", json, "POST");
+            JSONObject response = Requests.getResponse("userRegistration", json, "POST", getApplicationContext());
 
             //handle response
             if(response.has("userRegistration")){

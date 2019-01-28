@@ -117,22 +117,11 @@ public class ShowFriendsFragment extends Fragment implements SearchView.OnQueryT
             request.put("id", SaveSharedPreference.getUserID(context));
             request.put("input", query);
 
-            FutureTask<String> task = new FutureTask(new Callable<String>() {
-                public String call() {
-                    JSONObject threadResponse = Requests.getResponse(url, request, "POST");
-                    return threadResponse.toString();
-                }
-            });
-
-
-            new Thread(task).start();
-            Log.i("Response", task.get());
+            response = Requests.getResponse(url, request, "POST", context);
 
             /* show all users clickable */
 
-            response = new JSONObject(task.get());
-
-            if (response.has("foundUser")) {
+            if (response != null && response.has("foundUser")) {
                 String statusEv = (String) response.get("foundUser");
                 if (statusEv.equals("unsuccessful")) {
                     listUsers(new JSONArray());

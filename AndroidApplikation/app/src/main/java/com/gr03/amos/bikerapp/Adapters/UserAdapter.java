@@ -95,19 +95,10 @@ public class UserAdapter extends ArrayAdapter<BasicUser> implements AdapterView.
 
                 friendRequest.put("idUser", SaveSharedPreference.getUserID(view.getContext()));
                 friendRequest.put("idFollower", Long.toString(user.getUser_id()));
-
-                FutureTask<String> task = new FutureTask(new Callable<String>() {
-                    public String call() {
-                        JSONObject threadResponse = Requests.getResponse("addFriend", friendRequest);
-                        return threadResponse.toString();
-                    }
-                });
-                new Thread(task).start();
-                Log.i("Response", task.get());
-                response = new JSONObject(task.get());
+                response = Requests.getResponse("addFriend", friendRequest, getContext());
 
                 //handle response
-                if(response.has("friendship")){
+                if(response != null && response.has("friendship")){
                     String friendshipStatus = response.getString("friendship");
                     if(friendshipStatus.equals("successful")){
                         String msg = String.format("You added %s as a friend!", user.getName());
@@ -126,12 +117,7 @@ public class UserAdapter extends ArrayAdapter<BasicUser> implements AdapterView.
 
             } catch (JSONException e) {
                 e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
             }
-
 
         }
     }

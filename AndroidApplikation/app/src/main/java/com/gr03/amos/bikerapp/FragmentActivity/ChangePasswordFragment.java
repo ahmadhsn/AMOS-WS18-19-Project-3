@@ -68,20 +68,10 @@ public class ChangePasswordFragment extends Fragment {
         if (np.equals(rnp)) {
             try {
 
-                JSONObject response;
-
-                FutureTask<String> task = new FutureTask(new Callable<String>() {
-                    public String call() {
-                        JSONObject threadResponse = Requests.getResponse("changePassword", json);
-                        return threadResponse.toString();
-                    }
-                });
-                new Thread(task).start();
-                Log.i("Response", task.get());
-                response = new JSONObject(task.get());
+                JSONObject response = Requests.getResponse("changePassword", json, getContext());
 
                 //handle response
-                if (response.has("passwordUpdated")) {
+                if (response != null && response.has("passwordUpdated")) {
                     String loginResponse = response.getString("passwordUpdated");
 
                     if (loginResponse.equals("successfullUpdation")) {

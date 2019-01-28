@@ -60,7 +60,7 @@ public class AddRoute extends AppCompatActivity {
         if (checkEnteredData()) {
             return;
         }
-        Requests.getJSONResponse("createRoute", generateRequestJSON(), "POST");
+        Requests.getResponse("createRoute", generateRequestJSON(), "POST", context);
 
         finish();
     }

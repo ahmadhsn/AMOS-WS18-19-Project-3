@@ -11,6 +11,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.gr03.amos.bikerapp.NetworkLayer.HttpPostTask;
+import com.gr03.amos.bikerapp.NetworkLayer.HttpPutTask;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -40,32 +43,25 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
+
     public void submit(View view) throws JSONException {
         submitButtonTask();
     }
 
     private void submitButtonTask() {
         String email = emailId.getText().toString();
-        if(!isValidEmail(email)){
+        if (!isValidEmail(email)) {
             Log.i("VALIDATIONMAIL", "mail address is not valid");
             emailId.setError("Invalid E-Mail address. Please check again");
             return;
-        }
-        else
+        } else
             createAlertView();
-            try {
-                FutureTask<String> task = new FutureTask(new Callable<String>() {
-                    public String call() {
-                        JSONObject threadResponse = Requests.getResponse("resetPassword", generateRequestJSON(email), "PUT");
-                        return threadResponse.toString();
-                    }
-                });
-
-                new Thread(task).start();
-            } catch (Exception e) {
-                //TODO: ErrorHandling
-                Log.i("Exception --- not requested", e.toString());
-            }
+        try {
+            JSONObject response = Requests.getResponse("resetPassword", generateRequestJSON(email), "PUT", getApplicationContext());
+        } catch (Exception e) {
+            //TODO: ErrorHandling
+            Log.i("Exception --- not requested", e.toString());
+        }
     }
 
     private void createAlertView() {
@@ -79,11 +75,13 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         // Create the AlertDialog object and show it
         builder.create().show();
     }
+
     private JSONObject generateRequestJSON(String email) {
         JSONObject requestJSON = new JSONObject();
         try {
             requestJSON.put("reset_email", email);
-        } catch (JSONException e) {}
+        } catch (JSONException e) {
+        }
         return requestJSON;
     }
 

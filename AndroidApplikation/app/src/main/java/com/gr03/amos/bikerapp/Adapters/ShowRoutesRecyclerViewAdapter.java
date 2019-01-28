@@ -149,10 +149,7 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
                 json.put("route_id", mData.get(position).getId_route());
                 json.put("user_id", SaveSharedPreference.getUserID(context));
 
-                FutureTask<String> task = new FutureTask((Callable<String>) () -> {
-                    JSONObject threadResponse = Requests.getResponse("addUserRoute", json);
-                    return threadResponse.toString();
-                });
+                Requests.getResponse("addUserRoute", json, context);
 
                 Realm.init(context);
                 Realm realm = Realm.getDefaultInstance();
@@ -163,9 +160,7 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
                 realm.commitTransaction();
                 realm.close();
 
-                new Thread(task).start();
-                Log.i("Response", task.get());
-            } catch (JSONException | InterruptedException | ExecutionException e) {
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
         });
@@ -217,16 +212,7 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
 
         JSONObject json = new JSONObject();
         json.put("id_route", routeId);
-        try {
-            FutureTask<String> task = new FutureTask((Callable<String>) () -> {
-                JSONObject threadResponse = Requests.getResponse("deleteRoute", json);
-                return threadResponse.toString();
-            });
-            new Thread(task).start();
-            Log.i("Response", task.get());
-        } catch (Exception e) {
-            Log.i("Exception --- not requested", e.toString());
-        }
+        Requests.getResponse("deleteRoute", json, context);
     }
 
     //TO DO: IMPLEMENT EDIT ROUTE FEATURE

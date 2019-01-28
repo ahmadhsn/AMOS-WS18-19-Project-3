@@ -109,7 +109,7 @@ public class BusinessProfileFragment extends Fragment {
     private void loadProfile(){
 
         try {
-            JSONObject response = Requests.getJSONResponse("getBusinessProfile/" + userId, null, "GET");
+            JSONObject response = Requests.getResponse("getBusinessProfile/" + userId, null, "GET", getContext());
 
             if(response.get("business_profile").equals("no_profile")){
                 //no profile exists
@@ -162,7 +162,7 @@ public class BusinessProfileFragment extends Fragment {
             ex.printStackTrace();
         }
 
-        JSONObject response = Requests.getJSONResponse("editBusinessProfile", json, "POST");
+        JSONObject response = Requests.getResponse("editBusinessProfile", json, "POST", getContext());
 
         makeFieldsUneditable();
         editProfile.setVisibility(View.VISIBLE);

@@ -98,14 +98,7 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
     private JSONObject getAdditionalUserInfo() {
         JSONObject userInfo;
         try {
-            FutureTask<String> task = new FutureTask((Callable<String>) () -> {
-                JSONObject threadResponse = Requests.getResponse("getUserInfo/" + userId, null, "GET");
-                return threadResponse.toString();
-            });
-
-            new Thread(task).start();
-            Log.i("Response", task.get());
-            userInfo = new JSONObject(task.get());
+            userInfo = Requests.getResponse("getUserInfo/" + userId, null, "GET", getApplicationContext());
             userInfo = userInfo.getJSONObject("UserInfo");
             user_fname.setText(userInfo.getString("first_name"));
             user_lname.setText(userInfo.getString("last_name"));
@@ -160,16 +153,8 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         json.put("city", user_city.getText().toString());
         json.put("state", user_state.getText().toString());
         json.put("country", user_country.getText().toString());
-        try {
-            FutureTask<String> task = new FutureTask((Callable<String>) () -> {
-                JSONObject threadResponse = Requests.getResponse("addUserBasic", json);
-                return threadResponse.toString();
-            });
-            new Thread(task).start();
-            Log.i("Response", task.get());
-        } catch (Exception e) {
-            Log.i("Exception --- not requested", e.toString());
-        }
+
+        Requests.getResponse("addUserBasic", json, getApplicationContext());
     }
 
 
@@ -239,16 +224,7 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         json.put("city", user_city.getText().toString());
         json.put("state", user_state.getText().toString());
         json.put("country", user_country.getText().toString());
-        try {
-            FutureTask<String> task = new FutureTask((Callable<String>) () -> {
-                JSONObject threadResponse = Requests.getResponse("editUserInfo", json);
-                return threadResponse.toString();
-            });
-            new Thread(task).start();
-            Log.i("Response", task.get());
-        } catch (Exception e) {
-            Log.i("Exception --- not requested", e.toString());
-        }
+        Requests.getResponse("editUserInfo", json, getApplicationContext());
 
         makeFieldsUneditable(view);
         edit_profile_page.setVisibility(View.VISIBLE);

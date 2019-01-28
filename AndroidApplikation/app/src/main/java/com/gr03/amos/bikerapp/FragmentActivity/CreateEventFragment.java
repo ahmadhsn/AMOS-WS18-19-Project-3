@@ -78,9 +78,8 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
         houseNr = view.findViewById(R.id.houseNr);
 
         if (SaveSharedPreference.getUserType(container.getContext()) == 2) {
-            JSONObject response = Requests
-                    .getJSONResponse("getBusinessProfile/" + SaveSharedPreference.getUserID(container.getContext())
-                            , null, "GET");
+            JSONObject response = Requests.getResponse("getBusinessProfile/" + SaveSharedPreference.getUserID(container.getContext())
+                            , null, "GET", getContext());
 
             try {
                 if (response.get("business_profile").equals("no_profile")) {
@@ -134,7 +133,7 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
     }
 
     List<String> getEventTypes() {
-        JSONObject response = HTTPResponse("get_event_type", null, "GET");
+        JSONObject response = Requests.getResponse("get_event_type", null, "GET", getContext());
         List<String> eventTypesList = new ArrayList();
         if (response != null && response.has("result")) {
             try {
@@ -277,7 +276,7 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
         requestJSON.put("event", event);
         requestJSON.put("user_id", SaveSharedPreference.getUserID(this.getContext()));
 
-        JSONObject response = HTTPResponse("createEvent", requestJSON, "POST");
+        JSONObject response = Requests.getResponse("createEvent", requestJSON, "POST", getContext());
 
 
         if (response.has("eventCreation")) {
@@ -288,21 +287,4 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
         startActivity(intent);
     }
 
-    JSONObject HTTPResponse(String urlTail, JSONObject payload, String method) {
-        try {
-            FutureTask<String> task = new FutureTask(new Callable<String>() {
-                public String call() {
-                    JSONObject threadResponse = Requests.getResponse(urlTail, payload, method);
-                    return threadResponse.toString();
-                }
-            });
-
-            new Thread(task).start();
-            return new JSONObject(task.get());
-        } catch (Exception e) {
-            //TODO: Error-Handling
-            Log.i("Exception --- not requested", e.toString());
-        }
-        return null;
-    }
 }

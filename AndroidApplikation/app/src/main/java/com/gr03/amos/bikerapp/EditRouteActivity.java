@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.gr03.amos.bikerapp.Models.Route;
+import com.gr03.amos.bikerapp.NetworkLayer.HttpPostTask;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -75,18 +76,15 @@ public class EditRouteActivity extends AppCompatActivity {
         Log.i("EditRouteActivity", route_name + " " + routeId);
 
         try {
-            JSONObject response;
+            JSONObject response = Requests.getResponse("updateRoute", json, "POST", getApplicationContext());
+            if(response == null){
+                Intent intent = new Intent(this, ShowEventActivity.class);
+                startActivity(intent);
+                return;
+            }
 
-            FutureTask<String> task = new FutureTask((Callable<String>) () -> {
-                JSONObject threadResponse = Requests.getResponse("updateRoute", json);
-                return threadResponse.toString();
-            });
-
-            new Thread(task).start();
-            Log.i("Response", task.get());
             Intent intent = new Intent(this, ShowEventActivity.class);
             startActivity(intent);
-            response = new JSONObject(task.get());
 
             if (response.has("routeUpdate")) {
                 String statusRoute = (String) response.get("routeUpdate");
