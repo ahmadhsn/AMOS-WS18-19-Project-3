@@ -88,7 +88,7 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
         if (SaveSharedPreference.getUserType(this.context) != 2
                 && mData.get(position).getId_user_type() == 2) {
             holder.adminTag.setVisibility(View.VISIBLE);
-            holder.adminTag.setText("Ad");
+            holder.adminTag.setText(R.string.business_customer_event);
         }
 
         holder.eventDelete.setOnClickListener(v -> {
