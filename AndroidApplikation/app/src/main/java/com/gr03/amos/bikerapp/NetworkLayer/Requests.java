@@ -39,6 +39,11 @@ public class Requests {
         new HttpTask(handler,method, urlTail).execute(json.toString());
     }
 
+
+    public static JSONObject getResponse(String urlTail, JSONObject json, String method) {
+        return getResponse(urlTail, json, method, null, true);
+    }
+
     public static JSONObject getResponse(String urlTail, JSONObject json, String method, Context context) {
         return getResponse(urlTail, json, method, context, true);
     }
@@ -58,7 +63,7 @@ public class Requests {
 
         }
 
-        if(SocketUtility.hasSocketError(response)){
+        if(context != null && SocketUtility.hasSocketError(response)){
             Toast.makeText(context, "No response from server.", Toast.LENGTH_LONG).show();
         }
 
