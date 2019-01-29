@@ -528,17 +528,16 @@ public class Services {
 		System.out.println("...getAllEvetns");
 		try {
 			DatabaseProvider provider = DatabaseProvider.getInstance(context);
-
-			// PreparedStatement st = conn.prepareStatement("SELECT
-			// name,description,date,time FROM EVENT");
 			
 			ResultSet result = provider.querySelectDB("SELECT DISTINCT ON (e.id_event) * FROM EVENT e"
 					+ " LEFT JOIN ADDRESS a USING (id_address)"
 					+ " WHERE e.date >= now() "
 					+ " ORDER BY e.id_event, a.id_address" );
 			System.out.println(result);
-			
 			while (result.next()) {	
+				String user_id_type_json="";
+						
+				ResultSet userResult = provider.querySelectDB("Select id_user_type from user_reg where id_user=" + result.getString("id_user"));
 	
 				String id_json = result.getString("id_event");
 				String id_address_json = result.getString("id_address");
@@ -547,6 +546,10 @@ public class Services {
 				String date_json = result.getString("date");
 				String time_json = result.getString("time");
 				String user_id_json = result.getString("id_user");
+				
+				while (userResult.next()) {	
+				user_id_type_json = userResult.getString("id_user_type");
+				}
 				
 				String id_add_json = result.getString("id_address");
 				String city_json = result.getString("city");
@@ -560,6 +563,7 @@ public class Services {
 				jobj.put("date", date_json);
 				jobj.put("time", time_json);
 				jobj.put("id_user", user_id_json);
+				jobj.put("id_user_type", user_id_type_json);
 				
 				JSONObject jobj2 = new JSONObject();
 				jobj2.put("city", city_json);
