@@ -4,7 +4,6 @@ package com.gr03.amos.bikerapp.Adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,16 +17,13 @@ import android.widget.Toast;
 import com.gr03.amos.bikerapp.Models.BasicUser;
 import com.gr03.amos.bikerapp.ProfileBasicUserActivity;
 import com.gr03.amos.bikerapp.R;
-import com.gr03.amos.bikerapp.Requests;
+import com.gr03.amos.bikerapp.NetworkLayer.Requests;
 import com.gr03.amos.bikerapp.SaveSharedPreference;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.FutureTask;
 
 public class UserAdapter extends ArrayAdapter<BasicUser> implements AdapterView.OnItemClickListener{
     ShowFriendsListRecyclerViewAdapter showFriendsListRecyclerViewAdapter;
@@ -95,7 +91,7 @@ public class UserAdapter extends ArrayAdapter<BasicUser> implements AdapterView.
 
                 friendRequest.put("idUser", SaveSharedPreference.getUserID(view.getContext()));
                 friendRequest.put("idFollower", Long.toString(user.getUser_id()));
-                response = Requests.getResponse("addFriend", friendRequest, getContext());
+                response = Requests.getResponse("addFriend", friendRequest, "POST", getContext());
 
                 //handle response
                 if(response != null && response.has("friendship")){

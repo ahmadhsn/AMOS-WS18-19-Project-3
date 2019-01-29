@@ -19,6 +19,9 @@ import com.gr03.amos.bikerapp.FragmentActivity.BusinessProfileFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.CreateEventFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.ShowEventsFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.ShowFriendsFragment;
+import com.gr03.amos.bikerapp.NetworkLayer.ResponseHandler;
+
+import org.json.JSONObject;
 
 public class BusinessUserMainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -108,4 +111,5 @@ public class BusinessUserMainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }

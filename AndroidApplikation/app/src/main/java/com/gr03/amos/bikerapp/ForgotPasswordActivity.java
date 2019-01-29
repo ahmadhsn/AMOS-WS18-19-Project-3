@@ -8,19 +8,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
-import com.gr03.amos.bikerapp.NetworkLayer.HttpPostTask;
-import com.gr03.amos.bikerapp.NetworkLayer.HttpPutTask;
+import com.gr03.amos.bikerapp.NetworkLayer.Requests;
+import com.gr03.amos.bikerapp.NetworkLayer.ResponseHandler;
+import com.gr03.amos.bikerapp.NetworkLayer.SocketUtility;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.FutureTask;
-
-public class ForgotPasswordActivity extends AppCompatActivity {
+public class ForgotPasswordActivity extends AppCompatActivity implements ResponseHandler {
     private static EditText emailId;
 
     public ForgotPasswordActivity() {
@@ -56,12 +54,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             return;
         } else
             createAlertView();
-        try {
-            JSONObject response = Requests.getResponse("resetPassword", generateRequestJSON(email), "PUT", getApplicationContext());
-        } catch (Exception e) {
-            //TODO: ErrorHandling
-            Log.i("Exception --- not requested", e.toString());
-        }
+        Requests.executeRequest(this, "PUT", "resetPassword", generateRequestJSON(email));
     }
 
     private void createAlertView() {
@@ -91,5 +84,14 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         } else {
             return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
         }
+    }
+
+    @Override
+    public void onResponse(JSONObject response, String urlTail) {
+        if (SocketUtility.hasSocketError(response)) {
+            Toast.makeText(this, "No response from server.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
     }
 }

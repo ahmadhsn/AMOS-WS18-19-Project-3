@@ -14,6 +14,9 @@ import android.widget.Toast;
 import com.gr03.amos.bikerapp.Adapters.MessageListRecyclerViewAdapter;
 import com.gr03.amos.bikerapp.Models.Friend;
 import com.gr03.amos.bikerapp.Models.Message;
+import com.gr03.amos.bikerapp.NetworkLayer.Requests;
+import com.gr03.amos.bikerapp.NetworkLayer.ResponseHandler;
+import com.gr03.amos.bikerapp.NetworkLayer.SocketUtility;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,13 +27,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-public class ChatActivity extends AppCompatActivity {
+public class ChatActivity extends AppCompatActivity implements ResponseHandler {
 
     EditText msg;
     int chatId;
@@ -58,7 +59,7 @@ public class ChatActivity extends AppCompatActivity {
         Log.i("ids", String.valueOf(userIds));
 
         //load chat
-        chatId = loadChat();
+        loadChat();
 
 //        new Timer().scheduleAtFixedRate(new TimerTask() {
 //            @Override
@@ -71,7 +72,7 @@ public class ChatActivity extends AppCompatActivity {
         getAllChat();
     }
 
-    private int loadChat() {
+    private void loadChat() {
         JSONObject request = new JSONObject();
 
         try {
@@ -81,20 +82,12 @@ public class ChatActivity extends AppCompatActivity {
             }
             request.put("id_users", jsonUserIds);
 
-            JSONObject response = Requests.getResponse("loadChat", request, "PUT", getApplicationContext());
+            Requests.executeRequest(this, "PUT", "loadChat", request);
 
-            if (response.has("id_chat")) {
-                return response.getInt("id_chat");
-            } else {
-                Toast.makeText(this, "Error loading chat", Toast.LENGTH_LONG).show();
-            }
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-        return -1;
-
     }
 
     public void sendMessage(View view) {
@@ -116,18 +109,8 @@ public class ChatActivity extends AppCompatActivity {
             String currTime = getCurrentTimestampString();
             json.put("time", currTime);
 
-            JSONObject response = Requests.getResponse("saveMessage", json, "PUT", getApplicationContext());
+            Requests.executeRequest(this, "PUT", "saveMessage", json);
 
-            //handle response
-            if (response.has("saveMessage") && response.getString("saveMessage").equals("successful")) {
-
-                Log.i("IGI", String.valueOf(response));
-                Log.i("CHAT", "Message send from " + SaveSharedPreference.getUserID(this));
-                msg.setText("");
-            } else {
-                Toast.makeText(view.getContext(), "Could not send message", Toast.LENGTH_LONG).show();
-
-            }
         } catch (Exception e) {
             Toast.makeText(view.getContext(), "Error sending message", Toast.LENGTH_LONG).show();
             Log.i("Exception --- not requested", e.toString());
@@ -168,4 +151,40 @@ public class ChatActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onResponse(JSONObject response, String urlTail) {
+        if(SocketUtility.hasSocketError(response)){
+            Toast.makeText(getApplicationContext(), "No response from server.", Toast.LENGTH_LONG).show();
+            return;
+        }
+        switch (urlTail) {
+            case "loadChat":
+
+                if (response.has("id_chat")) {
+                    try {
+                        this.chatId = response.getInt("id_chat");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Toast.makeText(this, "Error loading chat", Toast.LENGTH_LONG).show();
+                }
+                break;
+            case "saveMessage":
+                //handle response
+                try {
+                    if (response.has("saveMessage") && response.getString("saveMessage").equals("successful")) {
+                        Log.i("IGI", String.valueOf(response));
+                        Log.i("CHAT", "Message send from " + SaveSharedPreference.getUserID(this));
+                        msg.setText("");
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Could not send message", Toast.LENGTH_LONG).show();
+
+                    }
+                } catch (JSONException ex) {
+                    ex.printStackTrace();
+                }
+
+        }
+    }
 }

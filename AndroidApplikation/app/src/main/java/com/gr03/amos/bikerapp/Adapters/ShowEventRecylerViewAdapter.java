@@ -21,21 +21,17 @@ import com.gr03.amos.bikerapp.EditEventActivity;
 import com.gr03.amos.bikerapp.Models.Event;
 import com.gr03.amos.bikerapp.Models.EventParticipation;
 import com.gr03.amos.bikerapp.R;
-import com.gr03.amos.bikerapp.Requests;
+import com.gr03.amos.bikerapp.NetworkLayer.Requests;
 import com.gr03.amos.bikerapp.SaveSharedPreference;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.FutureTask;
-
 import io.realm.Realm;
 import io.realm.RealmResults;
 
 
-public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventRecylerViewAdapter.ViewHolder> {
+public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventRecylerViewAdapter.ViewHolder>  {
 
     private RealmResults<Event> mData;
     private LayoutInflater mInflater;
@@ -139,8 +135,7 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
                     json.put("event_id", mData.get(position).getId_event());
                     json.put("user_id", SaveSharedPreference.getUserID(context));
 
-
-                    Requests.getResponse("addmyeventlist", json, context);
+                    Requests.getResponse("addmyeventlist", json, "POST", context);
 
                     Realm.init(context);
                     Realm realm = Realm.getDefaultInstance();
@@ -208,7 +203,7 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
     private void deleteEvent(long eventId) throws JSONException {
         JSONObject json = new JSONObject();
         json.put("id_event", eventId);
-        Requests.getResponse("deleteEvent", json, context);
+        Requests.getResponse("deleteEvent", json, "POST", context);
     }
 
     private void editEvent(long eventId) throws JSONException {

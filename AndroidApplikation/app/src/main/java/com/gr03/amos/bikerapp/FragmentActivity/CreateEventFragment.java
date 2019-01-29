@@ -19,10 +19,12 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.gr03.amos.bikerapp.NetworkLayer.ResponseHandler;
 import com.gr03.amos.bikerapp.R;
-import com.gr03.amos.bikerapp.Requests;
+import com.gr03.amos.bikerapp.NetworkLayer.Requests;
 import com.gr03.amos.bikerapp.SaveSharedPreference;
 import com.gr03.amos.bikerapp.ShowEventActivity;
+import com.gr03.amos.bikerapp.NetworkLayer.SocketUtility;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,12 +35,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Calendar;
 import java.util.Locale;
-import java.util.concurrent.Callable;
-import java.util.concurrent.FutureTask;
 
 public class CreateEventFragment extends Fragment implements AdapterView.OnItemSelectedListener,
         DatePickerDialog.OnDateSetListener,
-        TimePickerDialog.OnTimeSetListener {
+        TimePickerDialog.OnTimeSetListener, ResponseHandler {
     private int EVENTTYPEID = 1;
     private EditText eventName, eventDescr, eventDate, eventTime, country, city, street, postcode, houseNr;
     private Button createEvent;
@@ -78,32 +78,7 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
         houseNr = view.findViewById(R.id.houseNr);
 
         if (SaveSharedPreference.getUserType(container.getContext()) == 2) {
-            JSONObject response = Requests.getResponse("getBusinessProfile/" + SaveSharedPreference.getUserID(container.getContext())
-                            , null, "GET", getContext());
-
-            try {
-                if (response.get("business_profile").equals("no_profile")) {
-                    createEvent.setEnabled(false);
-                    Toast.makeText(getContext(), "Please add address first", Toast.LENGTH_LONG).show();
-                } else {
-                    JSONObject responseProfile = response.getJSONObject("business_profile");
-                    JSONObject address = responseProfile.getJSONObject("business_address");
-                    street.setText(address.optString("street"));
-                    houseNr.setText(address.optString("housenumber"));
-                    postcode.setText(address.optString("postcode"));
-                    city.setText(address.optString("city"));
-                    country.setText(address.optString("country"));
-
-
-                    houseNr.setEnabled(false);
-                    street.setEnabled(false);
-                    postcode.setEnabled(false);
-                    city.setEnabled(false);
-                    country.setEnabled(false);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            Requests.executeRequest(this, "GET", "getBusinessProfile/" + SaveSharedPreference.getUserID(container.getContext()));
         }
 
         eventDate.setOnClickListener(v -> {
@@ -287,4 +262,38 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
         startActivity(intent);
     }
 
+    @Override
+    public void onResponse(JSONObject response, String urlTail) {
+        if (SocketUtility.hasSocketError(response)) {
+            Toast.makeText(getContext(), "No response from server.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if (urlTail.equals("getBusinessProfile/" + SaveSharedPreference.getUserID(getContext()))) {
+            try {
+                if (response.get("business_profile").equals("no_profile")) {
+                    createEvent.setEnabled(false);
+                    Toast.makeText(getContext(), "Please add address first", Toast.LENGTH_LONG).show();
+                } else {
+                    JSONObject responseProfile = response.getJSONObject("business_profile");
+                    JSONObject address = responseProfile.getJSONObject("business_address");
+                    street.setText(address.optString("street"));
+                    houseNr.setText(address.optString("housenumber"));
+                    postcode.setText(address.optString("postcode"));
+                    city.setText(address.optString("city"));
+                    country.setText(address.optString("country"));
+
+
+                    houseNr.setEnabled(false);
+                    street.setEnabled(false);
+                    postcode.setEnabled(false);
+                    city.setEnabled(false);
+                    country.setEnabled(false);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
 }

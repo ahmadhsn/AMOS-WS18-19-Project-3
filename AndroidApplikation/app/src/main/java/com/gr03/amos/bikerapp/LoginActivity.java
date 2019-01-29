@@ -10,17 +10,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gr03.amos.bikerapp.Models.User;
+import com.gr03.amos.bikerapp.NetworkLayer.Requests;
+import com.gr03.amos.bikerapp.NetworkLayer.ResponseHandler;
+import com.gr03.amos.bikerapp.NetworkLayer.SocketUtility;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.FutureTask;
-
 import io.realm.Realm;
-import io.realm.RealmResults;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements ResponseHandler {
     TextView forgotPassword;
 
     @Override
@@ -43,11 +42,19 @@ public class LoginActivity extends AppCompatActivity {
         json.put("email", email.getText().toString());
         json.put("password", password.getText().toString());
 
-        try {
-            JSONObject response = Requests.getResponse("checkUser", json, "POST", getApplicationContext());
-            //handle response
-            if (response != null && response.has("success")) {
+        Requests.executeRequest(this, "POST", "checkUser", json);
 
+    }
+
+    @Override
+    public void onResponse(JSONObject response, String urlTail) {
+        if(SocketUtility.hasSocketError(response)){
+            Toast.makeText(this, "No response from server.", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (response != null && response.has("success")) {
+
+            try {
                 String eml = response.getString("email");
                 int userId = response.getInt("id_user");
                 int userType = response.getInt("id_user_type");
@@ -71,11 +78,12 @@ public class LoginActivity extends AppCompatActivity {
                     Intent intent = new Intent(this, ShowEventActivity.class);
                     startActivity(intent);
                 }
+            }catch(JSONException ex){
+                Log.i("Exception --- not requested", ex.toString());
+                ex.printStackTrace();
             }
-        } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "Wrong email or password", Toast.LENGTH_LONG).show();
-            Log.i("Exception --- not requested", e.toString());
-            return;
+        }else{
+            Toast.makeText(getApplicationContext(), "Wrong user credentials.", Toast.LENGTH_LONG);
         }
     }
 }

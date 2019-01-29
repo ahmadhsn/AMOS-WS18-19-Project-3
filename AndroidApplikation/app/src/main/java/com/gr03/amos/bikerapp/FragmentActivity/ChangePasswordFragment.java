@@ -1,6 +1,5 @@
 package com.gr03.amos.bikerapp.FragmentActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,31 +9,36 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Button;
-import android.text.TextUtils;
 import android.util.Log;
-import java.util.concurrent.Callable;
-import java.util.concurrent.FutureTask;
 
 import android.widget.Toast;
+
+import com.gr03.amos.bikerapp.NetworkLayer.ResponseHandler;
 import com.gr03.amos.bikerapp.R;
-import com.gr03.amos.bikerapp.Requests;
+import com.gr03.amos.bikerapp.NetworkLayer.Requests;
 import com.gr03.amos.bikerapp.SaveSharedPreference;
 import com.gr03.amos.bikerapp.ShowEventActivity;
+import com.gr03.amos.bikerapp.NetworkLayer.SocketUtility;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ChangePasswordFragment extends Fragment {
+public class ChangePasswordFragment extends Fragment implements ResponseHandler {
 
     private EditText email, editTextOldPassword, editTextNewPassword, editTextRepeatPassword, country;
     private Button changePassword;
-    public ChangePasswordFragment() { }
 
-    public static ChangePasswordFragment newInstance() { return new ChangePasswordFragment();
+    public ChangePasswordFragment() {
+    }
+
+    public static ChangePasswordFragment newInstance() {
+        return new ChangePasswordFragment();
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) { super.onCreate(savedInstanceState); }
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
 
     @Override
@@ -66,34 +70,46 @@ public class ChangePasswordFragment extends Fragment {
         json.put("repeatNewPassword", editTextRepeatPassword.getText().toString());
         json.put("user_id", SaveSharedPreference.getUserID(this.getContext()));
         if (np.equals(rnp)) {
-            try {
+            Requests.executeRequest(this, "POST", "changePassword", json);
 
-                JSONObject response = Requests.getResponse("changePassword", json, getContext());
-
-                //handle response
-                if (response != null && response.has("passwordUpdated")) {
-                    String loginResponse = response.getString("passwordUpdated");
-
-                    if (loginResponse.equals("successfullUpdation")) {
-                        Toast.makeText(getContext(), "Password Successfully Changed", Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(getContext(), ShowEventActivity.class);
-                        startActivity(intent);
-//                    return;
-                    } else {
-                        Toast.makeText(getContext(), "Wrong Old Password", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                }
-
-            } catch (Exception e) {
-
-                Log.i("Exception --- not requested", e.toString());
-            }
         } else {
             Toast.makeText(getContext(), "New Password does not match", Toast.LENGTH_LONG).show();
         }
 
     }
+
+    @Override
+    public void onResponse(JSONObject response, String urlTail) {
+        if (SocketUtility.hasSocketError(response)) {
+            Toast.makeText(getContext(), "No response from server.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        switch (urlTail) {
+            case "changePassword":
+                try {
+                    //handle response
+                    if (response != null && response.has("passwordUpdated")) {
+                        String loginResponse = response.getString("passwordUpdated");
+
+                        if (loginResponse.equals("successfullUpdation")) {
+                            Toast.makeText(getContext(), "Password Successfully Changed", Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(getContext(), ShowEventActivity.class);
+                            startActivity(intent);
+//                    return;
+                        } else {
+                            Toast.makeText(getContext(), "Wrong Old Password", Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                    }
+
+                } catch (Exception e) {
+
+                    Log.i("Exception --- not requested", e.toString());
+                }
+        }
+    }
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);

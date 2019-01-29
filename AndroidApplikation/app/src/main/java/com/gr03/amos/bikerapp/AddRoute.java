@@ -9,16 +9,16 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-
-import java.util.concurrent.Callable;
-import java.util.concurrent.FutureTask;
+import android.widget.Toast;
 
 import com.gr03.amos.bikerapp.Models.RouteParticipation;
+import com.gr03.amos.bikerapp.NetworkLayer.Requests;
+import com.gr03.amos.bikerapp.NetworkLayer.ResponseHandler;
+import com.gr03.amos.bikerapp.NetworkLayer.SocketUtility;
 
-public class AddRoute extends AppCompatActivity {
+public class AddRoute extends AppCompatActivity implements ResponseHandler {
     private static Context context;
 
     EditText routeName;
@@ -60,8 +60,7 @@ public class AddRoute extends AppCompatActivity {
         if (checkEnteredData()) {
             return;
         }
-        Requests.getResponse("createRoute", generateRequestJSON(), "POST", context);
-
+        Requests.executeRequest(this, "POST", "createRoute", generateRequestJSON());
         finish();
     }
 
@@ -143,6 +142,14 @@ public class AddRoute extends AppCompatActivity {
             e.printStackTrace();
         }
         return requestJSON;
+    }
+
+    @Override
+    public void onResponse(JSONObject response, String urlTail) {
+        if(SocketUtility.hasSocketError(response)){
+            Toast.makeText(context, "No response from server.", Toast.LENGTH_LONG).show();
+            return;
+        }
     }
 }
 

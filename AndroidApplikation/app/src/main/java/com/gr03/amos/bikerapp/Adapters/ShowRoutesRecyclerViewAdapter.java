@@ -20,19 +20,13 @@ import android.widget.TextView;
 import com.gr03.amos.bikerapp.EditRouteActivity;
 import com.gr03.amos.bikerapp.Models.Route;
 import com.gr03.amos.bikerapp.R;
-import com.gr03.amos.bikerapp.Requests;
+import com.gr03.amos.bikerapp.NetworkLayer.Requests;
 import com.gr03.amos.bikerapp.SaveSharedPreference;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.gr03.amos.bikerapp.Models.Route;
-
-import java.util.concurrent.Callable;
 import com.gr03.amos.bikerapp.Models.RouteParticipation;
-
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.FutureTask;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -149,7 +143,7 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
                 json.put("route_id", mData.get(position).getId_route());
                 json.put("user_id", SaveSharedPreference.getUserID(context));
 
-                Requests.getResponse("addUserRoute", json, context);
+                Requests.getResponse("addUserRoute", json, "POST", context);
 
                 Realm.init(context);
                 Realm realm = Realm.getDefaultInstance();
@@ -212,7 +206,7 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
 
         JSONObject json = new JSONObject();
         json.put("id_route", routeId);
-        Requests.getResponse("deleteRoute", json, context);
+        Requests.getResponse("deleteRoute", json, "POST", context);
     }
 
     //TO DO: IMPLEMENT EDIT ROUTE FEATURE

@@ -14,8 +14,9 @@ import android.widget.Toast;
 import com.gr03.amos.bikerapp.ChatActivity;
 import com.gr03.amos.bikerapp.Models.Friend;
 import com.gr03.amos.bikerapp.Models.Message;
+import com.gr03.amos.bikerapp.NetworkLayer.ResponseHandler;
 import com.gr03.amos.bikerapp.R;
-import com.gr03.amos.bikerapp.Requests;
+import com.gr03.amos.bikerapp.NetworkLayer.Requests;
 import com.gr03.amos.bikerapp.SaveSharedPreference;
 
 import org.json.JSONArray;
@@ -29,7 +30,7 @@ import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
-public class ShowConversationWithFriendsListRecyclerViewAdapter extends RealmRecyclerViewAdapter<Friend, ShowConversationWithFriendsListRecyclerViewAdapter.ViewHolder> {
+public class ShowConversationWithFriendsListRecyclerViewAdapter extends RealmRecyclerViewAdapter<Friend, ShowConversationWithFriendsListRecyclerViewAdapter.ViewHolder> implements ResponseHandler {
     private RealmResults<Friend> mData;
     private LayoutInflater mInflater;
     private Context context;
@@ -92,6 +93,7 @@ public class ShowConversationWithFriendsListRecyclerViewAdapter extends RealmRec
             }
             request.put("id_users", jsonUserIds);
 
+
             JSONObject response = Requests.getResponse("loadChat", request, "PUT", context);
 
             if (response.has("id_chat")) {
@@ -105,6 +107,11 @@ public class ShowConversationWithFriendsListRecyclerViewAdapter extends RealmRec
         }
 
         return -1;
+
+    }
+
+    @Override
+    public void onResponse(JSONObject response, String urlTail) {
 
     }
 

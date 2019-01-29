@@ -15,7 +15,9 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.gr03.amos.bikerapp.Models.Event;
-import com.gr03.amos.bikerapp.NetworkLayer.HttpPostTask;
+import com.gr03.amos.bikerapp.NetworkLayer.Requests;
+import com.gr03.amos.bikerapp.NetworkLayer.ResponseHandler;
+import com.gr03.amos.bikerapp.NetworkLayer.SocketUtility;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,12 +25,10 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
-import java.util.concurrent.Callable;
-import java.util.concurrent.FutureTask;
 
 import io.realm.Realm;
 
-public class EditEventActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public class EditEventActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, ResponseHandler {
     Intent intent;
     Long eventId;
     EditText event_name, event_description, event_date, event_time;
@@ -170,25 +170,8 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
         Log.i("EditEventActivity", event_name + " " + eventId);
 
         try {
-            JSONObject response = Requests.getResponse("updateEvent", json, "POST", getApplicationContext());
+            Requests.executeRequest(this, "POST", "updateEvent", json);
 
-            if (response == null) {
-                Intent intent = new Intent(this, ShowEventActivity.class);
-                startActivity(intent);
-                return;
-            }
-            Intent intent = new Intent(this, ShowEventActivity.class);
-            startActivity(intent);
-
-            if (response.has("eventUpdate")) {
-                String statusEv = (String) response.get("eventUpdate");
-                if (statusEv.equals("successfullUpdation")) {
-                    Toast.makeText(getApplicationContext(), "Successfully updated Event.", Toast.LENGTH_LONG).show();
-                }
-                if (statusEv.equals("InvalidRequestBody")) {
-                    Toast.makeText(getApplicationContext(), "Invalid Request Body", Toast.LENGTH_LONG).show();
-                }
-            }
         } catch (Exception e) {
             Log.i("Exception --- not requested", e.toString());
         }
@@ -199,4 +182,39 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
     }
 
 
+    @Override
+    public void onResponse(JSONObject response, String urlTail) {
+        if(SocketUtility.hasSocketError(response)){
+            Toast.makeText(this, "No response from server.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        switch(urlTail){
+            case "eventUpdate":
+                if (response == null) {
+                    Intent intent = new Intent(this, ShowEventActivity.class);
+                    startActivity(intent);
+                    return;
+                }
+                Intent intent = new Intent(this, ShowEventActivity.class);
+                startActivity(intent);
+
+                if (response.has("eventUpdate")) {
+                    try {
+                        String statusEv = (String) response.get("eventUpdate");
+                        if (statusEv.equals("successfullUpdation")) {
+                            Toast.makeText(getApplicationContext(), "Successfully updated Event.", Toast.LENGTH_LONG).show();
+                        }
+                        if (statusEv.equals("InvalidRequestBody")) {
+                            Toast.makeText(getApplicationContext(), "Invalid Request Body", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+                break;
+
+        }
+    }
 }

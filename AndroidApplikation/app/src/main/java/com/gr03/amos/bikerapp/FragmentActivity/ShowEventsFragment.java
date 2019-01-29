@@ -1,29 +1,22 @@
 package com.gr03.amos.bikerapp.FragmentActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.app.AlertDialog;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.gr03.amos.bikerapp.AddRoute;
 import com.gr03.amos.bikerapp.Models.Address;
 import com.gr03.amos.bikerapp.Models.Event;
 import com.gr03.amos.bikerapp.R;
-import com.gr03.amos.bikerapp.Requests;
+import com.gr03.amos.bikerapp.NetworkLayer.Requests;
 import com.gr03.amos.bikerapp.Adapters.ShowEventRecylerViewAdapter;
 
 import java.util.ArrayList;
@@ -31,7 +24,6 @@ import java.util.List;
 import java.util.Objects;
 
 import com.gr03.amos.bikerapp.SaveSharedPreference;
-import com.gr03.amos.bikerapp.ShowEventActivity;
 
 import io.realm.Realm;
 import io.realm.RealmResults;

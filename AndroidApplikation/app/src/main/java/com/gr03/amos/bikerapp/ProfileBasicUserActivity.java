@@ -10,19 +10,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.gr03.amos.bikerapp.Models.Friend;
+import com.gr03.amos.bikerapp.NetworkLayer.Requests;
+import com.gr03.amos.bikerapp.NetworkLayer.ResponseHandler;
+import com.gr03.amos.bikerapp.NetworkLayer.SocketUtility;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.concurrent.Callable;
-import java.util.concurrent.FutureTask;
-
-import io.realm.Realm;
-
-public class ProfileBasicUserActivity extends AppCompatActivity {
+public class ProfileBasicUserActivity extends AppCompatActivity implements ResponseHandler {
 
     Intent intent;
     Long userId;
@@ -95,28 +92,8 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         user_country.setText(country);
     }
 
-    private JSONObject getAdditionalUserInfo() {
-        JSONObject userInfo;
-        try {
-            userInfo = Requests.getResponse("getUserInfo/" + userId, null, "GET", getApplicationContext());
-            userInfo = userInfo.getJSONObject("UserInfo");
-            user_fname.setText(userInfo.getString("first_name"));
-            user_lname.setText(userInfo.getString("last_name"));
-            user_dob.setText(userInfo.getString("dob"));
-            user_gender.setText(userInfo.getString("gender"));
-
-            JSONObject address = userInfo.getJSONObject("address");
-            user_street.setText(address.getString("street"));
-            user_hnumber.setText(address.getString("housenumber"));
-            user_pcode.setText(address.getString("postcode"));
-            user_city.setText(address.getString("city"));
-            user_state.setText(address.getString("state"));
-            user_country.setText(address.getString("country"));
-        } catch (Exception e) {
-            Log.i("Exception --- not requested", e.toString());
-            return null;
-        }
-        return userInfo;
+    private void getAdditionalUserInfo() {
+        Requests.executeRequest(this, "GET", "getUserInfo/" + userId);
     }
 
     private void onCreateAfterProfileId() {
@@ -154,7 +131,7 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         json.put("state", user_state.getText().toString());
         json.put("country", user_country.getText().toString());
 
-        Requests.getResponse("addUserBasic", json, getApplicationContext());
+        Requests.executeRequest(this, "POST", "addUserBasic", json);
     }
 
 
@@ -224,7 +201,7 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         json.put("city", user_city.getText().toString());
         json.put("state", user_state.getText().toString());
         json.put("country", user_country.getText().toString());
-        Requests.getResponse("editUserInfo", json, getApplicationContext());
+        Requests.executeRequest(this, "POST", "editUserInfo");
 
         makeFieldsUneditable(view);
         edit_profile_page.setVisibility(View.VISIBLE);
@@ -295,5 +272,36 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         user_country.setBackgroundResource(0);
         user_state.setBackgroundResource(0);
         user_country.setBackgroundResource(0);
+    }
+
+    @Override
+    public void onResponse(JSONObject response, String urlTail) {
+        if(SocketUtility.hasSocketError(response)){
+            Toast.makeText(getApplicationContext(), "No response from server.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+
+        //check for urlTail
+        if(urlTail.equals("getUserInfo/" + userId)){
+            try {
+                response = response.getJSONObject("UserInfo");
+                user_fname.setText(response.getString("first_name"));
+                user_lname.setText(response.getString("last_name"));
+                user_dob.setText(response.getString("dob"));
+                user_gender.setText(response.getString("gender"));
+
+                JSONObject address = response.getJSONObject("address");
+                user_street.setText(address.getString("street"));
+                user_hnumber.setText(address.getString("housenumber"));
+                user_pcode.setText(address.getString("postcode"));
+                user_city.setText(address.getString("city"));
+                user_state.setText(address.getString("state"));
+                user_country.setText(address.getString("country"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
     }
 }

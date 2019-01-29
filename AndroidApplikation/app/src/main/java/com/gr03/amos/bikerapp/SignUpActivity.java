@@ -1,38 +1,32 @@
 package com.gr03.amos.bikerapp;
 
-import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.RadioButton;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.gr03.amos.bikerapp.Requests;
+import com.gr03.amos.bikerapp.NetworkLayer.Requests;
+import com.gr03.amos.bikerapp.NetworkLayer.ResponseHandler;
+import com.gr03.amos.bikerapp.NetworkLayer.SocketUtility;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.FutureTask;
-
-import static android.view.View.VISIBLE;
-
-public class SignUpActivity extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity implements ResponseHandler {
 
     //EditText businessName;
+    EditText email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
         //businessName = findViewById(R.id.business_name);
+        email = findViewById(R.id.email);
     }
 
     public void onRadioButtonClicked(View view) {
@@ -68,7 +62,6 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
 
-        EditText email = findViewById(R.id.email);
         String mail = email.getText().toString();
 
         //check if email address is valid
@@ -89,9 +82,25 @@ public class SignUpActivity extends AppCompatActivity {
         //if (businessUser)
           //  json.put("business_name", businessName.getText().toString());
 
-        try {
-            JSONObject response = Requests.getResponse("userRegistration", json, "POST", getApplicationContext());
+        Requests.executeRequest(this, "POST", "userRegistration", json);
+    }
 
+    public static boolean isValidEmail(CharSequence target) {
+        if (TextUtils.isEmpty(target)) {
+            return false;
+        } else {
+            return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+        }
+    }
+
+    @Override
+    public void onResponse(JSONObject response, String urlTail) {
+        if (SocketUtility.hasSocketError(response)) {
+            Toast.makeText(this, "No response from server.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        try {
             //handle response
             if(response.has("userRegistration")){
                 String statusReg = (String) response.get("userRegistration");
@@ -116,13 +125,6 @@ public class SignUpActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.i("Exception --- not requested", e.toString());
         }
-    }
 
-    public static boolean isValidEmail(CharSequence target) {
-        if (TextUtils.isEmpty(target)) {
-            return false;
-        } else {
-            return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
-        }
     }
 }

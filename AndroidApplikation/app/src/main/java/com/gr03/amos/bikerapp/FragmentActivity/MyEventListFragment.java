@@ -8,24 +8,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.app.AlertDialog;
-import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.gr03.amos.bikerapp.Adapters.ShowMyEventRecyclerViewAdapter;
-import com.gr03.amos.bikerapp.Models.Address;
 import com.gr03.amos.bikerapp.Models.Event;
 import com.gr03.amos.bikerapp.Models.EventParticipation;
 import com.gr03.amos.bikerapp.R;
-import com.gr03.amos.bikerapp.Requests;
-import com.gr03.amos.bikerapp.Adapters.ShowEventRecylerViewAdapter;
-import com.gr03.amos.bikerapp.SaveSharedPreference;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 import io.realm.Realm;
 import io.realm.RealmList;

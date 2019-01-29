@@ -12,17 +12,16 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.gr03.amos.bikerapp.Models.Route;
-import com.gr03.amos.bikerapp.NetworkLayer.HttpPostTask;
+import com.gr03.amos.bikerapp.NetworkLayer.Requests;
+import com.gr03.amos.bikerapp.NetworkLayer.ResponseHandler;
+import com.gr03.amos.bikerapp.NetworkLayer.SocketUtility;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.FutureTask;
-
 import io.realm.Realm;
 
-public class EditRouteActivity extends AppCompatActivity {
+public class EditRouteActivity extends AppCompatActivity implements ResponseHandler {
     Intent intent;
     Long routeId;
     Button updateRoute;
@@ -41,15 +40,15 @@ public class EditRouteActivity extends AppCompatActivity {
 
         final Route route = realm.where(Route.class).equalTo("id_route", routeId).findFirst();
 
-        route_name = (EditText)findViewById(R.id.route_name);
-        route_description = (EditText)findViewById(R.id.route_description);
+        route_name = (EditText) findViewById(R.id.route_name);
+        route_description = (EditText) findViewById(R.id.route_description);
 
         route_name.setText(route.getName());
         route_description.setText(route.getDescription());
 
     }
 
-    boolean isTextEmpty(EditText text){
+    boolean isTextEmpty(EditText text) {
         CharSequence string = text.getText().toString();
         return TextUtils.isEmpty(string);
     }
@@ -75,35 +74,47 @@ public class EditRouteActivity extends AppCompatActivity {
 
         Log.i("EditRouteActivity", route_name + " " + routeId);
 
-        try {
-            JSONObject response = Requests.getResponse("updateRoute", json, "POST", getApplicationContext());
-            if(response == null){
-                Intent intent = new Intent(this, ShowEventActivity.class);
-                startActivity(intent);
-                return;
-            }
-
-            Intent intent = new Intent(this, ShowEventActivity.class);
-            startActivity(intent);
-
-            if (response.has("routeUpdate")) {
-                String statusRoute = (String) response.get("routeUpdate");
-                if (statusRoute.equals("successfullUpdation")) {
-                    Toast.makeText(getApplicationContext(), "Successfully updated Route.", Toast.LENGTH_LONG).show();
-                }
-                if (statusRoute.equals("InvalidRequestBody")){
-                    Toast.makeText(getApplicationContext(),"Invalid Request Body",Toast.LENGTH_LONG).show();
-                }
-            }
-        } catch (Exception e) {
-            Log.i("Exception --- not requested", e.toString());
-        }
+        Requests.executeRequest(this, "POST", "updateRoute", json);
         super.onBackPressed();
     }
-    public void cancel(View view){
+
+    public void cancel(View view) {
         finish();
     }
 
 
+    @Override
+    public void onResponse(JSONObject response, String urlTail) {
+        if (SocketUtility.hasSocketError(response)) {
+            Toast.makeText(this, "No response from server.", Toast.LENGTH_LONG).show();
+            return;
+        }
 
+        switch (urlTail) {
+            case "routeUpdate":
+                if (response == null) {
+                    Intent intent = new Intent(this, ShowEventActivity.class);
+                    startActivity(intent);
+                    return;
+                }
+
+                Intent intent = new Intent(this, ShowEventActivity.class);
+                startActivity(intent);
+
+                if (response.has("routeUpdate")) {
+                    try {
+                        String statusRoute = (String) response.get("routeUpdate");
+                        if (statusRoute.equals("successfullUpdation")) {
+                            Toast.makeText(getApplicationContext(), "Successfully updated Route.", Toast.LENGTH_LONG).show();
+                        }
+                        if (statusRoute.equals("InvalidRequestBody")) {
+                            Toast.makeText(getApplicationContext(), "Invalid Request Body", Toast.LENGTH_LONG).show();
+                        }
+                    }catch(JSONException ex){
+                        Log.i("Exception --- not requested", ex.toString());
+                    }
+                }
+
+        }
+    }
 }

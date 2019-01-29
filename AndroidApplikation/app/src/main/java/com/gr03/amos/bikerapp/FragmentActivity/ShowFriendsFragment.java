@@ -1,6 +1,5 @@
 package com.gr03.amos.bikerapp.FragmentActivity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,24 +17,24 @@ import android.widget.Toast;
 import com.gr03.amos.bikerapp.Adapters.UserAdapter;
 import com.gr03.amos.bikerapp.Models.BasicUser;
 import com.gr03.amos.bikerapp.Models.Friend;
+import com.gr03.amos.bikerapp.NetworkLayer.ResponseHandler;
 import com.gr03.amos.bikerapp.R;
 import com.gr03.amos.bikerapp.Adapters.ShowFriendsListRecyclerViewAdapter;
-import com.gr03.amos.bikerapp.Requests;
+import com.gr03.amos.bikerapp.NetworkLayer.Requests;
 import com.gr03.amos.bikerapp.SaveSharedPreference;
+import com.gr03.amos.bikerapp.NetworkLayer.SocketUtility;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.concurrent.Callable;
-import java.util.concurrent.FutureTask;
 
 import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-public class ShowFriendsFragment extends Fragment implements SearchView.OnQueryTextListener {
+public class ShowFriendsFragment extends Fragment implements SearchView.OnQueryTextListener, ResponseHandler {
     Context context;
 
     RecyclerView showFriendsRecyclerView;
@@ -117,31 +116,45 @@ public class ShowFriendsFragment extends Fragment implements SearchView.OnQueryT
             request.put("id", SaveSharedPreference.getUserID(context));
             request.put("input", query);
 
-            response = Requests.getResponse(url, request, "POST", context);
-
-            /* show all users clickable */
-
-            if (response != null && response.has("foundUser")) {
-                String statusEv = (String) response.get("foundUser");
-                if (statusEv.equals("unsuccessful")) {
-                    listUsers(new JSONArray());
-                    Toast.makeText(context, "No such User.", Toast.LENGTH_LONG).show();
-                    return true;
-                }
-
-                Log.i("allUser:", response.toString());
-                listUsers(response.getJSONArray("user"));
-            }
+            Requests.executeRequest(this, "POST", url, request);
 
         } catch (Exception e) {
             Log.i("Exception --- not requested", e.toString());
         }
 
+        //TODO remove boolean
         return true;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
         return false;
+    }
+
+    @Override
+    public void onResponse(JSONObject response, String urlTail) {
+        if (SocketUtility.hasSocketError(response)) {
+            Toast.makeText(getContext(), "No response from server.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        /* show all users clickable */
+        if(urlTail.equals("searchUser")) {
+            try {
+                if (response != null && response.has("foundUser")) {
+                    String statusEv = (String) response.get("foundUser");
+                    if (statusEv.equals("unsuccessful")) {
+                        listUsers(new JSONArray());
+                        Toast.makeText(context, "No such User.", Toast.LENGTH_LONG).show();
+                    }
+
+                    Log.i("allUser:", response.toString());
+                    listUsers(response.getJSONArray("user"));
+                }
+
+            } catch (Exception e) {
+                Log.i("Exception --- not requested", e.toString());
+            }
+        }
     }
 }

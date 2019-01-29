@@ -1,8 +1,6 @@
 package com.gr03.amos.bikerapp.FragmentActivity;
 
 import android.app.Activity;
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
@@ -16,18 +14,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.gr03.amos.bikerapp.ProfileBasicUserActivity;
+import com.gr03.amos.bikerapp.NetworkLayer.ResponseHandler;
 import com.gr03.amos.bikerapp.R;
-import com.gr03.amos.bikerapp.Requests;
+import com.gr03.amos.bikerapp.NetworkLayer.Requests;
 import com.gr03.amos.bikerapp.SaveSharedPreference;
+import com.gr03.amos.bikerapp.NetworkLayer.SocketUtility;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.FutureTask;
-
-public class BusinessProfileFragment extends Fragment {
+public class BusinessProfileFragment extends Fragment implements ResponseHandler {
 
     Long userId;
 
@@ -70,7 +66,7 @@ public class BusinessProfileFragment extends Fragment {
 
 
         Bundle bundle = this.getArguments();
-        if(bundle != null){
+        if (bundle != null) {
             userId = bundle.getLong("id", 0);
         }
 
@@ -91,7 +87,7 @@ public class BusinessProfileFragment extends Fragment {
 
         initKeyListener();
 
-        if(userId == SaveSharedPreference.getUserID(getContext())){
+        if (userId == SaveSharedPreference.getUserID(getContext())) {
             editProfile.setVisibility(View.VISIBLE);
 
             Activity currActivity = getActivity();
@@ -106,29 +102,8 @@ public class BusinessProfileFragment extends Fragment {
         return view;
     }
 
-    private void loadProfile(){
-
-        try {
-            JSONObject response = Requests.getResponse("getBusinessProfile/" + userId, null, "GET", getContext());
-
-            if(response.get("business_profile").equals("no_profile")){
-                //no profile exists
-                Toast.makeText(getContext(), "This profile does not exist.", Toast.LENGTH_LONG).show();
-            }else{
-                JSONObject responseProfile = response.getJSONObject("business_profile");
-                editBusinessName.setText(responseProfile.getString("business_name"));
-                editBusinessDescr.setText(responseProfile.getString("business_descr"));
-                JSONObject address = responseProfile.getJSONObject("business_address");
-                editBusinessStreet.setText(address.optString("street"));
-                editBusinessHnumber.setText(address.optString("housenumber"));
-                editBusinessPostcode.setText(address.optString("postcode"));
-                editBusinessCity.setText(address.optString("city"));
-                editBusinessCountry.setText(address.optString("country"));
-                editBusinessState.setText(address.optString("state"));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+    private void loadProfile() {
+        Requests.executeRequest(this, "GET", "getBusinessProfile/" + userId);
 
     }
 
@@ -140,7 +115,7 @@ public class BusinessProfileFragment extends Fragment {
 
     public void saveEditedInfo() {
         boolean validated = validation();
-        if(!validated){
+        if (!validated) {
             return;
         }
 
@@ -158,11 +133,11 @@ public class BusinessProfileFragment extends Fragment {
             jsonAddress.put("state", editBusinessState.getText().toString());
             jsonAddress.put("country", editBusinessCountry.getText().toString());
             json.put("business_address", jsonAddress);
-        }catch(JSONException ex){
+        } catch (JSONException ex) {
             ex.printStackTrace();
         }
 
-        JSONObject response = Requests.getResponse("editBusinessProfile", json, "POST", getContext());
+        Requests.executeRequest(this, "POST", "editBusinessProfile", json);
 
         makeFieldsUneditable();
         editProfile.setVisibility(View.VISIBLE);
@@ -220,7 +195,7 @@ public class BusinessProfileFragment extends Fragment {
     }
 
 
-    private void makeFieldsEditable(){
+    private void makeFieldsEditable() {
 
         editBusinessCountry.setKeyListener(listenerCountry);
         editBusinessCity.setKeyListener(listenerCity);
@@ -275,7 +250,7 @@ public class BusinessProfileFragment extends Fragment {
         editBusinessState.setHint("State");
     }
 
-    private void makeFieldsUneditable(){
+    private void makeFieldsUneditable() {
         //makes all fields non-editable again
 
         editBusinessCountry.setKeyListener(null);
@@ -322,7 +297,7 @@ public class BusinessProfileFragment extends Fragment {
         editBusinessState.setBackgroundResource(0);
     }
 
-    private void initKeyListener(){
+    private void initKeyListener() {
         listenerCity = editBusinessCity.getKeyListener();
         listenerCountry = editBusinessCountry.getKeyListener();
         listenerDescr = editBusinessDescr.getKeyListener();
@@ -333,4 +308,35 @@ public class BusinessProfileFragment extends Fragment {
         listenerStreet = editBusinessStreet.getKeyListener();
     }
 
+    @Override
+    public void onResponse(JSONObject response, String urlTail) {
+        if (SocketUtility.hasSocketError(response)) {
+            Toast.makeText(getContext(), "No response from server.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if (urlTail.equals("getBusinessProfile/" + userId)) {
+            try {
+
+                if (response.get("business_profile").equals("no_profile")) {
+                    //no profile exists
+                    Toast.makeText(getContext(), "This profile does not exist.", Toast.LENGTH_LONG).show();
+                } else {
+                    JSONObject responseProfile = response.getJSONObject("business_profile");
+                    editBusinessName.setText(responseProfile.getString("business_name"));
+                    editBusinessDescr.setText(responseProfile.getString("business_descr"));
+                    JSONObject address = responseProfile.getJSONObject("business_address");
+                    editBusinessStreet.setText(address.optString("street"));
+                    editBusinessHnumber.setText(address.optString("housenumber"));
+                    editBusinessPostcode.setText(address.optString("postcode"));
+                    editBusinessCity.setText(address.optString("city"));
+                    editBusinessCountry.setText(address.optString("country"));
+                    editBusinessState.setText(address.optString("state"));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
 }
