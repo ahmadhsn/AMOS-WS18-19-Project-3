@@ -284,24 +284,34 @@ public class ProfileBasicUserActivity extends AppCompatActivity implements Respo
 
         //check for urlTail
         if(urlTail.equals("getUserInfo/" + userId)){
-            try {
-                response = response.getJSONObject("UserInfo");
-                user_fname.setText(response.getString("first_name"));
-                user_lname.setText(response.getString("last_name"));
-                user_dob.setText(response.getString("dob"));
-                user_gender.setText(response.getString("gender"));
+            onResponseUserInfo(response);
+        }
+    }
 
-                JSONObject address = response.getJSONObject("address");
-                user_street.setText(address.getString("street"));
-                user_hnumber.setText(address.getString("housenumber"));
-                user_pcode.setText(address.getString("postcode"));
-                user_city.setText(address.getString("city"));
-                user_state.setText(address.getString("state"));
-                user_country.setText(address.getString("country"));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+    /**
+     * Response handling for service "getUserInfo".
+     *
+     * Updates edit text views for profile information.
+     *
+     * @param response JSONObject of response
+     */
+    private void onResponseUserInfo(JSONObject response){
+        try {
+            response = response.getJSONObject("UserInfo");
+            user_fname.setText(response.getString("first_name"));
+            user_lname.setText(response.getString("last_name"));
+            user_dob.setText(response.getString("dob"));
+            user_gender.setText(response.getString("gender"));
 
+            JSONObject address = response.getJSONObject("address");
+            user_street.setText(address.getString("street"));
+            user_hnumber.setText(address.getString("housenumber"));
+            user_pcode.setText(address.getString("postcode"));
+            user_city.setText(address.getString("city"));
+            user_state.setText(address.getString("state"));
+            user_country.setText(address.getString("country"));
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 }

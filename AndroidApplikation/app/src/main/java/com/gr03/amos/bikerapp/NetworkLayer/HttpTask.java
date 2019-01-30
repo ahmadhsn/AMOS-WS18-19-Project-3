@@ -15,10 +15,11 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ * Async Task to execute Http Requests based on OkHttp Client.
+ */
 public class HttpTask extends AsyncTask<String, Void, JSONObject> {
 
-    private static String HOST = "10.0.2.2";
-    private static String PORT = "8080";
     static MediaType jsonMedia = MediaType.parse("application/json; charset=utf-8");
 
     private OkHttpClient client;
@@ -28,6 +29,13 @@ public class HttpTask extends AsyncTask<String, Void, JSONObject> {
     private JSONObject response;
     private ResponseHandler handler;
 
+    /**
+     * Constructor for HttpTask.
+     *
+     * @param handler specifies Response handling
+     * @param method HTTP Method ("GET", "POST", "PUT")
+     * @param urlTail urlTail (servicename) of request
+     */
     public HttpTask(ResponseHandler handler, String method, String urlTail) {
         super();
         client = new OkHttpClient.Builder()
@@ -40,6 +48,12 @@ public class HttpTask extends AsyncTask<String, Void, JSONObject> {
     }
 
 
+    /**
+     * Sends in background HTTP Request to server.
+     *
+     * @param params if response contains JSON Body params[0] is the JSON Object
+     * @return JSON Object of response
+     */
     @Override
     protected JSONObject doInBackground(String... params) {
         Request request = null;
@@ -77,6 +91,12 @@ public class HttpTask extends AsyncTask<String, Void, JSONObject> {
         return response;
     }
 
+    /**
+     * Handle response after executing. If the Client could not connect to the server, the response contains a specified JSON Object.
+     * Forwards response handling to ResponseHandler (specified in constructor).
+     *
+     * @param obj JSONObject of Response
+     */
     @Override
     protected void onPostExecute(JSONObject obj) {
         if (connectionTimeout) {

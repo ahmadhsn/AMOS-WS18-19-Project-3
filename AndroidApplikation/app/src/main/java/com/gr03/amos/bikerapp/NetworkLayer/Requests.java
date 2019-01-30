@@ -28,27 +28,54 @@ public class Requests {
 
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-    public static OkHttpClient client = new OkHttpClient();
-
+    /**
+     * Execute a request without JSON body as an async task in the background. Response handling is specified in the given ResponseHandler.
+     *
+     * @param handler specifies ResponseHandling
+     * @param method HTTP method ("GET", "POST", "PUT")
+     * @param urlTail urlTail (servicename) of Request
+     */
     public static void executeRequest(ResponseHandler handler, String method, String urlTail){
         new HttpTask(handler,method, urlTail).execute();
     }
 
-
+    /**
+     * Execute a request with JSON body as an async task in the background. Response handling is specified in the given ResponseHandler.
+     *
+     * @param handler specifies ResponseHandling
+     * @param method HTTP method ("GET", "POST", "PUT")
+     * @param urlTail urlTail (servicename) of Request
+     * @param json json Object for request
+     */
     public static void executeRequest(ResponseHandler handler, String method, String urlTail, JSONObject json){
         new HttpTask(handler,method, urlTail).execute(json.toString());
     }
 
 
+    /**
+     * Temporary method to handle old requests as a synch task. Response handling is done on return of the method.
+     *
+     * @param urlTail urlTail (servicename) of Request
+     * @param json json Object for request
+     * @param method HTTP method ("GET", "POST", "PUT")
+     * @return JSON Object of response
+     */
     public static JSONObject getResponse(String urlTail, JSONObject json, String method) {
-        return getResponse(urlTail, json, method, null, true);
+        return getResponse(urlTail, json, method, null);
     }
 
+
+    /**
+     * Temporary method to handle old requests as a synch task with timeoutHandling. Response handling is done on return of the method.
+     * On Timeout a toast is displayed if context is given.
+     *
+     * @param urlTail urlTail (servicename) of Request
+     * @param json json Object for request
+     * @param method HTTP method ("GET", "POST", "PUT")
+     * @param context
+     * @return JSON Object of response
+     */
     public static JSONObject getResponse(String urlTail, JSONObject json, String method, Context context) {
-        return getResponse(urlTail, json, method, context, true);
-    }
-
-    public static JSONObject getResponse(String urlTail, JSONObject json, String method, Context context, boolean handleTimeout) {
         JSONObject response = null;
         try {
             HttpTask currTask = new HttpTask(new DefaultResponseHandler(), method, urlTail);
@@ -70,6 +97,16 @@ public class Requests {
         return response;
     }
 
+    /**
+     * Executes a GET Request as an asynch background. To handle the response the RealmResponseHandler is used.
+     * After receiving the response the realmResponseHandler updates the Realm Database.
+     *
+     *
+     * @param urlTail urlTail (servicename) of request
+     * @param jsonName string of json Object in response
+     * @param type Class of RealmModel
+     * @param context Context of application to init realm
+     */
     private static void executeRealmResponse(String urlTail, String jsonName, Class type, Context context) {
         RealmResponseHandler handler = new RealmResponseHandler(type, jsonName, context);
 
