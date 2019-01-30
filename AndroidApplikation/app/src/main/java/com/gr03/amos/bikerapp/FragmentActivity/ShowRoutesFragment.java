@@ -65,10 +65,10 @@ public class ShowRoutesFragment extends Fragment {
         friendRoutesImage = view.findViewById(R.id.friend_route_filter);
         Realm.init(container.getContext());
         Realm realm = Realm.getDefaultInstance();
-        Requests.getJsonResponseForUser("getUserById/" +
-                SaveSharedPreference.getUserID(container.getContext()), container.getContext());
+        int userID = SaveSharedPreference.getUserID(container.getContext());
+        Requests.getJsonResponseForUser("getUserById/" + userID, container.getContext());
         Requests.getJsonResponseForRoutes("getRoutes", container.getContext());
-        User user = realm.where(User.class).equalTo("id_user", SaveSharedPreference.getUserID(container.getContext())).findFirst();
+        User user = realm.where(User.class).equalTo("id_user", userID).findFirst();
         RealmResults<Route> routes = realm.where(Route.class).equalTo("start.address.city", user.getAddress().getCity()).findAll();
         populateRecyclerView(routes);
 

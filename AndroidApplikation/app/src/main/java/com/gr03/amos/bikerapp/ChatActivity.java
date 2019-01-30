@@ -153,14 +153,16 @@ public class ChatActivity extends AppCompatActivity {
         Realm realm = Realm.getDefaultInstance();
         RealmResults<Message> messages = realm.where(Message.class).equalTo("id_chat", chatId).findAll();
 
-        //set last messages timestamp as last_messages_time from friend in model
-        String lastMessagesTime = messages.last().getTime_created();
-        for (Integer friendsID : this.userIds) {
-            if (!friendsID.equals(SaveSharedPreference.getUserID(this))) {
-                Friend friend = realm.where(Friend.class).equalTo("id", friendsID).findFirst();
-                realm.beginTransaction();
-                friend.setLast_message_time(lastMessagesTime);
-                realm.commitTransaction();
+        //set last messages timestamp as last_messages_time from friend in model if any messages
+        if(!messages.isEmpty()) {
+            String lastMessagesTime = messages.last().getTime_created();
+            for (Integer friendsID : this.userIds) {
+                if (!friendsID.equals(SaveSharedPreference.getUserID(this))) {
+                    Friend friend = realm.where(Friend.class).equalTo("id", friendsID).findFirst();
+                    realm.beginTransaction();
+                    friend.setLast_message_time(lastMessagesTime);
+                    realm.commitTransaction();
+                }
             }
         }
 
