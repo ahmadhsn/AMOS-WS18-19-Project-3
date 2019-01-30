@@ -8,11 +8,13 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import com.gr03.amos.bikerapp.SaveSharedPreference;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
+import java.io.Console;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 
@@ -116,12 +118,12 @@ public class AddRoute extends AppCompatActivity {
         JSONObject startAddress = new JSONObject();
         JSONObject route = new JSONObject();
         JSONObject endAddress = new JSONObject();
+        System.out.print(route);
         JSONObject requestJSON = new JSONObject();
         try {
-            route.put("user_id", "user_id");
             route.put("name", routeName.getText().toString());
             route.put("description", routeDescription.getText().toString());
-
+            route.put("id_user", SaveSharedPreference.getUserID(this));
             startAddress.put("street", startStreet.getText().toString());
             startAddress.put("housenumber", startHouseNr.getText().toString());
             startAddress.put("country", startCountry.getText().toString());
@@ -139,6 +141,7 @@ public class AddRoute extends AppCompatActivity {
             requestJSON.put("end_address", endAddress);
             requestJSON.put("start_address", startAddress);
             requestJSON.put("route", route);
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

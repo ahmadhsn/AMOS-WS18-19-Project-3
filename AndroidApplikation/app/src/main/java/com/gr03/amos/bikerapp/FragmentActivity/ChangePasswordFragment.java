@@ -57,9 +57,43 @@ public class ChangePasswordFragment extends Fragment {
         return view;
     }
 
+    boolean isTextEmpty(EditText text) {
+        CharSequence string = text.getText().toString();
+        return TextUtils.isEmpty(string);
+    }
+
+    boolean checkEnteredData() {
+        boolean isDataNotSet = false;
+        if (isTextEmpty(editTextOldPassword)) {
+            editTextOldPassword.setError("Please Enter your old password");
+            isDataNotSet = true;
+        }
+        if (isTextEmpty(editTextNewPassword)) {
+            editTextNewPassword.setError("Please Enter new password");
+            isDataNotSet = true;
+        }
+        return isDataNotSet;
+    }
+
+
     public void changePassword() throws JSONException {
         String np = editTextNewPassword.getText().toString();
         String rnp = editTextRepeatPassword.getText().toString();
+
+        if (checkEnteredData()) {
+            return;
+        }
+
+
+        if (!np.equals(rnp) || np.isEmpty() || rnp.isEmpty())   {
+            Log.i("COMPAREPASSWORDS", "passwords are unequal");
+            // this.setMessageOnScreen( "The passwords you entered do not match. Please try it again.",Color.RED);
+            Toast.makeText(getActivity().getApplicationContext(), "The Repeat password you entered doesn't match with the New Password.", Toast.LENGTH_SHORT).show();
+            editTextRepeatPassword.setText("");
+            editTextRepeatPassword.setError("");
+            return;
+        }
+
         JSONObject json = new JSONObject();
         json.put("oldPassword", editTextOldPassword.getText().toString());
         json.put("newPassword", editTextNewPassword.getText().toString());
