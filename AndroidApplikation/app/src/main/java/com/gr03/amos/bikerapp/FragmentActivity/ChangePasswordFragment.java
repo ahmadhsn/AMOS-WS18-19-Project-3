@@ -15,6 +15,8 @@ import android.util.Log;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 import com.gr03.amos.bikerapp.R;
 import com.gr03.amos.bikerapp.Requests;
@@ -28,6 +30,7 @@ public class ChangePasswordFragment extends Fragment {
 
     private EditText email, editTextOldPassword, editTextNewPassword, editTextRepeatPassword, country;
     private Button changePassword;
+    private ImageView backButton;
     public ChangePasswordFragment() { }
 
     public static ChangePasswordFragment newInstance() { return new ChangePasswordFragment();
@@ -47,6 +50,7 @@ public class ChangePasswordFragment extends Fragment {
         editTextNewPassword = view.findViewById(R.id.editTextNewPassword);
         editTextRepeatPassword = view.findViewById(R.id.editTextRepeatPassword);
         changePassword = view.findViewById(R.id.changePassword);
+        backButton= view.findViewById(R.id.pass_back);
         // Inflate the layout for this fragment
         changePassword.setOnClickListener(v -> {
             try {
@@ -54,8 +58,16 @@ public class ChangePasswordFragment extends Fragment {
             } catch (JSONException ignored) {
             }
         });
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
         return view;
     }
+
 
     boolean isTextEmpty(EditText text) {
         CharSequence string = text.getText().toString();
