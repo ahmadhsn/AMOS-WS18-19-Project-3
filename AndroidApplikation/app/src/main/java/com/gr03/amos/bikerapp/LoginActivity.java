@@ -39,6 +39,15 @@ public class LoginActivity extends AppCompatActivity {
         EditText email = findViewById(R.id.email);
         EditText password = findViewById(R.id.password);
 
+        if (email.getText().toString().isEmpty()){
+            Toast.makeText(getApplicationContext(), "Please enter your E-Mail address.", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (password.getText().toString().isEmpty()){
+            Toast.makeText(getApplicationContext(), "Please enter your password.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         JSONObject json = new JSONObject();
         json.put("email", email.getText().toString());
         json.put("password", password.getText().toString());
@@ -83,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "Wrong email or password", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Wrong E-Mail address or password.", Toast.LENGTH_LONG).show();
             Log.i("Exception --- not requested", e.toString());
             return;
         }

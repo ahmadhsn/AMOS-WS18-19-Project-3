@@ -56,10 +56,24 @@ public class SignUpActivity extends AppCompatActivity {
         //EditText businessName = findViewById(R.id.business_name);
 
         String pw = password.getText().toString();
+        String cf_pw = confirm_pw.getText().toString();
 
-        if (!pw.equals(confirm_pw.getText().toString()) || pw.isEmpty() || confirm_pw.getText().toString().isEmpty())   {
+        if (pw.isEmpty()){
+            Log.i("PASSWORDVALIDATION", "password is empty");
+            Toast.makeText(getApplicationContext(), "Please enter a password.", Toast.LENGTH_LONG).show();
+            password.setError("");
+            return;
+        }
+
+        if (cf_pw.isEmpty()){
+            Log.i("PASSWORDVALIDATION", "confirm_password is empty");
+            Toast.makeText(getApplicationContext(), "Please repeat the password.", Toast.LENGTH_LONG).show();
+            confirm_pw.setError("");
+            return;
+        }
+
+        if (!pw.equals(cf_pw))  {
             Log.i("COMPAREPASSWORDS", "passwords are unequal");
-            // this.setMessageOnScreen( "The passwords you entered do not match. Please try it again.",Color.RED);
             Toast.makeText(getApplicationContext(), "The passwords you entered do not match. Please try it again.", Toast.LENGTH_LONG).show();
             password.setText("");
             password.setError("");
@@ -71,10 +85,18 @@ public class SignUpActivity extends AppCompatActivity {
         EditText email = findViewById(R.id.email);
         String mail = email.getText().toString();
 
+        if (mail.isEmpty()){
+            Log.i("VALIDATIONMAIL", "mail address is empty");
+            Toast.makeText(getApplicationContext(), "Please enter your E-mail address.", Toast.LENGTH_LONG).show();
+            email.setError("");
+            return;
+        }
+
         //check if email address is valid
         if(!isValidEmail(mail)){
             Log.i("VALIDATIONMAIL", "mail address is not valid");
-            email.setError("Invalid E-Mail address. Please check again");
+            Toast.makeText(getApplicationContext(), "Invalid E-Mail address. Please check again", Toast.LENGTH_LONG).show();
+            email.setError("");
             return;
         }
 
@@ -97,7 +119,7 @@ public class SignUpActivity extends AppCompatActivity {
                 String statusReg = (String) response.get("userRegistration");
                 if(statusReg.equals("invalidMail")){
                     Log.i("VALIDATIONMAILSERVER", "invalid email address " + email.getText().toString());
-                    Toast.makeText(getApplicationContext(), "Invalid email address. Please check again.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Invalid E-Mail address. Please check again.", Toast.LENGTH_LONG).show();
                     return;
                 }
 
@@ -110,7 +132,7 @@ public class SignUpActivity extends AppCompatActivity {
 
                 if(statusReg.equals("emailExistsAlready")){
                     Log.i("mailExists", "email address already exists");
-                    Toast.makeText(getApplicationContext(), "A user with this email address is already registered. Try to login.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "A user with this E-Mail address is already registered. Try to login.", Toast.LENGTH_LONG).show();
                 }
             }
         } catch (Exception e) {
