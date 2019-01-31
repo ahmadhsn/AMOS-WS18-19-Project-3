@@ -38,6 +38,15 @@ public class LoginActivity extends AppCompatActivity implements ResponseHandler 
         EditText email = findViewById(R.id.email);
         EditText password = findViewById(R.id.password);
 
+        if (email.getText().toString().isEmpty()) {
+            Toast.makeText(getApplicationContext(), "Please enter your E-Mail address.", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (password.getText().toString().isEmpty()) {
+            Toast.makeText(getApplicationContext(), "Please enter your password.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         JSONObject json = new JSONObject();
         json.put("email", email.getText().toString());
         json.put("password", password.getText().toString());
@@ -48,7 +57,7 @@ public class LoginActivity extends AppCompatActivity implements ResponseHandler 
 
     @Override
     public void onResponse(JSONObject response, String urlTail) {
-        if(SocketUtility.hasSocketError(response)){
+        if (SocketUtility.hasSocketError(response)) {
             Toast.makeText(this, "No response from server.", Toast.LENGTH_LONG).show();
             return;
         }
@@ -78,11 +87,11 @@ public class LoginActivity extends AppCompatActivity implements ResponseHandler 
                     Intent intent = new Intent(this, ShowEventActivity.class);
                     startActivity(intent);
                 }
-            }catch(JSONException ex){
+            } catch (JSONException ex) {
                 Log.i("Exception --- not requested", ex.toString());
                 ex.printStackTrace();
             }
-        }else{
+        } else {
             Toast.makeText(getApplicationContext(), "Wrong user credentials.", Toast.LENGTH_LONG);
         }
     }

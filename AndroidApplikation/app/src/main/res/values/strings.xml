@@ -1,10 +1,9 @@
 <resources>
     <string name="app_name">Adrenaline</string>
-    <string name="starting_info">Discover great Tracks near you and make new friends along.</string>
-    <string name="try_label">Try Without Registration</string>
+    <string name="starting_info">Discover exciting Events and great Routes near you and make new friends along.</string>
     <string name="signup_label">Sign Up</string>
     <string name="login_label">Login</string>
-    <string name="signup_email">Enter Email Address</string>
+    <string name="signup_email">Enter E-Mail Address</string>
     <string name="signup_name">Name</string>
     <string name="signup_password">Enter Password</string>
     <string name="signup_confirm_password">Repeat Password</string>
@@ -70,6 +69,8 @@
     <string name="business_user_profile">My Business Profile</string>
     <string name="business_user_create_event">Create Event</string>
     <string name="business_user_events">My Events</string>
+    <string name="business_customer_event">Ad</string>
+    <string name="state">State</string>
 
 
 </resources>

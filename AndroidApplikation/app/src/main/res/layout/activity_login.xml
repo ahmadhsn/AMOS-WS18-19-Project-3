@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:adjustViewBounds="true"
-    android:background="@drawable/background"
+    android:background = "@color/colorPrimary"
     android:scaleType="fitXY">
 
     <RelativeLayout
@@ -37,7 +37,7 @@
             android:padding="20dp"
             android:text="Login"
             android:textAlignment="center"
-            android:textColor="@color/white"
+            android:textColor="@color/secondaryDarkColor"
             android:textSize="23sp"
             android:textStyle="bold" />
         <EditText
@@ -89,7 +89,7 @@
             android:background="@drawable/shape"
             android:onClick="login"
             android:text="@string/login_label"
-            android:textColor="@color/white"
+            android:textColor="@color/secondaryDarkColor"
             android:textStyle="bold" />
 
     </RelativeLayout>

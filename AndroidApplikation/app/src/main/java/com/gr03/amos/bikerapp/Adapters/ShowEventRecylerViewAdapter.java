@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -80,6 +81,12 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
             holder.controlLinearLayout.setVisibility(View.INVISIBLE);
         }
 
+        if (SaveSharedPreference.getUserType(this.context) != 2
+                && mData.get(position).getId_user_type() == 2) {
+            holder.adminTag.setVisibility(View.VISIBLE);
+            holder.adminTag.setText(R.string.business_customer_event);
+        }
+
         holder.eventDelete.setOnClickListener(v -> {
             AlertDialog.Builder builder;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -108,11 +115,7 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
                         realmDelete.close();
                         notifyDataSetChanged();
                     })
-                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    })
+                    .setNegativeButton(android.R.string.no, (dialog, which) -> dialog.dismiss())
                     .show();
         });
 

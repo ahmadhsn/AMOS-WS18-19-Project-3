@@ -49,12 +49,11 @@
                 android:id="@+id/eventtime"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_below="@id/eventdate"
+                android:layout_below="@id/eventdescr"
                 android:focusableInTouchMode="false"
                 android:hint="@string/create_event_select_time"
                 android:inputType="time"
                 style="@style/editTextView" />
-
 
             <TextView
                 android:id="@+id/eventlocation"
@@ -64,52 +63,87 @@
                 android:layout_marginStart="40dp"
                 android:layout_marginTop="25dp"
                 android:text="@string/create_event_location"
-                android:textColor="@color/white" />
+                android:textColor="@color/black" />
 
-            <EditText
-                android:id="@+id/country"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_below="@id/eventlocation"
-                android:hint="@string/country"
-                android:inputType="text"
-                style="@style/editTextView" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/city"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_below="@id/country"
-                android:hint="@string/city"
-                android:inputType="text"
-                style="@style/editTextView" />
+                <EditText
+                    android:id="@+id/street"
+                    android:layout_height="40dp"
+                    android:layout_width="0dp"
+                    android:layout_weight=".40"
+                    android:layout_below="@id/eventlocation"
+                    android:hint="@string/street"
+                    android:inputType="text"
+                    style="@style/editTextViewHalfLeft" />
 
-            <EditText
-                android:id="@+id/street"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_below="@id/city"
-                android:hint="@string/street"
-                android:inputType="text"
-                style="@style/editTextView" />
+                <EditText
+                    android:id="@+id/houseNr"
+                    android:layout_height="40dp"
+                    android:layout_width="0dp"
+                    android:layout_weight=".40"
+                    android:layout_below="@id/eventlocation"
+                    android:hint="@string/house_nr"
+                    android:inputType="text"
+                    style="@style/editTextViewHalfRight" />
 
-            <EditText
-                android:id="@+id/postcode"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_below="@id/street"
-                android:hint="@string/postcode"
-                android:inputType="text"
-                style="@style/editTextView" />
+            </LinearLayout>
 
-            <EditText
-                android:id="@+id/houseNr"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_below="@id/postcode"
-                android:hint="@string/house_nr"
-                android:inputType="text"
-                style="@style/editTextView" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/postcode"
+                    android:layout_height="40dp"
+                    android:layout_width="0dp"
+                    android:layout_weight=".40"
+                    android:layout_below="@id/street"
+                    android:hint="@string/postcode"
+                    android:inputType="number"
+                    style="@style/editTextViewHalfLeft" />
+
+                <EditText
+                    android:id="@+id/city"
+                    android:layout_height="40dp"
+                    android:layout_width="0dp"
+                    android:layout_weight=".40"
+                    android:layout_below="@id/houseNr"
+                    android:hint="@string/city"
+                    android:inputType="text"
+                    style="@style/editTextViewHalfRight" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/state"
+                    android:layout_height="40dp"
+                    android:layout_width="0dp"
+                    android:layout_weight=".40"
+                    android:layout_below="@id/postcode"
+                    android:hint="@string/state"
+                    android:inputType="text"
+                    style="@style/editTextViewHalfLeft" />
+
+                <EditText
+                    android:id="@+id/country"
+                    android:layout_height="40dp"
+                    android:layout_width="0dp"
+                    android:layout_weight=".40"
+                    android:layout_below="@id/city"
+                    android:hint="@string/country"
+                    android:inputType="text"
+                    style="@style/editTextViewHalfRight" />
+            </LinearLayout>
 
             <Spinner
                 android:id="@+id/spinner"

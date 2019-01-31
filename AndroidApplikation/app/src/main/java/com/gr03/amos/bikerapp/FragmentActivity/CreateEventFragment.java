@@ -40,7 +40,7 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
         DatePickerDialog.OnDateSetListener,
         TimePickerDialog.OnTimeSetListener, ResponseHandler {
     private int EVENTTYPEID = 1;
-    private EditText eventName, eventDescr, eventDate, eventTime, country, city, street, postcode, houseNr;
+    private EditText eventName, eventDescr, eventDate, eventTime, country, state, city, street, postcode, houseNr;
     private Button createEvent;
     private SimpleDateFormat simpleDateFormat;
 
@@ -72,6 +72,7 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
         simpleDateFormat = new SimpleDateFormat("dd MM yyyy", Locale.US);
 
         country = view.findViewById(R.id.country);
+        state = view.findViewById(R.id.state);
         city = view.findViewById(R.id.city);
         street = view.findViewById(R.id.street);
         postcode = view.findViewById(R.id.postcode);
@@ -190,6 +191,10 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
             country.setError("Country is a required field!");
             isDataNotSet = true;
         }
+        if (isTextEmpty(state)) {
+            state.setError("Country is a required field!");
+            isDataNotSet = true;
+        }
         if (isTextEmpty(city)) {
             city.setError("City is a required field!");
             isDataNotSet = true;
@@ -241,9 +246,9 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
         event.put("time", eventTime.getText().toString() + ":00");
         event.put("event_type_id", EVENTTYPEID);
         address.put("street", street.getText().toString());
-        address.put("house_number", houseNr.getText().toString());
+        address.put("housenumber", houseNr.getText().toString());
         address.put("country", country.getText().toString());
-        address.put("state", "");
+        address.put("state", state.getText().toString());
         address.put("city", city.getText().toString());
         address.put("postcode", postcode.getText().toString());
 
@@ -281,13 +286,14 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
                     houseNr.setText(address.optString("housenumber"));
                     postcode.setText(address.optString("postcode"));
                     city.setText(address.optString("city"));
+                    state.setText(address.optString("state"));
                     country.setText(address.optString("country"));
-
 
                     houseNr.setEnabled(false);
                     street.setEnabled(false);
                     postcode.setEnabled(false);
                     city.setEnabled(false);
+                    state.setEnabled(false);
                     country.setEnabled(false);
                 }
             } catch (JSONException e) {

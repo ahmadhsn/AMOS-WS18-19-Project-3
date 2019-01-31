@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:adjustViewBounds="true"
-    android:background="@drawable/background"
+    android:background="@color/colorPrimary"
     android:scaleType="fitXY"
     tools:context=".HomeActivity">
 
@@ -36,6 +36,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0">
+
+        <ImageView
+            android:layout_width="236dp"
+            android:layout_height="209dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="6dp"
+            app:srcCompat="@drawable/logo" />
     </RelativeLayout>
 
     <LinearLayout
@@ -55,7 +63,7 @@
             android:layout_weight="1"
             android:padding="20dp"
             android:text="@string/starting_info"
-            android:textColor="@color/white"
+            android:textColor="@color/secondaryDarkColor"
             android:textSize="23sp"
             android:textStyle="bold" />
     </LinearLayout>
@@ -95,21 +103,7 @@
 
             android:textColor="@color/white"
             android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/signup_button"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="50dp"
-            android:layout_marginTop="10dp"
-            android:text="@string/try_label"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="15sp" />
-
+        
     </RelativeLayout>
 
     <android.support.constraint.Barrier

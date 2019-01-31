@@ -24,7 +24,7 @@
         <activity android:name=".SignUpActivity" />
         <activity android:name=".AddRoute" />
         <activity
-            android:name=".ShowEventActivity"
+            android:name=".SplashScreen"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -48,6 +48,9 @@
             android:label="@string/title_activity_business_user_main"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize"></activity>
+        <activity
+            android:name=".ShowEventActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

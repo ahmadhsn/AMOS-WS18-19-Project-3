@@ -2,10 +2,11 @@ package com.gr03.amos.bikerapp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,7 +20,7 @@ import com.gr03.amos.bikerapp.NetworkLayer.SocketUtility;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ProfileBasicUserActivity extends AppCompatActivity implements ResponseHandler {
+public class ProfileBasicUserActivity extends AppCompatActivity implements ResponseHandler{
 
     Intent intent;
     Long userId;
@@ -53,19 +54,21 @@ public class ProfileBasicUserActivity extends AppCompatActivity implements Respo
         user_state = findViewById(R.id.user_state);
         user_country = findViewById(R.id.user_country);
 
+        user_fname.setCursorVisible(false);
+
         intent = getIntent();
         userId = intent.getLongExtra("id", 0);
 
         if (userId == 0) {
             //intent from add profile page
             //use Roxanas code now
-            onCreateAfterAddProfile(savedInstanceState);
+            onCreateAfterAddProfile();
         } else {
             onCreateAfterProfileId();
         }
     }
 
-    private void onCreateAfterAddProfile(Bundle savedInstanceState) {
+    private void onCreateAfterAddProfile() {
         Intent intent2 = getIntent();
 
         Bundle bundle = intent2.getExtras();
@@ -90,6 +93,7 @@ public class ProfileBasicUserActivity extends AppCompatActivity implements Respo
         user_city.setText("" + city);
         user_state.setText("" + state);
         user_country.setText(country);
+
     }
 
     private void getAdditionalUserInfo() {
@@ -115,28 +119,10 @@ public class ProfileBasicUserActivity extends AppCompatActivity implements Respo
         edit_profile_page.setVisibility(View.VISIBLE);
         save_edited_info.setVisibility(View.GONE);
         add_to_database.setVisibility(View.GONE);
-
-        //JSON request (first time insertion of user information to database)
-        JSONObject json = new JSONObject();
-        Context context = ProfileBasicUserActivity.this;
-        json.put("user_id", SaveSharedPreference.getUserID(context));
-        json.put("first_name", user_fname.getText().toString());
-        json.put("last_name", user_lname.getText().toString());
-        json.put("dob", user_dob.getText().toString());
-        json.put("gender", user_gender.getText().toString());
-        json.put("street", user_street.getText().toString());
-        json.put("housenumber", user_hnumber.getText().toString());
-        json.put("postcode", user_pcode.getText().toString());
-        json.put("city", user_city.getText().toString());
-        json.put("state", user_state.getText().toString());
-        json.put("country", user_country.getText().toString());
-
-        Requests.executeRequest(this, "POST", "addUserBasic", json);
     }
 
-
     public void editInfo(View view) {
-        makeFieldsEditable(view);
+        makeFieldsEditable();
         edit_profile_page.setVisibility(View.GONE);
         save_edited_info.setVisibility(View.VISIBLE);
 
@@ -191,6 +177,7 @@ public class ProfileBasicUserActivity extends AppCompatActivity implements Respo
         validation();
 
         //JSON request (updating edited info in the database)
+        //JSON request (updating edited info in the database)
         JSONObject json = new JSONObject();
         Context context = ProfileBasicUserActivity.this;
         json.put("user_id", SaveSharedPreference.getUserID(context));
@@ -201,11 +188,11 @@ public class ProfileBasicUserActivity extends AppCompatActivity implements Respo
         json.put("city", user_city.getText().toString());
         json.put("state", user_state.getText().toString());
         json.put("country", user_country.getText().toString());
+
         Requests.executeRequest(this, "POST", "editUserInfo");
 
-        makeFieldsUneditable(view);
-        edit_profile_page.setVisibility(View.VISIBLE);
-        save_edited_info.setVisibility(View.GONE);
+
+        makeFieldsUneditable();
     }
 
     boolean isTextEmpty(EditText text) {
@@ -251,8 +238,7 @@ public class ProfileBasicUserActivity extends AppCompatActivity implements Respo
         }
     }
 
-
-    private void makeFieldsEditable(View view){
+    private void makeFieldsEditable(){
         user_lname.setBackgroundResource(android.R.drawable.edit_text);
         user_street.setBackgroundResource(android.R.drawable.edit_text);
         user_hnumber.setBackgroundResource(android.R.drawable.edit_text);
@@ -263,7 +249,7 @@ public class ProfileBasicUserActivity extends AppCompatActivity implements Respo
         user_country.setBackgroundResource(android.R.drawable.edit_text);
     }
 
-    private void makeFieldsUneditable(View view){
+    private void makeFieldsUneditable(){
         user_lname.setBackgroundResource(0);
         user_street.setBackgroundResource(0);
         user_hnumber.setBackgroundResource(0);
@@ -285,6 +271,8 @@ public class ProfileBasicUserActivity extends AppCompatActivity implements Respo
         //check for urlTail
         if(urlTail.equals("getUserInfo/" + userId)){
             onResponseUserInfo(response);
+        }else if(urlTail.equals("editUserInfo")){
+            onResponseSaveEditedInfo(response);
         }
     }
 
@@ -313,5 +301,26 @@ public class ProfileBasicUserActivity extends AppCompatActivity implements Respo
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    private void onResponseSaveEditedInfo(JSONObject response){
+        try {
+            if(response.has("editUserInfo")){
+                String statusReg = (String) response.get("editUserInfo");
+
+                if(statusReg.equals("successfulUpdation")){
+                    Log.i("EditUserInfoBasic","successfulUpdation");
+                    Toast toast = Toast.makeText(this, "You have successfully saved your Profile after editing!", Toast.LENGTH_SHORT);
+                    TextView v = toast.getView().findViewById(android.R.id.message);
+                    if( v != null) v.setGravity(Gravity.CENTER);
+                    toast.show();
+                    finish();
+                }
+            }
+        } catch (Exception e) {
+            Log.i("Exception --- not requested", e.toString());
+        }
+
+
     }
 }

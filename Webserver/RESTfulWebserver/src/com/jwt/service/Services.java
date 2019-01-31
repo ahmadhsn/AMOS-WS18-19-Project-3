@@ -122,6 +122,42 @@ public class Services {
 			return Response.status(400).entity("InvalidRequestBody").build();
 		}
 	}
+	
+	@POST
+	@Path("/checkUserAdded")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response checkUserAdded(String urlReq)
+			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		DatabaseProvider.getInstance(context);
+		JSONObject JSONreq = new JSONObject(urlReq);
+		
+		if (JSONreq.has("id_user") ) {
+
+			int userid = JSONreq.getInt("id_user");
+			
+			System.out.println("...Request from " + userid);
+			
+			DatabaseProvider provider = DatabaseProvider.getInstance(context);
+			Connection conn = provider.getConnection();
+			
+			String selectSQL = "SELECT ID_USER FROM BASIC_USER WHERE ID_USER = "+ userid;
+			PreparedStatement preparedStatement = conn.prepareStatement(selectSQL);
+			ResultSet rs = preparedStatement.executeQuery();
+			int userid2 = 0;
+			while (rs.next()) {
+				userid2 = rs.getInt("ID_USER");
+			}
+
+			JSONObject response = new JSONObject();
+			if(userid == userid2) {
+				response.put("success", true);
+			}
+			
+			return Response.status(200).entity(response.toString()).build();		
+		} else {
+			return Response.status(400).entity("InvalidRequestBody").build();
+		}
+	}
 
 	/**
 	 * TODO Adds new user to database.
@@ -528,17 +564,16 @@ public class Services {
 		System.out.println("...getAllEvetns");
 		try {
 			DatabaseProvider provider = DatabaseProvider.getInstance(context);
-
-			// PreparedStatement st = conn.prepareStatement("SELECT
-			// name,description,date,time FROM EVENT");
 			
 			ResultSet result = provider.querySelectDB("SELECT DISTINCT ON (e.id_event) * FROM EVENT e"
 					+ " LEFT JOIN ADDRESS a USING (id_address)"
 					+ " WHERE e.date >= now() "
 					+ " ORDER BY e.id_event, a.id_address" );
 			System.out.println(result);
-			
 			while (result.next()) {	
+				String user_id_type_json="";
+						
+				ResultSet userResult = provider.querySelectDB("Select id_user_type from user_reg where id_user=" + result.getString("id_user"));
 	
 				String id_json = result.getString("id_event");
 				String id_address_json = result.getString("id_address");
@@ -547,6 +582,10 @@ public class Services {
 				String date_json = result.getString("date");
 				String time_json = result.getString("time");
 				String user_id_json = result.getString("id_user");
+				
+				while (userResult.next()) {	
+				user_id_type_json = userResult.getString("id_user_type");
+				}
 				
 				String id_add_json = result.getString("id_address");
 				String city_json = result.getString("city");
@@ -560,6 +599,7 @@ public class Services {
 				jobj.put("date", date_json);
 				jobj.put("time", time_json);
 				jobj.put("id_user", user_id_json);
+				jobj.put("id_user_type", user_id_type_json);
 				
 				JSONObject jobj2 = new JSONObject();
 				jobj2.put("city", city_json);
@@ -1171,7 +1211,7 @@ public class Services {
 					System.out.println("UserInfoGotUpdated");
 					
 					JSONObject response = new JSONObject();
-					response.put("userInfoUpdate", "successful");
+					response.put("editUserInfo", "successfulUpdation");
 					System.out.println("Response: " + response.toString());
 					return Response.status(200).entity(response.toString()).build();
 

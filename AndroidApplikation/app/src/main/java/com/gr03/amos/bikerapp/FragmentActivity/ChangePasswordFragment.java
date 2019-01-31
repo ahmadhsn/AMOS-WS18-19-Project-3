@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import android.widget.EditText;
 import android.widget.Button;
 import android.util.Log;
 
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.gr03.amos.bikerapp.NetworkLayer.ResponseHandler;
@@ -27,6 +30,7 @@ public class ChangePasswordFragment extends Fragment implements ResponseHandler 
 
     private EditText email, editTextOldPassword, editTextNewPassword, editTextRepeatPassword, country;
     private Button changePassword;
+    private ImageView backButton;
 
     public ChangePasswordFragment() {
     }
@@ -51,6 +55,7 @@ public class ChangePasswordFragment extends Fragment implements ResponseHandler 
         editTextNewPassword = view.findViewById(R.id.editTextNewPassword);
         editTextRepeatPassword = view.findViewById(R.id.editTextRepeatPassword);
         changePassword = view.findViewById(R.id.changePassword);
+        backButton = view.findViewById(R.id.pass_back);
         // Inflate the layout for this fragment
         changePassword.setOnClickListener(v -> {
             try {
@@ -58,12 +63,54 @@ public class ChangePasswordFragment extends Fragment implements ResponseHandler 
             } catch (JSONException ignored) {
             }
         });
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
         return view;
     }
+
+
+    boolean isTextEmpty(EditText text) {
+        CharSequence string = text.getText().toString();
+        return TextUtils.isEmpty(string);
+    }
+
+    boolean checkEnteredData() {
+        boolean isDataNotSet = false;
+        if (isTextEmpty(editTextOldPassword)) {
+            editTextOldPassword.setError("Please Enter your old password");
+            isDataNotSet = true;
+        }
+        if (isTextEmpty(editTextNewPassword)) {
+            editTextNewPassword.setError("Please Enter new password");
+            isDataNotSet = true;
+        }
+        return isDataNotSet;
+    }
+
 
     public void changePassword() throws JSONException {
         String np = editTextNewPassword.getText().toString();
         String rnp = editTextRepeatPassword.getText().toString();
+
+        if (checkEnteredData()) {
+            return;
+        }
+
+
+        if (!np.equals(rnp) || np.isEmpty() || rnp.isEmpty()) {
+            Log.i("COMPAREPASSWORDS", "passwords are unequal");
+            // this.setMessageOnScreen( "The passwords you entered do not match. Please try it again.",Color.RED);
+            Toast.makeText(getActivity().getApplicationContext(), "The Repeat password you entered doesn't match with the New Password.", Toast.LENGTH_SHORT).show();
+            editTextRepeatPassword.setText("");
+            editTextRepeatPassword.setError("");
+            return;
+        }
+
         JSONObject json = new JSONObject();
         json.put("oldPassword", editTextOldPassword.getText().toString());
         json.put("newPassword", editTextNewPassword.getText().toString());

@@ -27,6 +27,7 @@ import com.gr03.amos.bikerapp.SaveSharedPreference;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 
 public class ShowEventsFragment extends Fragment {
@@ -66,7 +67,7 @@ public class ShowEventsFragment extends Fragment {
         Realm realm = Realm.getDefaultInstance();
 
         Requests.getJsonResponse("getEvents", container.getContext());
-        RealmResults<Event> events = realm.where(Event.class).findAll();
+        RealmResults<Event> events = realm.where(Event.class).sort("id_user_type", Sort.DESCENDING).findAll();
 
         RealmResults<Address> countries = realm.where(Address.class).distinct("country").findAll();
         RealmResults<Address> cities = realm.where(Address.class).distinct("city").findAll();

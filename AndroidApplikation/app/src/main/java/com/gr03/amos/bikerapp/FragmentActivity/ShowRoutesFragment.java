@@ -60,8 +60,9 @@ public class ShowRoutesFragment extends Fragment implements ResponseHandler {
         friendRoutesImage = view.findViewById(R.id.friend_route_filter);
         Realm.init(container.getContext());
         Realm realm = Realm.getDefaultInstance();
-        Requests.getJsonResponseForUser("getUserById/" +
-                SaveSharedPreference.getUserID(container.getContext()), container.getContext());
+        int userID = SaveSharedPreference.getUserID(container.getContext());
+
+        Requests.getJsonResponseForUser("getUserById/" + userID, container.getContext());
         Requests.getJsonResponseForRoutes("getRoutes", container.getContext(), this);
 
         friendRoutesImage.setOnClickListener(v -> getFriendsRoutes(container.getContext()));
@@ -83,7 +84,7 @@ public class ShowRoutesFragment extends Fragment implements ResponseHandler {
                 SaveSharedPreference.getUserID(context), context);
         RealmResults<Friend> friends = realm.where(Friend.class).findAll();
 
-        RealmList<Route> routes = new RealmList<>();;
+        RealmList<Route> routes = new RealmList<>();
         for (Friend friend : friends) {
             routes.add(friend.getRoute());
         }
