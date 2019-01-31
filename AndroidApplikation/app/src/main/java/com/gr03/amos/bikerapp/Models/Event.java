@@ -8,6 +8,7 @@ public class Event extends RealmObject {
     @PrimaryKey
     private long id_event;
     private long id_user;
+    private long id_user_type;
     private Address address;
     private String name;
     private String description;
@@ -64,5 +65,13 @@ public class Event extends RealmObject {
 
     public void setId_user(long id_user) {
         this.id_user = id_user;
+    }
+
+    public long getId_user_type() {
+        return id_user_type;
+    }
+
+    public void setId_user_type(long id_user_type) {
+        this.id_user_type = id_user_type;
     }
 }
