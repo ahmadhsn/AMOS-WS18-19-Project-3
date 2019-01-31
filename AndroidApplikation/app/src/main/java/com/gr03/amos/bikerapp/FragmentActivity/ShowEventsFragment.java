@@ -15,6 +15,10 @@ import android.widget.Toast;
 
 import com.gr03.amos.bikerapp.Models.Address;
 import com.gr03.amos.bikerapp.Models.Event;
+import com.gr03.amos.bikerapp.Models.Route;
+import com.gr03.amos.bikerapp.Models.User;
+import com.gr03.amos.bikerapp.NetworkLayer.ResponseHandler;
+import com.gr03.amos.bikerapp.NetworkLayer.SocketUtility;
 import com.gr03.amos.bikerapp.R;
 import com.gr03.amos.bikerapp.NetworkLayer.Requests;
 import com.gr03.amos.bikerapp.Adapters.ShowEventRecylerViewAdapter;
@@ -25,12 +29,16 @@ import java.util.Objects;
 
 import com.gr03.amos.bikerapp.SaveSharedPreference;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
 
-public class ShowEventsFragment extends Fragment {
+public class ShowEventsFragment extends Fragment implements ResponseHandler {
     RecyclerView showEventsRecyclerView;
     ShowEventRecylerViewAdapter showEventRecylerViewAdapter;
     private ImageView eventFilterImage;
@@ -63,37 +71,7 @@ public class ShowEventsFragment extends Fragment {
         country.add("Choose a Country");
 
 
-        Realm.init(container.getContext());
-        Realm realm = Realm.getDefaultInstance();
-
-        Requests.getJsonResponse("getEvents", container.getContext());
-        RealmResults<Event> events = realm.where(Event.class).sort("id_user_type", Sort.DESCENDING).findAll();
-
-        RealmResults<Address> countries = realm.where(Address.class).distinct("country").findAll();
-        RealmResults<Address> cities = realm.where(Address.class).distinct("city").findAll();
-
-        for (Address address : countries) {
-            country.add(address.getCountry());
-        }
-
-        for (Address address : cities) {
-            city.add(address.getCity());
-        }
-
-        if (SaveSharedPreference.getUserType(container.getContext()) == 2) {
-            RealmResults<Event> businessUserEvents = realm
-                    .where(Event.class)
-                    .equalTo("id_user", SaveSharedPreference.getUserID(container.getContext()))
-                    .findAll();
-
-            populateRecyclerView(businessUserEvents);
-        } else {
-            populateRecyclerView(events);
-            eventFilterImage = view.findViewById(R.id.event_filter);
-            eventFilterImage.setOnClickListener(v -> showInputDialog());
-
-        }
-
+        Requests.getJsonResponseForEvents("getEvents", container.getContext(), this);
 
         return view;
 
@@ -166,6 +144,58 @@ public class ShowEventsFragment extends Fragment {
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
 
+    }
+
+    @Override
+    public void onResponse(JSONObject response, String urlTail) {
+        if (SocketUtility.hasSocketError(response)) {
+            Toast.makeText(getContext(), "No response from server.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if (urlTail.equals("getEvents")) {
+            String jsonName = "event";
+            JSONArray jsonString = null;
+            try {
+                jsonString = response.getJSONArray(jsonName);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            Realm.init(getContext());
+            Realm realm = Realm.getDefaultInstance();
+
+            realm.beginTransaction();
+            realm.createOrUpdateAllFromJson(Event.class, jsonString);
+            realm.commitTransaction();
+
+            RealmResults<Event> events = realm.where(Event.class).sort("id_user_type", Sort.DESCENDING).findAll();
+
+            RealmResults<Address> countries = realm.where(Address.class).distinct("country").findAll();
+            RealmResults<Address> cities = realm.where(Address.class).distinct("city").findAll();
+
+            for (Address address : countries) {
+                country.add(address.getCountry());
+            }
+
+            for (Address address : cities) {
+                city.add(address.getCity());
+            }
+
+            if (SaveSharedPreference.getUserType(getContext()) == 2) {
+                RealmResults<Event> businessUserEvents = realm
+                        .where(Event.class)
+                        .equalTo("id_user", SaveSharedPreference.getUserID(getContext()))
+                        .findAll();
+
+                populateRecyclerView(businessUserEvents);
+            } else {
+                populateRecyclerView(events);
+                eventFilterImage = view.findViewById(R.id.event_filter);
+                eventFilterImage.setOnClickListener(v -> showInputDialog());
+            }
+
+        }
     }
 
 

@@ -128,14 +128,46 @@ public class ChatActivity extends AppCompatActivity implements ResponseHandler {
     }
 
     private void getAllChat() {
-        Requests.getJsonResponseForChat("getChat", chatId, getApplicationContext());
+        Requests.getJsonResponseForChat("getChat", chatId, getApplicationContext(), this);
 
-        Realm.init(this);
+
+    }
+
+
+    @Override
+    public void onResponse(JSONObject response, String urlTail) {
+        if (SocketUtility.hasSocketError(response)) {
+            Toast.makeText(getApplicationContext(), "No response from server.", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (urlTail.equals("loadChat")) {
+            onResponseLoadChat(response);
+        } else if (urlTail.equals("saveMessage")) {
+            onResponseSaveMessage(response);
+        } else if(urlTail.equals("getChat/" + chatId)){
+            onResponseGetChat(response);
+        }
+    }
+
+    private void onResponseGetChat(JSONObject response){
+        Realm.init(getApplicationContext());
         Realm realm = Realm.getDefaultInstance();
+        try {
+            String jsonName = "Chat";
+            JSONArray jsonString = response.getJSONArray(jsonName);
+
+
+            realm.beginTransaction();
+            realm.createOrUpdateAllFromJson(Message.class, jsonString);
+            realm.commitTransaction();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         RealmResults<Message> messages = realm.where(Message.class).equalTo("id_chat", chatId).findAll();
 
         //set last messages timestamp as last_messages_time from friend in model if any messages
-        if(!messages.isEmpty()) {
+        if (!messages.isEmpty()) {
             String lastMessagesTime = messages.last().getTime_created();
             for (Integer friendsID : this.userIds) {
                 if (!friendsID.equals(SaveSharedPreference.getUserID(this))) {
@@ -152,41 +184,32 @@ public class ChatActivity extends AppCompatActivity implements ResponseHandler {
         showMessagesRecyclerView.setAdapter(messageListRecyclerViewAdapter);
     }
 
-
-    @Override
-    public void onResponse(JSONObject response, String urlTail) {
-        if(SocketUtility.hasSocketError(response)){
-            Toast.makeText(getApplicationContext(), "No response from server.", Toast.LENGTH_LONG).show();
-            return;
+    private void onResponseLoadChat(JSONObject response) {
+        if (response.has("id_chat")) {
+            try {
+                this.chatId = response.getInt("id_chat");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Toast.makeText(this, "Error loading chat", Toast.LENGTH_LONG).show();
         }
-        switch (urlTail) {
-            case "loadChat":
+    }
 
-                if (response.has("id_chat")) {
-                    try {
-                        this.chatId = response.getInt("id_chat");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    Toast.makeText(this, "Error loading chat", Toast.LENGTH_LONG).show();
-                }
-                break;
-            case "saveMessage":
-                //handle response
-                try {
-                    if (response.has("saveMessage") && response.getString("saveMessage").equals("successful")) {
-                        Log.i("IGI", String.valueOf(response));
-                        Log.i("CHAT", "Message send from " + SaveSharedPreference.getUserID(this));
-                        msg.setText("");
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Could not send message", Toast.LENGTH_LONG).show();
+    private void onResponseSaveMessage(JSONObject response) {
+        //handle response
+        try {
+            if (response.has("saveMessage") && response.getString("saveMessage").equals("successful")) {
+                Log.i("IGI", String.valueOf(response));
+                Log.i("CHAT", "Message send from " + SaveSharedPreference.getUserID(this));
+                msg.setText("");
+            } else {
+                Toast.makeText(getApplicationContext(), "Could not send message", Toast.LENGTH_LONG).show();
 
-                    }
-                } catch (JSONException ex) {
-                    ex.printStackTrace();
-                }
-
+            }
+        } catch (JSONException ex) {
+            ex.printStackTrace();
         }
+
     }
 }

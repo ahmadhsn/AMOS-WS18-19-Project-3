@@ -30,7 +30,7 @@ import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
-public class ShowConversationWithFriendsListRecyclerViewAdapter extends RealmRecyclerViewAdapter<Friend, ShowConversationWithFriendsListRecyclerViewAdapter.ViewHolder> implements ResponseHandler {
+public class ShowConversationWithFriendsListRecyclerViewAdapter extends RealmRecyclerViewAdapter<Friend, ShowConversationWithFriendsListRecyclerViewAdapter.ViewHolder> {
     private RealmResults<Friend> mData;
     private LayoutInflater mInflater;
     private Context context;
@@ -110,10 +110,6 @@ public class ShowConversationWithFriendsListRecyclerViewAdapter extends RealmRec
 
     }
 
-    @Override
-    public void onResponse(JSONObject response, String urlTail) {
-
-    }
 
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

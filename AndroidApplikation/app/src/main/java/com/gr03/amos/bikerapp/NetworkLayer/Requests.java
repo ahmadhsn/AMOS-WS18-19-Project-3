@@ -18,16 +18,11 @@ import org.json.JSONObject;
 
 import java.util.concurrent.ExecutionException;
 
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Response;
-
 public class Requests {
 
     public static final String HOST = "10.0.2.2";
     public static final String PORT = "8080";
 
-    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     /**
      * Execute a request without JSON body as an async task in the background. Response handling is specified in the given ResponseHandler.
@@ -111,7 +106,11 @@ public class Requests {
     private static void executeRealmResponse(String urlTail, String jsonName, Class type, Context context) {
         RealmResponseHandler handler = new RealmResponseHandler(type, jsonName, context);
 
-        executeRequest(handler, "GET", urlTail);
+        try {
+            new HttpTask(handler,"GET", urlTail).execute().get();
+        } catch (ExecutionException |InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void executeRealmResponse(String urlTail, String jsonName, Class type, Context context, ResponseHandler handler){
@@ -120,6 +119,10 @@ public class Requests {
 
     public static void getJsonResponse(String urlTail, Context context) {
         executeRealmResponse(urlTail, "event", Event.class, context);
+    }
+
+    public static void getJsonResponseForEvents(String urlTail, Context context, ResponseHandler handler) {
+        executeRealmResponse(urlTail, "event", Event.class, context, handler);
     }
 
     public static void getJsonResponseForRoutes(String urlTail, Context context) {
@@ -146,6 +149,9 @@ public class Requests {
         executeRealmResponse(urlTail + "/" + chatId, "Chat", Message.class, context);
     }
 
+    public static void getJsonResponseForChat(String urlTail, int chatId, Context context, ResponseHandler handler) {
+        executeRealmResponse(urlTail + "/" + chatId, "Chat", Message.class, context, handler);
+    }
 
     public static String getUrl(String urlTail) {
         return "http://" + HOST + ":" + PORT + "/RESTfulWebserver/services/" + urlTail;
