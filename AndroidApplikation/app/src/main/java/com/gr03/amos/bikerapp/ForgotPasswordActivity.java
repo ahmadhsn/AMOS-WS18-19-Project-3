@@ -59,7 +59,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Respons
 
     private void createAlertView() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MyDialogTheme);
-        builder.setMessage("We sent you a new password check it out.")
+        builder.setMessage("We sent you a new password. Please check your Email-box!")
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         finish();
