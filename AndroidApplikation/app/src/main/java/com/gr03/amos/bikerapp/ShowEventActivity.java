@@ -1,6 +1,7 @@
 package com.gr03.amos.bikerapp;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -31,8 +32,13 @@ import com.gr03.amos.bikerapp.FragmentActivity.ShowEventsFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.ShowFriendsFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.ShowRoutesFragment;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.concurrent.Callable;
+import java.util.concurrent.FutureTask;
 
 public class ShowEventActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -137,9 +143,24 @@ public class ShowEventActivity extends AppCompatActivity
         }
 
         if (id == R.id.show_profile) {
-            Intent intent = new Intent(this, ProfileBasicUserActivity.class);
-            intent.putExtra("id", (long) SaveSharedPreference.getUserID(this));
-            startActivity(intent);
+            try {
+
+                //if the user already added information, a click on show_profile directs him to editProfile
+                //otherwise user gets directed to addProfile
+                if (SaveSharedPreference.getUserAdd(this) == 1 || checkUserAdded() == true) {
+                    Intent intent = new Intent(this, ProfileBasicUserActivity.class);
+                    intent.putExtra("id", (long) SaveSharedPreference.getUserID(this));
+                    startActivity(intent);
+
+                } else {
+                    Intent intent = new Intent(this, AddProfileBasicUserActivity.class);
+                    startActivity(intent);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
         }
 
         if (id == R.id.add_friend) {
@@ -184,11 +205,13 @@ public class ShowEventActivity extends AppCompatActivity
                     .addToBackStack("CHANGE_PASSWORD_FRAGMENT")
                     .commit();
             getSupportActionBar().setTitle("Change Password");
-        } else if (id == R.id.add_profile) {
-
-            Intent intent = new Intent(this, AddProfileBasicUserActivity.class);
-            startActivity(intent);
-        } else if (id == R.id.add_route) {
+        }
+//        else if (id == R.id.add_profile) {
+//            Intent intent = new Intent(this, AddProfileBasicUserActivity.class);
+//            startActivity(intent);
+//        }
+//
+        else if (id == R.id.add_route) {
             Intent intent = new Intent(this, AddRoute.class);
             startActivity(intent);
         } else if (id == R.id.action_add_event) {
@@ -207,8 +230,7 @@ public class ShowEventActivity extends AppCompatActivity
             SaveSharedPreference.clearSharedPrefrences(this);
             Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
-        }
-        else if (id == R.id.home) {
+        } else if (id == R.id.home) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.create_event_fragment, new ShowEventsFragment())
                     .addToBackStack("HOME_FRAGMENT")
@@ -252,6 +274,36 @@ public class ShowEventActivity extends AppCompatActivity
             // Handle your exceptions
             return false;
         }
+    }
+
+    public boolean checkUserAdded() throws JSONException {
+
+        JSONObject json = new JSONObject();
+        Context context = ShowEventActivity.this;
+        json.put("id_user", SaveSharedPreference.getUserID(context));
+
+        //checks if the user already added profile information
+        try {
+            JSONObject response;
+
+            FutureTask<String> task = new FutureTask((Callable<String>) () -> {
+                JSONObject threadResponse = Requests.getResponse("checkUserAdded", json);
+                return threadResponse.toString();
+            });
+            new Thread(task).start();
+            Log.i("Response", task.get());
+            response = new JSONObject(task.get());
+
+            //handle response
+            if (response.has("success")) {
+                return true;
+            }
+
+        } catch (Exception e) {
+            return false;
+        }
+
+        return false;
     }
 
 

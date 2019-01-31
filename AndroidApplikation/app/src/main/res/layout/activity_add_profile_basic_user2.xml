@@ -11,7 +11,7 @@ tools:context=".AddProfileBasicUserActivity">
     android:id="@+id/relativeLayout2"
     android:layout_width="0dp"
     android:layout_height="match_parent"
-    android:paddingTop="40dp"
+    android:paddingTop="3dp"
     android:background="@color/smokeyWhite"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent">
@@ -21,10 +21,24 @@ tools:context=".AddProfileBasicUserActivity">
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/addProfileText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="17dp"
+                android:layout_marginBottom="15dp"
+                android:textStyle="bold"
+                android:textSize="22sp"
+                android:text="Let's add profile information"
+                android:textColor="@color/colorPrimaryDark"/>
+
         <EditText
             android:id="@+id/fname"
             android:layout_width="match_parent"
+            android:layout_below="@id/addProfileText"
             android:layout_height="40dp"
+            android:paddingTop="10dp"
             android:hint="First Name"
             android:inputType="text"
             style="@style/editTextView"/>
@@ -172,8 +186,9 @@ tools:context=".AddProfileBasicUserActivity">
             android:id="@+id/add"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:layout_below="@id/country"
-            android:text="Show My Profile"
+            android:text="Add Info and go to Profile"
             style="@style/buttonCreate"/>
 
     </LinearLayout>

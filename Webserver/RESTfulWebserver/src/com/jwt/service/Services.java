@@ -122,6 +122,42 @@ public class Services {
 			return Response.status(400).entity("InvalidRequestBody").build();
 		}
 	}
+	
+	@POST
+	@Path("/checkUserAdded")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response checkUserAdded(String urlReq)
+			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		DatabaseProvider.getInstance(context);
+		JSONObject JSONreq = new JSONObject(urlReq);
+		
+		if (JSONreq.has("id_user") ) {
+
+			int userid = JSONreq.getInt("id_user");
+			
+			System.out.println("...Request from " + userid);
+			
+			DatabaseProvider provider = DatabaseProvider.getInstance(context);
+			Connection conn = provider.getConnection();
+			
+			String selectSQL = "SELECT ID_USER FROM BASIC_USER WHERE ID_USER = "+ userid;
+			PreparedStatement preparedStatement = conn.prepareStatement(selectSQL);
+			ResultSet rs = preparedStatement.executeQuery();
+			int userid2 = 0;
+			while (rs.next()) {
+				userid2 = rs.getInt("ID_USER");
+			}
+
+			JSONObject response = new JSONObject();
+			if(userid == userid2) {
+				response.put("success", true);
+			}
+			
+			return Response.status(200).entity(response.toString()).build();		
+		} else {
+			return Response.status(400).entity("InvalidRequestBody").build();
+		}
+	}
 
 	/**
 	 * TODO Adds new user to database.
@@ -1175,7 +1211,7 @@ public class Services {
 					System.out.println("UserInfoGotUpdated");
 					
 					JSONObject response = new JSONObject();
-					response.put("userInfoUpdate", "successful");
+					response.put("editUserInfo", "successfulUpdation");
 					System.out.println("Response: " + response.toString());
 					return Response.status(200).entity(response.toString()).build();
 

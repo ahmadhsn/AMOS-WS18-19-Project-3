@@ -2,25 +2,22 @@ package com.gr03.amos.bikerapp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
-import com.gr03.amos.bikerapp.Models.Friend;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
-
-import io.realm.Realm;
 
 public class ProfileBasicUserActivity extends AppCompatActivity {
 
@@ -56,19 +53,21 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         user_state = findViewById(R.id.user_state);
         user_country = findViewById(R.id.user_country);
 
+        user_fname.setCursorVisible(false);
+
         intent = getIntent();
         userId = intent.getLongExtra("id", 0);
 
         if (userId == 0) {
             //intent from add profile page
             //use Roxanas code now
-            onCreateAfterAddProfile(savedInstanceState);
+            onCreateAfterAddProfile();
         } else {
             onCreateAfterProfileId();
         }
     }
 
-    private void onCreateAfterAddProfile(Bundle savedInstanceState) {
+    private void onCreateAfterAddProfile() {
         Intent intent2 = getIntent();
 
         Bundle bundle = intent2.getExtras();
@@ -93,6 +92,7 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         user_city.setText("" + city);
         user_state.setText("" + state);
         user_country.setText(country);
+
     }
 
     private JSONObject getAdditionalUserInfo() {
@@ -145,36 +145,10 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         edit_profile_page.setVisibility(View.VISIBLE);
         save_edited_info.setVisibility(View.GONE);
         add_to_database.setVisibility(View.GONE);
-
-        //JSON request (first time insertion of user information to database)
-        JSONObject json = new JSONObject();
-        Context context = ProfileBasicUserActivity.this;
-        json.put("user_id", SaveSharedPreference.getUserID(context));
-        json.put("first_name", user_fname.getText().toString());
-        json.put("last_name", user_lname.getText().toString());
-        json.put("dob", user_dob.getText().toString());
-        json.put("gender", user_gender.getText().toString());
-        json.put("street", user_street.getText().toString());
-        json.put("housenumber", user_hnumber.getText().toString());
-        json.put("postcode", user_pcode.getText().toString());
-        json.put("city", user_city.getText().toString());
-        json.put("state", user_state.getText().toString());
-        json.put("country", user_country.getText().toString());
-        try {
-            FutureTask<String> task = new FutureTask((Callable<String>) () -> {
-                JSONObject threadResponse = Requests.getResponse("addUserBasic", json);
-                return threadResponse.toString();
-            });
-            new Thread(task).start();
-            Log.i("Response", task.get());
-        } catch (Exception e) {
-            Log.i("Exception --- not requested", e.toString());
-        }
     }
 
-
     public void editInfo(View view) {
-        makeFieldsEditable(view);
+        makeFieldsEditable();
         edit_profile_page.setVisibility(View.GONE);
         save_edited_info.setVisibility(View.VISIBLE);
 
@@ -239,20 +213,27 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         json.put("city", user_city.getText().toString());
         json.put("state", user_state.getText().toString());
         json.put("country", user_country.getText().toString());
+
         try {
-            FutureTask<String> task = new FutureTask((Callable<String>) () -> {
-                JSONObject threadResponse = Requests.getResponse("editUserInfo", json);
-                return threadResponse.toString();
-            });
-            new Thread(task).start();
-            Log.i("Response", task.get());
+            JSONObject response = Requests.getJSONResponse("editUserInfo", json, "POST");
+
+            if(response.has("editUserInfo")){
+                String statusReg = (String) response.get("editUserInfo");
+
+                if(statusReg.equals("successfulUpdation")){
+                    Log.i("EditUserInfoBasic","successfulUpdation");
+                    Toast toast = Toast.makeText(this, "You have successfully saved your Profile after editing!", Toast.LENGTH_SHORT);
+                    TextView v = toast.getView().findViewById(android.R.id.message);
+                    if( v != null) v.setGravity(Gravity.CENTER);
+                    toast.show();
+                    finish();
+                }
+            }
         } catch (Exception e) {
             Log.i("Exception --- not requested", e.toString());
         }
 
-        makeFieldsUneditable(view);
-        edit_profile_page.setVisibility(View.VISIBLE);
-        save_edited_info.setVisibility(View.GONE);
+        makeFieldsUneditable();
     }
 
     boolean isTextEmpty(EditText text) {
@@ -298,8 +279,7 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         }
     }
 
-
-    private void makeFieldsEditable(View view){
+    private void makeFieldsEditable(){
         user_lname.setBackgroundResource(android.R.drawable.edit_text);
         user_street.setBackgroundResource(android.R.drawable.edit_text);
         user_hnumber.setBackgroundResource(android.R.drawable.edit_text);
@@ -310,7 +290,7 @@ public class ProfileBasicUserActivity extends AppCompatActivity {
         user_country.setBackgroundResource(android.R.drawable.edit_text);
     }
 
-    private void makeFieldsUneditable(View view){
+    private void makeFieldsUneditable(){
         user_lname.setBackgroundResource(0);
         user_street.setBackgroundResource(0);
         user_hnumber.setBackgroundResource(0);

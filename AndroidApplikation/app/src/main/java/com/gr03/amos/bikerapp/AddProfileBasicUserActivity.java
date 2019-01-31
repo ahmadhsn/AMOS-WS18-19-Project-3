@@ -1,20 +1,28 @@
 package com.gr03.amos.bikerapp;
         import android.app.DatePickerDialog;
-        import android.content.Intent;
-        import android.support.v7.app.AppCompatActivity;
-        import android.os.Bundle;
-        import android.util.Log;
-        import android.widget.DatePicker;
-        import android.widget.EditText;
-        import android.widget.Toast;
-        import android.widget.RadioButton;
-        import android.widget.RadioGroup;
-        import android.widget.TextView;
-        import android.widget.Button;;
-        import java.text.SimpleDateFormat;
-        import java.util.Calendar;
-        import java.util.Locale;
-        import  android.text.TextUtils;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.util.Log;
+        import android.view.Gravity;
+        import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
+;
 
 public class AddProfileBasicUserActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
 
@@ -130,8 +138,60 @@ public class AddProfileBasicUserActivity extends AppCompatActivity implements Da
                 }
             }
 
+            try {
+                newInfo();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
             intentHandling();
+
         });
+    }
+
+    public void newInfo() throws JSONException{
+
+        String Gender;
+
+        if(male.isChecked()) {
+            Gender = "M";
+        } else {
+            Gender = "F";
+        }
+        //JSON request (first time insertion of user information to database)
+        JSONObject json = new JSONObject();
+        Context context = AddProfileBasicUserActivity.this;
+        json.put("user_id", SaveSharedPreference.getUserID(context));
+        json.put("first_name", FName.getText().toString());
+        json.put("last_name", LName.getText().toString());
+        json.put("dob", Dob.getText().toString());
+        json.put("gender", Gender);
+        json.put("street", Street.getText().toString());
+        json.put("housenumber", HNumber.getText().toString());
+        json.put("postcode", Postcode.getText().toString());
+        json.put("city", City.getText().toString());
+        json.put("state", State.getText().toString());
+        json.put("country", Country.getText().toString());
+
+        try {
+            JSONObject response = Requests.getJSONResponse("addUserBasic", json, "POST");
+
+            if(response.has("addUserBasic")){
+                String statusReg = (String) response.get("addUserBasic");
+
+                if(statusReg.equals("successfullCreation")){
+                    Log.i("AddProfileBasicUser","successfullCreation");
+                    SaveSharedPreference.saveaddId(this, 1);
+                    Toast toast = Toast.makeText(this, "You have successfully added a Profile!", Toast.LENGTH_SHORT);
+                    TextView v = toast.getView().findViewById(android.R.id.message);
+                    if( v != null) v.setGravity(Gravity.CENTER);
+                    toast.show();
+                    finish();
+                }
+            }
+        } catch (Exception e) {
+            Log.i("Exception --- not requested", e.toString());
+        }
     }
 
     private void intentHandling(){
