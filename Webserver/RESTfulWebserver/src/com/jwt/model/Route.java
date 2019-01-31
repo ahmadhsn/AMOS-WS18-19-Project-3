@@ -18,7 +18,7 @@ public class Route {
 	}
 	
 	public Route(JSONObject addressJSON) {
-		this.user_id = 1;
+		this.user_id = addressJSON.getInt("id_user");
 		this.name = addressJSON.getString("name");
 		this.description = addressJSON.getString("description");
 	}
