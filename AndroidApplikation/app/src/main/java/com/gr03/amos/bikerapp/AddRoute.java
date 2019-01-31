@@ -1,10 +1,5 @@
 package com.gr03.amos.bikerapp;
 
-import io.realm.Realm;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,10 +9,14 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.gr03.amos.bikerapp.Models.RouteParticipation;
-import com.gr03.amos.bikerapp.NetworkLayer.DefaultResponseHandler;
 import com.gr03.amos.bikerapp.NetworkLayer.Requests;
 import com.gr03.amos.bikerapp.NetworkLayer.ResponseHandler;
 import com.gr03.amos.bikerapp.NetworkLayer.SocketUtility;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import io.realm.Realm;
 
 public class AddRoute extends AppCompatActivity implements ResponseHandler {
     private static Context context;
@@ -86,6 +85,7 @@ public class AddRoute extends AppCompatActivity implements ResponseHandler {
         return TextUtils.isEmpty(string);
     }
 
+
     boolean checkEnteredData() {
         boolean isDataNotSet = false;
         if (isTextEmpty(routeName)) {
@@ -93,9 +93,15 @@ public class AddRoute extends AppCompatActivity implements ResponseHandler {
             isDataNotSet = true;
         }
         if (isTextEmpty(routeDescription)) {
-            routeDescription.setError("Please add a short description of the route!");
+            routeDescription.setError("Route description is required!");
             isDataNotSet = true;
         }
+
+        if (isTextEmpty(startPostcode)) {
+            startPostcode.setError("Integer Postcode is required!");
+            isDataNotSet = true;
+        }
+
         if (isTextEmpty(startState)) {
             startState.setError("State is a required field!");
             isDataNotSet = true;
@@ -108,6 +114,12 @@ public class AddRoute extends AppCompatActivity implements ResponseHandler {
             startCity.setError("City is a required field!");
             isDataNotSet = true;
         }
+
+        if (isTextEmpty(endPostcode)) {
+            endPostcode.setError("Integer Postcode is required!");
+            isDataNotSet = true;
+        }
+
         if (isTextEmpty(endState)) {
             endState.setError("State is a required field!");
             isDataNotSet = true;

@@ -67,48 +67,32 @@ public class AddProfileBasicUserActivity extends AppCompatActivity implements Da
 
             //Validation, can't be extracted to an own method, causes problems with intents
             if (isTextEmpty(FName)) {
-                Log.i("VALIDATIONUSER", "First name is empty");
-                FName.setError("Please enter a First name");
+                FName.setError("First name is required!");
                 return;
             }
             if (isTextEmpty(LName)) {
-                Log.i("VALIDATIONUSER", "last name is empty");
-                LName.setError("Please enter a Last name");
+                LName.setError("Last name is required!");
                 return;
             }
             if (isTextEmpty(Dob)) {
-                Log.i("VALIDATIONUSER", "Date of birth is empty");
-                Dob.setError("Please enter date of birth");
+                Dob.setError("Date of Birth is required!");
                 return;
             }
-            if (isTextEmpty(Street)) {
-                Log.i("VALIDATIONUSER", "Street name is empty");
-                Street.setError("Please enter Street name");
-                return;
-            }
-            if (isTextEmpty(HNumber)) {
-                Log.i("VALIDATIONUSER", "House number is empty");
-                HNumber.setError("Please enter House num");
-                return;
-            }
+
             if (isTextEmpty(Postcode)) {
-                Log.i("VALIDATIONUSER", "Postcode is empty");
-                Postcode.setError("Please enter Post code");
+                Postcode.setError("Integer Postcode is required!");
                 return;
             }
             if (isTextEmpty(City)) {
-                Log.i("VALIDATIONUSER", "City name is empty");
-                City.setError("Please enter a City name");
+                City.setError("City is required!");
                 return;
             }
             if (isTextEmpty(State)) {
-                Log.i("VALIDATIONEVENT", "State name is empty");
-                State.setError("Please enter State name");
+                State.setError("State is required!");
                 return;
             }
             if (isTextEmpty(Country)) {
-                Log.i("VALIDATIONUSER", "Country name is empty");
-                Country.setError("Please enter Country name");
+                Country.setError("Country is required!");
                 return;
             }
             Calendar c = Calendar.getInstance();
@@ -217,6 +201,7 @@ public class AddProfileBasicUserActivity extends AppCompatActivity implements Da
         CharSequence string = text.getText().toString();
         return TextUtils.isEmpty(string);
     }
+
 
     @Override
     public void onResponse(JSONObject response, String urlTail) {

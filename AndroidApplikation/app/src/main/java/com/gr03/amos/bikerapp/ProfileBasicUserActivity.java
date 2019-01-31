@@ -225,42 +225,31 @@ public class ProfileBasicUserActivity extends AppCompatActivity implements Respo
         return TextUtils.isEmpty(string);
     }
 
+
     private void validation() {
         if (isTextEmpty(user_lname)) {
-            Log.i("VALIDATIONUSER", "Last name is empty");
-            user_lname.setError("Please enter last name");
+            user_lname.setError("Last name is required!");
             return;
         }
-        if (isTextEmpty(user_street)) {
-            Log.i("VALIDATIONUSER", "Street name is empty");
-            user_street.setError("Please enter Street name");
-            return;
-        }
-        if (isTextEmpty(user_hnumber)) {
-            Log.i("VALIDATIONUSER", "House number is empty");
-            user_hnumber.setError("Please enter house number");
-            return;
-        }
+
         if (isTextEmpty(user_pcode)) {
-            Log.i("VALIDATIONUSER", "Postcode is empty");
-            user_pcode.setError("Please enter postcode");
+            user_pcode.setError("Integer Postcode is required!");
             return;
         }
+
         if (isTextEmpty(user_city)) {
-            Log.i("VALIDATIONUSER", "City name is empty");
-            user_city.setError("Please enter a City name");
+            user_city.setError("City is required!");
             return;
         }
         if (isTextEmpty(user_state)) {
-            Log.i("VALIDATIONUSER", "State name is empty");
-            user_state.setError("Please enter State name");
+            user_state.setError("State is required");
             return;
         }
         if (isTextEmpty(user_country)) {
-            Log.i("VALIDATIONUSER", "Country name is empty");
-            user_country.setError("Please enter Country name");
+            user_country.setError("Country is required!");
             return;
         }
+
     }
 
     private void makeFieldsEditable(){

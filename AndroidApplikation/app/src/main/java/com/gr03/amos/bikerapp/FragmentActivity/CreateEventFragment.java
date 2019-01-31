@@ -177,6 +177,7 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
         return TextUtils.isEmpty(string);
     }
 
+
     boolean checkEnteredData() {
         boolean isDataNotSet = false;
         if (isTextEmpty(eventName)) {
@@ -184,7 +185,7 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
             isDataNotSet = true;
         }
         if (isTextEmpty(eventDescr)) {
-            eventDescr.setError("Please add a short description of the event!");
+            eventDescr.setError("Event discription is required!");
             isDataNotSet = true;
         }
         if (isTextEmpty(country)) {
@@ -192,19 +193,25 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
             isDataNotSet = true;
         }
         if (isTextEmpty(state)) {
-            state.setError("Country is a required field!");
+            state.setError("State is a required field!");
             isDataNotSet = true;
         }
         if (isTextEmpty(city)) {
             city.setError("City is a required field!");
             isDataNotSet = true;
         }
+
+        if (isTextEmpty(postcode)) {
+            postcode.setError("Integer Postcode is required!");
+            isDataNotSet = true;
+        }
+
         if (isTextEmpty(eventDate)) {
             eventDate.setError("Date is a required field!");
             isDataNotSet = true;
         }
         if (isTextEmpty(eventTime)) {
-            eventTime.setError("Date is a required field!");
+            eventTime.setError("Time is a required field!");
             isDataNotSet = true;
         }
 
