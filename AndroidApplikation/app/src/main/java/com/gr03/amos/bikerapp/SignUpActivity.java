@@ -1,7 +1,7 @@
 package com.gr03.amos.bikerapp;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -9,12 +9,12 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.gr03.amos.bikerapp.NetworkLayer.Requests;
 import com.gr03.amos.bikerapp.NetworkLayer.ResponseHandler;
 import com.gr03.amos.bikerapp.NetworkLayer.SocketUtility;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class SignUpActivity extends AppCompatActivity implements ResponseHandler {
 
@@ -25,7 +25,7 @@ public class SignUpActivity extends AppCompatActivity implements ResponseHandler
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-        //businessName = findViewById(R.id.business_name);
+        getSupportActionBar().hide();
         email = findViewById(R.id.email);
     }
 

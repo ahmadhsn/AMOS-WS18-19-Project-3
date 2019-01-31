@@ -3,7 +3,7 @@
     <string name="starting_info">Discover exciting Events and great Routes near you and make new friends along.</string>
     <string name="signup_label">Sign Up</string>
     <string name="login_label">Login</string>
-    <string name="signup_email">Enter E-Mail Address</string>
+    <string name="signup_email">Enter E-Mail</string>
     <string name="signup_name">Name</string>
     <string name="signup_password">Enter Password</string>
     <string name="signup_confirm_password">Repeat Password</string>
