@@ -20,6 +20,7 @@ import java.util.concurrent.ExecutionException;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
+import okhttp3.Response;
 
 public class Requests {
 
@@ -113,6 +114,10 @@ public class Requests {
         executeRequest(handler, "GET", urlTail);
     }
 
+    private static void executeRealmResponse(String urlTail, String jsonName, Class type, Context context, ResponseHandler handler){
+        executeRequest(handler, "GET", urlTail);
+    }
+
     public static void getJsonResponse(String urlTail, Context context) {
         executeRealmResponse(urlTail, "event", Event.class, context);
     }
@@ -121,13 +126,16 @@ public class Requests {
         executeRealmResponse(urlTail, "route", Route.class, context);
     }
 
+    public static void getJsonResponseForRoutes(String urlTail, Context context, ResponseHandler handler){
+        executeRealmResponse(urlTail, "route", Route.class, context, handler);
+    }
+
     public static void getJsonResponseForFriends(String urlTail, Context context) {
         executeRealmResponse(urlTail, "friends", Friend.class, context);
     }
 
     public static void getJsonResponseForFriendsRoutes(String urlTail, Context context) {
         executeRealmResponse(urlTail, "friend", Friend.class, context);
-
     }
 
     public static void getJsonResponseForUser(String urlTail, Context context) {
