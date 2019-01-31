@@ -10,13 +10,6 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/add_fried"
-        android:icon="@drawable/ic_person_add_white"
-        android:iconTint="@color/white"
-        android:title="Add Friend"
-        app:showAsAction="ifRoom"/>
-
-    <item
         android:id="@+id/action_logout"
         android:icon="@drawable/ic_arrow_back_white"
         android:iconTint="@color/white"
