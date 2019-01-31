@@ -70,6 +70,7 @@
     <string name="business_user_create_event">Create Event</string>
     <string name="business_user_events">My Events</string>
     <string name="business_customer_event">Ad</string>
+    <string name="state">State</string>
 
 
 </resources>
