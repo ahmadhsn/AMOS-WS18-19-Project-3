@@ -96,6 +96,11 @@ public class ShowRoutesFragment extends Fragment implements ResponseHandler {
 
     @Override
     public void onResponse(JSONObject response, String urlTail) {
+        if(SocketUtility.hasSocketError(response)){
+            Toast.makeText(getContext(), "No response from server.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         if(urlTail.equals("getRoutes")) {
             String jsonName = "route";
 
