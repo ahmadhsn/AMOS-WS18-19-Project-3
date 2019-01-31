@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.gr03.amos.bikerapp.EditEventActivity;
 import com.gr03.amos.bikerapp.Models.Event;
 import com.gr03.amos.bikerapp.Models.EventParticipation;
+import com.gr03.amos.bikerapp.NetworkLayer.DefaultResponseHandler;
 import com.gr03.amos.bikerapp.R;
 import com.gr03.amos.bikerapp.NetworkLayer.Requests;
 import com.gr03.amos.bikerapp.SaveSharedPreference;
@@ -32,7 +33,7 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 
 
-public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventRecylerViewAdapter.ViewHolder>  {
+public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventRecylerViewAdapter.ViewHolder> {
 
     private RealmResults<Event> mData;
     private LayoutInflater mInflater;
@@ -58,6 +59,12 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
         holder.eventDescription.setText(mData.get(position).getDescription());
         holder.eventDate.setText(mData.get(position).getDate());
         holder.eventTime.setText(mData.get(position).getTime());
+
+        //set to joined if already participant
+        if (isEventParticipant(mData.get(position).getId_event())) {
+            holder.unjoinEvent.setVisibility(View.VISIBLE);
+            holder.joinEvent.setVisibility(View.GONE);
+        }
 
         holder.eventDropDownButton.setOnClickListener(v -> {
             holder.eventDescription.setVisibility(View.VISIBLE);
@@ -138,7 +145,7 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
                     json.put("event_id", mData.get(position).getId_event());
                     json.put("user_id", SaveSharedPreference.getUserID(context));
 
-                    Requests.getResponse("addmyeventlist", json, "POST", context);
+                    Requests.executeRequest(new DefaultResponseHandler(), "POST", "addmyeventlist", json);
 
                     Realm.init(context);
                     Realm realm = Realm.getDefaultInstance();
@@ -149,11 +156,21 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
                     realm.commitTransaction();
                     realm.close();
 
+                    holder.joinEvent.setVisibility(View.GONE);
+                    holder.unjoinEvent.setVisibility(View.VISIBLE);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
 
+            });
+
+            holder.unjoinEvent.setOnClickListener(v -> {
+                unjoinEventRequest(position);
+
+                holder.joinEvent.setVisibility(View.VISIBLE);
+                holder.unjoinEvent.setVisibility(View.GONE);
             });
         }
     }
@@ -162,6 +179,7 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
     public int getItemCount() {
         return mData.size();
     }
+
 
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -177,6 +195,7 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
         ImageButton eventDelete;
         ImageButton eventEdit;
         Button joinEvent;
+        Button unjoinEvent;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -185,6 +204,7 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
             eventDate = itemView.findViewById(R.id.event_date);
             eventTime = itemView.findViewById(R.id.event_time);
             joinEvent = itemView.findViewById(R.id.join_event);
+            unjoinEvent = itemView.findViewById(R.id.unjoin_event);
             eventDropDownButton = itemView.findViewById(R.id.arrow_down);
             eventDropUpButton = itemView.findViewById(R.id.arrow_up);
             eventDelete = itemView.findViewById(R.id.event_delete);
@@ -203,6 +223,7 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
         }
     }
 
+
     private void deleteEvent(long eventId) throws JSONException {
         JSONObject json = new JSONObject();
         json.put("id_event", eventId);
@@ -213,6 +234,54 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
         Intent intent = new Intent(context, EditEventActivity.class);
         intent.putExtra("id", eventId);
         context.startActivity(intent);
+    }
+
+    private void unjoinEventRequest(int position) {
+        JSONObject json = new JSONObject();
+        try {
+            json.put("event_id", mData.get(position).getId_event());
+            json.put("user_id", SaveSharedPreference.getUserID(context));
+
+            Requests.executeRequest(new DefaultResponseHandler(), "POST", "deleteEventParticipant", json);
+
+            Realm.init(context);
+            Realm realm = Realm.getDefaultInstance();
+
+            //delete event participation in Realm Database
+            realm.executeTransaction(realm1 -> {
+                final EventParticipation participant = realm1
+                        .where(EventParticipation.class)
+                        .equalTo("id_event", mData.get(position).getId_event())
+                        .and()
+                        .equalTo("id_user", SaveSharedPreference.getUserID(context))
+                        .findFirst();
+                participant.deleteFromRealm();
+            });
+            Log.i("After Transaction from Realm 1", "Deleted Event Participation");
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    private boolean isEventParticipant(long eventId) {
+        Realm.init(context);
+        Realm realm = Realm.getDefaultInstance();
+
+        RealmResults<EventParticipation> participation = realm.where(EventParticipation.class)
+                .equalTo("id_event", eventId)
+                .and()
+                .equalTo("id_user", SaveSharedPreference.getUserID(context))
+                .findAll();
+
+        if(participation.isEmpty()){
+            return false;
+        }else{
+            return true;
+        }
     }
 
 }

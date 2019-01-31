@@ -1762,6 +1762,39 @@ public class Services {
 		return Response.status(200).entity(response.toString()).build();
 		
 	}
+	
+	@POST
+	@Path("/deleteEventParticipant")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response deleteEventParticipant(String urlReq)
+			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
+
+		JSONObject JSONreq = new JSONObject(urlReq);
+		System.out.println("...delete Event Participant");
+
+		if (JSONreq.has("event_id") && JSONreq.has("user_id")) {
+			try {
+
+				DatabaseProvider db = DatabaseProvider.getInstance(context);
+				String query = "DELETE FROM event_participation WHERE id_user = ? AND id_event = ?";
+				db.queryInsertDB(query, JSONreq.getInt("user_id"), JSONreq.getInt("event_id"));
+				
+				JSONObject response = new JSONObject();
+
+				response.put("deleteEventParticipation", "successful");
+
+				return Response.status(200).entity(response.toString()).build();
+
+			} catch (Exception e) {
+				System.out.println("Wrong JSONFormat:" + e.toString());
+				return Response.status(500).entity("InternalServerError").build();
+			}
+		}
+		System.out.println("InvalidRequestbody");
+		return Response.status(400).entity("InvalidRequestBody").build();
+	}
 
 
 }
