@@ -11,7 +11,7 @@
         android:id="@+id/imageView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:alpha="0.8"
+        android:alpha="0.3"
         android:background="#000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -25,6 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="70dp"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,7 +63,7 @@
             android:layout_marginTop="146dp"
             android:backgroundTint="@color/white"
             android:ems="10"
-            android:hint="password"
+            android:hint="Password"
             android:inputType="textPassword"
             android:textColor="@color/white"
             android:textColorHint="@color/white" />
@@ -82,15 +83,11 @@
         <Button
             android:id="@+id/login_button"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
-            android:layout_marginTop="230dp"
-            android:layout_marginRight="50dp"
-            android:background="@drawable/shape"
+            android:layout_height="50dp"
+            android:layout_marginTop="250dp"
+            android:style="@style/buttonCreate"
             android:onClick="login"
-            android:text="@string/login_label"
-            android:textColor="@color/secondaryDarkColor"
-            android:textStyle="bold" />
+            android:text="@string/login_label" />
 
     </RelativeLayout>
 
