@@ -66,6 +66,8 @@ public class ShowFriendsFragment extends Fragment implements SearchView.OnQueryT
         //Set Title to My Friends
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle("");
+        showFriendsRecyclerView = view.findViewById(R.id.showFriends);
+        showFriendsRecyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
 
         Requests.getJsonResponseForFriends("getFriends/" + SaveSharedPreference.getUserID(container.getContext()), container.getContext(), this);
 
@@ -156,7 +158,6 @@ public class ShowFriendsFragment extends Fragment implements SearchView.OnQueryT
         Realm realm = Realm.getDefaultInstance();
         RealmResults<Friend> friends = realm.where(Friend.class).findAll();
 
-        showFriendsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         showFriendsListRecyclerViewAdapter = new ShowFriendsListRecyclerViewAdapter(getContext(), friends);
         showFriendsRecyclerView.setAdapter(showFriendsListRecyclerViewAdapter);
 
