@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.gr03.amos.bikerapp.Adapters.MessageListRecyclerViewAdapter;
 import com.gr03.amos.bikerapp.Adapters.ShowConversationWithFriendsListRecyclerViewAdapter;
 import com.gr03.amos.bikerapp.Models.Friend;
 import com.gr03.amos.bikerapp.Models.Message;
@@ -24,8 +23,6 @@ public class MyChatListFragment extends Fragment {
     RecyclerView messageListRecyclerViewAdapter;
     ShowConversationWithFriendsListRecyclerViewAdapter showConversationWithFriendsListRecyclerViewAdapter;
     private View view;
-    Message message;
-
 
     public MyChatListFragment() {
     }
@@ -47,20 +44,6 @@ public class MyChatListFragment extends Fragment {
         Realm.init(container.getContext());
         Realm realm = Realm.getDefaultInstance();
         RealmResults<Friend> friends = realm.where(Friend.class).findAll();
-
-      /*  TODO
-
-               RealmList<Event> events = new RealmList<>();
-        for (EventParticipation eventParticipation : eventParticipations) {
-            message = realm.where(Event.class)
-                    .equalTo("id_event", eventParticipation.getId_event())
-                    .findFirst();
-            Log.i("EventDesc", message.toString());
-            events.add(message);
-        }
-
-        populateRecyclerView(events);
-        */
         populateRecyclerView(friends);
         return view;
     }
@@ -68,10 +51,7 @@ public class MyChatListFragment extends Fragment {
     private void populateRecyclerView(RealmResults<Friend> friendConversation) {
         messageListRecyclerViewAdapter = view.findViewById(R.id.myChats);
         messageListRecyclerViewAdapter.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        //TODO
         friendConversation = friendConversation.sort("last_message_time", Sort.DESCENDING);
-
         showConversationWithFriendsListRecyclerViewAdapter = new ShowConversationWithFriendsListRecyclerViewAdapter(getContext(), friendConversation);
         messageListRecyclerViewAdapter.setAdapter(showConversationWithFriendsListRecyclerViewAdapter);
     }
