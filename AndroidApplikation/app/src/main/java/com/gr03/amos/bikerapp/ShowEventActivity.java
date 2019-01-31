@@ -31,6 +31,7 @@ import com.gr03.amos.bikerapp.FragmentActivity.MyRouteListFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.ShowEventsFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.ShowFriendsFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.ShowRoutesFragment;
+import com.gr03.amos.bikerapp.NetworkLayer.Requests;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -284,15 +285,7 @@ public class ShowEventActivity extends AppCompatActivity
 
         //checks if the user already added profile information
         try {
-            JSONObject response;
-
-            FutureTask<String> task = new FutureTask((Callable<String>) () -> {
-                JSONObject threadResponse = Requests.getResponse("checkUserAdded", json);
-                return threadResponse.toString();
-            });
-            new Thread(task).start();
-            Log.i("Response", task.get());
-            response = new JSONObject(task.get());
+            JSONObject response = Requests.getResponse("checkUserAdded", json,"POST");
 
             //handle response
             if (response.has("success")) {

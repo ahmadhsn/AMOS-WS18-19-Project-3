@@ -15,7 +15,11 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONException;
+        import com.gr03.amos.bikerapp.NetworkLayer.Requests;
+        import com.gr03.amos.bikerapp.NetworkLayer.ResponseHandler;
+        import com.gr03.amos.bikerapp.NetworkLayer.SocketUtility;
+
+        import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
@@ -24,7 +28,7 @@ import java.util.Locale;
 
 ;
 
-public class AddProfileBasicUserActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
+public class AddProfileBasicUserActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, ResponseHandler {
 
     EditText FName, LName, Dob, Street, HNumber, Postcode, City, State, Country;
     TextView choose_gender;
@@ -173,25 +177,8 @@ public class AddProfileBasicUserActivity extends AppCompatActivity implements Da
         json.put("state", State.getText().toString());
         json.put("country", Country.getText().toString());
 
-        try {
-            JSONObject response = Requests.getJSONResponse("addUserBasic", json, "POST");
+        Requests.executeRequest(this, "POST", "addUserBasic", json);
 
-            if(response.has("addUserBasic")){
-                String statusReg = (String) response.get("addUserBasic");
-
-                if(statusReg.equals("successfullCreation")){
-                    Log.i("AddProfileBasicUser","successfullCreation");
-                    SaveSharedPreference.saveaddId(this, 1);
-                    Toast toast = Toast.makeText(this, "You have successfully added a Profile!", Toast.LENGTH_SHORT);
-                    TextView v = toast.getView().findViewById(android.R.id.message);
-                    if( v != null) v.setGravity(Gravity.CENTER);
-                    toast.show();
-                    finish();
-                }
-            }
-        } catch (Exception e) {
-            Log.i("Exception --- not requested", e.toString());
-        }
     }
 
     private void intentHandling(){
@@ -229,5 +216,39 @@ public class AddProfileBasicUserActivity extends AppCompatActivity implements Da
     boolean isTextEmpty(EditText text){
         CharSequence string = text.getText().toString();
         return TextUtils.isEmpty(string);
+    }
+
+    @Override
+    public void onResponse(JSONObject response, String urlTail) {
+        if (SocketUtility.hasSocketError(response)) {
+            Toast.makeText(this, "No response from server.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if(urlTail.equals("addUserBasic")){
+            onResposeAddUser(response);
+        }
+
+    }
+
+    public void onResposeAddUser(JSONObject response){
+        try {
+
+            if(response.has("addUserBasic")){
+                String statusReg = (String) response.get("addUserBasic");
+
+                if(statusReg.equals("successfullCreation")){
+                    Log.i("AddProfileBasicUser","successfullCreation");
+                    SaveSharedPreference.saveaddId(this, 1);
+                    Toast toast = Toast.makeText(this, "You have successfully added a Profile!", Toast.LENGTH_SHORT);
+                    TextView v = toast.getView().findViewById(android.R.id.message);
+                    if( v != null) v.setGravity(Gravity.CENTER);
+                    toast.show();
+                    finish();
+                }
+            }
+        } catch (Exception e) {
+            Log.i("Exception --- not requested", e.toString());
+        }
     }
 }
