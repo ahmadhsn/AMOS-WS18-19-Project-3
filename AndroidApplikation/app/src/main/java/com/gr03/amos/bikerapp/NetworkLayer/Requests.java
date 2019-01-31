@@ -18,6 +18,8 @@ import org.json.JSONObject;
 
 import java.util.concurrent.ExecutionException;
 
+import okhttp3.Response;
+
 public class Requests {
 
     public static final String HOST = "10.0.2.2";
@@ -28,23 +30,23 @@ public class Requests {
      * Execute a request without JSON body as an async task in the background. Response handling is specified in the given ResponseHandler.
      *
      * @param handler specifies ResponseHandling
-     * @param method HTTP method ("GET", "POST", "PUT")
+     * @param method  HTTP method ("GET", "POST", "PUT")
      * @param urlTail urlTail (servicename) of Request
      */
-    public static void executeRequest(ResponseHandler handler, String method, String urlTail){
-        new HttpTask(handler,method, urlTail).execute();
+    public static void executeRequest(ResponseHandler handler, String method, String urlTail) {
+        new HttpTask(handler, method, urlTail).execute();
     }
 
     /**
      * Execute a request with JSON body as an async task in the background. Response handling is specified in the given ResponseHandler.
      *
      * @param handler specifies ResponseHandling
-     * @param method HTTP method ("GET", "POST", "PUT")
+     * @param method  HTTP method ("GET", "POST", "PUT")
      * @param urlTail urlTail (servicename) of Request
-     * @param json json Object for request
+     * @param json    json Object for request
      */
-    public static void executeRequest(ResponseHandler handler, String method, String urlTail, JSONObject json){
-        new HttpTask(handler,method, urlTail).execute(json.toString());
+    public static void executeRequest(ResponseHandler handler, String method, String urlTail, JSONObject json) {
+        new HttpTask(handler, method, urlTail).execute(json.toString());
     }
 
 
@@ -52,8 +54,8 @@ public class Requests {
      * Temporary method to handle old requests as a synch task. Response handling is done on return of the method.
      *
      * @param urlTail urlTail (servicename) of Request
-     * @param json json Object for request
-     * @param method HTTP method ("GET", "POST", "PUT")
+     * @param json    json Object for request
+     * @param method  HTTP method ("GET", "POST", "PUT")
      * @return JSON Object of response
      */
     public static JSONObject getResponse(String urlTail, JSONObject json, String method) {
@@ -66,8 +68,8 @@ public class Requests {
      * On Timeout a toast is displayed if context is given.
      *
      * @param urlTail urlTail (servicename) of Request
-     * @param json json Object for request
-     * @param method HTTP method ("GET", "POST", "PUT")
+     * @param json    json Object for request
+     * @param method  HTTP method ("GET", "POST", "PUT")
      * @param context
      * @return JSON Object of response
      */
@@ -86,7 +88,7 @@ public class Requests {
 
         }
 
-        if(context != null && SocketUtility.hasSocketError(response)){
+        if (context != null && SocketUtility.hasSocketError(response)) {
             Toast.makeText(context, "No response from server.", Toast.LENGTH_LONG).show();
         }
 
@@ -97,28 +99,22 @@ public class Requests {
      * Executes a GET Request as an asynch background. To handle the response the RealmResponseHandler is used.
      * After receiving the response the realmResponseHandler updates the Realm Database.
      *
-     *
-     * @param urlTail urlTail (servicename) of request
+     * @param urlTail  urlTail (servicename) of request
      * @param jsonName string of json Object in response
-     * @param type Class of RealmModel
-     * @param context Context of application to init realm
+     * @param type     Class of RealmModel
+     * @param context  Context of application to init realm
      */
-    private static void executeRealmResponse(String urlTail, String jsonName, Class type, Context context) {
-        RealmResponseHandler handler = new RealmResponseHandler(type, jsonName, context);
+    private static void executeRealmResponse(String urlTail, String jsonName, Class type, Context context, ResponseHandler handler) {
+        if (handler == null) {
+            handler = new DefaultResponseHandler();
+        }
+        RealmResponseHandler realmHandler = new RealmResponseHandler(type, jsonName, context);
 
         try {
-            new HttpTask(handler,"GET", urlTail).execute().get();
-        } catch (ExecutionException |InterruptedException e) {
+            new HttpTask(handler, "GET", urlTail, realmHandler).execute().get();
+        } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
-    }
-
-    private static void executeRealmResponse(String urlTail, String jsonName, Class type, Context context, ResponseHandler handler){
-        executeRequest(handler, "GET", urlTail);
-    }
-
-    public static void getJsonResponse(String urlTail, Context context) {
-        executeRealmResponse(urlTail, "event", Event.class, context);
     }
 
     public static void getJsonResponseForEvents(String urlTail, Context context, ResponseHandler handler) {
@@ -126,27 +122,23 @@ public class Requests {
     }
 
     public static void getJsonResponseForRoutes(String urlTail, Context context) {
-        executeRealmResponse(urlTail, "route", Route.class, context);
+        executeRealmResponse(urlTail, "route", Route.class, context, null);
     }
 
-    public static void getJsonResponseForRoutes(String urlTail, Context context, ResponseHandler handler){
+    public static void getJsonResponseForRoutes(String urlTail, Context context, ResponseHandler handler) {
         executeRealmResponse(urlTail, "route", Route.class, context, handler);
     }
 
-    public static void getJsonResponseForFriends(String urlTail, Context context) {
-        executeRealmResponse(urlTail, "friends", Friend.class, context);
+    public static void getJsonResponseForFriends(String urlTail, Context context, ResponseHandler handler) {
+        executeRealmResponse(urlTail, "friends", Friend.class, context, handler);
     }
 
-    public static void getJsonResponseForFriendsRoutes(String urlTail, Context context) {
-        executeRealmResponse(urlTail, "friend", Friend.class, context);
+    public static void getJsonResponseForFriendsRoutes(String urlTail, Context context, ResponseHandler handler) {
+        executeRealmResponse(urlTail, "friend", Friend.class, context, handler);
     }
 
     public static void getJsonResponseForUser(String urlTail, Context context) {
-        executeRealmResponse(urlTail, "user", User.class, context);
-    }
-
-    public static void getJsonResponseForChat(String urlTail, int chatId, Context context) {
-        executeRealmResponse(urlTail + "/" + chatId, "Chat", Message.class, context);
+        executeRealmResponse(urlTail, "user", User.class, context, null);
     }
 
     public static void getJsonResponseForChat(String urlTail, int chatId, Context context, ResponseHandler handler) {

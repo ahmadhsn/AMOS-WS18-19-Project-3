@@ -1,5 +1,6 @@
 package com.gr03.amos.bikerapp.NetworkLayer;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -28,6 +29,11 @@ public class HttpTask extends AsyncTask<String, Void, JSONObject> {
     private boolean connectionTimeout;
     private JSONObject response;
     private ResponseHandler handler;
+    private String jsonName;
+    private Context context;
+    private Class typeClass;
+    private boolean hasRealmUpdate;
+    private ResponseHandler realmHandler;
 
     /**
      * Constructor for HttpTask.
@@ -45,6 +51,27 @@ public class HttpTask extends AsyncTask<String, Void, JSONObject> {
         this.urlTail = urlTail;
         this.connectionTimeout = false;
         this.handler = handler;
+        this.hasRealmUpdate = false;
+    }
+
+    /**
+     * Constructor for HttpTask with Realm updates.
+     *
+     * @param handler specifies Response handling
+     * @param method HTTP Method ("GET", "POST", "PUT")
+     * @param urlTail urlTail (servicename) of request
+     */
+    public HttpTask(ResponseHandler handler, String method, String urlTail, ResponseHandler realmHandler) {
+        super();
+        client = new OkHttpClient.Builder()
+                .retryOnConnectionFailure(false)
+                .build();
+        this.method = method;
+        this.urlTail = urlTail;
+        this.connectionTimeout = false;
+        this.handler = handler;
+        this.realmHandler = realmHandler;
+        this.hasRealmUpdate = true;
     }
 
 
@@ -109,6 +136,10 @@ public class HttpTask extends AsyncTask<String, Void, JSONObject> {
             }
         }
 
+        //execute Realm update before other Response handling if necessary
+        if(hasRealmUpdate){
+            realmHandler.onResponse(response, urlTail);
+        }
         handler.onResponse(response, urlTail);
     }
 

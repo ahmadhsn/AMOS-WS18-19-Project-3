@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.gr03.amos.bikerapp.Models.RouteParticipation;
+import com.gr03.amos.bikerapp.NetworkLayer.DefaultResponseHandler;
 import com.gr03.amos.bikerapp.NetworkLayer.Requests;
 import com.gr03.amos.bikerapp.NetworkLayer.ResponseHandler;
 import com.gr03.amos.bikerapp.NetworkLayer.SocketUtility;

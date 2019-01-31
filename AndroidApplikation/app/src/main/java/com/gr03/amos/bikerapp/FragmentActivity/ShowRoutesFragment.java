@@ -77,11 +77,37 @@ public class ShowRoutesFragment extends Fragment implements ResponseHandler {
     }
 
     protected void getFriendsRoutes(Context context) {
-
-        Realm.init(context);
-        Realm realm = Realm.getDefaultInstance();
         Requests.getJsonResponseForFriendsRoutes("getFriendsRoutes/" +
-                SaveSharedPreference.getUserID(context), context);
+                SaveSharedPreference.getUserID(context), context, this);
+    }
+
+    @Override
+    public void onResponse(JSONObject response, String urlTail) {
+        if(SocketUtility.hasSocketError(response)){
+            Toast.makeText(getContext(), "No response from server.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if(urlTail.equals("getRoutes")) {
+            onResponseRoutes();
+        }else if(urlTail.equals("getFriendsRoutes/" +
+                SaveSharedPreference.getUserID(getContext()))){
+            onResponseFriendRoutes();
+        }
+    }
+
+    private void onResponseRoutes(){
+        Realm.init(getContext());
+        Realm realm = Realm.getDefaultInstance();
+
+        User user = realm.where(User.class).equalTo("id_user", SaveSharedPreference.getUserID(getContext())).findFirst();
+        RealmResults<Route> routes = realm.where(Route.class).equalTo("start.address.city", user.getAddress().getCity()).findAll();
+        populateRecyclerView(routes);
+    }
+
+    private void onResponseFriendRoutes(){
+        Realm.init(getContext());
+        Realm realm = Realm.getDefaultInstance();
         RealmResults<Friend> friends = realm.where(Friend.class).findAll();
 
         RealmList<Route> routes = new RealmList<>();
@@ -93,39 +119,5 @@ public class ShowRoutesFragment extends Fragment implements ResponseHandler {
         showRoutesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         showFriendsRoutesRecyclerViewAdapter = new ShowFriendsRoutesRecyclerViewAdapter(getContext(), routes);
         showRoutesRecyclerView.setAdapter(showFriendsRoutesRecyclerViewAdapter);
-    }
-
-    @Override
-    public void onResponse(JSONObject response, String urlTail) {
-        if(SocketUtility.hasSocketError(response)){
-            Toast.makeText(getContext(), "No response from server.", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if(urlTail.equals("getRoutes")) {
-            String jsonName = "route";
-
-            if (SocketUtility.hasSocketError(response)) {
-                Toast.makeText(getContext(), "No response from server.", Toast.LENGTH_LONG);
-                return;
-            }
-            try {
-                JSONArray jsonString = response.getJSONArray(jsonName);
-
-                Realm.init(getContext());
-                Realm realm = Realm.getDefaultInstance();
-                realm.beginTransaction();
-                realm.createOrUpdateAllFromJson(Route.class, jsonString);
-                realm.commitTransaction();
-                realm.close();
-
-                User user = realm.where(User.class).equalTo("id_user", SaveSharedPreference.getUserID(getContext())).findFirst();
-                RealmResults<Route> routes = realm.where(Route.class).equalTo("start.address.city", user.getAddress().getCity()).findAll();
-                populateRecyclerView(routes);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
     }
 }

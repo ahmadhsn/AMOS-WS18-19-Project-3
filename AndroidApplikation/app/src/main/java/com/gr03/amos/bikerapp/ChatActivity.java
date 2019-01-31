@@ -152,17 +152,6 @@ public class ChatActivity extends AppCompatActivity implements ResponseHandler {
     private void onResponseGetChat(JSONObject response){
         Realm.init(getApplicationContext());
         Realm realm = Realm.getDefaultInstance();
-        try {
-            String jsonName = "Chat";
-            JSONArray jsonString = response.getJSONArray(jsonName);
-
-
-            realm.beginTransaction();
-            realm.createOrUpdateAllFromJson(Message.class, jsonString);
-            realm.commitTransaction();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
 
         RealmResults<Message> messages = realm.where(Message.class).equalTo("id_chat", chatId).findAll();
 

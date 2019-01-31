@@ -35,8 +35,6 @@ public class ShowFriendsRoutesRecyclerViewAdapter extends RecyclerView.Adapter<S
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.show_route_row, parent, false);
         return new ViewHolder(view);
-
-
     }
 
     @Override

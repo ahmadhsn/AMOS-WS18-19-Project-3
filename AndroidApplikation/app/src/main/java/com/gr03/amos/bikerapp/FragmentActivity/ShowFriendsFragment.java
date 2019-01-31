@@ -67,16 +67,7 @@ public class ShowFriendsFragment extends Fragment implements SearchView.OnQueryT
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle("");
 
-        Requests.getJsonResponseForFriends("getFriends/" + SaveSharedPreference.getUserID(container.getContext()), container.getContext());
-
-        Realm.init(container.getContext());
-        Realm realm = Realm.getDefaultInstance();
-        RealmResults<Friend> friends = realm.where(Friend.class).findAll();
-
-        showFriendsRecyclerView = view.findViewById(R.id.showFriends);
-        showFriendsRecyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
-        showFriendsListRecyclerViewAdapter = new ShowFriendsListRecyclerViewAdapter(container.getContext(), friends);
-        showFriendsRecyclerView.setAdapter(showFriendsListRecyclerViewAdapter);
+        Requests.getJsonResponseForFriends("getFriends/" + SaveSharedPreference.getUserID(container.getContext()), container.getContext(), this);
 
         return view;
     }
@@ -155,6 +146,20 @@ public class ShowFriendsFragment extends Fragment implements SearchView.OnQueryT
             } catch (Exception e) {
                 Log.i("Exception --- not requested", e.toString());
             }
+        }else if(urlTail.equals("getFriends/" + SaveSharedPreference.getUserID(getContext()))){
+            onResponseFriends(response);
         }
+    }
+
+    private void onResponseFriends(JSONObject response){
+        Realm.init(getContext());
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<Friend> friends = realm.where(Friend.class).findAll();
+
+        showFriendsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        showFriendsListRecyclerViewAdapter = new ShowFriendsListRecyclerViewAdapter(getContext(), friends);
+        showFriendsRecyclerView.setAdapter(showFriendsListRecyclerViewAdapter);
+
+
     }
 }

@@ -154,20 +154,8 @@ public class ShowEventsFragment extends Fragment implements ResponseHandler {
         }
 
         if (urlTail.equals("getEvents")) {
-            String jsonName = "event";
-            JSONArray jsonString = null;
-            try {
-                jsonString = response.getJSONArray(jsonName);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
             Realm.init(getContext());
             Realm realm = Realm.getDefaultInstance();
-
-            realm.beginTransaction();
-            realm.createOrUpdateAllFromJson(Event.class, jsonString);
-            realm.commitTransaction();
 
             RealmResults<Event> events = realm.where(Event.class).sort("id_user_type", Sort.DESCENDING).findAll();
 
