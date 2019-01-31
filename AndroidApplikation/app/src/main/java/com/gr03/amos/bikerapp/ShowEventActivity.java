@@ -9,12 +9,14 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,9 +36,7 @@ import java.net.URLConnection;
 
 public class ShowEventActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    MenuItem menuItem;
     BottomNavigationView navigation;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,9 +68,8 @@ public class ShowEventActivity extends AppCompatActivity
                 };
                 task.execute();
                 System.out.println("No server connection, we are in the show dialog branch");
-            }
-            catch(Exception e){
-               System.out.println("No server connection, but doesnt show dialog");
+            } catch (Exception e) {
+                System.out.println("No server connection, but doesnt show dialog");
             }
         }
 
@@ -106,7 +105,7 @@ public class ShowEventActivity extends AppCompatActivity
         //set email and username in navigation drawer
         NavigationView navView = findViewById(R.id.nav_view);
         View navHeader = navView.getHeaderView(0);
-        TextView txt_email = (TextView) navHeader.findViewById(R.id.txt_email);
+        TextView txt_email = navHeader.findViewById(R.id.txt_email);
         txt_email.setText(SaveSharedPreference.getUserEmail(this));
 
     }
@@ -114,17 +113,8 @@ public class ShowEventActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else if (fragmentManager.getBackStackEntryCount() > 0) {
-            fragmentManager.popBackStack();
-            getSupportActionBar().setTitle("Events");
-            if (navigation.getVisibility() == View.GONE) {
-                navigation.setVisibility(View.VISIBLE);
-            }
+        if (getFragmentManager().getBackStackEntryCount() > 0) {
+            getFragmentManager().popBackStack();
         } else {
             super.onBackPressed();
         }
@@ -132,7 +122,6 @@ public class ShowEventActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.show_event, menu);
         return true;
     }
@@ -174,36 +163,23 @@ public class ShowEventActivity extends AppCompatActivity
         } else if (id == R.id.my_event_list) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.create_event_fragment, new MyEventListFragment())
+                    .addToBackStack("SHOW_EVENT_FRAGMENT")
                     .commit();
-            if (navigation.getVisibility() == View.VISIBLE) {
-                navigation.setVisibility(View.GONE);
-            }
-
         } else if (id == R.id.my_chat_list) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.create_event_fragment, new MyChatListFragment())
+                    .addToBackStack("SHOW_CHAT_FRAGMENT")
                     .commit();
-            if (navigation.getVisibility() == View.VISIBLE) {
-                navigation.setVisibility(View.GONE);
-            }
-
         } else if (id == R.id.my_route_list) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.create_event_fragment, new MyRouteListFragment())
+                    .addToBackStack("ROUTE_LIST_FRAGMENT")
                     .commit();
-            if (navigation.getVisibility() == View.VISIBLE) {
-                navigation.setVisibility(View.GONE);
-            }
-
         } else if (id == R.id.change_password) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.create_event_fragment, new ChangePasswordFragment())
                     .addToBackStack("CHANGE_PASSWORD_FRAGMENT")
                     .commit();
-            if (navigation.getVisibility() == View.VISIBLE) {
-                navigation.setVisibility(View.GONE);
-            }
-
         } else if (id == R.id.add_profile) {
             Intent intent = new Intent(this, AddProfileBasicUserActivity.class);
             startActivity(intent);
@@ -215,23 +191,17 @@ public class ShowEventActivity extends AppCompatActivity
                     .replace(R.id.create_event_fragment, new CreateEventFragment())
                     .addToBackStack("CREATE_EVENT_FRAGMENT")
                     .commit();
-            if (navigation.getVisibility() == View.VISIBLE) {
-                navigation.setVisibility(View.GONE);
-            }
-
         } else if (id == R.id.show_friends) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.create_event_fragment, new ShowFriendsFragment())
                     .addToBackStack("FRIEND_LIST_FRAGMENT")
                     .commit();
-            if (navigation.getVisibility() == View.VISIBLE) {
-                navigation.setVisibility(View.GONE);
-            }
         } else if (id == R.id.sidebar_logout) {
             SaveSharedPreference.clearSharedPrefrences(this);
             Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
-        } else if (id == R.id.home) {
+        }
+        else if (id == R.id.home) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.create_event_fragment, new ShowEventsFragment())
                     .addToBackStack("HOME_FRAGMENT")
@@ -243,47 +213,28 @@ public class ShowEventActivity extends AppCompatActivity
         return true;
     }
 
-    //    bottom
 
-
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
-//
-//
-//    }
-
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            Fragment fragment;
-            switch (item.getItemId()) {
-                case R.id.navigation_event:
-//                    toolbar.setTitle("Event Feed");
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.create_event_fragment, new ShowEventsFragment())
-                            .commit();
-                    getSupportActionBar().setTitle("Event Feed");
-                    return true;
-                case R.id.navigation_route:
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.create_event_fragment, new ShowRoutesFragment())
-                            .commit();
-                    getSupportActionBar().setTitle("Route Feed");
-//                    toolbar.setTitle("Route Feed");
-                    return true;
-            }
-            return false;
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = item -> {
+        switch (item.getItemId()) {
+            case R.id.navigation_event:
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.create_event_fragment, new ShowEventsFragment())
+                        .commit();
+                getSupportActionBar().setTitle("Event Feed");
+                return true;
+            case R.id.navigation_route:
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.create_event_fragment, new ShowRoutesFragment())
+                        .commit();
+                getSupportActionBar().setTitle("Route Feed");
+                return true;
         }
+        return false;
     };
 
 
-
     public boolean isConnectedToServer(String url, int timeout) {
-        try{
+        try {
             URL myUrl = new URL(url);
             URLConnection connection = myUrl.openConnection();
             connection.setConnectTimeout(timeout);
@@ -294,7 +245,6 @@ public class ShowEventActivity extends AppCompatActivity
             return false;
         }
     }
-
 
 
 }
