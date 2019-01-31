@@ -54,7 +54,7 @@ public class ProfileBasicUserActivity extends AppCompatActivity implements Respo
         user_state = findViewById(R.id.user_state);
         user_country = findViewById(R.id.user_country);
 
-        user_fname.setCursorVisible(false);
+        pageUneditableWhenOpening();
 
         intent = getIntent();
         userId = intent.getLongExtra("id", 0);
@@ -67,6 +67,31 @@ public class ProfileBasicUserActivity extends AppCompatActivity implements Respo
             onCreateAfterProfileId();
         }
     }
+
+    private void pageUneditableWhenOpening() {
+            user_fname.setCursorVisible(false);
+            user_fname.setEnabled(false);
+            user_fname.setFocusableInTouchMode(false);
+            user_fname.setClickable(false);
+            user_street.setEnabled(false);
+            user_street.setFocusableInTouchMode(false);
+            user_street.setClickable(false);
+            user_hnumber.setEnabled(false);
+            user_hnumber.setFocusableInTouchMode(false);
+            user_hnumber.setClickable(false);
+            user_pcode.setEnabled(false);
+            user_pcode.setFocusableInTouchMode(false);
+            user_pcode.setClickable(false);
+            user_city.setEnabled(false);
+            user_city.setFocusableInTouchMode(false);
+            user_city.setClickable(false);
+            user_state.setEnabled(false);
+            user_state.setFocusableInTouchMode(false);
+            user_state.setClickable(false);
+            user_country.setEnabled(false);
+            user_country.setFocusableInTouchMode(false);
+            user_country.setClickable(false);
+        }
 
     private void onCreateAfterAddProfile() {
         Intent intent2 = getIntent();
