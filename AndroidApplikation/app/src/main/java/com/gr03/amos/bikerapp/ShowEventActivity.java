@@ -165,22 +165,27 @@ public class ShowEventActivity extends AppCompatActivity
                     .replace(R.id.create_event_fragment, new MyEventListFragment())
                     .addToBackStack("SHOW_EVENT_FRAGMENT")
                     .commit();
+            getSupportActionBar().setTitle("Event List");
         } else if (id == R.id.my_chat_list) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.create_event_fragment, new MyChatListFragment())
                     .addToBackStack("SHOW_CHAT_FRAGMENT")
                     .commit();
+            getSupportActionBar().setTitle("My Messages");
         } else if (id == R.id.my_route_list) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.create_event_fragment, new MyRouteListFragment())
                     .addToBackStack("ROUTE_LIST_FRAGMENT")
                     .commit();
+            getSupportActionBar().setTitle("Route List");
         } else if (id == R.id.change_password) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.create_event_fragment, new ChangePasswordFragment())
                     .addToBackStack("CHANGE_PASSWORD_FRAGMENT")
                     .commit();
+            getSupportActionBar().setTitle("Change Password");
         } else if (id == R.id.add_profile) {
+
             Intent intent = new Intent(this, AddProfileBasicUserActivity.class);
             startActivity(intent);
         } else if (id == R.id.add_route) {
@@ -191,11 +196,13 @@ public class ShowEventActivity extends AppCompatActivity
                     .replace(R.id.create_event_fragment, new CreateEventFragment())
                     .addToBackStack("CREATE_EVENT_FRAGMENT")
                     .commit();
+            getSupportActionBar().setTitle("Add Event");
         } else if (id == R.id.show_friends) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.create_event_fragment, new ShowFriendsFragment())
                     .addToBackStack("FRIEND_LIST_FRAGMENT")
                     .commit();
+            getSupportActionBar().setTitle("Friends");
         } else if (id == R.id.sidebar_logout) {
             SaveSharedPreference.clearSharedPrefrences(this);
             Intent intent = new Intent(this, HomeActivity.class);
@@ -206,6 +213,7 @@ public class ShowEventActivity extends AppCompatActivity
                     .replace(R.id.create_event_fragment, new ShowEventsFragment())
                     .addToBackStack("HOME_FRAGMENT")
                     .commit();
+            getSupportActionBar().setTitle("Event Feed");
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
