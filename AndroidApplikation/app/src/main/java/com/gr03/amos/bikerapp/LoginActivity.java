@@ -63,7 +63,7 @@ public class LoginActivity extends AppCompatActivity implements ResponseHandler 
             return;
         }
         if (SocketUtility.hasSocketError(response)) {
-            Toast.makeText(this, "No response from server.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Login not possible. Please try again later.", Toast.LENGTH_LONG).show();
             return;
         }
         if (response != null && response.has("success")) {
@@ -81,7 +81,6 @@ public class LoginActivity extends AppCompatActivity implements ResponseHandler 
                 realm.beginTransaction();
                 realm.createOrUpdateObjectFromJson(User.class, response);
                 realm.commitTransaction();
-                realm.close();
 
                 User user = realm.where(User.class).findFirst();
 

@@ -214,8 +214,7 @@ public class ProfileBasicUserActivity extends AppCompatActivity implements Respo
         json.put("state", user_state.getText().toString());
         json.put("country", user_country.getText().toString());
 
-        Requests.executeRequest(this, "POST", "editUserInfo");
-
+        Requests.executeRequest(this, "POST", "editUserInfo", json);
 
         makeFieldsUneditable();
     }
