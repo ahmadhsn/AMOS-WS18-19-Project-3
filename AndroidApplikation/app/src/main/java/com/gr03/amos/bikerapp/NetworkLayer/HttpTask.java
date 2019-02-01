@@ -29,9 +29,6 @@ public class HttpTask extends AsyncTask<String, Void, JSONObject> {
     private boolean connectionTimeout;
     private JSONObject response;
     private ResponseHandler handler;
-    private String jsonName;
-    private Context context;
-    private Class typeClass;
     private boolean hasRealmUpdate;
     private ResponseHandler realmHandler;
 
