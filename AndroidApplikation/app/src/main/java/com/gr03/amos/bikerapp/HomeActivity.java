@@ -10,7 +10,6 @@ import java.util.Objects;
 public class HomeActivity extends AppCompatActivity {
     Button loginButton;
     Button signUpButton;
-    Button ChangePasswordButton;
 
 
     @Override

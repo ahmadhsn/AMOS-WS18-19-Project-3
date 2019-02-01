@@ -16,7 +16,7 @@ public class RealmResponseHandler implements ResponseHandler {
     private Context context;
     private Class typeClass;
 
-    public RealmResponseHandler(Class typeClass, String jsonName, Context context){
+    public RealmResponseHandler(Class typeClass, String jsonName, Context context) {
         this.typeClass = typeClass;
         this.jsonName = jsonName;
         this.context = context;
@@ -24,21 +24,21 @@ public class RealmResponseHandler implements ResponseHandler {
 
     @Override
     public void onResponse(JSONObject response, String urlTail) {
-        if(SocketUtility.hasSocketError(response)){
-            Toast.makeText(context, "No response from server.", Toast.LENGTH_LONG);
-            return;
-        }
-        try {
-            JSONArray jsonString = response.getJSONArray(jsonName);
+        if (SocketUtility.checkRequestSuccessful(context, response)) {
 
-            Realm.init(context);
-            Realm realm = Realm.getDefaultInstance();
-            realm.beginTransaction();
-            realm.createOrUpdateAllFromJson(typeClass, jsonString);
-            realm.commitTransaction();
-            realm.close();
-        } catch (JSONException e) {
-            e.printStackTrace();
+            try {
+                JSONArray jsonString = response.getJSONArray(jsonName);
+
+                Realm.init(context);
+                Realm realm = Realm.getDefaultInstance();
+                realm.beginTransaction();
+                realm.createOrUpdateAllFromJson(typeClass, jsonString);
+                realm.commitTransaction();
+                realm.close();
+            } catch (JSONException e) {
+                e.printStackTrace();
+
+            }
         }
 
     }

@@ -127,33 +127,33 @@ public class ChangePasswordFragment extends Fragment implements ResponseHandler 
 
     @Override
     public void onResponse(JSONObject response, String urlTail) {
-        if (SocketUtility.hasSocketError(response)) {
-            Toast.makeText(getContext(), "No response from server.", Toast.LENGTH_LONG).show();
-            return;
+        if (SocketUtility.checkRequestSuccessful(getContext(),response)) {
+            if (urlTail.equals("changePassword")) {
+                onResponseChangePwd(response);
+            }
         }
+    }
 
-        switch (urlTail) {
-            case "changePassword":
-                try {
-                    //handle response
-                    if (response != null && response.has("passwordUpdated")) {
-                        String loginResponse = response.getString("passwordUpdated");
+    private void onResponseChangePwd(JSONObject response){
+        try {
+            //handle response
+            if (response != null && response.has("passwordUpdated")) {
+                String loginResponse = response.getString("passwordUpdated");
 
-                        if (loginResponse.equals("successfullUpdation")) {
-                            Toast.makeText(getContext(), "Password Successfully Changed", Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(getContext(), ShowEventActivity.class);
-                            startActivity(intent);
+                if (loginResponse.equals("successfullUpdation")) {
+                    Toast.makeText(getContext(), "Password Successfully Changed", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(getContext(), ShowEventActivity.class);
+                    startActivity(intent);
 //                    return;
-                        } else {
-                            Toast.makeText(getContext(), "Wrong Old Password", Toast.LENGTH_LONG).show();
-                            return;
-                        }
-                    }
-
-                } catch (Exception e) {
-
-                    Log.i("Exception --- not requested", e.toString());
+                } else {
+                    Toast.makeText(getContext(), "Wrong Old Password", Toast.LENGTH_LONG).show();
+                    return;
                 }
+            }
+
+        } catch (Exception e) {
+
+            Log.i("Exception --- not requested", e.toString());
         }
     }
 

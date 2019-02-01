@@ -38,4 +38,43 @@ public class SocketUtility {
         }
     }
 
+    public static boolean checkRequestSuccessful(Context ctx, JSONObject obj){
+        boolean isSuccessful = true;
+
+        String errorMsg = getErrorMessage(obj);
+        if(errorMsg != null){
+            isSuccessful = false;
+            Toast.makeText(ctx, errorMsg, Toast.LENGTH_LONG).show();
+        }
+
+        return isSuccessful;
+    }
+
+    private static String getErrorMessage(JSONObject obj){
+
+        if(obj.has("error")){
+            try {
+                String jsonError = obj.getString("error");
+
+                //check on network timeout
+                if(jsonError.equals("connection_timeout")){
+                    return "NetworkTimeout: Please try again later.";
+                }
+
+                //check on not found error
+                if(jsonError.equals("not_found")){
+                    return "Serivce not found. Please Contact us!";
+                }
+
+                //check on unauthorized
+                if(jsonError.equals("unauthorized")){
+                    return "Wrong user credentials";
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return null;
+    }
 }

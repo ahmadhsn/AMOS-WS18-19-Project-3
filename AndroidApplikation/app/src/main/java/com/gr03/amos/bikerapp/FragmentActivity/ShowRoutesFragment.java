@@ -83,16 +83,14 @@ public class ShowRoutesFragment extends Fragment implements ResponseHandler {
 
     @Override
     public void onResponse(JSONObject response, String urlTail) {
-        if(SocketUtility.hasSocketError(response)){
-            Toast.makeText(getContext(), "No response from server.", Toast.LENGTH_LONG).show();
-            return;
-        }
+        if (SocketUtility.checkRequestSuccessful(getContext(),response)) {
 
-        if(urlTail.equals("getRoutes")) {
-            onResponseRoutes();
-        }else if(urlTail.equals("getFriendsRoutes/" +
-                SaveSharedPreference.getUserID(getContext()))){
-            onResponseFriendRoutes();
+            if (urlTail.equals("getRoutes")) {
+                onResponseRoutes();
+            } else if (urlTail.equals("getFriendsRoutes/" +
+                    SaveSharedPreference.getUserID(getContext()))) {
+                onResponseFriendRoutes();
+            }
         }
     }
 

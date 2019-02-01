@@ -14,6 +14,7 @@ public class Event extends RealmObject {
     private String description;
     private String date;
     private String time;
+    private boolean is_participant;
 
     public String getName() {
         return name;
@@ -73,5 +74,13 @@ public class Event extends RealmObject {
 
     public void setId_user_type(long id_user_type) {
         this.id_user_type = id_user_type;
+    }
+
+    public boolean is_participant() {
+        return is_participant;
+    }
+
+    public void setParticipant(boolean participant) {
+        is_participant = participant;
     }
 }

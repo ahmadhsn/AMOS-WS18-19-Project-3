@@ -205,13 +205,11 @@ public class AddProfileBasicUserActivity extends AppCompatActivity implements Da
 
     @Override
     public void onResponse(JSONObject response, String urlTail) {
-        if (SocketUtility.hasSocketError(response)) {
-            Toast.makeText(this, "No response from server.", Toast.LENGTH_LONG).show();
-            return;
-        }
+        if (SocketUtility.checkRequestSuccessful(getApplicationContext(),response)) {
 
-        if(urlTail.equals("addUserBasic")){
-            onResposeAddUser(response);
+            if (urlTail.equals("addUserBasic")) {
+                onResposeAddUser(response);
+            }
         }
 
     }

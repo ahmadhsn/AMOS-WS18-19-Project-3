@@ -136,16 +136,15 @@ public class ChatActivity extends AppCompatActivity implements ResponseHandler {
 
     @Override
     public void onResponse(JSONObject response, String urlTail) {
-        if (SocketUtility.hasSocketError(response)) {
-            Toast.makeText(getApplicationContext(), "No response from server.", Toast.LENGTH_LONG).show();
-            return;
-        }
-        if (urlTail.equals("loadChat")) {
-            onResponseLoadChat(response);
-        } else if (urlTail.equals("saveMessage")) {
-            onResponseSaveMessage(response);
-        } else if(urlTail.equals("getChat/" + chatId)){
-            onResponseGetChat(response);
+        if (SocketUtility.checkRequestSuccessful(getApplicationContext(),response)) {
+
+            if (urlTail.equals("loadChat")) {
+                onResponseLoadChat(response);
+            } else if (urlTail.equals("saveMessage")) {
+                onResponseSaveMessage(response);
+            } else if (urlTail.equals("getChat/" + chatId)) {
+                onResponseGetChat(response);
+            }
         }
     }
 

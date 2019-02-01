@@ -276,37 +276,39 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
 
     @Override
     public void onResponse(JSONObject response, String urlTail) {
-        if (SocketUtility.hasSocketError(response)) {
-            Toast.makeText(getContext(), "No response from server.", Toast.LENGTH_LONG).show();
-            return;
-        }
+        if (SocketUtility.checkRequestSuccessful(getContext(), response)) {
 
-        if (urlTail.equals("getBusinessProfile/" + SaveSharedPreference.getUserID(getContext()))) {
-            try {
-                if (response.get("business_profile").equals("no_profile")) {
-                    createEvent.setEnabled(false);
-                    Toast.makeText(getContext(), "Please add address first", Toast.LENGTH_LONG).show();
-                } else {
-                    JSONObject responseProfile = response.getJSONObject("business_profile");
-                    JSONObject address = responseProfile.getJSONObject("business_address");
-                    street.setText(address.optString("street"));
-                    houseNr.setText(address.optString("housenumber"));
-                    postcode.setText(address.optString("postcode"));
-                    city.setText(address.optString("city"));
-                    state.setText(address.optString("state"));
-                    country.setText(address.optString("country"));
-
-                    houseNr.setEnabled(false);
-                    street.setEnabled(false);
-                    postcode.setEnabled(false);
-                    city.setEnabled(false);
-                    state.setEnabled(false);
-                    country.setEnabled(false);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
+            if (urlTail.equals("getBusinessProfile/" + SaveSharedPreference.getUserID(getContext()))) {
+                onResponseBusinessProfile(response);
             }
         }
 
+    }
+
+    private void onResponseBusinessProfile(JSONObject response) {
+        try {
+            if (response.get("business_profile").equals("no_profile")) {
+                createEvent.setEnabled(false);
+                Toast.makeText(getContext(), "Please add address first", Toast.LENGTH_LONG).show();
+            } else {
+                JSONObject responseProfile = response.getJSONObject("business_profile");
+                JSONObject address = responseProfile.getJSONObject("business_address");
+                street.setText(address.optString("street"));
+                houseNr.setText(address.optString("housenumber"));
+                postcode.setText(address.optString("postcode"));
+                city.setText(address.optString("city"));
+                state.setText(address.optString("state"));
+                country.setText(address.optString("country"));
+
+                houseNr.setEnabled(false);
+                street.setEnabled(false);
+                postcode.setEnabled(false);
+                city.setEnabled(false);
+                state.setEnabled(false);
+                country.setEnabled(false);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

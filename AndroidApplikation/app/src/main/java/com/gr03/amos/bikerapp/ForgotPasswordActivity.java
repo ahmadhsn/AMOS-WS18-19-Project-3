@@ -88,10 +88,6 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Respons
 
     @Override
     public void onResponse(JSONObject response, String urlTail) {
-        if (SocketUtility.hasSocketError(response)) {
-            Toast.makeText(this, "No response from server.", Toast.LENGTH_LONG).show();
-            return;
-        }
-
+        SocketUtility.checkRequestSuccessful(getApplicationContext(),response);
     }
 }

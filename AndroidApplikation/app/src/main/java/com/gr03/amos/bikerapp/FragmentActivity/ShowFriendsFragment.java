@@ -126,30 +126,28 @@ public class ShowFriendsFragment extends Fragment implements SearchView.OnQueryT
 
     @Override
     public void onResponse(JSONObject response, String urlTail) {
-        if (SocketUtility.hasSocketError(response)) {
-            Toast.makeText(getContext(), "No response from server.", Toast.LENGTH_LONG).show();
-            return;
-        }
+        if (SocketUtility.checkRequestSuccessful(getContext(),response)) {
 
-        /* show all users clickable */
-        if(urlTail.equals("searchUser")) {
-            try {
-                if (response != null && response.has("foundUser")) {
-                    String statusEv = (String) response.get("foundUser");
-                    if (statusEv.equals("unsuccessful")) {
-                        listUsers(new JSONArray());
-                        Toast.makeText(context, "No such User.", Toast.LENGTH_LONG).show();
+            /* show all users clickable */
+            if (urlTail.equals("searchUser")) {
+                try {
+                    if (response != null && response.has("foundUser")) {
+                        String statusEv = (String) response.get("foundUser");
+                        if (statusEv.equals("unsuccessful")) {
+                            listUsers(new JSONArray());
+                            Toast.makeText(context, "No such User.", Toast.LENGTH_LONG).show();
+                        }
+
+                        Log.i("allUser:", response.toString());
+                        listUsers(response.getJSONArray("user"));
                     }
 
-                    Log.i("allUser:", response.toString());
-                    listUsers(response.getJSONArray("user"));
+                } catch (Exception e) {
+                    Log.i("Exception --- not requested", e.toString());
                 }
-
-            } catch (Exception e) {
-                Log.i("Exception --- not requested", e.toString());
+            } else if (urlTail.equals("getFriends/" + SaveSharedPreference.getUserID(getContext()))) {
+                onResponseFriends(response);
             }
-        }else if(urlTail.equals("getFriends/" + SaveSharedPreference.getUserID(getContext()))){
-            onResponseFriends(response);
         }
     }
 

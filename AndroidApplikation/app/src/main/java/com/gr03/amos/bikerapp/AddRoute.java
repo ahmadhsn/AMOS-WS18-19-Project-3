@@ -173,10 +173,7 @@ public class AddRoute extends AppCompatActivity implements ResponseHandler {
 
     @Override
     public void onResponse(JSONObject response, String urlTail) {
-        if(SocketUtility.hasSocketError(response)){
-            Toast.makeText(context, "No response from server.", Toast.LENGTH_LONG).show();
-            return;
-        }
+        SocketUtility.checkRequestSuccessful(getApplicationContext(),response);
     }
 }
 

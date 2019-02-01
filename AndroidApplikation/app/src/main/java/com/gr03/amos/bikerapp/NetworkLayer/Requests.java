@@ -13,6 +13,7 @@ import com.gr03.amos.bikerapp.NetworkLayer.HttpTask;
 import com.gr03.amos.bikerapp.NetworkLayer.RealmResponseHandler;
 import com.gr03.amos.bikerapp.NetworkLayer.ResponseHandler;
 import com.gr03.amos.bikerapp.NetworkLayer.SocketUtility;
+import com.gr03.amos.bikerapp.SaveSharedPreference;
 
 import org.json.JSONObject;
 
@@ -88,8 +89,8 @@ public class Requests {
 
         }
 
-        if (context != null && SocketUtility.hasSocketError(response)) {
-            Toast.makeText(context, "No response from server.", Toast.LENGTH_LONG).show();
+        if (context != null) {
+            SocketUtility.checkRequestSuccessful(context, response);
         }
 
         return response;
@@ -117,8 +118,8 @@ public class Requests {
         }
     }
 
-    public static void getJsonResponseForEvents(String urlTail, Context context, ResponseHandler handler) {
-        executeRealmResponse(urlTail, "event", Event.class, context, handler);
+    public static void getJsonResponseForEvents(String urlTail, int userId,  Context context, ResponseHandler handler) {
+        executeRealmResponse(urlTail + "/" + userId, "event", Event.class, context, handler);
     }
 
     public static void getJsonResponseForRoutes(String urlTail, Context context) {

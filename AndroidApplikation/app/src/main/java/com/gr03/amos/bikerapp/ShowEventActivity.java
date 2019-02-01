@@ -50,36 +50,6 @@ public class ShowEventActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_event);
 
-        //checks server connecetion
-        if (isConnectedToServer("http://localhost:8080/RESTfulWebserver/", 4000) == false) {
-            try {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage("No Server Connection");
-                final AlertDialog dialog = builder.show();
-                AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
-
-                    @SuppressLint("WrongThread")
-                    protected Void doInBackground(Void... params) {
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        return null;
-                    }
-
-                    protected void onPostExecute(Void result) {
-                        dialog.dismiss();
-                    }
-
-                };
-                task.execute();
-                System.out.println("No server connection, we are in the show dialog branch");
-            } catch (Exception e) {
-                System.out.println("No server connection, but doesnt show dialog");
-            }
-        }
-
         if (SaveSharedPreference.getUserEmail(this).length() == 0) {
             Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
@@ -263,19 +233,6 @@ public class ShowEventActivity extends AppCompatActivity
         return false;
     };
 
-
-    public boolean isConnectedToServer(String url, int timeout) {
-        try {
-            URL myUrl = new URL(url);
-            URLConnection connection = myUrl.openConnection();
-            connection.setConnectTimeout(timeout);
-            connection.connect();
-            return true;
-        } catch (Exception e) {
-            // Handle your exceptions
-            return false;
-        }
-    }
 
     public boolean checkUserAdded() throws JSONException {
 

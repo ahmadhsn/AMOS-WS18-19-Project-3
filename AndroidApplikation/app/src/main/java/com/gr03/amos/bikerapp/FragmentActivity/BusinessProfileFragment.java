@@ -310,31 +310,30 @@ public class BusinessProfileFragment extends Fragment implements ResponseHandler
 
     @Override
     public void onResponse(JSONObject response, String urlTail) {
-        if (SocketUtility.hasSocketError(response)) {
-            Toast.makeText(getContext(), "No response from server.", Toast.LENGTH_LONG).show();
-            return;
-        }
+        if (SocketUtility.checkRequestSuccessful(getContext(),response)) {
 
-        if (urlTail.equals("getBusinessProfile/" + userId)) {
-            try {
+            if (urlTail.equals("getBusinessProfile/" + userId)) {
+                try {
 
-                if (response.get("business_profile").equals("no_profile")) {
-                    //no profile exists
-                    Toast.makeText(getContext(), "This profile does not exist.", Toast.LENGTH_LONG).show();
-                } else {
-                    JSONObject responseProfile = response.getJSONObject("business_profile");
-                    editBusinessName.setText(responseProfile.getString("business_name"));
-                    editBusinessDescr.setText(responseProfile.getString("business_descr"));
-                    JSONObject address = responseProfile.getJSONObject("business_address");
-                    editBusinessStreet.setText(address.optString("street"));
-                    editBusinessHnumber.setText(address.optString("housenumber"));
-                    editBusinessPostcode.setText(address.optString("postcode"));
-                    editBusinessCity.setText(address.optString("city"));
-                    editBusinessCountry.setText(address.optString("country"));
-                    editBusinessState.setText(address.optString("state"));
+                    if (response.get("business_profile").equals("no_profile")) {
+                        //no profile exists
+                        Toast.makeText(getContext(), "This profile does not exist.", Toast.LENGTH_LONG).show();
+                    } else {
+                        JSONObject responseProfile = response.getJSONObject("business_profile");
+                        editBusinessName.setText(responseProfile.getString("business_name"));
+                        editBusinessDescr.setText(responseProfile.getString("business_descr"));
+                        JSONObject address = responseProfile.getJSONObject("business_address");
+                        editBusinessStreet.setText(address.optString("street"));
+                        editBusinessHnumber.setText(address.optString("housenumber"));
+                        editBusinessPostcode.setText(address.optString("postcode"));
+                        editBusinessCity.setText(address.optString("city"));
+                        editBusinessCountry.setText(address.optString("country"));
+                        editBusinessState.setText(address.optString("state"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
+
             }
 
         }

@@ -71,7 +71,7 @@ public class ShowEventsFragment extends Fragment implements ResponseHandler {
         country.add("Choose a Country");
 
 
-        Requests.getJsonResponseForEvents("getEvents", container.getContext(), this);
+        Requests.getJsonResponseForEvents("getEvents", SaveSharedPreference.getUserID(container.getContext()), container.getContext(), this);
 
         return view;
 
@@ -148,41 +148,39 @@ public class ShowEventsFragment extends Fragment implements ResponseHandler {
 
     @Override
     public void onResponse(JSONObject response, String urlTail) {
-        if (SocketUtility.hasSocketError(response)) {
-            Toast.makeText(getContext(), "No response from server.", Toast.LENGTH_LONG).show();
-            return;
-        }
+        if (SocketUtility.checkRequestSuccessful(getContext(), response)) {
 
-        if (urlTail.equals("getEvents")) {
-            Realm.init(getContext());
-            Realm realm = Realm.getDefaultInstance();
+            if (urlTail.contains("getEvents")) {
+                Realm.init(getContext());
+                Realm realm = Realm.getDefaultInstance();
 
-            RealmResults<Event> events = realm.where(Event.class).sort("id_user_type", Sort.DESCENDING).findAll();
+                RealmResults<Event> events = realm.where(Event.class).sort("id_user_type", Sort.DESCENDING).findAll();
 
-            RealmResults<Address> countries = realm.where(Address.class).distinct("country").findAll();
-            RealmResults<Address> cities = realm.where(Address.class).distinct("city").findAll();
+                RealmResults<Address> countries = realm.where(Address.class).distinct("country").findAll();
+                RealmResults<Address> cities = realm.where(Address.class).distinct("city").findAll();
 
-            for (Address address : countries) {
-                country.add(address.getCountry());
+                for (Address address : countries) {
+                    country.add(address.getCountry());
+                }
+
+                for (Address address : cities) {
+                    city.add(address.getCity());
+                }
+
+                if (SaveSharedPreference.getUserType(getContext()) == 2) {
+                    RealmResults<Event> businessUserEvents = realm
+                            .where(Event.class)
+                            .equalTo("id_user", SaveSharedPreference.getUserID(getContext()))
+                            .findAll();
+
+                    populateRecyclerView(businessUserEvents);
+                } else {
+                    populateRecyclerView(events);
+                    eventFilterImage = view.findViewById(R.id.event_filter);
+                    eventFilterImage.setOnClickListener(v -> showInputDialog());
+                }
+
             }
-
-            for (Address address : cities) {
-                city.add(address.getCity());
-            }
-
-            if (SaveSharedPreference.getUserType(getContext()) == 2) {
-                RealmResults<Event> businessUserEvents = realm
-                        .where(Event.class)
-                        .equalTo("id_user", SaveSharedPreference.getUserID(getContext()))
-                        .findAll();
-
-                populateRecyclerView(businessUserEvents);
-            } else {
-                populateRecyclerView(events);
-                eventFilterImage = view.findViewById(R.id.event_filter);
-                eventFilterImage.setOnClickListener(v -> showInputDialog());
-            }
-
         }
     }
 

@@ -85,36 +85,35 @@ public class EditRouteActivity extends AppCompatActivity implements ResponseHand
 
     @Override
     public void onResponse(JSONObject response, String urlTail) {
-        if (SocketUtility.hasSocketError(response)) {
-            Toast.makeText(this, "No response from server.", Toast.LENGTH_LONG).show();
-            return;
-        }
+        if (SocketUtility.checkRequestSuccessful(getApplicationContext(),response)) {
 
-        switch (urlTail) {
-            case "routeUpdate":
-                if (response == null) {
+
+            switch (urlTail) {
+                case "routeUpdate":
+                    if (response == null) {
+                        Intent intent = new Intent(this, ShowEventActivity.class);
+                        startActivity(intent);
+                        return;
+                    }
+
                     Intent intent = new Intent(this, ShowEventActivity.class);
                     startActivity(intent);
-                    return;
-                }
 
-                Intent intent = new Intent(this, ShowEventActivity.class);
-                startActivity(intent);
-
-                if (response.has("routeUpdate")) {
-                    try {
-                        String statusRoute = (String) response.get("routeUpdate");
-                        if (statusRoute.equals("successfullUpdation")) {
-                            Toast.makeText(getApplicationContext(), "Successfully updated Route.", Toast.LENGTH_LONG).show();
+                    if (response.has("routeUpdate")) {
+                        try {
+                            String statusRoute = (String) response.get("routeUpdate");
+                            if (statusRoute.equals("successfullUpdation")) {
+                                Toast.makeText(getApplicationContext(), "Successfully updated Route.", Toast.LENGTH_LONG).show();
+                            }
+                            if (statusRoute.equals("InvalidRequestBody")) {
+                                Toast.makeText(getApplicationContext(), "Invalid Request Body", Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException ex) {
+                            Log.i("Exception --- not requested", ex.toString());
                         }
-                        if (statusRoute.equals("InvalidRequestBody")) {
-                            Toast.makeText(getApplicationContext(), "Invalid Request Body", Toast.LENGTH_LONG).show();
-                        }
-                    }catch(JSONException ex){
-                        Log.i("Exception --- not requested", ex.toString());
                     }
-                }
 
+            }
         }
     }
 }

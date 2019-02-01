@@ -1,6 +1,7 @@
 package com.gr03.amos.bikerapp.NetworkLayer;
 
 import android.content.Context;
+import android.net.http.HttpResponseCache;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -22,12 +23,15 @@ import okhttp3.Response;
 public class HttpTask extends AsyncTask<String, Void, JSONObject> {
 
     static MediaType jsonMedia = MediaType.parse("application/json; charset=utf-8");
+    static int CODE_NOTFOUND = 404;
+    static int CODE_UNAUTHORIZED = 401;
 
     private OkHttpClient client;
     private String urlTail;
     private String method;
     private boolean connectionTimeout;
-    private JSONObject response;
+    private Response response;
+    private JSONObject responseJson;
     private ResponseHandler handler;
     private boolean hasRealmUpdate;
     private ResponseHandler realmHandler;
@@ -103,16 +107,16 @@ public class HttpTask extends AsyncTask<String, Void, JSONObject> {
         }
 
         try {
-            Response response = client.newCall(request).execute();
+            this.response = client.newCall(request).execute();
             Log.i("Response", response.toString());
-            this.response = new JSONObject(response.body().string());
+            this.responseJson = new JSONObject(response.body().string());
         } catch (SocketTimeoutException ex) {
             connectionTimeout = true;
         } catch (IOException |JSONException e) {
             e.printStackTrace();
         }
 
-        return response;
+        return responseJson;
     }
 
     /**
@@ -125,9 +129,27 @@ public class HttpTask extends AsyncTask<String, Void, JSONObject> {
     protected void onPostExecute(JSONObject obj) {
         if (connectionTimeout) {
             Log.d("CONNECTION_TIMEOUT", "Found connection Timeout");
-            response = new JSONObject();
+            responseJson = new JSONObject();
             try {
-                response.put("error", "connection_timeout");
+                responseJson.put("error", "connection_timeout");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(response.code() == CODE_UNAUTHORIZED){
+            try {
+                responseJson = new JSONObject();
+                responseJson.put("error", "unauthorized");
+                Log.d("UNAUTHORIZED_REQUEST", "found unauthorized request");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else if(response.code() == CODE_NOTFOUND){
+            try {
+                responseJson = new JSONObject();
+                responseJson.put("error", "not_found");
+                Log.d("NOTFOUND_REQUEST", "Service with url " + urlTail + " not found.");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -135,9 +157,9 @@ public class HttpTask extends AsyncTask<String, Void, JSONObject> {
 
         //execute Realm update before other Response handling if necessary
         if(hasRealmUpdate){
-            realmHandler.onResponse(response, urlTail);
+            realmHandler.onResponse(responseJson, urlTail);
         }
-        handler.onResponse(response, urlTail);
+        handler.onResponse(responseJson, urlTail);
     }
 
 }

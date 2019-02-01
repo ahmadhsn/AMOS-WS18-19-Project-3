@@ -25,6 +25,20 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
+        <Button
+            android:id="@+id/unjoin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-52dp"
+            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@id/event_name"
+            android:onClick="unjoinEvent"
+            android:text="UNJOIN"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitEnd"/>
+
 
         <ImageView
             android:id="@+id/image_time"

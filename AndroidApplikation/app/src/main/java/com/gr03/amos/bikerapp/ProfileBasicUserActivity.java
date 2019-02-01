@@ -20,7 +20,7 @@ import com.gr03.amos.bikerapp.NetworkLayer.SocketUtility;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ProfileBasicUserActivity extends AppCompatActivity implements ResponseHandler{
+public class ProfileBasicUserActivity extends AppCompatActivity implements ResponseHandler {
 
     Intent intent;
     Long userId;
@@ -69,29 +69,29 @@ public class ProfileBasicUserActivity extends AppCompatActivity implements Respo
     }
 
     private void pageUneditableWhenOpening() {
-            user_fname.setCursorVisible(false);
-            user_fname.setEnabled(false);
-            user_fname.setFocusableInTouchMode(false);
-            user_fname.setClickable(false);
-            user_street.setEnabled(false);
-            user_street.setFocusableInTouchMode(false);
-            user_street.setClickable(false);
-            user_hnumber.setEnabled(false);
-            user_hnumber.setFocusableInTouchMode(false);
-            user_hnumber.setClickable(false);
-            user_pcode.setEnabled(false);
-            user_pcode.setFocusableInTouchMode(false);
-            user_pcode.setClickable(false);
-            user_city.setEnabled(false);
-            user_city.setFocusableInTouchMode(false);
-            user_city.setClickable(false);
-            user_state.setEnabled(false);
-            user_state.setFocusableInTouchMode(false);
-            user_state.setClickable(false);
-            user_country.setEnabled(false);
-            user_country.setFocusableInTouchMode(false);
-            user_country.setClickable(false);
-        }
+        user_fname.setCursorVisible(false);
+        user_fname.setEnabled(false);
+        user_fname.setFocusableInTouchMode(false);
+        user_fname.setClickable(false);
+        user_street.setEnabled(false);
+        user_street.setFocusableInTouchMode(false);
+        user_street.setClickable(false);
+        user_hnumber.setEnabled(false);
+        user_hnumber.setFocusableInTouchMode(false);
+        user_hnumber.setClickable(false);
+        user_pcode.setEnabled(false);
+        user_pcode.setFocusableInTouchMode(false);
+        user_pcode.setClickable(false);
+        user_city.setEnabled(false);
+        user_city.setFocusableInTouchMode(false);
+        user_city.setClickable(false);
+        user_state.setEnabled(false);
+        user_state.setFocusableInTouchMode(false);
+        user_state.setClickable(false);
+        user_country.setEnabled(false);
+        user_country.setFocusableInTouchMode(false);
+        user_country.setClickable(false);
+    }
 
     private void onCreateAfterAddProfile() {
         Intent intent2 = getIntent();
@@ -251,7 +251,7 @@ public class ProfileBasicUserActivity extends AppCompatActivity implements Respo
 
     }
 
-    private void makeFieldsEditable(){
+    private void makeFieldsEditable() {
         user_lname.setBackgroundResource(android.R.drawable.edit_text);
         user_street.setBackgroundResource(android.R.drawable.edit_text);
         user_hnumber.setBackgroundResource(android.R.drawable.edit_text);
@@ -262,7 +262,7 @@ public class ProfileBasicUserActivity extends AppCompatActivity implements Respo
         user_country.setBackgroundResource(android.R.drawable.edit_text);
     }
 
-    private void makeFieldsUneditable(){
+    private void makeFieldsUneditable() {
         user_lname.setBackgroundResource(0);
         user_street.setBackgroundResource(0);
         user_hnumber.setBackgroundResource(0);
@@ -275,28 +275,24 @@ public class ProfileBasicUserActivity extends AppCompatActivity implements Respo
 
     @Override
     public void onResponse(JSONObject response, String urlTail) {
-        if(SocketUtility.hasSocketError(response)){
-            Toast.makeText(getApplicationContext(), "No response from server.", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-
-        //check for urlTail
-        if(urlTail.equals("getUserInfo/" + userId)){
-            onResponseUserInfo(response);
-        }else if(urlTail.equals("editUserInfo")){
-            onResponseSaveEditedInfo(response);
+        if (SocketUtility.checkRequestSuccessful(getApplicationContext(), response)) {
+            //check for urlTail
+            if (urlTail.equals("getUserInfo/" + userId)) {
+                onResponseUserInfo(response);
+            } else if (urlTail.equals("editUserInfo")) {
+                onResponseSaveEditedInfo(response);
+            }
         }
     }
 
     /**
      * Response handling for service "getUserInfo".
-     *
+     * <p>
      * Updates edit text views for profile information.
      *
      * @param response JSONObject of response
      */
-    private void onResponseUserInfo(JSONObject response){
+    private void onResponseUserInfo(JSONObject response) {
         try {
             response = response.getJSONObject("UserInfo");
             user_fname.setText(response.getString("first_name"));
@@ -316,16 +312,16 @@ public class ProfileBasicUserActivity extends AppCompatActivity implements Respo
         }
     }
 
-    private void onResponseSaveEditedInfo(JSONObject response){
+    private void onResponseSaveEditedInfo(JSONObject response) {
         try {
-            if(response.has("editUserInfo")){
+            if (response.has("editUserInfo")) {
                 String statusReg = (String) response.get("editUserInfo");
 
-                if(statusReg.equals("successfulUpdation")){
-                    Log.i("EditUserInfoBasic","successfulUpdation");
+                if (statusReg.equals("successfulUpdation")) {
+                    Log.i("EditUserInfoBasic", "successfulUpdation");
                     Toast toast = Toast.makeText(this, "You have successfully saved your Profile after editing!", Toast.LENGTH_SHORT);
                     TextView v = toast.getView().findViewById(android.R.id.message);
-                    if( v != null) v.setGravity(Gravity.CENTER);
+                    if (v != null) v.setGravity(Gravity.CENTER);
                     toast.show();
                     finish();
                 }

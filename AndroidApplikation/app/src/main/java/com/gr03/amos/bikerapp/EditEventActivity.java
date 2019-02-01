@@ -184,37 +184,34 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
 
     @Override
     public void onResponse(JSONObject response, String urlTail) {
-        if(SocketUtility.hasSocketError(response)){
-            Toast.makeText(this, "No response from server.", Toast.LENGTH_LONG).show();
-            return;
-        }
+        if (SocketUtility.checkRequestSuccessful(getApplicationContext(), response)) {
 
-        switch(urlTail){
-            case "eventUpdate":
-                if (response == null) {
+            switch (urlTail) {
+                case "eventUpdate":
+                    if (response == null) {
+                        Intent intent = new Intent(this, ShowEventActivity.class);
+                        startActivity(intent);
+                        return;
+                    }
                     Intent intent = new Intent(this, ShowEventActivity.class);
                     startActivity(intent);
-                    return;
-                }
-                Intent intent = new Intent(this, ShowEventActivity.class);
-                startActivity(intent);
 
-                if (response.has("eventUpdate")) {
-                    try {
-                        String statusEv = (String) response.get("eventUpdate");
-                        if (statusEv.equals("successfullUpdation")) {
-                            Toast.makeText(getApplicationContext(), "Successfully updated Event.", Toast.LENGTH_LONG).show();
+                    if (response.has("eventUpdate")) {
+                        try {
+                            String statusEv = (String) response.get("eventUpdate");
+                            if (statusEv.equals("successfullUpdation")) {
+                                Toast.makeText(getApplicationContext(), "Successfully updated Event.", Toast.LENGTH_LONG).show();
+                            }
+                            if (statusEv.equals("InvalidRequestBody")) {
+                                Toast.makeText(getApplicationContext(), "Invalid Request Body", Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                        if (statusEv.equals("InvalidRequestBody")) {
-                            Toast.makeText(getApplicationContext(), "Invalid Request Body", Toast.LENGTH_LONG).show();
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+
                     }
-
-                }
-                break;
-
+                    break;
+            }
         }
     }
 }

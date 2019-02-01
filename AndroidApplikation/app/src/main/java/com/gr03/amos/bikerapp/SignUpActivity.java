@@ -34,16 +34,16 @@ public class SignUpActivity extends AppCompatActivity implements ResponseHandler
         switch (view.getId()) {
             case R.id.rider:
                 if (checked)
-                   // businessName.setVisibility(View.GONE);
-                break;
+                    // businessName.setVisibility(View.GONE);
+                    break;
             case R.id.business_user:
                 if (checked)
                     //businessName.setVisibility(VISIBLE);
-                break;
+                    break;
         }
     }
 
-    public void userSignUp(View view) throws JSONException{
+    public void userSignUp(View view) throws JSONException {
 
         EditText password = findViewById(R.id.password);
         EditText confirm_pw = findViewById(R.id.confirm_password);
@@ -52,21 +52,21 @@ public class SignUpActivity extends AppCompatActivity implements ResponseHandler
         String pw = password.getText().toString();
         String cf_pw = confirm_pw.getText().toString();
 
-        if (pw.isEmpty()){
+        if (pw.isEmpty()) {
             Log.i("PASSWORDVALIDATION", "password is empty");
             Toast.makeText(getApplicationContext(), "Please enter a password.", Toast.LENGTH_LONG).show();
             password.setError("");
             return;
         }
 
-        if (cf_pw.isEmpty()){
+        if (cf_pw.isEmpty()) {
             Log.i("PASSWORDVALIDATION", "confirm_password is empty");
             Toast.makeText(getApplicationContext(), "Please repeat the password.", Toast.LENGTH_LONG).show();
             confirm_pw.setError("");
             return;
         }
 
-        if (!pw.equals(cf_pw))  {
+        if (!pw.equals(cf_pw)) {
             Log.i("COMPAREPASSWORDS", "passwords are unequal");
             Toast.makeText(getApplicationContext(), "The passwords you entered do not match. Please try it again.", Toast.LENGTH_LONG).show();
             password.setText("");
@@ -78,7 +78,7 @@ public class SignUpActivity extends AppCompatActivity implements ResponseHandler
 
         String mail = email.getText().toString();
 
-        if (mail.isEmpty()){
+        if (mail.isEmpty()) {
             Log.i("VALIDATIONMAIL", "mail address is empty");
             Toast.makeText(getApplicationContext(), "Please enter your E-mail address.", Toast.LENGTH_LONG).show();
             email.setError("");
@@ -86,7 +86,7 @@ public class SignUpActivity extends AppCompatActivity implements ResponseHandler
         }
 
         //check if email address is valid
-        if(!isValidEmail(mail)){
+        if (!isValidEmail(mail)) {
             Log.i("VALIDATIONMAIL", "mail address is not valid");
             Toast.makeText(getApplicationContext(), "Invalid E-Mail address. Please check again", Toast.LENGTH_LONG).show();
             email.setError("");
@@ -102,7 +102,7 @@ public class SignUpActivity extends AppCompatActivity implements ResponseHandler
         json.put("password", pw);
         json.put("isBusinessUser", businessUser);
         //if (businessUser)
-          //  json.put("business_name", businessName.getText().toString());
+        //  json.put("business_name", businessName.getText().toString());
 
         Requests.executeRequest(this, "POST", "userRegistration", json);
     }
@@ -117,36 +117,34 @@ public class SignUpActivity extends AppCompatActivity implements ResponseHandler
 
     @Override
     public void onResponse(JSONObject response, String urlTail) {
-        if (SocketUtility.hasSocketError(response)) {
-            Toast.makeText(this, "No response from server.", Toast.LENGTH_LONG).show();
-            return;
-        }
+        if (SocketUtility.checkRequestSuccessful(getApplicationContext(), response)) {
 
-        try {
-            //handle response
-            if(response.has("userRegistration")){
-                String statusReg = (String) response.get("userRegistration");
-                if(statusReg.equals("invalidMail")){
-                    Log.i("VALIDATIONMAILSERVER", "invalid email address " + email.getText().toString());
-                    Toast.makeText(getApplicationContext(), "Invalid E-Mail address. Please check again.", Toast.LENGTH_LONG).show();
-                    return;
+
+            try {
+                //handle response
+                if (response.has("userRegistration")) {
+                    String statusReg = (String) response.get("userRegistration");
+                    if (statusReg.equals("invalidMail")) {
+                        Log.i("VALIDATIONMAILSERVER", "invalid email address " + email.getText().toString());
+                        Toast.makeText(getApplicationContext(), "Invalid E-Mail address. Please check again.", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    if (statusReg.equals("successfullRegistration")) {
+                        Log.i("Registration", "successfullRegistration");
+                        Toast.makeText(getApplicationContext(), "You have successfully registered! You can login now.", Toast.LENGTH_LONG).show();
+                        finish();
+
+                    }
+
+                    if (statusReg.equals("emailExistsAlready")) {
+                        Log.i("mailExists", "email address already exists");
+                        Toast.makeText(getApplicationContext(), "A user with this E-Mail address is already registered. Try to login.", Toast.LENGTH_LONG).show();
+                    }
                 }
-
-                if(statusReg.equals("successfullRegistration")){
-                    Log.i("Registration","successfullRegistration");
-                    Toast.makeText(getApplicationContext(), "You have successfully registered! You can login now.", Toast.LENGTH_LONG).show();
-                    finish();
-
-                }
-
-                if(statusReg.equals("emailExistsAlready")){
-                    Log.i("mailExists", "email address already exists");
-                    Toast.makeText(getApplicationContext(), "A user with this E-Mail address is already registered. Try to login.", Toast.LENGTH_LONG).show();
-                }
+            } catch (Exception e) {
+                Log.i("Exception --- not requested", e.toString());
             }
-        } catch (Exception e) {
-            Log.i("Exception --- not requested", e.toString());
         }
-
     }
 }

@@ -20,7 +20,6 @@ import android.widget.TextView;
 
 import com.gr03.amos.bikerapp.EditEventActivity;
 import com.gr03.amos.bikerapp.Models.Event;
-import com.gr03.amos.bikerapp.Models.EventParticipation;
 import com.gr03.amos.bikerapp.NetworkLayer.DefaultResponseHandler;
 import com.gr03.amos.bikerapp.R;
 import com.gr03.amos.bikerapp.NetworkLayer.Requests;
@@ -61,7 +60,7 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
         holder.eventTime.setText(mData.get(position).getTime());
 
         //set to joined if already participant
-        if (isEventParticipant(mData.get(position).getId_event())) {
+        if (mData.get(position).is_participant()) {
             holder.unjoinEvent.setVisibility(View.VISIBLE);
             holder.joinEvent.setVisibility(View.GONE);
         }
@@ -149,11 +148,14 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
 
                     Realm.init(context);
                     Realm realm = Realm.getDefaultInstance();
-                    realm.beginTransaction();
-                    EventParticipation eventParticipation = realm.createObject(EventParticipation.class);
-                    eventParticipation.setId_event(mData.get(position).getId_event());
-                    eventParticipation.setId_user(SaveSharedPreference.getUserID(context));
-                    realm.commitTransaction();
+
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            Event edit = realm.where(Event.class).equalTo("id_event", mData.get(position).getId_event()).findFirst();
+                            edit.setParticipant(true);
+                        }
+                    });
                     realm.close();
 
                     holder.joinEvent.setVisibility(View.GONE);
@@ -249,13 +251,10 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
 
             //delete event participation in Realm Database
             realm.executeTransaction(realm1 -> {
-                final EventParticipation participant = realm1
-                        .where(EventParticipation.class)
+                Event toEdit = realm1.where(Event.class)
                         .equalTo("id_event", mData.get(position).getId_event())
-                        .and()
-                        .equalTo("id_user", SaveSharedPreference.getUserID(context))
                         .findFirst();
-                participant.deleteFromRealm();
+                toEdit.setParticipant(false);
             });
             Log.i("After Transaction from Realm 1", "Deleted Event Participation");
 
@@ -265,23 +264,6 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
         }
 
 
-    }
-
-    private boolean isEventParticipant(long eventId) {
-        Realm.init(context);
-        Realm realm = Realm.getDefaultInstance();
-
-        RealmResults<EventParticipation> participation = realm.where(EventParticipation.class)
-                .equalTo("id_event", eventId)
-                .and()
-                .equalTo("id_user", SaveSharedPreference.getUserID(context))
-                .findAll();
-
-        if(participation.isEmpty()){
-            return false;
-        }else{
-            return true;
-        }
     }
 
 }

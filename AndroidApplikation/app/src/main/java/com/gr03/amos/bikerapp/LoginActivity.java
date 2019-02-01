@@ -57,46 +57,40 @@ public class LoginActivity extends AppCompatActivity implements ResponseHandler 
 
     @Override
     public void onResponse(JSONObject response, String urlTail) {
-        //TODO check response on Login
-        if(response == null){
-            Toast.makeText(this, "Wrong user credentials.", Toast.LENGTH_LONG).show();
-            return;
-        }
-        if (SocketUtility.hasSocketError(response)) {
-            Toast.makeText(this, "Login not possible. Please try again later.", Toast.LENGTH_LONG).show();
-            return;
-        }
-        if (response != null && response.has("success")) {
+        if (SocketUtility.checkRequestSuccessful(getApplicationContext(),response)) {
 
-            try {
-                String eml = response.getString("email");
-                int userId = response.getInt("id_user");
-                int userType = response.getInt("id_user_type");
-                SaveSharedPreference.saveUserInforamtion(this, eml, userId, userType);
-                Toast.makeText(getApplicationContext(), "You are logged in now!", Toast.LENGTH_LONG).show();
+            if (response != null && response.has("success")) {
+
+                try {
+                    String eml = response.getString("email");
+                    int userId = response.getInt("id_user");
+                    int userType = response.getInt("id_user_type");
+                    SaveSharedPreference.saveUserInforamtion(this, eml, userId, userType);
+                    Toast.makeText(getApplicationContext(), "You are logged in now!", Toast.LENGTH_LONG).show();
 
 
-                Realm.init(this);
-                Realm realm = Realm.getDefaultInstance();
-                realm.beginTransaction();
-                realm.createOrUpdateObjectFromJson(User.class, response);
-                realm.commitTransaction();
+                    Realm.init(this);
+                    Realm realm = Realm.getDefaultInstance();
+                    realm.beginTransaction();
+                    realm.createOrUpdateObjectFromJson(User.class, response);
+                    realm.commitTransaction();
 
-                User user = realm.where(User.class).findFirst();
+                    User user = realm.where(User.class).findFirst();
 
-                if (user.getId_user_type() == 2) {
-                    Intent intent = new Intent(this, BusinessUserMainActivity.class);
-                    startActivity(intent);
-                } else {
-                    Intent intent = new Intent(this, ShowEventActivity.class);
-                    startActivity(intent);
+                    if (user.getId_user_type() == 2) {
+                        Intent intent = new Intent(this, BusinessUserMainActivity.class);
+                        startActivity(intent);
+                    } else {
+                        Intent intent = new Intent(this, ShowEventActivity.class);
+                        startActivity(intent);
+                    }
+                } catch (JSONException ex) {
+                    Log.i("Exception --- not requested", ex.toString());
+                    ex.printStackTrace();
                 }
-            } catch (JSONException ex) {
-                Log.i("Exception --- not requested", ex.toString());
-                ex.printStackTrace();
+            } else {
+                Toast.makeText(getApplicationContext(), "Wrong user credentials.", Toast.LENGTH_LONG);
             }
-        } else {
-            Toast.makeText(getApplicationContext(), "Wrong user credentials.", Toast.LENGTH_LONG);
         }
     }
 }

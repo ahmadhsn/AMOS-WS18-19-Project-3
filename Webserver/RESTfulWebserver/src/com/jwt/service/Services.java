@@ -553,15 +553,15 @@ public class Services {
 
 
 	@GET
-	@Path("/getEvents")
+	@Path("/getEvents/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response getAllEvents() throws JSONException {
+	public Response getAllEvents(@PathParam("id") int userId) throws JSONException {
 
 		JSONObject jobj1 = new JSONObject();
 		JSONArray jArray = new JSONArray();
 		JSONObject j = new JSONObject();
 		
-		System.out.println("...getAllEvetns");
+		System.out.println("...getAllEvetns for user " + userId);
 		try {
 			DatabaseProvider provider = DatabaseProvider.getInstance(context);
 			
@@ -591,6 +591,14 @@ public class Services {
 				String city_json = result.getString("city");
 				String country_json = result.getString("country");
 				System.out.println(result);
+				
+				//check if current user (userId) is participant of event 
+				int id_event = result.getInt("id_event");
+				ResultSet participantResult = provider.querySelectDB("Select * from event_participation WHERE id_user = ? AND id_event = ?", userId, id_event);
+				boolean isParticipant = false; 
+				if(participantResult.next()) {
+					isParticipant = true; 
+				}
 
 				JSONObject jobj = new JSONObject();
 				jobj.put("id_event", id_json);
@@ -600,7 +608,7 @@ public class Services {
 				jobj.put("time", time_json);
 				jobj.put("id_user", user_id_json);
 				jobj.put("id_user_type", user_id_type_json);
-				
+				jobj.put("is_participant", isParticipant);
 				JSONObject jobj2 = new JSONObject();
 				jobj2.put("city", city_json);
 				jobj2.put("country", country_json);

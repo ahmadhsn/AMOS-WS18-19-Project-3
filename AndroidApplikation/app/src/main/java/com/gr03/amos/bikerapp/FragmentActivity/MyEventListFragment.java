@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 
 import com.gr03.amos.bikerapp.Adapters.ShowMyEventRecyclerViewAdapter;
 import com.gr03.amos.bikerapp.Models.Event;
-import com.gr03.amos.bikerapp.Models.EventParticipation;
 import com.gr03.amos.bikerapp.R;
 
 import io.realm.Realm;
@@ -46,16 +45,9 @@ public class MyEventListFragment extends Fragment {
         Realm.init(container.getContext());
         Realm realm = Realm.getDefaultInstance();
 
-        RealmResults<EventParticipation> eventParticipations = realm.where(EventParticipation.class).findAll();
-
+        RealmResults<Event> eventParticipating = realm.where(Event.class).equalTo("is_participant", true).findAll();
         RealmList<Event> events = new RealmList<>();
-        for (EventParticipation eventParticipation : eventParticipations) {
-            event = realm.where(Event.class)
-                    .equalTo("id_event", eventParticipation.getId_event())
-                    .findFirst();
-            Log.i("EventDesc", event.toString());
-            events.add(event);
-        }
+        events.addAll(eventParticipating);
 
         populateRecyclerView(events);
 
