@@ -26,19 +26,16 @@
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/unjoin"
+            android:id="@+id/unjoin_event"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/event_date"
+            android:layout_alignLeft="@+id/event_description"
+            android:layout_marginLeft="257dp"
             android:layout_marginTop="-52dp"
-            android:layout_alignParentRight="true"
-            android:layout_toRightOf="@id/event_name"
-            android:onClick="unjoinEvent"
-            android:text="UNJOIN"
+            android:text="Unjoin"
             android:textColor="@color/black"
-            android:textSize="15sp"
-            android:adjustViewBounds="true"
-            android:scaleType="fitEnd"/>
-
+            android:textSize="15sp" />
 
         <ImageView
             android:id="@+id/image_time"
@@ -90,5 +87,7 @@
             android:text="description"
             android:textColor="@color/colorPrimary"
             android:textSize="15sp" />
+
+
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
