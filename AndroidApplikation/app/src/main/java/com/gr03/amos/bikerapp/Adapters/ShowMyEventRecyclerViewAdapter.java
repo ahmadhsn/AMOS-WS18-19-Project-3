@@ -1,7 +1,9 @@
 package com.gr03.amos.bikerapp.Adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 import com.gr03.amos.bikerapp.Models.Event;
 import com.gr03.amos.bikerapp.NetworkLayer.DefaultResponseHandler;
 import com.gr03.amos.bikerapp.NetworkLayer.Requests;
+import com.gr03.amos.bikerapp.NetworkLayer.ResponseHandler;
 import com.gr03.amos.bikerapp.R;
 import com.gr03.amos.bikerapp.SaveSharedPreference;
 
@@ -27,7 +30,7 @@ import io.realm.RealmList;
 import io.realm.RealmResults;
 
 
-public class ShowMyEventRecyclerViewAdapter extends RecyclerView.Adapter<ShowMyEventRecyclerViewAdapter.ViewHolder> {
+public class ShowMyEventRecyclerViewAdapter extends RecyclerView.Adapter<ShowMyEventRecyclerViewAdapter.ViewHolder>{
 
     private RealmList<Event> mData;
     private LayoutInflater mInflater;
@@ -53,12 +56,37 @@ public class ShowMyEventRecyclerViewAdapter extends RecyclerView.Adapter<ShowMyE
         holder.eventDate.setText(mData.get(position).getDate());
         holder.eventTime.setText(mData.get(position).getTime());
 
-        holder.unjoinEvent.setOnClickListener(v -> {
-            unjoinEventRequest(position);
-            mData.remove(position);
-            notifyItemRemoved(position);
-            notifyItemRangeChanged(position, mData.size());
-        });
+        if (mData.get(position).getId_user() == SaveSharedPreference.getUserID(this.context)) {
+
+            holder.unjoinEvent.setOnClickListener(v -> {
+
+                AlertDialog.Builder builder;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    builder = new AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert);
+                } else {
+                    builder = new AlertDialog.Builder(context);
+                }
+                builder.setTitle("Unjoin Event")
+                        .setMessage("You are the administrator of the event. You cannot unjoin. If you can't" +
+                                " participate, you have to delete the event. ")
+                        .setNegativeButton("Okay.", (dialog, which) -> dialog.dismiss())
+                        .show();
+            });
+        } else {
+            holder.unjoinEvent.setOnClickListener(v -> {
+                unjoinEventRequest(position);
+                mData.remove(position);
+                notifyItemRemoved(position);
+                notifyItemRangeChanged(position, mData.size());
+            });
+        }
+
+    }
+
+    private void deleteEvent(long eventId) throws JSONException {
+        JSONObject json = new JSONObject();
+        json.put("id_event", eventId);
+        Requests.executeRequest(new DefaultResponseHandler(), "POST", "deleteEvent", json);
     }
 
     @Override
@@ -91,8 +119,8 @@ public class ShowMyEventRecyclerViewAdapter extends RecyclerView.Adapter<ShowMyE
             e.printStackTrace();
         }
 
-
     }
+
 
 
     // stores and recycles views as they are scrolled off screen
