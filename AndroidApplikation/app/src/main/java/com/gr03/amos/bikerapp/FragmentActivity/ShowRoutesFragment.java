@@ -63,7 +63,7 @@ public class ShowRoutesFragment extends Fragment implements ResponseHandler {
         int userID = SaveSharedPreference.getUserID(container.getContext());
 
         Requests.getJsonResponseForUser("getUserById/" + userID, container.getContext());
-        Requests.getJsonResponseForRoutes("getRoutes", container.getContext(), this);
+        Requests.getJsonResponseForRoutes("getRoutes/" + userID, container.getContext(), this);
 
         friendRoutesImage.setOnClickListener(v -> getFriendsRoutes(container.getContext()));
         return view;
@@ -84,11 +84,10 @@ public class ShowRoutesFragment extends Fragment implements ResponseHandler {
     @Override
     public void onResponse(JSONObject response, String urlTail) {
         if (SocketUtility.checkRequestSuccessful(getContext(),response)) {
-
-            if (urlTail.equals("getRoutes")) {
+            int userId = SaveSharedPreference.getUserID((getContext()));
+            if (urlTail.equals("getRoutes/" + userId)) {
                 onResponseRoutes();
-            } else if (urlTail.equals("getFriendsRoutes/" +
-                    SaveSharedPreference.getUserID(getContext()))) {
+            } else if (urlTail.equals("getFriendsRoutes/" + userId)) {
                 onResponseFriendRoutes();
             }
         }

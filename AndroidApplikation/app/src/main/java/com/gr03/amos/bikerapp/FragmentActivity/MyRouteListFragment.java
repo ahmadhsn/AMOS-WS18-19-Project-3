@@ -46,15 +46,10 @@ public class MyRouteListFragment extends Fragment {
         Realm.init(container.getContext());
         Realm realm = Realm.getDefaultInstance();
 
-        RealmResults<RouteParticipation> routeParticipations = realm.where(RouteParticipation.class).findAll();
+        RealmResults<Route> routesLiked = realm.where(Route.class).equalTo("isLiked", true).findAll();
 
         RealmList<Route> routes = new RealmList<>();
-        for (RouteParticipation routeParticipation : routeParticipations) {
-            route = realm.where(Route.class)
-                    .equalTo("id_route", routeParticipation.getIdRoute())
-                    .findFirst();
-            routes.add(route);
-        }
+        routes.addAll(routesLiked);
 
         populateRecyclerView(routes);
 
