@@ -14,6 +14,7 @@ public class Route extends RealmObject {
     private Start start;
     private Address end_address;
     private Address start_address;
+    private boolean isLiked;
 
     @LinkingObjects("route")
     private final RealmResults<Friend> friend = null;
@@ -77,6 +78,8 @@ public class Route extends RealmObject {
     public RealmResults<Friend> getFriend() {
         return friend;
     }
+
+    public void setLiked(boolean isLiked) {this.isLiked = isLiked;}
 
 }
 

@@ -103,7 +103,23 @@
                 android:onClick="likeRoute"
                 android:text="Like"
                 android:textColor="@color/black"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:visibility="visible" />
+
+            <Button
+                android:id="@+id/unlike_route"
+                android:layout_width="104dp"
+                android:layout_height="40dp"
+                android:layout_below="@+id/route_name"
+                android:layout_alignRight="@+id/arrow_down"
+                android:layout_marginLeft="177dp"
+                android:layout_marginTop="-32dp"
+                android:layout_marginRight="30dp"
+                android:onClick="unlikeRoute"
+                android:text="Liked"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/arrow_down"

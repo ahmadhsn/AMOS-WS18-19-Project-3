@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gr03.amos.bikerapp.EditRouteActivity;
+import com.gr03.amos.bikerapp.Models.Event;
 import com.gr03.amos.bikerapp.Models.Route;
 import com.gr03.amos.bikerapp.R;
 import com.gr03.amos.bikerapp.NetworkLayer.Requests;
@@ -147,12 +148,18 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
 
                 Realm.init(context);
                 Realm realm = Realm.getDefaultInstance();
-                realm.beginTransaction();
-                RouteParticipation routeParticipation = realm.createObject(RouteParticipation.class);
-                routeParticipation.setIdRoute(mData.get(position).getId_route());
-                routeParticipation.setIdUser(SaveSharedPreference.getUserID(context));
-                realm.commitTransaction();
+
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        Route edit = realm.where(Route.class).equalTo("id_route", mData.get(position).getId_route()).findFirst();
+                        edit.setLiked(true);
+                    }
+                });
                 realm.close();
+
+                holder.likeRoute.setVisibility(View.GONE);
+                holder.unlikeRoute.setVisibility(View.VISIBLE);
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -178,6 +185,8 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
         ImageButton route_delete;
         ImageButton routeEdit;
         Button likeRoute;
+        Button unlikeRoute;
+
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -192,6 +201,8 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
             dividerView = itemView.findViewById(R.id.divider);
             adminTag = itemView.findViewById(R.id.admin_tag);
             likeRoute = itemView.findViewById(R.id.like_route);
+            unlikeRoute = itemView.findViewById(R.id.unlike_route);
+
 
             itemView.setOnClickListener(this);
         }

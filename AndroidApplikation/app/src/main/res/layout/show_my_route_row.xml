@@ -22,6 +22,17 @@
             android:textColor="@color/colorPrimary"
             android:textSize="20sp"
             android:textStyle="bold" />
+        <Button
+            android:id="@+id/unlike_route"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/route_name"
+            android:layout_marginLeft="257dp"
+            android:layout_marginTop="0dp"
+            android:text="Unlike"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
+
 
         <TextView
             android:id="@+id/route_description"
