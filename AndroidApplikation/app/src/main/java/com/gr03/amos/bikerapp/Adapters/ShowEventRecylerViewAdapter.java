@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -28,6 +29,8 @@ import com.gr03.amos.bikerapp.SaveSharedPreference;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Console;
+
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -37,6 +40,8 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
     private RealmResults<Event> mData;
     private LayoutInflater mInflater;
     private Context context;
+    private String event_Location;
+    private String map;
 
     // data is passed into the constructor
     public ShowEventRecylerViewAdapter(Context context, RealmResults<Event> data) {
@@ -49,7 +54,6 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.show_event_row, parent, false);
         return new ViewHolder(view);
-
     }
 
     @Override
@@ -58,6 +62,13 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
         holder.eventDescription.setText(mData.get(position).getDescription());
         holder.eventDate.setText(mData.get(position).getDate());
         holder.eventTime.setText(mData.get(position).getTime());
+        holder.eventLocation
+                .setText("Event Location : "
+                        + mData.get(position).getAddress().getHouse_number()
+                        + ", " + mData.get(position).getAddress().getStreet()
+                        + ", " + mData.get(position).getAddress().getPostcode()
+                        + ", " + mData.get(position).getAddress().getCity()
+                        + ", " + mData.get(position).getAddress().getCountry());
 
         //set to joined if already participant
         if (mData.get(position).is_participant()) {
@@ -69,12 +80,16 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
             holder.eventDescription.setVisibility(View.VISIBLE);
             holder.eventDropDownButton.setVisibility(View.GONE);
             holder.eventDropUpButton.setVisibility(View.VISIBLE);
+            holder.eventLocation.setVisibility(View.VISIBLE);
+            holder.map_Image.setVisibility(View.VISIBLE);
             holder.dividerView.setVisibility(View.VISIBLE);
         });
 
         holder.eventDropUpButton.setOnClickListener(v -> {
             holder.eventDescription.setVisibility(View.GONE);
             holder.eventDropDownButton.setVisibility(View.VISIBLE);
+            holder.eventLocation.setVisibility(View.GONE);
+            holder.map_Image.setVisibility(View.GONE);
             holder.eventDropUpButton.setVisibility(View.GONE);
             holder.dividerView.setVisibility(View.GONE);
         });
@@ -133,6 +148,22 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
             }
         });
 
+        holder.map_Image.setOnClickListener(v -> {
+
+            try {
+                event_Location= mData.get(position).getAddress().getHouse_number()
+                        + " " + mData.get(position).getAddress().getStreet()
+                        + " " + mData.get(position).getAddress().getPostcode()
+                        + " " + mData.get(position).getAddress().getCity()
+                        + "," + mData.get(position).getAddress().getCountry();
+                map = "http://maps.google.com/maps?q=" + event_Location;
+                eventMap(map);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
+
         if (SaveSharedPreference.getUserType(context) == 2) {
             holder.joinEvent.setVisibility(View.GONE);
         } else {
@@ -164,8 +195,6 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-
             });
 
             holder.unjoinEvent.setOnClickListener(v -> {
@@ -189,6 +218,7 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
         TextView eventDescription;
         TextView eventDate;
         TextView eventTime;
+        TextView eventLocation;
         ImageView eventDropDownButton;
         ImageView eventDropUpButton;
         LinearLayout controlLinearLayout;
@@ -196,6 +226,7 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
         TextView adminTag;
         ImageButton eventDelete;
         ImageButton eventEdit;
+        Button map_Image;
         Button joinEvent;
         Button unjoinEvent;
 
@@ -205,12 +236,14 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
             eventDescription = itemView.findViewById(R.id.event_description);
             eventDate = itemView.findViewById(R.id.event_date);
             eventTime = itemView.findViewById(R.id.event_time);
+            eventLocation = itemView.findViewById(R.id.event_location);
             joinEvent = itemView.findViewById(R.id.join_event);
             unjoinEvent = itemView.findViewById(R.id.unjoin_event);
             eventDropDownButton = itemView.findViewById(R.id.arrow_down);
             eventDropUpButton = itemView.findViewById(R.id.arrow_up);
             eventDelete = itemView.findViewById(R.id.event_delete);
             eventEdit = itemView.findViewById(R.id.event_edit);
+            map_Image = itemView.findViewById(R.id.map_event);
             controlLinearLayout = itemView.findViewById(R.id.controls_button);
             dividerView = itemView.findViewById(R.id.divider);
             adminTag = itemView.findViewById(R.id.admin_tag);
@@ -219,12 +252,10 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
 
         }
 
-
         public void onClick(View view) {
 
         }
     }
-
 
     private void deleteEvent(long eventId) throws JSONException {
         JSONObject json = new JSONObject();
@@ -237,6 +268,12 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
         intent.putExtra("id", eventId);
         context.startActivity(intent);
     }
+
+    private void eventMap(String mapAddress) throws JSONException {
+        Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(mapAddress));
+        context.startActivity(i);
+    }
+
 
     private void unjoinEventRequest(int position) {
         JSONObject json = new JSONObject();

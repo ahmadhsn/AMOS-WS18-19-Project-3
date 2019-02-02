@@ -588,6 +588,9 @@ public class Services {
 				}
 				
 				String id_add_json = result.getString("id_address");
+				String street_json = result.getString("street");
+				String postcode_json = result.getString("postcode");
+				String house_number_json = result.getString("housenumber");
 				String city_json = result.getString("city");
 				String country_json = result.getString("country");
 				System.out.println(result);
@@ -609,7 +612,11 @@ public class Services {
 				jobj.put("id_user", user_id_json);
 				jobj.put("id_user_type", user_id_type_json);
 				jobj.put("is_participant", isParticipant);
+				
 				JSONObject jobj2 = new JSONObject();
+				jobj2.put("street", street_json);
+				jobj2.put("housenumber", house_number_json);
+				jobj2.put("postcode", postcode_json);
 				jobj2.put("city", city_json);
 				jobj2.put("country", country_json);
 				jobj2.put("id_address", id_add_json);

@@ -106,7 +106,6 @@ public class ShowFriendsRoutesRecyclerViewAdapter extends RecyclerView.Adapter<S
             itemView.setOnClickListener(this);
         }
 
-
         @Override
         public void onClick(View view) {
         }

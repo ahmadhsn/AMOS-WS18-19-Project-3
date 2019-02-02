@@ -74,7 +74,6 @@ public class ShowEventsFragment extends Fragment implements ResponseHandler {
         Requests.getJsonResponseForEvents("getEvents", SaveSharedPreference.getUserID(container.getContext()), container.getContext(), this);
 
         return view;
-
     }
 
 
