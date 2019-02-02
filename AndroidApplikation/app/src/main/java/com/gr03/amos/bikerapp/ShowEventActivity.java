@@ -31,6 +31,7 @@ import com.gr03.amos.bikerapp.FragmentActivity.MyRouteListFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.ShowEventsFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.ShowFriendsFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.ShowRoutesFragment;
+import com.gr03.amos.bikerapp.Models.User;
 import com.gr03.amos.bikerapp.NetworkLayer.Requests;
 
 import org.json.JSONException;
@@ -40,6 +41,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
+
+import io.realm.Realm;
 
 public class ShowEventActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -224,6 +227,7 @@ public class ShowEventActivity extends AppCompatActivity
                 getSupportActionBar().setTitle("Event Feed");
                 return true;
             case R.id.navigation_route:
+                if(openEditProfileInfoIfEmpty()) return true;
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.create_event_fragment, new ShowRoutesFragment())
                         .commit();
@@ -233,6 +237,19 @@ public class ShowEventActivity extends AppCompatActivity
         return false;
     };
 
+    public boolean openEditProfileInfoIfEmpty() {
+        // if user no has no address in profile -> open edit user infos
+        Realm.init(this);
+        Realm realm = Realm.getDefaultInstance();
+        User user = realm.where(User.class).equalTo("id_user", SaveSharedPreference.getUserID(this)).findFirst();
+        Log.i("TEST", user.toString());
+        if (user.getAddress() == null){
+            Intent intent = new Intent(this, AddProfileBasicUserActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        return false;
+    }
 
     public boolean checkUserAdded() throws JSONException {
 
