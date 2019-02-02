@@ -18,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gr03.amos.bikerapp.EditEventActivity;
 import com.gr03.amos.bikerapp.Models.Event;
@@ -97,9 +98,48 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
         if (mData.get(position).getId_user() == SaveSharedPreference.getUserID(this.context)) {
             holder.adminTag.setVisibility(View.VISIBLE);
             holder.controlLinearLayout.setVisibility(View.VISIBLE);
+            holder.unjoinEvent.setOnClickListener( v -> {
+
+                AlertDialog.Builder builder;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    builder = new AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert);
+                } else {
+                    builder = new AlertDialog.Builder(context);
+                }
+                builder.setTitle("Unjoin Event")
+                        .setMessage("You are the administrator of the event. You cannot unjoin. If you can't" +
+                                " participate, you have to delete the event. ")
+                        .setNegativeButton(android.R.string.no, (dialog, which) -> dialog.dismiss())
+                        .setPositiveButton("Delete Event", (dialog, which) -> {
+                            try {
+                                deleteEvent(mData.get(position).getId_event());
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            Realm realmDelete = Realm.getDefaultInstance();
+                            final Event event1 = realmDelete
+                                    .where(Event.class)
+                                    .equalTo("id_event", mData.get(position).getId_event())
+                                    .findFirst();
+
+                            realmDelete.beginTransaction();
+                            event1.deleteFromRealm();
+                            Log.i("After Transaction from Realm 1", "Deleted");
+                            realmDelete.commitTransaction();
+                            realmDelete.close();
+                            notifyDataSetChanged();
+                        })
+                        .show();
+            });
         } else {
             holder.adminTag.setVisibility(View.INVISIBLE);
             holder.controlLinearLayout.setVisibility(View.INVISIBLE);
+            holder.unjoinEvent.setOnClickListener(v -> {
+                unjoinEventRequest(position);
+
+                holder.joinEvent.setVisibility(View.VISIBLE);
+                holder.unjoinEvent.setVisibility(View.GONE);
+            });
         }
 
         if (SaveSharedPreference.getUserType(this.context) != 2
@@ -197,12 +237,7 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
                 }
             });
 
-            holder.unjoinEvent.setOnClickListener(v -> {
-                unjoinEventRequest(position);
 
-                holder.joinEvent.setVisibility(View.VISIBLE);
-                holder.unjoinEvent.setVisibility(View.GONE);
-            });
         }
     }
 

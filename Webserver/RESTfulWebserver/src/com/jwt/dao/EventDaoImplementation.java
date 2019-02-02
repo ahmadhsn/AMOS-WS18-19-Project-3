@@ -28,6 +28,8 @@ public class EventDaoImplementation implements EventDao {
 		  try (ResultSet generatedKeys = st.getGeneratedKeys()) {
 		   if (generatedKeys.next()) {
 			   event.setEvent_id(generatedKeys.getInt(1));
+			   //insert admin as participant 
+			   provider.queryInsertDB("INSERT INTO event_participation(id_user, id_event) VALUES (?,?)", event.getEvent_id(), event.getUser_id());
 		   } else {
 		    throw new SQLException("Creating e failed, no ID obtained.");
 		   }
