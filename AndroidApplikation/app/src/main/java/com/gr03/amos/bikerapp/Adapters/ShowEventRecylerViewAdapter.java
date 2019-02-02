@@ -35,7 +35,6 @@ import java.io.Console;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-
 public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventRecylerViewAdapter.ViewHolder> {
 
     private RealmResults<Event> mData;
@@ -65,8 +64,8 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
         holder.eventTime.setText(mData.get(position).getTime());
         holder.eventLocation
                 .setText("Event Location : "
-                        + mData.get(position).getAddress().getHouse_number()
-                        + ", " + mData.get(position).getAddress().getStreet()
+                        + mData.get(position).getAddress().getStreet()
+                        + ", " + mData.get(position).getAddress().getHouse_number()
                         + ", " + mData.get(position).getAddress().getPostcode()
                         + ", " + mData.get(position).getAddress().getCity()
                         + ", " + mData.get(position).getAddress().getCountry());
@@ -191,8 +190,8 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
         holder.map_Image.setOnClickListener(v -> {
 
             try {
-                event_Location= mData.get(position).getAddress().getHouse_number()
-                        + " " + mData.get(position).getAddress().getStreet()
+                event_Location= mData.get(position).getAddress().getStreet()
+                        + " " + mData.get(position).getAddress().getHouse_number()
                         + " " + mData.get(position).getAddress().getPostcode()
                         + " " + mData.get(position).getAddress().getCity()
                         + "," + mData.get(position).getAddress().getCountry();

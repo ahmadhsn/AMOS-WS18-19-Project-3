@@ -615,7 +615,7 @@ public class Services {
 				
 				JSONObject jobj2 = new JSONObject();
 				jobj2.put("street", street_json);
-				jobj2.put("housenumber", house_number_json);
+				jobj2.put("house_number", house_number_json);
 				jobj2.put("postcode", postcode_json);
 				jobj2.put("city", city_json);
 				jobj2.put("country", country_json);
