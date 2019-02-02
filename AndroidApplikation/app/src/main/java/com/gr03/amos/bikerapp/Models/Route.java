@@ -81,6 +81,10 @@ public class Route extends RealmObject {
 
     public void setLiked(boolean isLiked) {this.isLiked = isLiked;}
 
+    public boolean isLiked(){
+        return isLiked;
+    }
+
 }
 
 

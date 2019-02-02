@@ -637,9 +637,9 @@ public class Services {
 			
 	
 	@GET
-	@Path("/getRoutes")
+	@Path("/getRoutes/{id}")
 	@Consumes (MediaType.APPLICATION_JSON)
-	public Response getAllRoutes() throws JSONException{
+	public Response getAllRoutes(@PathParam("id") int userId) throws JSONException{
 
 		JSONObject j = new JSONObject();
 		
@@ -704,6 +704,15 @@ public class Services {
 					jobj3.append("address",jobj5);
 					jobj.append("end", jobj3);
 				}
+				
+				//check if current user (userId) is participant of event 
+				int id_route = result.getInt("id_route");
+				ResultSet participantResult = provider.querySelectDB("Select * from liked_route WHERE id_user = ? AND id_route = ?", userId, id_route);
+				boolean isLiked = false; 
+				if(participantResult.next()) {
+					isLiked = true; 
+				}
+				jobj.put("isLiked", isLiked);
 				
 				j.append("route",jobj);
 			}

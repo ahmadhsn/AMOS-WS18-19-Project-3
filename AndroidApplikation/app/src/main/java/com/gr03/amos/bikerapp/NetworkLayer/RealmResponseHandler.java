@@ -2,6 +2,7 @@ package com.gr03.amos.bikerapp.NetworkLayer;
 
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -27,6 +28,10 @@ public class RealmResponseHandler implements ResponseHandler {
         if (SocketUtility.checkRequestSuccessful(context, response)) {
 
             try {
+                if(!response.has(jsonName)){
+                    Log.d("NOREALMDATA", "no data in response");
+                    return;
+                }
                 JSONArray jsonString = response.getJSONArray(jsonName);
 
                 Realm.init(context);

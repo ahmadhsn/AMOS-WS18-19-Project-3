@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.gr03.amos.bikerapp.EditRouteActivity;
 import com.gr03.amos.bikerapp.Models.Event;
 import com.gr03.amos.bikerapp.Models.Route;
+import com.gr03.amos.bikerapp.NetworkLayer.DefaultResponseHandler;
 import com.gr03.amos.bikerapp.R;
 import com.gr03.amos.bikerapp.NetworkLayer.Requests;
 import com.gr03.amos.bikerapp.SaveSharedPreference;
@@ -65,6 +66,13 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
                         + ", " + mData.get(position).getStart().getAddress().getPostcode()
                         + ", " + mData.get(position).getStart().getAddress().getCity()
                         + ", " + mData.get(position).getStart().getAddress().getCountry());
+
+        //set to joined if already participant
+        if (mData.get(position).isLiked()) {
+            holder.unlikeRoute.setVisibility(View.VISIBLE);
+            holder.likeRoute.setVisibility(View.GONE);
+        }
+
 
         holder.routeDropDownButton.setOnClickListener(v -> {
             holder.routeDescription.setVisibility(View.VISIBLE);
@@ -165,6 +173,12 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
                 e.printStackTrace();
             }
         });
+
+        holder.unlikeRoute.setOnClickListener(v -> {
+            unlikeRoute(position);
+            holder.likeRoute.setVisibility(View.VISIBLE);
+            holder.unlikeRoute.setVisibility(View.GONE);
+        });
     }
 
     @Override
@@ -172,6 +186,32 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
         return mData.size();
     }
 
+
+    private void unlikeRoute(int position){
+        JSONObject json = new JSONObject();
+        try {
+            json.put("route_id", mData.get(position).getId_route());
+            json.put("user_id", SaveSharedPreference.getUserID(context));
+
+            Requests.executeRequest(new DefaultResponseHandler(), "POST", "unlikeRoute", json);
+
+            Realm.init(context);
+            Realm realm = Realm.getDefaultInstance();
+
+            //delete event participation in Realm Database
+            realm.executeTransaction(realm1 -> {
+                Route toEdit = realm1.where(Route.class)
+                        .equalTo("id_route", mData.get(position).getId_route())
+                        .findFirst();
+                toEdit.setLiked(false);
+            });
+            Log.i("After Transaction from Realm 1", "Deleted Route Like");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView routeName;
