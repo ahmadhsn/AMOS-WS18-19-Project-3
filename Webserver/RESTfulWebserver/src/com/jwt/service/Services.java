@@ -1810,6 +1810,38 @@ public class Services {
 		System.out.println("InvalidRequestbody");
 		return Response.status(400).entity("InvalidRequestBody").build();
 	}
+	
+	@POST
+	@Path("/unlikeRoute")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response unlikeRoute(String urlReq)
+			throws ClassNotFoundException, SQLException, JSONException, UnsupportedEncodingException {
+		// Setting the DB context in case its not set
+		DatabaseProvider.getInstance(context);
 
+		JSONObject JSONreq = new JSONObject(urlReq);
+		System.out.println("...delete Route Participant");
+
+		if (JSONreq.has("route_id") && JSONreq.has("user_id")) {
+			try {
+
+				DatabaseProvider db = DatabaseProvider.getInstance(context);
+				String query = "DELETE FROM liked_route WHERE id_user = ? AND id_route = ?";
+				db.queryInsertDB(query, JSONreq.getInt("user_id"), JSONreq.getInt("route_id"));
+				
+				JSONObject response = new JSONObject();
+
+				response.put("deleteRouteParticipation", "successful");
+
+				return Response.status(200).entity(response.toString()).build();
+
+			} catch (Exception e) {
+				System.out.println("Wrong JSONFormat:" + e.toString());
+				return Response.status(500).entity("InternalServerError").build();
+			}
+		}
+		System.out.println("InvalidRequestbody");
+		return Response.status(400).entity("InvalidRequestBody").build();
+	}
 
 }
