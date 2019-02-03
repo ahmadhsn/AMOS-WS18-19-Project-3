@@ -64,11 +64,11 @@ Steps:
  10. Edit classpath and remove for Tomcat all Entries that are not located on your computer (Run -> Run Configurations -> Classpath)
  11. If necessary(could be optional as sometimes jdk is already installed if used in another project): Set the 'jdk' to the one installed on your computer (Right click on Project -> Properties -> Java Build Path) and used port 8080 (Else any free port on your Machine), then settled the port in the config file server.xml.
  12. So at the end, Need to check/set one important things: You can see Restfulwebserver in project explorer in left side corner. There you will be able to see Web content folder inside it. Then, Click on WEB-INF --> lib --> enivronment.ini. 
- 13. Check following info should be correct to connect server with database: 
+ 13. Make sure following information should be corrected to connect server with database: 
      POSTGRES_HOST= Name of the host which you are using currently (e.g. localhost)
      POSTGRES_DB= Name of the database which ou have created in pgAdmin 4.
      POSTGRES_USERNAME= Name of username which you can find in pgAdmin4 below Database named 'Login/Group roles' --> the last tab (e.g 'postgres' by default usually)
      POSTGRES_PASSWORD= The password which you have kept while installing pgAdmin 4.
      POSTGRES_PORT= The port number (e.g 5432)  
 ```
-At the end , The user should be now able to run project in their local machine successfully.
+At the end , The user should now be able to run project in their local machine successfully.
