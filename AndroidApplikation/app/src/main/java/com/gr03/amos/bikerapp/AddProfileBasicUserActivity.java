@@ -15,6 +15,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+        import com.gr03.amos.bikerapp.Models.Address;
+        import com.gr03.amos.bikerapp.Models.User;
         import com.gr03.amos.bikerapp.NetworkLayer.Requests;
         import com.gr03.amos.bikerapp.NetworkLayer.ResponseHandler;
         import com.gr03.amos.bikerapp.NetworkLayer.SocketUtility;
@@ -26,7 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-;
+;import io.realm.Realm;
 
 public class AddProfileBasicUserActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, ResponseHandler {
 
@@ -163,6 +165,22 @@ public class AddProfileBasicUserActivity extends AppCompatActivity implements Da
 
         Requests.executeRequest(this, "POST", "addUserBasic", json);
 
+        Realm.init(this);
+        Realm realm = Realm.getDefaultInstance();
+        User user = realm.where(User.class).equalTo("id_user", SaveSharedPreference.getUserID(this)).findFirst();
+
+        realm.beginTransaction();
+        //TODO get userAddress id of user
+        /*Address address = new Address();
+        address.setStreet(Street.getText().toString());
+        address.setHouse_number(HNumber.getText().toString());
+        address.setPostcode(Long.parseLong(Postcode.getText().toString()));
+        address.setCity(City.getText().toString());
+        address.setState(State.getText().toString());
+        address.setCountry(Country.getText().toString());
+
+        user.setAddress(address);*/
+        realm.commitTransaction();
     }
 
     private void intentHandling(){

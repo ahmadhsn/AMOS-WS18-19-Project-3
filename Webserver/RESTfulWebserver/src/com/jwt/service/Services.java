@@ -615,7 +615,7 @@ public class Services {
 				
 				JSONObject jobj2 = new JSONObject();
 				jobj2.put("street", street_json);
-				jobj2.put("housenumber", house_number_json);
+				jobj2.put("house_number", house_number_json);
 				jobj2.put("postcode", postcode_json);
 				jobj2.put("city", city_json);
 				jobj2.put("country", country_json);
@@ -696,13 +696,14 @@ public class Services {
 				if(end.next()) { 
 					JSONObject jobj5 = new JSONObject();
 					JSONObject jobj3 = new JSONObject();
-					jobj5.put("country", start.getString("country"));
-					jobj5.put("city", start.getString("city"));
-					jobj5.put("street", start.getString("street"));
-					jobj5.put("postcode", start.getString("postcode"));
-					jobj5.put("house_number", start.getString("housenumber"));
-					jobj3.append("address",jobj5);
-					jobj.append("end", jobj3);
+					jobj5.put("country", end.getString("country"));
+					jobj5.put("city", end.getString("city"));
+					jobj5.put("street", end.getString("street"));
+					jobj5.put("postcode", end.getString("postcode"));
+					jobj5.put("id_address", end.getString("id_address"));
+					jobj5.put("house_number", end.getString("housenumber"));
+					jobj3.put("address",jobj5);
+					jobj.put("end", jobj3);
 				}
 				
 				//check if current user (userId) is participant of event 

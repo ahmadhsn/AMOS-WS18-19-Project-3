@@ -29,7 +29,7 @@ public class RealmResponseHandler implements ResponseHandler {
 
             try {
                 if(!response.has(jsonName)){
-                    Log.d("NOREALMDATA", "no realm objects to add");
+                    Log.d("NOREALMDATA", "no data in response");
                     return;
                 }
                 JSONArray jsonString = response.getJSONArray(jsonName);

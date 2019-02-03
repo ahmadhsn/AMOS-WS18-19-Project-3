@@ -133,35 +133,39 @@ tools:context=".ProfileBasicUserActivity">
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal" >
+                        android:orientation="horizontal"
+                        android:layout_marginRight="25dp">
 
                         <EditText
                             android:id="@+id/user_street"
-                            android:layout_height="40dp"
-                            android:layout_width="0dp"
-                            android:layout_weight=".40"
-                            android:layout_alignRight="@id/address_image"
-                            android:hint="Street"
-                            android:inputType="text"
                             style="@style/editTextViewHalfLeft"
-                            android:background="@null"/>
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:layout_alignRight="@id/address_image"
+                            android:layout_weight=".40"
+                            android:background="@null"
+                            android:hint="Street"
+                            android:inputType="text" />
 
                         <EditText
                             android:id="@+id/hnumber"
-                            android:layout_height="40dp"
-                            android:layout_width="0dp"
-                            android:layout_weight=".40"
-                            android:hint="Number"
-                            android:inputType="text"
-                            android:focusable="false"
                             style="@style/editTextViewHalfRight"
-                            android:background="@null"/>
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_marginRight="40dp"
+                            android:layout_weight=".40"
+                            android:background="@null"
+                            android:focusable="false"
+                            android:gravity="right"
+                            android:hint="Number"
+                            android:inputType="text" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal" >
+                        android:orientation="horizontal"
+                        android:layout_marginRight="25dp">
 
                         <EditText
                             android:id="@+id/user_postcode"
@@ -182,8 +186,10 @@ tools:context=".ProfileBasicUserActivity">
                             android:layout_weight=".40"
                             android:layout_below="@id/hnumber"
                             android:text="City"
+                            android:layout_marginRight="40dp"
                             android:inputType="text"
                             style="@style/editTextViewHalfRight"
+                            android:gravity="right"
                             android:focusable="false"
                             android:background="@null"/>
                         />
