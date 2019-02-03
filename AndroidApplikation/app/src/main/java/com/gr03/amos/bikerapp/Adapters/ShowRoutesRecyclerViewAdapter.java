@@ -61,12 +61,19 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
         holder.routeDescription.setText(mData.get(position).getDescription());
         holder.startPoint
                 .setText("Start Point: "
-                        + mData.get(position).getStart().getAddress().getHouse_number()
-                        + ", " + mData.get(position).getStart().getAddress().getStreet()
+                        + mData.get(position).getStart().getAddress().getStreet()
+                        + ", " + mData.get(position).getStart().getAddress().getHouse_number()
                         + ", " + mData.get(position).getStart().getAddress().getPostcode()
                         + ", " + mData.get(position).getStart().getAddress().getCity()
                         + ", " + mData.get(position).getStart().getAddress().getCountry());
 
+        holder.endPoint
+                .setText("End Point: "
+                        + mData.get(position).getEnd().getAddress().getStreet()
+                        + ", " + mData.get(position).getEnd().getAddress().getHouse_number()
+                        + ", " + mData.get(position).getEnd().getAddress().getPostcode()
+                        + ", " + mData.get(position).getEnd().getAddress().getCity()
+                        + ", " + mData.get(position).getEnd().getAddress().getCountry());
         //set to joined if already participant
         if (mData.get(position).isLiked()) {
             holder.unlikeRoute.setVisibility(View.VISIBLE);
@@ -77,6 +84,7 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
         holder.routeDropDownButton.setOnClickListener(v -> {
             holder.routeDescription.setVisibility(View.VISIBLE);
             holder.startPoint.setVisibility(View.VISIBLE);
+            holder.endPoint.setVisibility(View.VISIBLE);
             holder.routeDropDownButton.setVisibility(View.GONE);
             holder.routeDropUpButton.setVisibility(View.VISIBLE);
             holder.dividerView.setVisibility(View.VISIBLE);
@@ -85,6 +93,7 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
         holder.routeDropUpButton.setOnClickListener(v -> {
             holder.routeDescription.setVisibility(View.GONE);
             holder.startPoint.setVisibility(View.GONE);
+            holder.endPoint.setVisibility(View.GONE);
             holder.routeDropDownButton.setVisibility(View.VISIBLE);
             holder.routeDropUpButton.setVisibility(View.GONE);
             holder.dividerView.setVisibility(View.GONE);
@@ -217,6 +226,7 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
         TextView routeName;
         TextView routeDescription;
         TextView startPoint;
+        TextView endPoint;
         ImageView routeDropDownButton;
         ImageView routeDropUpButton;
         LinearLayout controlLinearLayout;
@@ -227,12 +237,12 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
         Button likeRoute;
         Button unlikeRoute;
 
-
         ViewHolder(View itemView) {
             super(itemView);
             routeName = itemView.findViewById(R.id.route_name);
             routeDescription = itemView.findViewById(R.id.route_description);
             startPoint = itemView.findViewById(R.id.route_start_point);
+            endPoint = itemView.findViewById(R.id.route_end_point);
             routeDropDownButton = itemView.findViewById(R.id.arrow_down);
             routeDropUpButton = itemView.findViewById(R.id.arrow_up);
             route_delete = itemView.findViewById(R.id.route_delete);
