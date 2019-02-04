@@ -154,8 +154,8 @@
 
             <TextView
                 android:id="@+id/route_description"
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/divider"
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
@@ -168,8 +168,8 @@
 
             <TextView
                 android:id="@+id/route_start_point"
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/route_description"
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
@@ -177,13 +177,13 @@
                 android:maxLength="100"
                 android:text="Start Point"
                 android:textColor="@color/colorPrimary"
-                android:textSize="15sp"
+                android:textSize="16sp"
                 android:visibility="gone" />
 
             <TextView
                 android:id="@+id/route_end_point"
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/route_start_point"
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
@@ -191,7 +191,7 @@
                 android:maxLength="100"
                 android:text="End Point"
                 android:textColor="@color/colorPrimary"
-                android:textSize="15sp"
+                android:textSize="16sp"
                 android:visibility="gone" />
 
             <!--<TextView

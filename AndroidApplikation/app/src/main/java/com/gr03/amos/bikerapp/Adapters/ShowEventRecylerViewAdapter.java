@@ -2,9 +2,7 @@ package com.gr03.amos.bikerapp.Adapters;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -23,14 +21,12 @@ import android.widget.Toast;
 import com.gr03.amos.bikerapp.EditEventActivity;
 import com.gr03.amos.bikerapp.Models.Event;
 import com.gr03.amos.bikerapp.NetworkLayer.DefaultResponseHandler;
-import com.gr03.amos.bikerapp.R;
 import com.gr03.amos.bikerapp.NetworkLayer.Requests;
+import com.gr03.amos.bikerapp.R;
 import com.gr03.amos.bikerapp.SaveSharedPreference;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.Console;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -195,7 +191,8 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
                         + " " + mData.get(position).getAddress().getPostcode()
                         + " " + mData.get(position).getAddress().getCity()
                         + "," + mData.get(position).getAddress().getCountry();
-                map = "http://maps.google.com/maps?q=" + event_Location;
+               // map = "http://maps.google.com/maps?q=" + event_Location;
+                map = "https://www.google.com/maps/search/?api=1&query=" + event_Location;
                 eventMap(map);
 
             } catch (JSONException e) {
