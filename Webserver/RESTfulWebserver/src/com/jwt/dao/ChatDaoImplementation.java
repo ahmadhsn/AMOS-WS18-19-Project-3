@@ -1,13 +1,16 @@
 package com.jwt.dao;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
 
 import com.jwt.DataBaseConnection.DatabaseProvider;
+import com.jwt.model.Chat;
 import com.jwt.model.Message;
 
 public class ChatDaoImplementation implements ChatDao {
@@ -95,6 +98,78 @@ public class ChatDaoImplementation implements ChatDao {
 		
 		
 	}
+
+	@Override
+	public ArrayList<Chat> loadAllChats(int userId) {
+		String query = "SELECT * FROM chat WHERE id_chat IN "
+				+ "(SELECT id_chat FROM participant WHERE id_user = ?)";
+		ArrayList<Chat> chats = new ArrayList<>();
+		try {
+			ResultSet rsChats = db.querySelectDB(query, userId);
+			
+			while(rsChats.next()) {
+				int idChat= rsChats.getInt("id_chat");
+				
+				//load participants and title 
+				ArrayList<Integer> participants = new ArrayList<>();
+				String title = "";
+				ResultSet rsParticipants = db.querySelectDB("SELECT id_user FROM participant WHERE id_chat = ?", idChat);
+				
+				while(rsParticipants.next()) {
+					int currUserId = rsParticipants.getInt("id_user");
+					participants.add(currUserId);
+					if(currUserId != userId) {
+						ResultSet rsUser = db.querySelectDB("SELECT first_name, last_name FROM basic_user WHERE id_user = ?", currUserId);
+						
+						if(rsUser.next()) {
+							if(!title.isEmpty()) {
+								title += ", ";
+							}
+							title += rsUser.getString("first_name") + " " + rsUser.getString("last_name");
+						}
+					}
+				}
+				
+				if(title.isEmpty()) {
+					title = "Unknown Username";
+				}
+
+				
+				//load last message and lastsend Date
+				String queryMessage = "SELECT * FROM message WHERE id_chat = ? ORDER BY time_created DESC LIMIT 1";
+				ResultSet rsMessage = db.querySelectDB(queryMessage, idChat);
+				if(rsMessage.next()) {
+					Timestamp lastSend = rsMessage.getTimestamp("time_created");
+					String lastMessage = rsMessage.getString("message");
+					chats.add(new Chat(idChat, participants, lastSend, lastMessage, title));
+				}else {
+					System.out.println("Chat has no messages, skip chat");
+					break;
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return chats;
+	}
+	
+	private ArrayList<Integer> loadParticipants(int idChat){
+		DatabaseProvider db = DatabaseProvider.getInstance();
+		ArrayList<Integer> participants = new ArrayList<>();
+		
+		try {
+			ResultSet rsParticipants = db.querySelectDB("SELECT id_user FROM participant WHERE id_chat = ?", idChat);
+		
+			while(rsParticipants.next()) {
+				participants.add(rsParticipants.getInt("id_user"));
+			}
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		
+		return participants;
+	}
+	
     
 
 }

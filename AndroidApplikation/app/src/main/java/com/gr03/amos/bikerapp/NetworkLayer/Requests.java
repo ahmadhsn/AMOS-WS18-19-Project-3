@@ -3,6 +3,7 @@ package com.gr03.amos.bikerapp.NetworkLayer;
 import android.content.Context;
 import android.widget.Toast;
 
+import com.gr03.amos.bikerapp.Models.Chat;
 import com.gr03.amos.bikerapp.Models.Event;
 import com.gr03.amos.bikerapp.Models.Friend;
 import com.gr03.amos.bikerapp.Models.Route;
@@ -144,6 +145,11 @@ public class Requests {
 
     public static void getJsonResponseForChat(String urlTail, int chatId, Context context, ResponseHandler handler) {
         executeRealmResponse(urlTail + "/" + chatId, "Chat", Message.class, context, handler);
+    }
+
+    public static void getJSONResponseForChats(int userId, Context context, ResponseHandler handler){
+        executeRealmResponse( "getChats/" + userId, "chat", Chat.class, context, handler);
+
     }
 
     public static String getUrl(String urlTail) {
