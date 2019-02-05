@@ -227,29 +227,25 @@ public class ShowEventActivity extends AppCompatActivity
                 getSupportActionBar().setTitle("Event Feed");
                 return true;
             case R.id.navigation_route:
-                if(openEditProfileInfoIfEmpty()) return true;
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.create_event_fragment, new ShowRoutesFragment())
-                        .commit();
-                getSupportActionBar().setTitle("Route Feed");
-                return true;
+                try {
+                    if (!checkUserAdded()) {
+                        Intent intent = new Intent(this, AddProfileBasicUserActivity.class);
+                        startActivity(intent);
+
+                    } else {
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.create_event_fragment, new ShowRoutesFragment())
+                                .commit();
+                        getSupportActionBar().setTitle("Route Feed");
+                        return true;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
         }
         return false;
     };
-
-    public boolean openEditProfileInfoIfEmpty() {
-        // if user no has no address in profile -> open edit user infos
-        Realm.init(this);
-        Realm realm = Realm.getDefaultInstance();
-        User user = realm.where(User.class).equalTo("id_user", SaveSharedPreference.getUserID(this)).findFirst();
-        Log.i("TEST", user.toString());
-        if (user.getAddress() == null){
-            Intent intent = new Intent(this, AddProfileBasicUserActivity.class);
-            startActivity(intent);
-            return true;
-        }
-        return false;
-    }
+    
 
     public boolean checkUserAdded() throws JSONException {
 
@@ -259,7 +255,7 @@ public class ShowEventActivity extends AppCompatActivity
 
         //checks if the user already added profile information
         try {
-            JSONObject response = Requests.getResponse("checkUserAdded", json,"POST");
+            JSONObject response = Requests.getResponse("checkUserAdded", json, "POST");
 
             //handle response
             if (response.has("success")) {
