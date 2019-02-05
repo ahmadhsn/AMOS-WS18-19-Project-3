@@ -56,8 +56,8 @@
     <string name="enter_message_hint">Enter message</string>
     <string name="button_send">SEND</string>
     <string name="admin_tag">Admin</string>
-    <string name="title_event_feed">Event Feed</string>
-    <string name="title_route_feed">Route Feed</string>
+    <string name="title_event_feed">Events</string>
+    <string name="title_route_feed">Routes</string>
     <string name="title_activity_business_user_main">BusinessUserMain</string>
     <string name="nav_header_desc">Navigation header</string>
 

@@ -5,12 +5,12 @@
 
     <item
         android:id="@+id/navigation_event"
-        android:icon="@drawable/ic_check_box"
+        android:icon="@drawable/ic_event_available_white_24dp"
         android:title="@string/title_event_feed" />
 
     <item
         android:id="@+id/navigation_route"
-        android:icon="@drawable/ic_check_box"
+        android:icon="@drawable/ic_motorcycle_white_24dp"
         android:title="@string/title_route_feed" />
 
 </menu>
