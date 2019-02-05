@@ -51,7 +51,7 @@ public class LoginActivity extends AppCompatActivity implements ResponseHandler 
         json.put("email", email.getText().toString());
         json.put("password", password.getText().toString());
 
-        Requests.executeRequest(this, "POST", "checkUser", json);
+        Requests.executeRequest(this, "POST", "checkUser", json, getApplicationContext());
 
     }
 

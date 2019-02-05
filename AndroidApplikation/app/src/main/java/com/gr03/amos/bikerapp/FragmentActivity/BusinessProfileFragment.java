@@ -103,7 +103,7 @@ public class BusinessProfileFragment extends Fragment implements ResponseHandler
     }
 
     private void loadProfile() {
-        Requests.executeRequest(this, "GET", "getBusinessProfile/" + userId);
+        Requests.executeRequest(this, "GET", "getBusinessProfile/" + userId, getContext());
 
     }
 
@@ -137,7 +137,7 @@ public class BusinessProfileFragment extends Fragment implements ResponseHandler
             ex.printStackTrace();
         }
 
-        Requests.executeRequest(this, "POST", "editBusinessProfile", json);
+        Requests.executeRequest(this, "POST", "editBusinessProfile", json, getContext());
 
         makeFieldsUneditable();
         editProfile.setVisibility(View.VISIBLE);

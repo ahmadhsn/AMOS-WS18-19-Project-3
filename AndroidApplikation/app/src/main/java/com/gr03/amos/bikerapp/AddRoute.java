@@ -64,7 +64,7 @@ public class AddRoute extends AppCompatActivity implements ResponseHandler {
         if (checkEnteredData()) {
             return;
         }
-        Requests.executeRequest(this, "POST", "createRoute", generateRequestJSON());
+        Requests.executeRequest(this, "POST", "createRoute", generateRequestJSON(), getApplicationContext());
         finish();
     }
 

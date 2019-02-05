@@ -35,8 +35,8 @@ public class Requests {
      * @param method  HTTP method ("GET", "POST", "PUT")
      * @param urlTail urlTail (servicename) of Request
      */
-    public static void executeRequest(ResponseHandler handler, String method, String urlTail) {
-        new HttpTask(handler, method, urlTail).execute();
+    public static void executeRequest(ResponseHandler handler, String method, String urlTail, Context context) {
+        new HttpTask(handler, method, urlTail, context).execute();
     }
 
     /**
@@ -47,8 +47,8 @@ public class Requests {
      * @param urlTail urlTail (servicename) of Request
      * @param json    json Object for request
      */
-    public static void executeRequest(ResponseHandler handler, String method, String urlTail, JSONObject json) {
-        new HttpTask(handler, method, urlTail).execute(json.toString());
+    public static void executeRequest(ResponseHandler handler, String method, String urlTail, JSONObject json, Context context) {
+        new HttpTask(handler, method, urlTail, context).execute(json.toString());
     }
 
 
@@ -78,7 +78,7 @@ public class Requests {
     public static JSONObject getResponse(String urlTail, JSONObject json, String method, Context context) {
         JSONObject response = null;
         try {
-            HttpTask currTask = new HttpTask(new DefaultResponseHandler(), method, urlTail);
+            HttpTask currTask = new HttpTask(new DefaultResponseHandler(), method, urlTail, context);
             if (json == null) {
                 response = currTask.execute().get();
             } else {
@@ -112,11 +112,7 @@ public class Requests {
         }
         RealmResponseHandler realmHandler = new RealmResponseHandler(type, jsonName, context);
 
-        try {
-            new HttpTask(handler, "GET", urlTail, realmHandler).execute().get();
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
+        new HttpTask(handler, "GET", urlTail, realmHandler, context).execute();
     }
 
     public static void getJsonResponseForEvents(String urlTail, int userId,  Context context, ResponseHandler handler) {

@@ -85,7 +85,7 @@ public class ChatActivity extends AppCompatActivity implements ResponseHandler {
             }
             request.put("id_users", jsonUserIds);
 
-            Requests.executeRequest(this, "PUT", "loadChat", request);
+            Requests.executeRequest(this, "PUT", "loadChat", request, getApplicationContext());
 
 
         } catch (JSONException e) {
@@ -112,7 +112,7 @@ public class ChatActivity extends AppCompatActivity implements ResponseHandler {
             String currTime = getCurrentTimestampString();
             json.put("time", currTime);
 
-            Requests.executeRequest(this, "PUT", "saveMessage", json);
+            Requests.executeRequest(this, "PUT", "saveMessage", json, getApplicationContext());
 
 
         } catch (Exception e) {

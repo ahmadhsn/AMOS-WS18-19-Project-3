@@ -122,7 +122,7 @@ public class ProfileBasicUserActivity extends AppCompatActivity implements Respo
     }
 
     private void getAdditionalUserInfo() {
-        Requests.executeRequest(this, "GET", "getUserInfo/" + userId);
+        Requests.executeRequest(this, "GET", "getUserInfo/" + userId, getApplicationContext());
     }
 
     private void onCreateAfterProfileId() {
@@ -214,7 +214,7 @@ public class ProfileBasicUserActivity extends AppCompatActivity implements Respo
         json.put("state", user_state.getText().toString());
         json.put("country", user_country.getText().toString());
 
-        Requests.executeRequest(this, "POST", "editUserInfo", json);
+        Requests.executeRequest(this, "POST", "editUserInfo", json, getApplicationContext());
 
         makeFieldsUneditable();
     }

@@ -104,7 +104,7 @@ public class SignUpActivity extends AppCompatActivity implements ResponseHandler
         //if (businessUser)
         //  json.put("business_name", businessName.getText().toString());
 
-        Requests.executeRequest(this, "POST", "userRegistration", json);
+        Requests.executeRequest(this, "POST", "userRegistration", json, getApplicationContext());
     }
 
     public static boolean isValidEmail(CharSequence target) {

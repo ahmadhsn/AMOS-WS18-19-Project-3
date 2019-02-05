@@ -163,7 +163,7 @@ public class AddProfileBasicUserActivity extends AppCompatActivity implements Da
         json.put("state", State.getText().toString());
         json.put("country", Country.getText().toString());
 
-        Requests.executeRequest(this, "POST", "addUserBasic", json);
+        Requests.executeRequest(this, "POST", "addUserBasic", json, getApplicationContext());
 
         Realm.init(this);
         Realm realm = Realm.getDefaultInstance();

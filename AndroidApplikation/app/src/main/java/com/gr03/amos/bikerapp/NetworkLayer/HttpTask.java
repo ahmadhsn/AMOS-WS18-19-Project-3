@@ -1,6 +1,8 @@
 package com.gr03.amos.bikerapp.NetworkLayer;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.http.HttpResponseCache;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -30,11 +32,13 @@ public class HttpTask extends AsyncTask<String, Void, JSONObject> {
     private String urlTail;
     private String method;
     private boolean connectionTimeout;
+    private boolean deviceOffline;
     private Response response;
     private JSONObject responseJson;
     private ResponseHandler handler;
     private boolean hasRealmUpdate;
     private ResponseHandler realmHandler;
+    private Context context;
 
     /**
      * Constructor for HttpTask.
@@ -43,7 +47,7 @@ public class HttpTask extends AsyncTask<String, Void, JSONObject> {
      * @param method HTTP Method ("GET", "POST", "PUT")
      * @param urlTail urlTail (servicename) of request
      */
-    public HttpTask(ResponseHandler handler, String method, String urlTail) {
+    public HttpTask(ResponseHandler handler, String method, String urlTail, Context context) {
         super();
         client = new OkHttpClient.Builder()
                 .retryOnConnectionFailure(false)
@@ -51,8 +55,10 @@ public class HttpTask extends AsyncTask<String, Void, JSONObject> {
         this.method = method;
         this.urlTail = urlTail;
         this.connectionTimeout = false;
+        this.deviceOffline = false;
         this.handler = handler;
         this.hasRealmUpdate = false;
+        this.context = context;
     }
 
     /**
@@ -62,7 +68,7 @@ public class HttpTask extends AsyncTask<String, Void, JSONObject> {
      * @param method HTTP Method ("GET", "POST", "PUT")
      * @param urlTail urlTail (servicename) of request
      */
-    public HttpTask(ResponseHandler handler, String method, String urlTail, ResponseHandler realmHandler) {
+    public HttpTask(ResponseHandler handler, String method, String urlTail, ResponseHandler realmHandler, Context context) {
         super();
         client = new OkHttpClient.Builder()
                 .retryOnConnectionFailure(false)
@@ -70,9 +76,11 @@ public class HttpTask extends AsyncTask<String, Void, JSONObject> {
         this.method = method;
         this.urlTail = urlTail;
         this.connectionTimeout = false;
+        this.deviceOffline = false;
         this.handler = handler;
         this.realmHandler = realmHandler;
         this.hasRealmUpdate = true;
+        this.context = context;
     }
 
 
@@ -84,6 +92,10 @@ public class HttpTask extends AsyncTask<String, Void, JSONObject> {
      */
     @Override
     protected JSONObject doInBackground(String... params) {
+        if(!isNetworkConnected()){
+            deviceOffline = true;
+            return null;
+        }
         Request request = null;
         if (method == "GET") {
             request = new Request.Builder()
@@ -127,7 +139,17 @@ public class HttpTask extends AsyncTask<String, Void, JSONObject> {
      */
     @Override
     protected void onPostExecute(JSONObject obj) {
-        if (connectionTimeout) {
+        if(deviceOffline){
+            Log.d("OFFLINE_DEVICE", "Device has no iternet connection");
+            responseJson = new JSONObject();
+            try {
+                responseJson.put("error", "Device offline");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+        else if (connectionTimeout) {
             Log.d("CONNECTION_TIMEOUT", "Found connection Timeout");
             responseJson = new JSONObject();
             try {
@@ -158,6 +180,16 @@ public class HttpTask extends AsyncTask<String, Void, JSONObject> {
             realmHandler.onResponse(responseJson, urlTail);
         }
         handler.onResponse(responseJson, urlTail);
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm =
+                (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+        return isConnected;
     }
 
 }

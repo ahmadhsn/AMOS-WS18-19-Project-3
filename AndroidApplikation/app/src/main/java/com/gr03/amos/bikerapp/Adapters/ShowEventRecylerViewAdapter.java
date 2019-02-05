@@ -211,7 +211,7 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
                     json.put("event_id", mData.get(position).getId_event());
                     json.put("user_id", SaveSharedPreference.getUserID(context));
 
-                    Requests.executeRequest(new DefaultResponseHandler(), "POST", "addmyeventlist", json);
+                    Requests.executeRequest(new DefaultResponseHandler(), "POST", "addmyeventlist", json, context);
 
                     Realm.init(context);
                     Realm realm = Realm.getDefaultInstance();
@@ -312,7 +312,7 @@ public class ShowEventRecylerViewAdapter extends RecyclerView.Adapter<ShowEventR
             json.put("event_id", mData.get(position).getId_event());
             json.put("user_id", SaveSharedPreference.getUserID(context));
 
-            Requests.executeRequest(new DefaultResponseHandler(), "POST", "deleteEventParticipant", json);
+            Requests.executeRequest(new DefaultResponseHandler(), "POST", "deleteEventParticipant", json, context);
 
             Realm.init(context);
             Realm realm = Realm.getDefaultInstance();

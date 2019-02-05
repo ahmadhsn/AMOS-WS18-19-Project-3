@@ -79,7 +79,7 @@ public class CreateEventFragment extends Fragment implements AdapterView.OnItemS
         houseNr = view.findViewById(R.id.houseNr);
 
         if (SaveSharedPreference.getUserType(container.getContext()) == 2) {
-            Requests.executeRequest(this, "GET", "getBusinessProfile/" + SaveSharedPreference.getUserID(container.getContext()));
+            Requests.executeRequest(this, "GET", "getBusinessProfile/" + SaveSharedPreference.getUserID(container.getContext()), getContext());
         }
 
         eventDate.setOnClickListener(v -> {
