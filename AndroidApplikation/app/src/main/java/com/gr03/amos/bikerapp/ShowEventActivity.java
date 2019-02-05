@@ -1,23 +1,16 @@
 package com.gr03.amos.bikerapp;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,18 +24,10 @@ import com.gr03.amos.bikerapp.FragmentActivity.MyRouteListFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.ShowEventsFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.ShowFriendsFragment;
 import com.gr03.amos.bikerapp.FragmentActivity.ShowRoutesFragment;
-import com.gr03.amos.bikerapp.Models.User;
 import com.gr03.amos.bikerapp.NetworkLayer.Requests;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.concurrent.Callable;
-import java.util.concurrent.FutureTask;
-
-import io.realm.Realm;
 
 public class ShowEventActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -253,7 +238,7 @@ public class ShowEventActivity extends AppCompatActivity
 
         //checks if the user already added profile information
         try {
-            JSONObject response = Requests.getResponse("checkUserAdded", json, "POST");
+            JSONObject response = Requests.getResponse("checkUserAdded", json, "POST", this);
 
             //handle response
             if (response.has("success")) {
