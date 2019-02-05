@@ -135,9 +135,7 @@ public class HttpTask extends AsyncTask<String, Void, JSONObject> {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }
-
-        if(response.code() == CODE_UNAUTHORIZED){
+        }else if(response.code() == CODE_UNAUTHORIZED){
             try {
                 responseJson = new JSONObject();
                 responseJson.put("error", "unauthorized");
