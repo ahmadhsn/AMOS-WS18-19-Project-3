@@ -153,9 +153,7 @@ public class ShowEventActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.settings) {
-            //TODO implement settings
-        } else if (id == R.id.my_event_list) {
+        if (id == R.id.my_event_list) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.create_event_fragment, new MyEventListFragment())
                     .addToBackStack("SHOW_EVENT_FRAGMENT")

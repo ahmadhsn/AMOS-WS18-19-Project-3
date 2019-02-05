@@ -11,53 +11,47 @@
 
         <item
             android:id="@+id/my_event_list"
-            android:icon="@drawable/ic_menu_share"
+            android:icon="@drawable/ic_check_box"
             android:title="My Event List" />
+
+        <item
+            android:id="@+id/my_route_list"
+            android:icon="@drawable/ic_map_black_24dp"
+            android:title="My Route List" />
 
         <item
             android:id="@+id/show_friends"
             android:icon="@drawable/ic_contacts"
             android:title="My Friends" />
+
+        <item
+            android:id="@+id/my_chat_list"
+            android:icon="@drawable/ic_message_black_24dp"
+            android:title="My Messages" />
     </group>
 
     <item android:title="User Activities">
         <menu>
 
-
-            <item
-                android:id="@+id/my_route_list"
-                android:icon="@drawable/ic_menu_share"
-                android:title="My Route List" />
-
-            <item
-                android:id="@+id/my_chat_list"
-                android:icon="@drawable/ic_menu_share"
-                android:title="My Messages" />
-
-
             <item
                 android:id="@+id/add_route"
-                android:icon="@drawable/ic_map_black_24dp"
+                android:icon="@drawable/ic_menu_plus_gray"
                 android:title="Create Route" />
 
             <item
                 android:id="@+id/action_add_event"
                 android:icon="@drawable/ic_menu_plus_gray"
-                android:title="Add Event" />
+                android:title="Create Event" />
 
         </menu>
     </item>
 
     <item android:title="@string/event_drawer_user_options">
         <menu>
-            <item
-                android:id="@+id/settings"
-                android:icon="@drawable/ic_menu_share"
-                android:title="@string/settings" />
 
             <item
                 android:id="@+id/change_password"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@android:drawable/ic_secure"
                 android:title="@string/change_password" />
 
             <item
