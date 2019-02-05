@@ -163,7 +163,7 @@
                 android:maxLength="100"
                 android:text="description"
                 android:textColor="@color/colorPrimary"
-                android:textSize="15sp"
+                android:textSize="16sp"
                 android:visibility="gone" />
 
             <TextView
@@ -192,6 +192,19 @@
                 android:text="End Point"
                 android:textColor="@color/colorPrimary"
                 android:textSize="16sp"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/map_route"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/route_end_point"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="5dp"
+                android:background="@android:color/transparent"
+                android:text="See route on Google Maps"
+                android:drawableRight="@drawable/ic_near_me_black_24dp"
                 android:visibility="gone" />
 
             <!--<TextView
