@@ -86,7 +86,7 @@ public class ShowMyEventRecyclerViewAdapter extends RecyclerView.Adapter<ShowMyE
     private void deleteEvent(long eventId) throws JSONException {
         JSONObject json = new JSONObject();
         json.put("id_event", eventId);
-        Requests.executeRequest(new DefaultResponseHandler(), "POST", "deleteEvent", json);
+        Requests.executeRequest(new DefaultResponseHandler(), "POST", "deleteEvent", json, context);
     }
 
     @Override
@@ -100,7 +100,7 @@ public class ShowMyEventRecyclerViewAdapter extends RecyclerView.Adapter<ShowMyE
             json.put("event_id", mData.get(position).getId_event());
             json.put("user_id", SaveSharedPreference.getUserID(context));
 
-            Requests.executeRequest(new DefaultResponseHandler(), "POST", "deleteEventParticipant", json);
+            Requests.executeRequest(new DefaultResponseHandler(), "POST", "deleteEventParticipant", json, context);
 
             Realm.init(context);
             Realm realm = Realm.getDefaultInstance();

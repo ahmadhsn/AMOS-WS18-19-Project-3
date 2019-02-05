@@ -109,7 +109,7 @@ public class ShowFriendsFragment extends Fragment implements SearchView.OnQueryT
             request.put("id", SaveSharedPreference.getUserID(context));
             request.put("input", query);
 
-            Requests.executeRequest(this, "POST", url, request);
+            Requests.executeRequest(this, "POST", url, request, getContext());
 
         } catch (Exception e) {
             Log.i("Exception --- not requested", e.toString());

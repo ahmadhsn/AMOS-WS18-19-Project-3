@@ -232,7 +232,7 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
             json.put("route_id", mData.get(position).getId_route());
             json.put("user_id", SaveSharedPreference.getUserID(context));
 
-            Requests.executeRequest(new DefaultResponseHandler(), "POST", "unlikeRoute", json);
+            Requests.executeRequest(new DefaultResponseHandler(), "POST", "unlikeRoute", json, context);
 
             Realm.init(context);
             Realm realm = Realm.getDefaultInstance();

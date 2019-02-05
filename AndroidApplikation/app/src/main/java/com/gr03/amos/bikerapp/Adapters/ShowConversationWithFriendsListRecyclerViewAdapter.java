@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gr03.amos.bikerapp.ChatActivity;
+import com.gr03.amos.bikerapp.Models.Chat;
 import com.gr03.amos.bikerapp.Models.Friend;
 import com.gr03.amos.bikerapp.Models.Message;
 import com.gr03.amos.bikerapp.NetworkLayer.ResponseHandler;
@@ -30,13 +31,13 @@ import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
-public class ShowConversationWithFriendsListRecyclerViewAdapter extends RealmRecyclerViewAdapter<Friend, ShowConversationWithFriendsListRecyclerViewAdapter.ViewHolder> {
-    private RealmResults<Friend> mData;
+public class ShowConversationWithFriendsListRecyclerViewAdapter extends RealmRecyclerViewAdapter<Chat, ShowConversationWithFriendsListRecyclerViewAdapter.ViewHolder> {
+    private RealmResults<Chat> mData;
     private LayoutInflater mInflater;
     private Context context;
 
     // data is passed into the constructor
-    public ShowConversationWithFriendsListRecyclerViewAdapter(Context context, RealmResults<Friend> data) {
+    public ShowConversationWithFriendsListRecyclerViewAdapter(Context context, RealmResults<Chat> data) {
         super(data, true);
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
@@ -51,24 +52,22 @@ public class ShowConversationWithFriendsListRecyclerViewAdapter extends RealmRec
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ArrayList<Integer> chatUser = new ArrayList<>();
-        chatUser.add(SaveSharedPreference.getUserID(context));
-        chatUser.add(Math.toIntExact(mData.get(position).getId()));
-        int chatId = loadChat(chatUser);
-        Log.i("before chat", String.valueOf(chatId));
         Realm.init(context);
         Realm realm = Realm.getDefaultInstance();
-        Message message = realm.where(Message.class).equalTo("id_chat", chatId).sort("time_created", Sort.DESCENDING).findFirst();
+        Chat chat = realm.where(Chat.class).equalTo("id_chat", mData.get(position).getId_chat()).findFirst();
 
         try {
-            holder.friendName.setText(mData.get(position).getFirst_name());
-            holder.timeStamp.setText(message.getTime_created());
-            holder.lastMessage.setText(message.getMessage());
+            holder.friendName.setText(chat.getTitle());
+            holder.timeStamp.setText(chat.getLast_send().toString());
+            holder.lastMessage.setText(chat.getLast_message());
 
             holder.itemView.setOnClickListener(v -> {
                 Intent intent = new Intent(context, ChatActivity.class);
-                intent.putExtra("chatUser", chatUser);
-                Log.i("this chat", String.valueOf(chatUser));
+                ArrayList<Integer> participants = new ArrayList<>();
+                participants.addAll(chat.getParticipants());
+                intent.putExtra("chatUser", participants);
+                intent.putExtra("id_chat", chat.getId_chat());
+                Log.i("this chat", String.valueOf(participants));
                 context.startActivity(intent);
             });
         } catch (Exception e) {
@@ -93,7 +92,6 @@ public class ShowConversationWithFriendsListRecyclerViewAdapter extends RealmRec
             }
             request.put("id_users", jsonUserIds);
 
-
             JSONObject response = Requests.getResponse("loadChat", request, "PUT", context);
 
             if (response.has("id_chat")) {
@@ -107,10 +105,7 @@ public class ShowConversationWithFriendsListRecyclerViewAdapter extends RealmRec
         }
 
         return -1;
-
     }
-
-
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView friendName;

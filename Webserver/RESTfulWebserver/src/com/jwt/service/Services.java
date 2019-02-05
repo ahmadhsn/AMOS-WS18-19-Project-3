@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.sql.Connection;
 import java.sql.Date;
@@ -42,6 +43,7 @@ import com.jwt.dao.UserDaoImplementation;
 import com.jwt.model.Address;
 import com.jwt.model.BasicUser;
 import com.jwt.model.BusinessUser;
+import com.jwt.model.Chat;
 import com.jwt.model.Event;
 import com.jwt.model.EventType;
 import com.jwt.model.Message;
@@ -631,6 +633,7 @@ public class Services {
 			ex.printStackTrace();
 		}
 
+		System.out.print(j.toString());
 		return Response.status(200).entity(j.toString()).build();
 
 	}
@@ -1853,5 +1856,27 @@ public class Services {
 		System.out.println("InvalidRequestbody");
 		return Response.status(400).entity("InvalidRequestBody").build();
 	}
+	
+	@GET
+	@Path("getChats/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response getChatsforUser(@PathParam("id") int userId) throws JSONException {
+		// Setting the DB context in case its not set
+		try {
+			DatabaseProvider.getInstance(context);
+			System.out.println("...getAllChats for User " + userId);
+			ChatDao chatDao = new ChatDaoImplementation();
+			ArrayList<Chat> chats = chatDao.loadAllChats(userId);
+			JSONObject response = new JSONObject();
+			response.put("chat", Chat.serializeChatList(chats));
+			System.out.println(response.toString());
+			return Response.status(200).entity(response.toString()).build();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return Response.status(500).entity("InternalServerError").build();
+	}
+
 
 }

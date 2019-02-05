@@ -117,7 +117,7 @@ public class ChangePasswordFragment extends Fragment implements ResponseHandler 
         json.put("repeatNewPassword", editTextRepeatPassword.getText().toString());
         json.put("user_id", SaveSharedPreference.getUserID(this.getContext()));
         if (np.equals(rnp)) {
-            Requests.executeRequest(this, "POST", "changePassword", json);
+            Requests.executeRequest(this, "POST", "changePassword", json, getContext());
 
         } else {
             Toast.makeText(getContext(), "New Password does not match", Toast.LENGTH_LONG).show();

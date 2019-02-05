@@ -39,7 +39,6 @@ public class ChatActivity extends AppCompatActivity implements ResponseHandler {
     RecyclerView showMessagesRecyclerView;
     MessageListRecyclerViewAdapter messageListRecyclerViewAdapter;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,11 +54,16 @@ public class ChatActivity extends AppCompatActivity implements ResponseHandler {
         Intent intent = getIntent();
         userIds = new ArrayList<>();
         userIds = intent.getIntegerArrayListExtra("chatUser");
+        chatId = intent.getIntExtra("id_chat", -1);
         showMessagesRecyclerView = findViewById(R.id.reyclerview_message_list);
         Log.i("ids", String.valueOf(userIds));
 
-        //load chat
-        loadChat();
+        if(chatId == -1) {
+            //load chat
+            loadChat();
+        }else{
+            getAllChat();
+        }
 
 //        new Timer().scheduleAtFixedRate(new TimerTask() {
 //            @Override
@@ -69,7 +73,6 @@ public class ChatActivity extends AppCompatActivity implements ResponseHandler {
 //            }
 //        }, 0, 1000);
 
-        getAllChat();
     }
 
     private void loadChat() {
@@ -82,7 +85,7 @@ public class ChatActivity extends AppCompatActivity implements ResponseHandler {
             }
             request.put("id_users", jsonUserIds);
 
-            Requests.executeRequest(this, "PUT", "loadChat", request);
+            Requests.executeRequest(this, "PUT", "loadChat", request, getApplicationContext());
 
 
         } catch (JSONException e) {
@@ -109,7 +112,8 @@ public class ChatActivity extends AppCompatActivity implements ResponseHandler {
             String currTime = getCurrentTimestampString();
             json.put("time", currTime);
 
-            Requests.executeRequest(this, "PUT", "saveMessage", json);
+            Requests.executeRequest(this, "PUT", "saveMessage", json, getApplicationContext());
+
 
         } catch (Exception e) {
             Toast.makeText(view.getContext(), "Error sending message", Toast.LENGTH_LONG).show();
@@ -129,8 +133,6 @@ public class ChatActivity extends AppCompatActivity implements ResponseHandler {
 
     private void getAllChat() {
         Requests.getJsonResponseForChat("getChat", chatId, getApplicationContext(), this);
-
-
     }
 
 
@@ -154,19 +156,6 @@ public class ChatActivity extends AppCompatActivity implements ResponseHandler {
 
         RealmResults<Message> messages = realm.where(Message.class).equalTo("id_chat", chatId).findAll();
 
-        //set last messages timestamp as last_messages_time from friend in model if any messages
-        if (!messages.isEmpty()) {
-            String lastMessagesTime = messages.last().getTime_created();
-            for (Integer friendsID : this.userIds) {
-                if (!friendsID.equals(SaveSharedPreference.getUserID(this))) {
-                    Friend friend = realm.where(Friend.class).equalTo("id", friendsID).findFirst();
-                    realm.beginTransaction();
-                    friend.setLast_message_time(lastMessagesTime);
-                    realm.commitTransaction();
-                }
-            }
-        }
-
         showMessagesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         messageListRecyclerViewAdapter = new MessageListRecyclerViewAdapter(this, messages);
         showMessagesRecyclerView.setAdapter(messageListRecyclerViewAdapter);
@@ -176,6 +165,7 @@ public class ChatActivity extends AppCompatActivity implements ResponseHandler {
         if (response.has("id_chat")) {
             try {
                 this.chatId = response.getInt("id_chat");
+                getAllChat();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -191,6 +181,7 @@ public class ChatActivity extends AppCompatActivity implements ResponseHandler {
                 Log.i("IGI", String.valueOf(response));
                 Log.i("CHAT", "Message send from " + SaveSharedPreference.getUserID(this));
                 msg.setText("");
+
             } else {
                 Toast.makeText(getApplicationContext(), "Could not send message", Toast.LENGTH_LONG).show();
 

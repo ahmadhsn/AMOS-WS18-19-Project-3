@@ -170,7 +170,7 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
         Log.i("EditEventActivity", event_name + " " + eventId);
 
         try {
-            Requests.executeRequest(this, "POST", "updateEvent", json);
+            Requests.executeRequest(this, "POST", "updateEvent", json, getApplicationContext());
 
         } catch (Exception e) {
             Log.i("Exception --- not requested", e.toString());

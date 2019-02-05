@@ -54,7 +54,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Respons
             return;
         } else
             createAlertView();
-        Requests.executeRequest(this, "PUT", "resetPassword", generateRequestJSON(email));
+        Requests.executeRequest(this, "PUT", "resetPassword", generateRequestJSON(email), getApplicationContext());
     }
 
     private void createAlertView() {

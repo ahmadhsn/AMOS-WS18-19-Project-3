@@ -56,6 +56,10 @@ public class SocketUtility {
             try {
                 String jsonError = obj.getString("error");
 
+                //check on internet connection
+                if(jsonError.equals("Device offline")){
+                    return "You are offline. Check your internet connection.";
+                }
                 //check on network timeout
                 if(jsonError.equals("connection_timeout")){
                     return "NetworkTimeout: Please try again later.";
