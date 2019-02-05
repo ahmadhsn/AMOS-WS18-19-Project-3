@@ -10,11 +10,21 @@
     android:scaleType="fitXY">
 
     <RelativeLayout
-        android:id="@+id/relativeLayout2"
-        android:alpha="0.8"
+        android:id="@+id/imageView"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:alpha="0.7"
         android:background="#000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="571dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,10 +34,10 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="70dp"
             android:layout_weight="1"
             android:padding="20dp"
             android:text="Sign up"
-            android:layout_marginTop="70dp"
             android:textAlignment="center"
             android:textColor="@color/secondaryDarkColor"
             android:textSize="23sp"
@@ -37,16 +47,16 @@
             android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_marginLeft="65dp"
-            android:layout_marginRight="65dp"
-            android:layout_marginTop="25dp"
-            android:ems="10"
             android:layout_below="@id/textView"
+            android:layout_marginLeft="65dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginRight="65dp"
+            android:backgroundTint="@color/white"
+            android:ems="10"
             android:hint="@string/signup_email"
             android:inputType="textEmailAddress"
             android:textColor="@color/white"
-            android:textColorHint="@color/white"
-            android:backgroundTint="@color/white"/>
+            android:textColorHint="@color/white" />
 
         <EditText
             android:id="@+id/password"
@@ -54,10 +64,10 @@
             android:layout_height="40dp"
             android:layout_below="@id/email"
             android:layout_marginLeft="65dp"
-            android:layout_marginRight="65dp"
             android:layout_marginTop="10dp"
-            android:ems="10"
+            android:layout_marginRight="65dp"
             android:backgroundTint="@color/white"
+            android:ems="10"
             android:hint="@string/signup_password"
             android:inputType="textPassword"
             android:textColor="@color/white"
@@ -69,10 +79,10 @@
             android:layout_height="40dp"
             android:layout_below="@id/password"
             android:layout_marginLeft="65dp"
-            android:layout_marginRight="65dp"
             android:layout_marginTop="10dp"
-            android:ems="10"
+            android:layout_marginRight="65dp"
             android:backgroundTint="@color/white"
+            android:ems="10"
             android:hint="@string/signup_confirm_password"
             android:inputType="textPassword"
             android:textColor="@color/white"
@@ -84,8 +94,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/confirm_password"
             android:layout_marginLeft="67dp"
-            android:layout_marginRight="65dp"
             android:layout_marginTop="10dp"
+            android:layout_marginRight="65dp"
             android:text="@string/user_type"
             android:textColor="@color/white" />
 
@@ -95,8 +105,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/choose_user"
             android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
             android:layout_marginTop="10dp"
+            android:layout_marginRight="40dp"
             android:orientation="horizontal">
 
             <RadioButton
@@ -126,15 +136,14 @@
             android:id="@+id/signup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="50dp"
+            android:layout_marginLeft="40dp"
             android:layout_marginTop="400dp"
-            android:background="@drawable/shape"
-            android:text="@string/signup_label"
-            android:textColor="@color/secondaryDarkColor"
-            android:textStyle="bold"
+            android:layout_marginRight="40dp"
+            android:background="@color/orange"
             android:onClick="userSignUp"
-            />
+            android:text="@string/signup_label"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/message"
