@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -40,6 +41,9 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
     private RealmResults<Route> mData;
     private LayoutInflater mInflater;
     private Context context;
+    private String startPoint;
+    private String endPoint;
+    private String map;
 
     // data is passed into the constructor
     public ShowRoutesRecyclerViewAdapter(Context context, RealmResults<Route> data) {
@@ -61,12 +65,19 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
         holder.routeDescription.setText(mData.get(position).getDescription());
         holder.startPoint
                 .setText("Start Point: "
-                        + mData.get(position).getStart().getAddress().getHouse_number()
-                        + ", " + mData.get(position).getStart().getAddress().getStreet()
+                        + mData.get(position).getStart().getAddress().getStreet()
+                        + ", " + mData.get(position).getStart().getAddress().getHouse_number()
                         + ", " + mData.get(position).getStart().getAddress().getPostcode()
                         + ", " + mData.get(position).getStart().getAddress().getCity()
                         + ", " + mData.get(position).getStart().getAddress().getCountry());
 
+        holder.endPoint
+                .setText("End Point: "
+                        + mData.get(position).getEnd().getAddress().getStreet()
+                        + ", " + mData.get(position).getEnd().getAddress().getHouse_number()
+                        + ", " + mData.get(position).getEnd().getAddress().getPostcode()
+                        + ", " + mData.get(position).getEnd().getAddress().getCity()
+                        + ", " + mData.get(position).getEnd().getAddress().getCountry());
         //set to joined if already participant
         if (mData.get(position).isLiked()) {
             holder.unlikeRoute.setVisibility(View.VISIBLE);
@@ -77,7 +88,9 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
         holder.routeDropDownButton.setOnClickListener(v -> {
             holder.routeDescription.setVisibility(View.VISIBLE);
             holder.startPoint.setVisibility(View.VISIBLE);
+            holder.endPoint.setVisibility(View.VISIBLE);
             holder.routeDropDownButton.setVisibility(View.GONE);
+            holder.mapRoute.setVisibility(View.VISIBLE);
             holder.routeDropUpButton.setVisibility(View.VISIBLE);
             holder.dividerView.setVisibility(View.VISIBLE);
         });
@@ -85,8 +98,10 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
         holder.routeDropUpButton.setOnClickListener(v -> {
             holder.routeDescription.setVisibility(View.GONE);
             holder.startPoint.setVisibility(View.GONE);
+            holder.endPoint.setVisibility(View.GONE);
             holder.routeDropDownButton.setVisibility(View.VISIBLE);
             holder.routeDropUpButton.setVisibility(View.GONE);
+            holder.mapRoute.setVisibility(View.GONE);
             holder.dividerView.setVisibility(View.GONE);
         });
 
@@ -173,6 +188,30 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
                 e.printStackTrace();
             }
         });
+        holder.mapRoute.setOnClickListener(v -> {
+
+            try {
+                startPoint= mData.get(position).getStart().getAddress().getStreet()
+                        + " " + mData.get(position).getStart().getAddress().getHouse_number()
+                        + " " + mData.get(position).getStart().getAddress().getPostcode()
+                        + " " + mData.get(position).getStart().getAddress().getCity()
+                        + "," + mData.get(position).getStart().getAddress().getCountry();
+
+                endPoint= mData.get(position).getEnd().getAddress().getStreet()
+                        + " " + mData.get(position).getEnd().getAddress().getHouse_number()
+                        + " " + mData.get(position).getEnd().getAddress().getPostcode()
+                        + " " + mData.get(position).getEnd().getAddress().getCity()
+                        + "," + mData.get(position).getEnd().getAddress().getCountry();
+
+                //  map = "http://maps.google.com/maps?saddr=" + startPoint + "&daddr=" + endPoint;
+                map = "https://www.google.com/maps/dir/?api=1&origin="+ startPoint + "&destination=" + endPoint;
+
+                routeMap(map);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
 
         holder.unlikeRoute.setOnClickListener(v -> {
             unlikeRoute(position);
@@ -217,6 +256,7 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
         TextView routeName;
         TextView routeDescription;
         TextView startPoint;
+        TextView endPoint;
         ImageView routeDropDownButton;
         ImageView routeDropUpButton;
         LinearLayout controlLinearLayout;
@@ -226,13 +266,14 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
         ImageButton routeEdit;
         Button likeRoute;
         Button unlikeRoute;
-
+        Button mapRoute;
 
         ViewHolder(View itemView) {
             super(itemView);
             routeName = itemView.findViewById(R.id.route_name);
             routeDescription = itemView.findViewById(R.id.route_description);
             startPoint = itemView.findViewById(R.id.route_start_point);
+            endPoint = itemView.findViewById(R.id.route_end_point);
             routeDropDownButton = itemView.findViewById(R.id.arrow_down);
             routeDropUpButton = itemView.findViewById(R.id.arrow_up);
             route_delete = itemView.findViewById(R.id.route_delete);
@@ -242,6 +283,7 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
             adminTag = itemView.findViewById(R.id.admin_tag);
             likeRoute = itemView.findViewById(R.id.like_route);
             unlikeRoute = itemView.findViewById(R.id.unlike_route);
+            mapRoute= itemView.findViewById(R.id.map_route);
 
 
             itemView.setOnClickListener(this);
@@ -266,5 +308,10 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
         intent.putExtra("id", routeId);
         context.startActivity(intent);
     }
+    private void routeMap(String mapAddress) throws JSONException {
+        Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(mapAddress));
+        context.startActivity(i);
+    }
+
 
 }

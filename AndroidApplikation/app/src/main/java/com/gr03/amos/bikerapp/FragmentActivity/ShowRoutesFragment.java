@@ -83,7 +83,7 @@ public class ShowRoutesFragment extends Fragment implements ResponseHandler {
 
     @Override
     public void onResponse(JSONObject response, String urlTail) {
-        if (SocketUtility.checkRequestSuccessful(getContext(),response)) {
+        if (SocketUtility.checkRequestSuccessful(getContext(), response)) {
             int userId = SaveSharedPreference.getUserID((getContext()));
             if (urlTail.equals("getRoutes/" + userId)) {
                 onResponseRoutes();
@@ -93,7 +93,7 @@ public class ShowRoutesFragment extends Fragment implements ResponseHandler {
         }
     }
 
-    private void onResponseRoutes(){
+    private void onResponseRoutes() {
         Realm.init(getContext());
         Realm realm = Realm.getDefaultInstance();
 
@@ -102,14 +102,16 @@ public class ShowRoutesFragment extends Fragment implements ResponseHandler {
         populateRecyclerView(routes);
     }
 
-    private void onResponseFriendRoutes(){
+    private void onResponseFriendRoutes() {
         Realm.init(getContext());
         Realm realm = Realm.getDefaultInstance();
         RealmResults<Friend> friends = realm.where(Friend.class).findAll();
 
         RealmList<Route> routes = new RealmList<>();
         for (Friend friend : friends) {
-            routes.add(friend.getRoute());
+            if (friend.getRoute() != null) {
+                routes.add(friend.getRoute());
+            }
         }
 
         showRoutesRecyclerView = view.findViewById(R.id.showRoutes);
