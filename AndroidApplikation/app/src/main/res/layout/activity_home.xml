@@ -5,24 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:adjustViewBounds="true"
-    android:background="@color/colorPrimary"
+    android:background="@color/darkGrey"
     android:scaleType="fitXY"
     tools:context=".HomeActivity">
-
-    <RelativeLayout
-        android:id="@+id/imageView1"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:alpha="0.7"
-        android:background="#000"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
-    </RelativeLayout>
-
 
     <RelativeLayout
         android:id="@+id/imageView"

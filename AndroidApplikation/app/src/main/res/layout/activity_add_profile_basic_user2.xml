@@ -5,14 +5,29 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
 xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
+android:background="@color/colorPrimaryDark"
 tools:context=".AddProfileBasicUserActivity">
+
+    <RelativeLayout
+        android:id="@+id/imageView1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:alpha="0.5"
+        android:background="#000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+    </RelativeLayout>
+
 
 <RelativeLayout
     android:id="@+id/relativeLayout2"
     android:layout_width="0dp"
     android:layout_height="match_parent"
     android:paddingTop="3dp"
-    android:background="@color/smokeyWhite"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent">
 
@@ -31,7 +46,7 @@ tools:context=".AddProfileBasicUserActivity">
                 android:textStyle="bold"
                 android:textSize="22sp"
                 android:text="Let's add profile information"
-                android:textColor="@color/colorPrimaryDark"/>
+                android:textColor="@color/orange"/>
 
         <EditText
             android:id="@+id/fname"

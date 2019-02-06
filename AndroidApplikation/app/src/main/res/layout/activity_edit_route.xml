@@ -22,7 +22,7 @@
             android:layout_marginRight="7dp"
             android:inputType="text"
             android:text="Update Route"
-            android:textColor="@color/white"
+            android:textColor="@color/orange"
             android:textSize="20dp"
             android:textStyle="bold" />
 
@@ -36,7 +36,7 @@
             android:layout_marginRight="7dp"
             android:inputType="text"
             android:singleLine="true"
-            android:text="name"
+            android:text="Name"
             android:textColor="@color/white"
             android:textSize="15dp" />
 
@@ -50,7 +50,7 @@
             android:layout_marginRight="7dp"
             android:layout_marginBottom="25dp"
             android:singleLine="true"
-            android:text="description"
+            android:text="Description"
             android:textColor="@color/white"
             android:textSize="15dp" />
 
@@ -92,7 +92,7 @@
                 android:id="@+id/button1"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="0dip"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:layout_gravity="start"
                 android:layout_marginBottom="2dp"
                 android:layout_weight="1" />
@@ -110,7 +110,8 @@
                 android:maxLines="3"
                 android:onClick="cancel"
                 android:text="Cancel"
-                android:textColor="@color/blue"
+                android:textColor="@color/orange"
+                android:textStyle="bold"
                 android:textSize="15dp" />
 
             <Button
@@ -126,7 +127,8 @@
                 android:maxLines="2"
                 android:onClick="updateRoute"
                 android:text="Update"
-                android:textColor="@color/blue"
+                android:textColor="@color/orange"
+                android:textStyle="bold"
                 android:textSize="15dp" />
 
             <LinearLayout

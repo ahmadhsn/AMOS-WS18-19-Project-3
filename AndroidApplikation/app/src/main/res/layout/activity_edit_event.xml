@@ -9,6 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingBottom="@dimen/activity_vertical_margin">
 
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -22,7 +23,7 @@
             android:layout_marginRight="7dp"
             android:inputType="text"
             android:text="Update Event"
-            android:textColor="@color/white"
+            android:textColor="@color/orange"
             android:textSize="20dp"
             android:textStyle="bold" />
 
@@ -36,7 +37,7 @@
             android:layout_marginRight="7dp"
             android:inputType="text"
             android:singleLine="true"
-            android:text="name"
+            android:text="Name"
             android:textColor="@color/white"
             android:textSize="15dp" />
 
@@ -49,7 +50,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginRight="7dp"
             android:singleLine="true"
-            android:text="description"
+            android:text="Description"
             android:textColor="@color/white"
             android:textSize="15dp" />
 
@@ -138,7 +139,8 @@
                 android:maxLines="3"
                 android:onClick="cancel"
                 android:text="Cancel"
-                android:textColor="@color/blue"
+                android:textColor="@color/orange"
+                android:textStyle="bold"
                 android:textSize="15dp" />
 
             <Button
@@ -154,7 +156,8 @@
                 android:maxLines="2"
                 android:onClick="updateEvent"
                 android:text="Update"
-                android:textColor="@color/blue"
+                android:textColor="@color/orange"
+                android:textStyle="bold"
                 android:textSize="15dp" />
 
             <LinearLayout
