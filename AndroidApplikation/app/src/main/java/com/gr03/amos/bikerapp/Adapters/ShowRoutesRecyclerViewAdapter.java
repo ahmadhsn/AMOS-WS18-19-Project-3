@@ -19,17 +19,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gr03.amos.bikerapp.EditRouteActivity;
-import com.gr03.amos.bikerapp.Models.Event;
 import com.gr03.amos.bikerapp.Models.Route;
 import com.gr03.amos.bikerapp.NetworkLayer.DefaultResponseHandler;
-import com.gr03.amos.bikerapp.R;
 import com.gr03.amos.bikerapp.NetworkLayer.Requests;
+import com.gr03.amos.bikerapp.R;
 import com.gr03.amos.bikerapp.SaveSharedPreference;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import com.gr03.amos.bikerapp.Models.RouteParticipation;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -285,7 +282,6 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
             unlikeRoute = itemView.findViewById(R.id.unlike_route);
             mapRoute= itemView.findViewById(R.id.map_route);
 
-
             itemView.setOnClickListener(this);
         }
 
@@ -312,6 +308,5 @@ public class ShowRoutesRecyclerViewAdapter extends RecyclerView.Adapter<ShowRout
         Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(mapAddress));
         context.startActivity(i);
     }
-
 
 }
