@@ -10,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 public class RealmResponseHandler implements ResponseHandler {
 
@@ -33,13 +34,23 @@ public class RealmResponseHandler implements ResponseHandler {
                     return;
                 }
                 JSONArray jsonString = response.getJSONArray(jsonName);
-
                 Realm.init(context);
-                Realm realm = Realm.getDefaultInstance();
-                realm.beginTransaction();
-                realm.createOrUpdateAllFromJson(typeClass, jsonString);
-                realm.commitTransaction();
-                realm.close();
+                try{
+                    Realm realm = Realm.getDefaultInstance();
+                    realm.beginTransaction();
+                    realm.createOrUpdateAllFromJson(typeClass, jsonString);
+                    realm.commitTransaction();
+                    realm.close();
+                } catch (Exception e) {
+                    /* sometimes necessary for new devices*/
+                    Realm.deleteRealm(Realm.getDefaultConfiguration());
+                    Realm realm = Realm.getDefaultInstance();
+                    realm.beginTransaction();
+                    realm.createOrUpdateAllFromJson(typeClass, jsonString);
+                    realm.commitTransaction();
+                    realm.close();
+                }
+
             } catch (JSONException e) {
                 e.printStackTrace();
 
