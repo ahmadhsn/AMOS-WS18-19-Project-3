@@ -70,6 +70,11 @@ public class ShowEventsFragment extends Fragment implements ResponseHandler {
         city.add("Choose a City");
         country.add("Choose a Country");
 
+        if (SaveSharedPreference.getUserType(container.getContext()) == 2) {
+            eventFilterImage = view.findViewById(R.id.event_filter);
+            eventFilterImage.setVisibility(View.GONE);
+
+        }
 
         Requests.getJsonResponseForEvents("getEvents", SaveSharedPreference.getUserID(container.getContext()), container.getContext(), this);
 
@@ -171,7 +176,6 @@ public class ShowEventsFragment extends Fragment implements ResponseHandler {
                             .where(Event.class)
                             .equalTo("id_user", SaveSharedPreference.getUserID(getContext()))
                             .findAll();
-
                     populateRecyclerView(businessUserEvents);
                 } else {
                     populateRecyclerView(events);
